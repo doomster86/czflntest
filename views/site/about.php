@@ -14,5 +14,6 @@ $this->params['breadcrumbs'][] = $this->title;
         This is the About page. You may modify the following file to customize its content !!!:
     </p>
 
+    <p>test</p>
     <code><?= __FILE__ ?></code>
 </div>
