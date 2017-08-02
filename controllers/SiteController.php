@@ -123,4 +123,13 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
+
+    /**
+     * Dispalay message
+     * @return string
+     */
+    public function actionSay($message = 'Привет')
+    {
+        return $this->render('say', ['message' => $message]);
+    }
 }
