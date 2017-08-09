@@ -6,7 +6,7 @@ use yii\widgets\ActiveForm;
 
 <?= $form->field($model, 'name')->label('Ваше имя') ?>
 
-<?= $form->field($model, 'email')->label('Ваш Email') ?>
+<?= $form->field($model, 'email')->label('Ваш Email 11') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary']) ?>
