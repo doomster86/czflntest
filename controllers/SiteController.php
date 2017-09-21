@@ -10,6 +10,7 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\EntryForm;
+use app\models\CoursesForm;
 
 class SiteController extends Controller
 {
@@ -153,6 +154,9 @@ class SiteController extends Controller
         }
     }
 
+    /**
+     * Validate CoursesForm
+     */
     public function actionCourses()
     {
         $model = new CoursesForm();
@@ -162,10 +166,10 @@ class SiteController extends Controller
 
             // делаем что-то полезное с $model ...
 
-            return $this->render('entry-confirm', ['model' => $model]);
+            return $this->render('courses-confirm', ['model' => $model]);
         } else {
             // либо страница отображается первый раз, либо есть ошибка в данных
-            return $this->render('entry', ['model' => $model]);
+            return $this->render('courses', ['model' => $model]);
         }
     }
 }
