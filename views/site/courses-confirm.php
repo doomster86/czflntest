@@ -6,7 +6,7 @@ use yii\helpers\Html;
 <ul>
     <li><label>Название курса: </label>: <?= Html::encode($model->name) ?></li>
     <li><label>Преподаватель курса</label>: <?= Html::encode($model->teacher) ?></li>
-    <li><label>Преподаватель курса</label>: <?= Html::encode($model->group) ?></li>
-    <li><label>Преподаватель курса</label>: <?= Html::encode($model->lections) ?></li>
-    <li><label>Преподаватель курса</label>: <?= Html::encode($model->practics) ?></li>
+    <li><label>Группа курса</label>: <?= Html::encode($model->group) ?></li>
+    <li><label>Кол-во курса</label>: <?= Html::encode($model->lections) ?></li>
+    <li><label>Кол-во практических занятий курса</label>: <?= Html::encode($model->practics) ?></li>
 </ul>
