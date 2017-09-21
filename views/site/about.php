@@ -16,6 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<p>commit by alex</p>
     <p>next commit by alex</p>
     <p>commit at 21.09.2017</p>
+    <p>commit 21.09.2017 14:52</p>
 
 
     <p>test</p>
