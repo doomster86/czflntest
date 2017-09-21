@@ -172,4 +172,9 @@ class SiteController extends Controller
             return $this->render('courses', ['model' => $model]);
         }
     }
+
+    public function actionMySay($message = 'Превед', $author = 'NewAuthor')
+    {
+        return $this->render('my-say', ['message' => $message, 'author' => $author ]);
+    }
 }
