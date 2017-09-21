@@ -175,6 +175,23 @@ class SiteController extends Controller
 
     public function actionMySay($message = 'Превед', $author = 'NewAuthor')
     {
-        return $this->render('my-say', ['message' => $message, 'author' => $author ]);
+        return $this->render('my-say', ['param1' => $message, 'param2' => $author ]);
     }
+
+    public function actionMyEntry()
+    {
+        $mymodel = new MyEntryForm();
+
+        if ($mymodel->load(Yii::$app->request->post()) && $mymodel->validate()) {
+            // данные в $model удачно проверены
+
+            // делаем что-то полезное с $model ...
+
+            return $this->render('my-entry-confirm', ['model' => $mymodel]);
+        } else {
+            // либо страница отображается первый раз, либо есть ошибка в данных
+            return $this->render('my-entry', ['model' => $mymodel]);
+        }
+    }
+
 }
