@@ -10,3 +10,8 @@ use yii\helpers\Html;
     <li><label>Кол-во курса</label>: <?= Html::encode($model->lections) ?></li>
     <li><label>Кол-во практических занятий курса</label>: <?= Html::encode($model->practics) ?></li>
 </ul>
+
+<ul>
+    <li><a href="/site/courses">Создать курс</a></li>
+    <a href="/site/index">На главную</a>
+</ul>
