@@ -11,7 +11,10 @@ use yii\helpers\Html;
     <li><label>Кол-во практических занятий курса</label>: <?= Html::encode($model->practics) ?></li>
 </ul>
 
+<?php
+$url = Url::home();
+?>
 <ul>
-    <li><a href="/site/courses">Создать курс</a></li>
-    <a href="/site/index">На главную</a>
+    <li><a href="<?php echo $url; ?>site/courses">Создать курс</a></li>
+    <li><a href="<?php echo $url; ?>">На главную</a></li>
 </ul>
