@@ -40,7 +40,10 @@ AppAsset::register($this);
             ['label' => 'Главная', 'url' => ['/site/index']],
             ['label' => 'О центре', 'url' => ['/site/about']],
             ['label' => 'Контакты', 'url' => ['/site/contact']],
-            ['label' => 'Курсы', 'url' => ['/site/courses']],
+            ['label' => 'Администрирование', 'url' => ['product/index'], 'items' => [
+                ['label' => 'Пользователи', 'url' => ['#']],
+                ['label' => 'Курсы', 'url' => ['/site/courses']],
+            ] , 'visible' => Yii::$app->user->identity->role=='admin'],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Войти', 'url' => ['/site/login']]
             ) : (
