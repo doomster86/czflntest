@@ -70,12 +70,16 @@ AppAsset::register($this);
     <div class="container">
         <div class="contacts">
             <h4>Контакты</h4>
+
             <p><span>Телефон: </span>111-222-333</p>
+
             <p><span>Адрес: </span>г. Город, ул. Улица, д.11, офис 123</p>
         </div>
         <div class="working">
             <h4>График работы</h4>
+
             <p>Пн-Пт с 10:00 до 19:00</p>
+
             <p>13:00-14:00 - перерыв</p>
         </div>
     </div>
