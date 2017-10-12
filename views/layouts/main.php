@@ -42,12 +42,12 @@ AppAsset::register($this);
             ['label' => 'Контакты', 'url' => ['/site/contact']],
             ['label' => 'Курсы', 'url' => ['/site/courses']],
             Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
+                ['label' => 'Войти', 'url' => ['/site/login']]
             ) : (
                 '<li>'
                 . Html::beginForm(['/site/logout'], 'post')
                 . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
+                    'Выйти (' . Yii::$app->user->identity->username . ')',
                     ['class' => 'btn btn-link logout']
                 )
                 . Html::endForm()
@@ -68,9 +68,16 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
-
-        <p class="pull-right"><?= Yii::powered() ?></p>
+        <div class="contacts">
+            <h4>Контакты</h4>
+            <p><span>Телефон: </span>111-222-333</p>
+            <p><span>Адрес: </span>г. Город, ул. Улица, д.11, офис 123</p>
+        </div>
+        <div class="working">
+            <h4>График работы</h4>
+            <p>Пн-Пт с 10:00 до 19:00</p>
+            <p>13:00-14:00 - перерыв</p>
+        </div>
     </div>
 </footer>
 
