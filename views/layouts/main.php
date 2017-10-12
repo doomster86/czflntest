@@ -36,6 +36,7 @@ AppAsset::register($this);
     ]);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
+        'activateParents'=>true,
         'items' => [
             ['label' => 'Главная', 'url' => ['/site/index']],
             ['label' => 'О центре', 'url' => ['/site/about']],
