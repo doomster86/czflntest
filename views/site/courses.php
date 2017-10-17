@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\widgets\LinkPager;
 
 $this->title = 'Создать новый курс';
 $this->params['breadcrumbs'][] = $this->title;
@@ -22,3 +23,14 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
 <?php ActiveForm::end(); ?>
+
+
+<ul>
+    <?php foreach ($courses as $cours): ?>
+        <li>
+            <?= Html::encode("{$cours->name} ({$cours->teacher_id})") ?>:
+        </li>
+    <?php endforeach; ?>
+</ul>
+
+<?= LinkPager::widget(['pagination' => $pagination]) ?>
