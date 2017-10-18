@@ -14,9 +14,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?= $form->field($model, 'group')->label('Група')->dropDownList(['1','2']) ?>
 
-<?= $form->field($model, 'lections')->label('Кількість лекцій')->textInput(['type' => 'number', 'min' => '1', 'value' =>'1']) ?>
+<?= $form->field($model, 'pract')->label('Кількість занять виробничої практики')->textInput(['type' => 'number', 'min' => '1', 'value' =>'1']) ?>
 
-<?= $form->field($model, 'practics')->label('Кількість ПЗ')->textInput(['type' => 'number', 'min' => '1', 'value' =>'1']) ?>
+<?= $form->field($model, 'worklect')->label('Кількість занять виробничого навчання')->textInput(['type' => 'number', 'min' => '1', 'value' =>'1']) ?>
+
+<?= $form->field($model, 'teorlect')->label('Кількість занять теоритичного навчання')->textInput(['type' => 'number', 'min' => '1', 'value' =>'1']) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Створити', ['class' => 'btn btn-primary']) ?>
