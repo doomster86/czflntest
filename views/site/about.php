@@ -6,7 +6,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Breadcrumbs;
 
-$this->title = 'О центре';
+$this->title = 'Про центр';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
