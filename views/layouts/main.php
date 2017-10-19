@@ -38,20 +38,29 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'activateParents'=>true,
         'items' => [
-            ['label' => 'Главная', 'url' => ['/site/index']],
-            ['label' => 'О центре', 'url' => ['/site/about']],
-            ['label' => 'Контакты', 'url' => ['/site/contact']],
-            ['label' => 'Администрирование', 'url' => ['product/index'], 'items' => [
-                ['label' => 'Пользователи', 'url' => ['#']],
-                ['label' => 'Курсы', 'url' => ['/site/courses']],
+            ['label' => 'Головна', 'url' => ['/site/index']],
+            ['label' => 'Про центр', 'url' => ['/site/about']],
+            ['label' => 'Розклад', 'url' => ['#'], 'visible' => !Yii::$app->user->isGuest],
+            ['label' => 'Графік відвідування', 'url' => ['#'], 'visible' => Yii::$app->user->identity->role=='admin'],
+            ['label' => 'Контакти', 'url' => ['/site/contact']],
+            ['label' => 'Адміністрування', 'url' => ['product/index'], 'items' => [
+                ['label' => 'Користувачі', 'url' => ['#']],
+                ['label' => 'Групи', 'url' => ['#']],
+                ['label' => 'Курси', 'url' => ['/site/courses']],
+                ['label' => 'Корпуси', 'url' => ['#'], 'items' => [
+                    ['label' => 'Аудиторії', 'url' => ['#']],
+                    ]
+                ],
+                ['label' => 'Заняття', 'url' => ['#']],
+                ['label' => 'Управління розкладом', 'url' => ['#']],
             ] , 'visible' => Yii::$app->user->identity->role=='admin'],
             Yii::$app->user->isGuest ? (
-                ['label' => 'Войти', 'url' => ['/site/login']]
+                ['label' => 'Увійти', 'url' => ['/site/login']]
             ) : (
                 '<li>'
                 . Html::beginForm(['/site/logout'], 'post')
                 . Html::submitButton(
-                    'Выйти (' . Yii::$app->user->identity->username . ')',
+                    'Вийти (' . Yii::$app->user->identity->username . ')',
                     ['class' => 'btn btn-link logout']
                 )
                 . Html::endForm()
@@ -64,6 +73,7 @@ AppAsset::register($this);
 
     <div class="container">
         <?= Breadcrumbs::widget([
+            'homeLink' => ['label' => 'Головна', 'url' => '/'],
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
         <?= $content ?>
@@ -73,18 +83,18 @@ AppAsset::register($this);
 <footer class="footer">
     <div class="container">
         <div class="contacts">
-            <h4>Контакты</h4>
+            <h4>Контакти</h4>
 
             <p><span>Телефон: </span>111-222-333</p>
 
-            <p><span>Адрес: </span>г. Город, ул. Улица, д.11, офис 123</p>
+            <p><span>Адреса: </span>м. Місто, вул. Вулиця, б.11, офіс 123</p>
         </div>
         <div class="working">
-            <h4>График работы</h4>
+            <h4>Графік работи</h4>
 
             <p>Пн-Пт с 10:00 до 19:00</p>
 
-            <p>13:00-14:00 - перерыв</p>
+            <p>13:00-14:00 - перерва</p>
         </div>
     </div>
 </footer>

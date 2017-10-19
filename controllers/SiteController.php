@@ -11,6 +11,8 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\EntryForm;
 use app\models\CoursesForm;
+use yii\data\Pagination;
+use app\models\Courses;
 
 class SiteController extends Controller
 {
@@ -126,14 +128,6 @@ class SiteController extends Controller
         return $this->render('about');
     }
 
-    /**
-     * Dispalay message
-     * @return string
-     */
-    public function actionSay($message = 'Привет')
-    {
-        return $this->render('say', ['message' => $message]);
-    }
 
     /**
      * Validate EntyForm
@@ -159,6 +153,18 @@ class SiteController extends Controller
      */
     public function actionCourses()
     {
+        $query = Courses::find();
+
+        $pagination = new Pagination([
+            'defaultPageSize' => 5,
+            'totalCount' => $query->count(),
+        ]);
+
+        $courses = $query->orderBy('name')
+            ->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+
         $model = new CoursesForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -169,29 +175,7 @@ class SiteController extends Controller
             return $this->render('courses-confirm', ['model' => $model]);
         } else {
             // либо страница отображается первый раз, либо есть ошибка в данных
-            return $this->render('courses', ['model' => $model]);
+            return $this->render('courses', ['model' => $model, 'courses' => $courses, 'pagination' => $pagination]);
         }
     }
-
-    public function actionMySay($message = 'Превед', $author = 'NewAuthor')
-    {
-        return $this->render('my-say', ['param1' => $message, 'param2' => $author ]);
-    }
-
-    public function actionMyEntry()
-    {
-        $mymodel = new MyEntryForm();
-
-        if ($mymodel->load(Yii::$app->request->post()) && $mymodel->validate()) {
-            // данные в $model удачно проверены
-
-            // делаем что-то полезное с $model ...
-
-            return $this->render('my-entry-confirm', ['model' => $mymodel]);
-        } else {
-            // либо страница отображается первый раз, либо есть ошибка в данных
-            return $this->render('my-entry', ['model' => $mymodel]);
-        }
-    }
-
 }
