@@ -26,13 +26,25 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php ActiveForm::end(); ?>
 
-
-<ul>
+<table class="table table-striped table-bordered">
+    <tr>
+        <th>Назва курсу</th>
+        <th>Викладач</th>
+        <th>Група</th>
+        <th>Кількість занять виробничої практики</th>
+        <th>Кількість занять виробничого навчання</th>
+        <th>Кількість занять теоритичного навчання</th>
+    </tr>
     <?php foreach ($courses as $cours): ?>
-        <li>
-            <?= Html::encode("{$cours->name} ({$cours->teacher_id})") ?>:
-        </li>
+    <tr>
+        <td><?= Html::encode("{$cours->name}") ?></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
     <?php endforeach; ?>
-</ul>
+</table>
 
 <?= LinkPager::widget(['pagination' => $pagination]) ?>
