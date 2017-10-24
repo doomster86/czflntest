@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
         $subjects=array('Предмет 1', 'Предмет 2', 'Предмет 3', 'Предмет 4', 'Предмет 5', 'Предмет 6', 'Предмет 7', 'Предмет 8');
     ?>
 
-            <?= $form->field($model, 'name', ['options' => ['class' => 'col-sm-6']])->label('Назва професії')->textInput(['placeholder' => 'Введіть назву професії']) ?>
+            <?= $form->field($model, 'name', ['options' => ['class' => 'col-sm-6']])->label('Назва професії')->textInput(['placeholder' => 'Введіть назву професії', 'value' =>'']) ?>
 
             <?= $form->field($model, 'group', ['options' => ['class' => 'col-sm-6']])->label('Група')->dropDownList(['1','2']) ?>
 
