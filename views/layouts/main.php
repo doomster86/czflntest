@@ -46,7 +46,10 @@ AppAsset::register($this);
             ['label' => 'Адміністрування', 'url' => ['product/index'], 'items' => [
                 ['label' => 'Користувачі', 'url' => ['#']],
                 ['label' => 'Групи', 'url' => ['#']],
-                ['label' => 'Курси', 'url' => ['/site/courses']],
+                ['label' => 'Професії', 'url' => ['/site/courses'], 'items' => [
+                    ['label' => 'Створити нову професію', 'url' => ['site/courses-create']],
+                    ]
+                ],
                 ['label' => 'Корпуси', 'url' => ['#'], 'items' => [
                     ['label' => 'Аудиторії', 'url' => ['#']],
                     ]

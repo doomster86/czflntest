@@ -147,16 +147,23 @@ class SiteController extends Controller
 
         $model = new CoursesForm();
 
+        return $this->render('courses', ['courses' => $courses, 'pagination' => $pagination]);
+    }
+
+    public function  actionCoursesCreate()
+    {
+        $model = new CoursesForm();
+
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             // данные в $model удачно проверены
 
             // делаем что-то полезное с $model ...
 
             //return $this->render('courses-confirm', ['model' => $model]);
-            return $this->render('courses', ['model' => $model, 'courses' => $courses, 'pagination' => $pagination]);
+            return $this->render('courses-create', ['model' => $model]);
         } else {
             // либо страница отображается первый раз, либо есть ошибка в данных
-            return $this->render('courses', ['model' => $model, 'courses' => $courses, 'pagination' => $pagination]);
+            return $this->render('courses-create', ['model' => $model]);
         }
     }
 }
