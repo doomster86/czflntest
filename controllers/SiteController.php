@@ -128,26 +128,6 @@ class SiteController extends Controller
         return $this->render('about');
     }
 
-
-    /**
-     * Validate EntyForm
-     */
-    public function actionEntry()
-    {
-        $model = new EntryForm();
-
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            // данные в $model удачно проверены
-
-            // делаем что-то полезное с $model ...
-
-            return $this->render('entry-confirm', ['model' => $model]);
-        } else {
-            // либо страница отображается первый раз, либо есть ошибка в данных
-            return $this->render('entry', ['model' => $model]);
-        }
-    }
-
     /**
      * Validate CoursesForm
      */
@@ -172,7 +152,8 @@ class SiteController extends Controller
 
             // делаем что-то полезное с $model ...
 
-            return $this->render('courses-confirm', ['model' => $model]);
+            //return $this->render('courses-confirm', ['model' => $model]);
+            return $this->render('courses', ['model' => $model, 'courses' => $courses, 'pagination' => $pagination]);
         } else {
             // либо страница отображается первый раз, либо есть ошибка в данных
             return $this->render('courses', ['model' => $model, 'courses' => $courses, 'pagination' => $pagination]);

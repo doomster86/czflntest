@@ -2,38 +2,64 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\widgets\LinkPager;
+use yii\widgets\Pjax;
 
-$this->title = 'Створити новий курс';
+$this->title = 'Створити нову професію';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<?php $form = ActiveForm::begin(); ?>
+<?php
+    Pjax::begin([
+    // Pjax options
+    ]);
+        if (!empty($model->name)):
+?>
 
-<?= $form->field($model, 'name')->label('Назва курсу')->textInput(['placeholder' => 'Введіть назву курсу']) ?>
+            <p>Нова професія створена!</p>
 
-<?= $form->field($model, 'teacher')->label('Викладач')->dropDownList(['Іван','Не Іван']) ?>
+            <ul>
+                <li><label>Назва професії: </label>: <?= Html::encode($model->name) ?></li>
+                <li><label>Група</label>: <?= Html::encode($model->group) ?></li>
+                <li><label>Кількість занять виробничої практики</label>: <?= Html::encode($model->pract) ?></li>
+                <li><label>Кількість занять виробничого навчання</label>: <?= Html::encode($model->worklect) ?></li>
+                <li><label>Кількість занять теоритичного навчання</label>: <?= Html::encode($model->teorlect) ?></li>
+            </ul>
 
-<?= $form->field($model, 'group')->label('Група')->dropDownList(['1','2']) ?>
+    <?php
+        endif;
+        $form = ActiveForm::begin([
+            'options' => ['data' => ['pjax' => true]],
+        ]);
+    ?>
 
-<?= $form->field($model, 'pract')->label('Кількість занять виробничої практики')->textInput(['type' => 'number', 'min' => '1', 'value' =>'1']) ?>
+            <?= $form->field($model, 'name')->label('Назва професії')->textInput(['placeholder' => 'Введіть назву професії']) ?>
 
-<?= $form->field($model, 'worklect')->label('Кількість занять виробничого навчання')->textInput(['type' => 'number', 'min' => '1', 'value' =>'1']) ?>
+            <?= $form->field($model, 'group')->label('Група')->dropDownList(['1','2']) ?>
 
-<?= $form->field($model, 'teorlect')->label('Кількість занять теоритичного навчання')->textInput(['type' => 'number', 'min' => '1', 'value' =>'1']) ?>
+            <?= $form->field($model, 'pract')->label('Кількість занять виробничої практики')->textInput(['type' => 'number', 'min' => '1', 'value' =>'1']) ?>
 
-    <div class="form-group">
-        <?= Html::submitButton('Створити', ['class' => 'btn btn-primary']) ?>
-    </div>
+            <?= $form->field($model, 'worklect')->label('Кількість занять виробничого навчання')->textInput(['type' => 'number', 'min' => '1', 'value' =>'1']) ?>
 
-<?php ActiveForm::end(); ?>
+            <?= $form->field($model, 'teorlect')->label('Кількість занять теоритичного навчання')->textInput(['type' => 'number', 'min' => '1', 'value' =>'1']) ?>
+
+            <?= $form->field($model, 'subject')->label('Оберіть предмети')->checkboxList(['П1', 'П2', 'П3', 'П4', 'П5', 'П6', 'П7', 'П8']); ?>
+
+            <div class="form-group">
+                <?= Html::submitButton('Створити', ['class' => 'btn btn-primary']) ?>
+            </div>
+
+<?php
+        ActiveForm::end();
+    Pjax::end();
+?>
 
 <table class="table table-striped table-bordered">
     <tr>
         <th>Назва курсу</th>
-        <th>Викладач</th>
         <th>Група</th>
         <th>Кількість занять виробничої практики</th>
         <th>Кількість занять виробничого навчання</th>
         <th>Кількість занять теоритичного навчання</th>
+        <th>Предмети</th>
     </tr>
     <?php foreach ($courses as $cours): ?>
     <tr>
