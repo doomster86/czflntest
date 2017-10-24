@@ -22,6 +22,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 <li><label>Кількість занять виробничої практики</label>: <?= Html::encode($model->pract) ?></li>
                 <li><label>Кількість занять виробничого навчання</label>: <?= Html::encode($model->worklect) ?></li>
                 <li><label>Кількість занять теоритичного навчання</label>: <?= Html::encode($model->teorlect) ?></li>
+                <li><label>Предмети</label>:
+                    <?php
+                    foreach ($model->subject as $subject) {
+                        echo Html::encode($subject." ");
+                    }
+                    ?>
+                </li>
             </ul>
 
     <?php
@@ -45,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= $form->field($model, 'subject', ['options' => ['class' => 'col-sm-12']])->label('Оберіть предмети')
                 ->checkboxList($subjects, [
                     'item'=>function ($index, $label, $name, $checked, $value){
-                        return "<div class='checkbox col-sm-4'><label><input type='checkbox' {$checked} name='{$name}' value='{$value}'>{$label}</label></div>";
+                        return "<div class='checkbox col-sm-4'><label><input type='checkbox' {$checked} name='{$name}' value='{$label}'>{$label}</label></div>";
                     }
                 ]); ?>
 
@@ -58,15 +65,15 @@ $this->params['breadcrumbs'][] = $this->title;
     Pjax::end();
 ?>
 
-<table class="table table-striped table-bordered">
+<table class="table table-striped table-bordered col-sm-12">
     <thead>
         <tr>
-            <th>Назва курсу</th>
-            <th>Група</th>
-            <th>Кількість занять виробничої практики</th>
-            <th>Кількість занять виробничого навчання</th>
-            <th>Кількість занять теоритичного навчання</th>
-            <th>Предмети</th>
+            <th class="col-sm-2">Назва курсу</th>
+            <th class="col-sm-2">Група</th>
+            <th class="col-sm-1">Кількість занять виробничої практики</th>
+            <th class="col-sm-1">Кількість занять виробничого навчання</th>
+            <th class="col-sm-1">Кількість занять теоритичного навчання</th>
+            <th class="col-sm-5">Предмети</th>
         </tr>
     </thead>
     <tbody>
