@@ -117,3 +117,17 @@ a.desc:after {
     float: left;
     padding-right: 40px;
 }
+
+#courses-form .checkbox{
+    margin-top: 10px !important;
+}
+
+@media (min-width: 768px) {
+    #courses-form .col-sm-6 {
+        height: 90px;
+    }
+}
+
+#courses-form .field-coursesform-subject .help-block-error {
+    clear: both;
+}

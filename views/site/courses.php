@@ -27,23 +27,29 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
         endif;
         $form = ActiveForm::begin([
-            'options' => ['data' => ['pjax' => true]],
+            'options' => ['data' => ['pjax' => true], 'id' => 'courses-form'],
         ]);
+        $subjects=array('Предмет 1', 'Предмет 2', 'Предмет 3', 'Предмет 4', 'Предмет 5', 'Предмет 6', 'Предмет 7', 'Предмет 8');
     ?>
 
-            <?= $form->field($model, 'name')->label('Назва професії')->textInput(['placeholder' => 'Введіть назву професії']) ?>
+            <?= $form->field($model, 'name', ['options' => ['class' => 'col-sm-6']])->label('Назва професії')->textInput(['placeholder' => 'Введіть назву професії']) ?>
 
-            <?= $form->field($model, 'group')->label('Група')->dropDownList(['1','2']) ?>
+            <?= $form->field($model, 'group', ['options' => ['class' => 'col-sm-6']])->label('Група')->dropDownList(['1','2']) ?>
 
-            <?= $form->field($model, 'pract')->label('Кількість занять виробничої практики')->textInput(['type' => 'number', 'min' => '1', 'value' =>'1']) ?>
+            <?= $form->field($model, 'pract', ['options' => ['class' => 'col-sm-4']])->label('Кількість занять виробничої практики')->textInput(['type' => 'number', 'min' => '1', 'value' =>'1']) ?>
 
-            <?= $form->field($model, 'worklect')->label('Кількість занять виробничого навчання')->textInput(['type' => 'number', 'min' => '1', 'value' =>'1']) ?>
+            <?= $form->field($model, 'worklect', ['options' => ['class' => 'col-sm-4']])->label('Кількість занять виробничого навчання')->textInput(['type' => 'number', 'min' => '1', 'value' =>'1']) ?>
 
-            <?= $form->field($model, 'teorlect')->label('Кількість занять теоритичного навчання')->textInput(['type' => 'number', 'min' => '1', 'value' =>'1']) ?>
+            <?= $form->field($model, 'teorlect', ['options' => ['class' => 'col-sm-4']])->label('Кількість занять теоритичного навчання')->textInput(['type' => 'number', 'min' => '1', 'value' =>'1']) ?>
 
-            <?= $form->field($model, 'subject')->label('Оберіть предмети')->checkboxList(['П1', 'П2', 'П3', 'П4', 'П5', 'П6', 'П7', 'П8']); ?>
+            <?= $form->field($model, 'subject', ['options' => ['class' => 'col-sm-12']])->label('Оберіть предмети')
+                ->checkboxList($subjects, [
+                    'item'=>function ($index, $label, $name, $checked, $value){
+                        return "<div class='checkbox col-sm-4'><label><input type='checkbox' {$checked} name='{$name}' value='{$value}'>{$label}</label></div>";
+                    }
+                ]); ?>
 
-            <div class="form-group">
+            <div class="form-group col-sm-12">
                 <?= Html::submitButton('Створити', ['class' => 'btn btn-primary']) ?>
             </div>
 
@@ -53,24 +59,28 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <table class="table table-striped table-bordered">
-    <tr>
-        <th>Назва курсу</th>
-        <th>Група</th>
-        <th>Кількість занять виробничої практики</th>
-        <th>Кількість занять виробничого навчання</th>
-        <th>Кількість занять теоритичного навчання</th>
-        <th>Предмети</th>
-    </tr>
-    <?php foreach ($courses as $cours): ?>
-    <tr>
-        <td><?= Html::encode("{$cours->name}") ?></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
+    <thead>
+        <tr>
+            <th>Назва курсу</th>
+            <th>Група</th>
+            <th>Кількість занять виробничої практики</th>
+            <th>Кількість занять виробничого навчання</th>
+            <th>Кількість занять теоритичного навчання</th>
+            <th>Предмети</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($courses as $cours): ?>
+        <tr>
+            <td><?= Html::encode("{$cours->name}") ?></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
     <?php endforeach; ?>
+    </tbody>
 </table>
 
 <?= LinkPager::widget(['pagination' => $pagination]) ?>
