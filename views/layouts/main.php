@@ -43,11 +43,11 @@ AppAsset::register($this);
             ['label' => 'Розклад', 'url' => ['#'], 'visible' => !Yii::$app->user->isGuest],
             ['label' => 'Графік відвідування', 'url' => ['#'], 'visible' => Yii::$app->user->identity->role=='admin'],
             ['label' => 'Контакти', 'url' => ['/site/contact']],
-            ['label' => 'Адміністрування', 'url' => ['product/index'], 'items' => [
+            ['label' => 'Адміністрування', 'url' => ['/product/index'], 'items' => [
                 ['label' => 'Користувачі', 'url' => ['#']],
                 ['label' => 'Групи', 'url' => ['#']],
-                ['label' => 'Професії', 'url' => ['/site/courses'], 'items' => [
-                    ['label' => 'Створити нову професію', 'url' => ['site/courses-create']],
+                ['label' => 'Професії', 'url' => ['/prof/courses'], 'items' => [
+                    ['label' => 'Створити нову професію', 'url' => ['/prof/courses-create']],
                     ]
                 ],
                 ['label' => 'Корпуси', 'url' => ['#'], 'items' => [

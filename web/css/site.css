@@ -136,3 +136,7 @@ a.desc:after {
     word-wrap: break-word;
     white-space: inherit;
 }
+
+.courses-table {
+    margin-top: 20px;
+}
