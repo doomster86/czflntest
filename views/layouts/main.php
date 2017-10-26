@@ -28,7 +28,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'Центр занятости: Расписание',
+        'brandLabel' => 'Центр зайнятості: Розклад',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
@@ -46,7 +46,10 @@ AppAsset::register($this);
             ['label' => 'Адміністрування', 'url' => ['product/index'], 'items' => [
                 ['label' => 'Користувачі', 'url' => ['#']],
                 ['label' => 'Групи', 'url' => ['#']],
-                ['label' => 'Курси', 'url' => ['/site/courses']],
+                ['label' => 'Професії', 'url' => ['/site/courses'], 'items' => [
+                    ['label' => 'Створити нову професію', 'url' => ['site/courses-create']],
+                    ]
+                ],
                 ['label' => 'Корпуси', 'url' => ['#'], 'items' => [
                     ['label' => 'Аудиторії', 'url' => ['#']],
                     ]
