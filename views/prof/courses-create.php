@@ -5,6 +5,8 @@ use yii\bootstrap\ActiveForm;
 use yii\widgets\Pjax;
 
 $this->title = 'Створити нову професію';
+//$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = ['label' => 'Професії', 'url' => ['courses']];
 $this->params['breadcrumbs'][] = $this->title;
 
 Pjax::begin([

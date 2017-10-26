@@ -9,6 +9,7 @@ use app\models\CoursesForm;
 use yii\data\Pagination;
 use app\models\Courses;
 use yii\helpers\Html;
+use app\models\CoursesSearch;
 
 
 class ProfController extends Controller
@@ -19,21 +20,15 @@ class ProfController extends Controller
      */
     public function actionCourses()
     {
-        $query = Courses::find();
+        $searchModel = new CoursesSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        $pagination = new Pagination([
-            'defaultPageSize' => 20,
-            'totalCount' => $query->count(),
+        return $this->render('courses', [
+            'courses' => $courses,
+            'pagination' => $pagination,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
-
-        $courses = $query->orderBy('name')
-            ->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
-
-        $model = new CoursesForm();
-
-        return $this->render('courses', ['courses' => $courses, 'pagination' => $pagination]);
     }
 
     public function  actionCoursesCreate()
@@ -68,6 +63,34 @@ class ProfController extends Controller
         } else {
             // либо страница отображается первый раз, либо есть ошибка в данных
             return $this->render('courses-create', ['model' => $model]);
+        }
+    }
+
+    /**
+     * Displays a single Courses model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionView($id)
+    {
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
+    /**
+     * Finds the Courses model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return Courses the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = Courses::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
 
