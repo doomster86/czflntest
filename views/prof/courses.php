@@ -10,7 +10,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="courses-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
         <?= Html::a('Створити професію', ['courses-create'], ['class' => 'btn btn-success']) ?>
@@ -63,8 +62,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {update} {delete}',
+                //'template' => '{view} {update} {delete}',
+                'template' => '{update} {delete}',
                 'buttons' => [
+                        /*
                     'view' => function ($url,$model) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-eye-open"></span>',
@@ -75,9 +76,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]
                             );
                     },
+                        */
                     'update' => function ($url,$model) {
                         return Html::a(
-                            '<span class="glyphicon glyphicon-pencil"></span>',
+                            '<span class="glyphicon glyphicon-pencil left"></span>',
                             $url,
                             [
                                 'title' => 'Редагувати',
@@ -87,7 +89,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'delete' => function ($url,$model) {
                         return Html::a(
-                            '<span class="glyphicon glyphicon-trash"></span>',
+                            '<span class="glyphicon glyphicon-trash right"></span>',
                             $url,
                             [
                                 'title' => 'Видалити',

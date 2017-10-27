@@ -53,7 +53,7 @@ class ProfController extends Controller
             $model->save();
 
             //return $this->redirect(['courses-create', 'id' => $model->ID]);
-            return $this->render('courses-create', ['model' => $model]);
+            return $this->render('courses-create', ['model' => $model, 'operation' => 'created']);
         } else {
             // либо страница отображается первый раз, либо есть ошибка в данных
             return $this->render('courses-create', ['model' => $model]);
@@ -130,7 +130,8 @@ class ProfController extends Controller
 
             $model->update();
 
-            return $this->redirect(['update', 'id' => $model->ID]);
+            //return $this->redirect(['update', 'id' => $model->ID, 'operation' => 'updated']);
+            return $this->render('update', ['model' => $model, 'operation' => 'updated', 'id' => $model->ID]);
         } else {
             return $this->render('update', [
                 'model' => $model,
