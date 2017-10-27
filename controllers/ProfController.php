@@ -5,8 +5,6 @@ namespace app\controllers;
 use Yii;
 use yii\web\Controller;
 use app\models\EntryForm;
-use app\models\CoursesForm;
-use yii\data\Pagination;
 use app\models\Courses;
 use yii\helpers\Html;
 use app\models\CoursesSearch;
@@ -25,14 +23,14 @@ class ProfController extends Controller
         $dataProvider->pagination = ['pageSize' => 15];
 
         return $this->render('courses', [
-            'searchModel' => $searchModel,
+            //'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
 
     public function  actionCoursesCreate()
     {
-        $model = new CoursesForm();
+        $model = new Courses();
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             // данные в $model удачно проверены
@@ -46,18 +44,15 @@ class ProfController extends Controller
                 $coursesSubject = $coursesSubject . Html::encode($subject." ");
             }
 
-            $newcours = new Courses();
+            $model->name = $coursesName;
+            $model->pract = $coursesPract;
+            $model->worklect = $coursesWorklect;
+            $model->teorlect = $coursesTeorlect;
+            $model->subject = $coursesSubject;
 
-            $newcours->name = $coursesName;
-            $newcours->pract = $coursesPract;
-            $newcours->worklect = $coursesWorklect;
-            $newcours->teorlect = $coursesTeorlect;
-            $newcours->subject = $coursesSubject;
+            $model->save();
 
-            $newcours->save();
-
-
-            //return $this->render('courses-confirm', ['model' => $model]);
+            //return $this->redirect(['courses-create', 'id' => $model->ID]);
             return $this->render('courses-create', ['model' => $model]);
         } else {
             // либо страница отображается первый раз, либо есть ошибка в данных
@@ -89,7 +84,7 @@ class ProfController extends Controller
         if (($model = Courses::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException('Сторінку не знайдено.');
         }
     }
 
@@ -104,6 +99,43 @@ class ProfController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['courses']);
+    }
+
+    /**
+     * Updates an existing Courses model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
+            $coursesName = Html::encode($model->name);
+            $coursesPract = Html::encode($model->pract);
+            $coursesWorklect = Html::encode($model->worklect);
+            $coursesTeorlect = Html::encode($model->teorlect);
+            $coursesSubject='';
+            foreach ($model->subject as $subject) {
+                $coursesSubject = $coursesSubject . Html::encode($subject." ");
+            }
+
+            $model->name = $coursesName;
+            $model->pract = $coursesPract;
+            $model->worklect = $coursesWorklect;
+            $model->teorlect = $coursesTeorlect;
+            $model->subject = $coursesSubject;
+
+            $model->update();
+
+            return $this->redirect(['update', 'id' => $model->ID]);
+        } else {
+            return $this->render('update', [
+                'model' => $model,
+            ]);
+        }
     }
 
 }

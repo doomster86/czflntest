@@ -5,7 +5,6 @@ use yii\bootstrap\ActiveForm;
 use yii\widgets\Pjax;
 
 $this->title = 'Створити нову професію';
-//$this->params['breadcrumbs'][] = $this->title;
 $this->params['breadcrumbs'][] = ['label' => 'Професії', 'url' => ['courses']];
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -18,10 +17,7 @@ if (!empty($model->name)):
     $coursesPract = Html::encode($model->pract);
     $coursesWorklect = Html::encode($model->worklect);
     $coursesTeorlect = Html::encode($model->teorlect);
-    $coursesSubject='';
-    foreach ($model->subject as $subject) {
-        $coursesSubject = $coursesSubject . Html::encode($subject." ");
-    }
+    $coursesSubject = Html::encode($model->subject);
 
     ?>
 
