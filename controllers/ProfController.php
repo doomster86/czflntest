@@ -23,7 +23,7 @@ class ProfController extends Controller
         $dataProvider->pagination = ['pageSize' => 15];
 
         return $this->render('courses', [
-            //'searchModel' => $searchModel,
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }

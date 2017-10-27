@@ -24,14 +24,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'class' => 'table table-striped table-bordered col-xs-12 courses-table'
         ],
         'columns' => [
-            /*
-            [
-                'class' => 'yii\grid\SerialColumn',
-                'contentOptions' =>function ($model, $key, $index, $column){
-                    return ['class' => 'col-xs-1'];
-                }
-            ],
-            */
 
             [
                 'attribute'=>'name',
