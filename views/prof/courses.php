@@ -17,6 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'emptyText' => 'Нічого не знайдено',
         'layout'=>"{pager}\n{summary}\n{items}\n{summary}\n{pager}",
         'summary' => "<div class='summary'>Показано {begin} - {end} з {totalCount} професій</div>",
         'tableOptions' => [

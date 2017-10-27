@@ -39,9 +39,16 @@ class ProfController extends Controller
             $coursesPract = Html::encode($model->pract);
             $coursesWorklect = Html::encode($model->worklect);
             $coursesTeorlect = Html::encode($model->teorlect);
-            $coursesSubject='';
+            $coursesSubject ='';
+            $subjectCount = count($model->subject);
+            $i=0;
             foreach ($model->subject as $subject) {
-                $coursesSubject = $coursesSubject . Html::encode($subject." ");
+                $i++;
+                if($i==$subjectCount) {
+                    $coursesSubject = $coursesSubject . Html::encode($subject);
+                } else {
+                    $coursesSubject = $coursesSubject . Html::encode($subject.", ");
+                }
             }
 
             $model->name = $coursesName;
@@ -119,7 +126,7 @@ class ProfController extends Controller
             $coursesTeorlect = Html::encode($model->teorlect);
             $coursesSubject='';
             foreach ($model->subject as $subject) {
-                $coursesSubject = $coursesSubject . Html::encode($subject." ");
+                $coursesSubject = $coursesSubject . Html::encode($subject.", ");
             }
 
             $model->name = $coursesName;
