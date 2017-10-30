@@ -51,22 +51,27 @@ $subjects=array('Предмет 1', 'Предмет 2', 'Предмет 3', 'П�
 
 ?>
     <div class="col-md-3">
+        <?php
+            if ($courses_status == 'create') {
+                $nameValue = '';
+                $practValue = 1;
+                $worlectValue = 1;
+                $teorlectValue = 1;
+            } else {
+                $nameValue = $model->name;
+                $practValue = $model->pract;
+                $worlectValue = $model->worklect;
+                $teorlectValue = $model->teorlect;
+            }
+        ?>
 
-        <?php if (!empty($model->name) && $courses_status == 'create'): ?>
+        <?= $form->field($model, 'name')->label('Назва професії')->textInput(['placeholder' => 'Введіть назву професії', 'value' =>$nameValue]) ?>
 
-            <?= $form->field($model, 'name')->label('Назва професії')->textInput(['placeholder' => 'Введіть назву професії', 'value' =>'']) ?>
+        <?= $form->field($model, 'pract')->label('Кількість занять виробничої практики')->textInput(['type' => 'number', 'min' => '1', 'value' =>$practValue]) ?>
 
-        <?php else: ?>
+        <?= $form->field($model, 'worklect')->label('Кількість занять виробничого навчання')->textInput(['type' => 'number', 'min' => '1', 'value' =>$worlectValue]) ?>
 
-            <?= $form->field($model, 'name')->label('Назва професії')->textInput(['placeholder' => 'Введіть назву професії']) ?>
-
-        <?php endif; ?>
-
-        <?= $form->field($model, 'pract')->label('Кількість занять виробничої практики')->textInput(['type' => 'number', 'min' => '1', 'value' =>'1']) ?>
-
-        <?= $form->field($model, 'worklect')->label('Кількість занять виробничого навчання')->textInput(['type' => 'number', 'min' => '1', 'value' =>'1']) ?>
-
-        <?= $form->field($model, 'teorlect')->label('Кількість занять теоритичного навчання')->textInput(['type' => 'number', 'min' => '1', 'value' =>'1']) ?>
+        <?= $form->field($model, 'teorlect')->label('Кількість занять теоритичного навчання')->textInput(['type' => 'number', 'min' => '1', 'value' =>$teorlectValue]) ?>
 
     </div>
     <div class="col-md-9">
@@ -85,10 +90,22 @@ $subjects=array('Предмет 1', 'Предмет 2', 'Предмет 3', 'П�
 
             $coursesSubjectArray = explode(", ", $coursesSubject);
 
-            print_r($coursesSubjectArray);
+            $checkedList = []; //Массив номеров выбранных элементов checkboxList
+
+            for ($i=0; $i<count($subjects); $i++) {
+                foreach ($coursesSubjectArray as $subject) {
+                    if($subjects[$i]==$subject) {
+                        array_push($checkedList, $i);
+                    }
+                }
+            }
+
+            $model->subject = $checkedList;
+
             echo $form->field($model, 'subject', ['options' => ['class' => 'col-md-12']])->label('Оберіть предмети')
                 ->checkboxList($subjects, [
                     'item' => function ($index, $label, $name, $checked, $value) {
+                        $checked = $checked ? 'checked' : '';
                         return "<div class='checkbox col-md-4'><label><input type='checkbox' {$checked} name='{$name}' value='{$label}'>{$label}</label></div>";
                     }
                 ]);
