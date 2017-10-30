@@ -47,10 +47,9 @@ $form = ActiveForm::begin([
     'options' => ['data' => ['pjax' => true], 'id' => 'courses-form'],
 ]);
 
-$subjects=array('Предмет 1', 'Предмет 2', 'Предмет 3', 'Предмет 4', 'Предмет 5', 'Предмет 6', 'Предмет 7', 'Предмет 8');
-
 ?>
     <div class="col-md-3">
+
         <?php
             if ($courses_status == 'create') {
                 $nameValue = '';
@@ -65,13 +64,28 @@ $subjects=array('Предмет 1', 'Предмет 2', 'Предмет 3', 'П�
             }
         ?>
 
-        <?= $form->field($model, 'name')->label('Назва професії')->textInput(['placeholder' => 'Введіть назву професії', 'value' =>$nameValue]) ?>
+        <?= $form->field($model, 'name')->label('Назва професії')->textInput([
+                'placeholder' => 'Введіть назву професії',
+                'value' =>$nameValue])
+        ?>
 
-        <?= $form->field($model, 'pract')->label('Кількість занять виробничої практики')->textInput(['type' => 'number', 'min' => '1', 'value' =>$practValue]) ?>
+        <?= $form->field($model, 'pract')->label('Кількість занять виробничої практики')->textInput([
+                'type' => 'number',
+                'min' => '1',
+                'value' =>$practValue
+        ]) ?>
 
-        <?= $form->field($model, 'worklect')->label('Кількість занять виробничого навчання')->textInput(['type' => 'number', 'min' => '1', 'value' =>$worlectValue]) ?>
+        <?= $form->field($model, 'worklect')->label('Кількість занять виробничого навчання')->textInput([
+                'type' => 'number',
+                'min' => '1',
+                'value' =>$worlectValue
+        ]) ?>
 
-        <?= $form->field($model, 'teorlect')->label('Кількість занять теоритичного навчання')->textInput(['type' => 'number', 'min' => '1', 'value' =>$teorlectValue]) ?>
+        <?= $form->field($model, 'teorlect')->label('Кількість занять теоритичного навчання')->textInput([
+                'type' => 'number',
+                'min' => '1',
+                'value' =>$teorlectValue
+        ]) ?>
 
     </div>
     <div class="col-md-9">

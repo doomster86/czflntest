@@ -8,4 +8,5 @@ $this->params['breadcrumbs'][] = $this->title; ?>
     'model' => $model,
     'courses_status' =>'create',
     'operation' => $operation,
+    'subjects' => $subjects,
 ]) ?>

@@ -32,6 +32,8 @@ class ProfController extends Controller
     {
         $model = new Courses();
 
+        $subjects=array('Предмет 1', 'Предмет 2', 'Предмет 3', 'Предмет 4', 'Предмет 5', 'Предмет 6', 'Предмет 7', 'Предмет 8');
+
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             // данные в $model удачно проверены
 
@@ -60,10 +62,17 @@ class ProfController extends Controller
             $model->save();
 
             //return $this->redirect(['courses-create', 'id' => $model->ID]);
-            return $this->render('courses-create', ['model' => $model, 'operation' => 'created']);
+            return $this->render('courses-create', [
+                'model' => $model,
+                'operation' => 'created',
+                'subjects' => $subjects,
+            ]);
         } else {
             // либо страница отображается первый раз, либо есть ошибка в данных
-            return $this->render('courses-create', ['model' => $model]);
+            return $this->render('courses-create', [
+                'model' => $model,
+                'subjects' => $subjects,
+            ]);
         }
     }
 
@@ -118,6 +127,8 @@ class ProfController extends Controller
     {
         $model = $this->findModel($id);
 
+        $subjects=array('Предмет 1', 'Предмет 2', 'Предмет 3', 'Предмет 4', 'Предмет 5', 'Предмет 6', 'Предмет 7', 'Предмет 8');
+
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
             $coursesName = Html::encode($model->name);
@@ -138,10 +149,16 @@ class ProfController extends Controller
             $model->update();
 
             //return $this->redirect(['update', 'id' => $model->ID, 'operation' => 'updated']);
-            return $this->render('update', ['model' => $model, 'operation' => 'updated', 'id' => $model->ID]);
+            return $this->render('update', [
+                'model' => $model,
+                'operation' => 'updated',
+                'id' => $model->ID,
+                'subjects' => $subjects,
+            ]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'subjects' => $subjects,
             ]);
         }
     }

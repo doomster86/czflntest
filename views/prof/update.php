@@ -10,4 +10,5 @@ $this->params['breadcrumbs'][] = $this->title;
     'model' => $model,
     'courses_status' =>'update',
     'operation' => $operation,
+    'subjects' => $subjects,
 ]) ?>
