@@ -131,3 +131,24 @@ a.desc:after {
 #courses-form .field-coursesform-subject .help-block-error {
     clear: both;
 }
+
+.courses-table th {
+    word-wrap: break-word;
+    white-space: inherit;
+}
+
+.courses-table {
+    margin-top: 20px;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.courses-table .glyphicon {
+    padding: 0 5px;
+}

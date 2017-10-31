@@ -30,10 +30,7 @@ class Courses extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'subject', 'pract', 'worklect', 'teorlect'], 'required'],
-            [['subject'], 'string'],
-            [['pract', 'worklect', 'teorlect'], 'integer'],
-            [['name'], 'string', 'max' => 255],
+            [['name', 'subject','pract', 'worklect', 'teorlect'], 'required', 'message'=>'Обовязкове поле'],
         ];
     }
 

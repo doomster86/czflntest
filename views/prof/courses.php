@@ -1,32 +1,109 @@
 <?php
 use yii\helpers\Html;
-use yii\widgets\LinkPager;
+use yii\grid\GridView;
+use yii\widgets\Pjax;
 
 $this->title = 'Всі професії';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<table class="table table-striped table-bordered col-sm-12">
-    <thead>
-        <tr>
-            <th class="col-md-2">Назва курсу</th>
-            <th class="col-md-1">Кількість занять виробничої практики</th>
-            <th class="col-md-1">Кількість занять виробничого навчання</th>
-            <th class="col-md-1">Кількість занять теоритичного навчання</th>
-            <th class="col-md-5">Предмети</th>
-        </tr>
-    </thead>
-    <tbody>
-    <?php foreach ($courses as $cours): ?>
-        <tr>
-            <td><?= Html::encode("{$cours->name}") ?></td>
-            <td><?= Html::encode("{$cours->pract}") ?></td>
-            <td><?= Html::encode("{$cours->worklect}") ?></td>
-            <td><?= Html::encode("{$cours->teorlect}") ?></td>
-            <td><?= Html::encode("{$cours->subject}") ?></td>
-        </tr>
-    <?php endforeach; ?>
-    </tbody>
-</table>
+<div class="courses-index">
 
-<?= LinkPager::widget(['pagination' => $pagination]) ?>
+    <h1><?= Html::encode($this->title) ?></h1>
+
+    <p>
+        <?= Html::a('Створити професію', ['courses-create'], ['class' => 'btn btn-success']) ?>
+    </p>
+    <?php Pjax::begin(); ?>    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'emptyText' => 'Нічого не знайдено',
+        'layout'=>"{pager}\n{summary}\n{items}\n{summary}\n{pager}",
+        'summary' => "<div class='summary'>Показано {begin} - {end} з {totalCount} професій</div>",
+        'tableOptions' => [
+            'class' => 'table table-striped table-bordered col-xs-12 courses-table'
+        ],
+        'columns' => [
+
+            [
+                'attribute'=>'name',
+                'label'=>'Професія',
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-3'];
+                }
+            ],
+            [
+                'attribute'=>'subject',
+                'label'=>'Предмети',
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-5'];
+                }
+            ],
+            [
+                'attribute'=>'pract',
+                'label'=>'Кількість занять виробничої практики',
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-1'];
+                }
+            ],
+            [
+                'attribute'=>'worklect',
+                'label'=>'Кількість занять виробничого навчання',
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-1'];
+                }
+            ],
+            [
+                'attribute'=>'teorlect',
+                'label'=>'Кількість занять теоритичного навчання',
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-1'];
+                }
+            ],
+
+            [
+                'class' => 'yii\grid\ActionColumn',
+                //'template' => '{view} {update} {delete}',
+                'template' => '{update} {delete}',
+                'buttons' => [
+                        /*
+                    'view' => function ($url,$model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-eye-open"></span>',
+                            $url,
+                            [
+                                'title' => 'Переглянути',
+                                'data-pjax' => '0',
+                            ]
+                            );
+                    },
+                        */
+                    'update' => function ($url,$model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-pencil left"></span>',
+                            $url,
+                            [
+                                'title' => 'Редагувати',
+                                'data-pjax' => '0',
+                            ]
+                        );
+                    },
+                    'delete' => function ($url,$model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-trash right"></span>',
+                            $url,
+                            [
+                                'title' => 'Видалити',
+                                'data-pjax' => '0',
+                            ]
+                        );
+                    },
+                ],
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-1'];
+                }
+            ],
+        ],
+    ]); ?>
+    <?php Pjax::end(); ?>
+</div>

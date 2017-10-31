@@ -5,10 +5,9 @@ namespace app\controllers;
 use Yii;
 use yii\web\Controller;
 use app\models\EntryForm;
-use app\models\CoursesForm;
-use yii\data\Pagination;
 use app\models\Courses;
 use yii\helpers\Html;
+use app\models\CoursesSearch;
 
 
 class ProfController extends Controller
@@ -19,26 +18,21 @@ class ProfController extends Controller
      */
     public function actionCourses()
     {
-        $query = Courses::find();
+        $searchModel = new CoursesSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->pagination = ['pageSize' => 15];
 
-        $pagination = new Pagination([
-            'defaultPageSize' => 20,
-            'totalCount' => $query->count(),
+        return $this->render('courses', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
-
-        $courses = $query->orderBy('name')
-            ->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
-
-        $model = new CoursesForm();
-
-        return $this->render('courses', ['courses' => $courses, 'pagination' => $pagination]);
     }
 
     public function  actionCoursesCreate()
     {
-        $model = new CoursesForm();
+        $model = new Courses();
+
+        $subjects=array('Предмет 1', 'Предмет 2', 'Предмет 3', 'Предмет 4', 'Предмет 5', 'Предмет 6', 'Предмет 7', 'Предмет 8');
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             // данные в $model удачно проверены
@@ -47,27 +41,125 @@ class ProfController extends Controller
             $coursesPract = Html::encode($model->pract);
             $coursesWorklect = Html::encode($model->worklect);
             $coursesTeorlect = Html::encode($model->teorlect);
-            $coursesSubject='';
+            $coursesSubject ='';
+            $subjectCount = count($model->subject);
+            $i=0;
             foreach ($model->subject as $subject) {
-                $coursesSubject = $coursesSubject . Html::encode($subject." ");
+                $i++;
+                if($i==$subjectCount) {
+                    $coursesSubject = $coursesSubject . Html::encode($subject);
+                } else {
+                    $coursesSubject = $coursesSubject . Html::encode($subject.", ");
+                }
             }
 
-            $newcours = new Courses();
+            $model->name = $coursesName;
+            $model->pract = $coursesPract;
+            $model->worklect = $coursesWorklect;
+            $model->teorlect = $coursesTeorlect;
+            $model->subject = $coursesSubject;
 
-            $newcours->name = $coursesName;
-            $newcours->pract = $coursesPract;
-            $newcours->worklect = $coursesWorklect;
-            $newcours->teorlect = $coursesTeorlect;
-            $newcours->subject = $coursesSubject;
+            $model->save();
 
-            $newcours->save();
-
-
-            //return $this->render('courses-confirm', ['model' => $model]);
-            return $this->render('courses-create', ['model' => $model]);
+            //return $this->redirect(['courses-create', 'id' => $model->ID]);
+            return $this->render('courses-create', [
+                'model' => $model,
+                'operation' => 'created',
+                'subjects' => $subjects,
+            ]);
         } else {
             // либо страница отображается первый раз, либо есть ошибка в данных
-            return $this->render('courses-create', ['model' => $model]);
+            return $this->render('courses-create', [
+                'model' => $model,
+                'subjects' => $subjects,
+            ]);
+        }
+    }
+
+    /**
+     * Displays a single Courses model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionView($id)
+    {
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
+    /**
+     * Finds the Courses model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return Courses the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = Courses::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('Сторінку не знайдено.');
+        }
+    }
+
+    /**
+     * Deletes an existing Courses model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionDelete($id)
+    {
+        $this->findModel($id)->delete();
+
+        return $this->redirect(['courses']);
+    }
+
+    /**
+     * Updates an existing Courses model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+
+        $subjects=array('Предмет 1', 'Предмет 2', 'Предмет 3', 'Предмет 4', 'Предмет 5', 'Предмет 6', 'Предмет 7', 'Предмет 8');
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
+            $coursesName = Html::encode($model->name);
+            $coursesPract = Html::encode($model->pract);
+            $coursesWorklect = Html::encode($model->worklect);
+            $coursesTeorlect = Html::encode($model->teorlect);
+            $coursesSubject='';
+            foreach ($model->subject as $subject) {
+                $coursesSubject = $coursesSubject . Html::encode($subject.", ");
+            }
+
+            $model->name = $coursesName;
+            $model->pract = $coursesPract;
+            $model->worklect = $coursesWorklect;
+            $model->teorlect = $coursesTeorlect;
+            $model->subject = $coursesSubject;
+
+            $model->update();
+
+            //return $this->redirect(['update', 'id' => $model->ID, 'operation' => 'updated']);
+            return $this->render('update', [
+                'model' => $model,
+                'operation' => 'updated',
+                'id' => $model->ID,
+                'subjects' => $subjects,
+            ]);
+        } else {
+            return $this->render('update', [
+                'model' => $model,
+                'subjects' => $subjects,
+            ]);
         }
     }
 
