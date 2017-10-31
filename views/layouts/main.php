@@ -47,7 +47,7 @@ AppAsset::register($this);
                 ['label' => 'Користувачі', 'url' => ['#']],
                 ['label' => 'Групи', 'url' => ['#']],
                 ['label' => 'Професії', 'url' => ['/prof/courses'], 'items' => [
-                    ['label' => 'Створити нову професію', 'url' => ['/prof/courses-create']],
+                    ['label' => 'Створити нову', 'url' => ['/prof/courses-create']],
                     ]
                 ],
                 ['label' => 'Корпуси', 'url' => ['#'], 'items' => [
