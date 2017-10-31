@@ -49,7 +49,7 @@ $config = [
         */
         'urlManager' => [
             'class' => 'yii\web\UrlManager',
-            // Убираем index.php
+            // Убираем subjects.php
             'showScriptName' => false,
             // Убираем r= routes
             'enablePrettyUrl' => true,

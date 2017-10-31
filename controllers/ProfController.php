@@ -4,7 +4,6 @@ namespace app\controllers;
 
 use Yii;
 use yii\web\Controller;
-use app\models\EntryForm;
 use app\models\Courses;
 use yii\helpers\Html;
 use app\models\CoursesSearch;
@@ -74,18 +73,6 @@ class ProfController extends Controller
                 'subjects' => $subjects,
             ]);
         }
-    }
-
-    /**
-     * Displays a single Courses model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
     }
 
     /**

@@ -50,8 +50,8 @@ AppAsset::register($this);
                     ['label' => 'Створити нову', 'url' => ['/prof/courses-create']],
                     ]
                 ],
-                ['label' => 'Предмети', 'url' => ['#'], 'items' => [
-                    ['label' => 'Створити новий', 'url' => ['#']],
+                ['label' => 'Предмети', 'url' => ['/subjects/all-subjects'], 'items' => [
+                    ['label' => 'Створити новий', 'url' => ['/subjects/create']],
                 ]
                 ],
                 ['label' => 'Корпуси', 'url' => ['#'], 'items' => [
