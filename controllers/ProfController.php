@@ -3,11 +3,12 @@
 namespace app\controllers;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use app\models\Courses;
+use app\models\Subjects;
 use yii\helpers\Html;
 use app\models\CoursesSearch;
-
 
 class ProfController extends Controller
 {
@@ -31,7 +32,12 @@ class ProfController extends Controller
     {
         $model = new Courses();
 
-        $subjects=array('Предмет 1', 'Предмет 2', 'Предмет 3', 'Предмет 4', 'Предмет 5', 'Предмет 6', 'Предмет 7', 'Предмет 8');
+        $array = Subjects::find()->asArray()->select('name')->orderBy('name')->all();
+
+        $subjects = ArrayHelper::getColumn($array, 'name');
+
+
+        //$subjects=array('Предмет 1', 'Предмет 2', 'Предмет 3', 'Предмет 4', 'Предмет 5', 'Предмет 6', 'Предмет 7', 'Предмет 8');
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             // данные в $model удачно проверены
@@ -114,7 +120,11 @@ class ProfController extends Controller
     {
         $model = $this->findModel($id);
 
-        $subjects=array('Предмет 1', 'Предмет 2', 'Предмет 3', 'Предмет 4', 'Предмет 5', 'Предмет 6', 'Предмет 7', 'Предмет 8');
+        $array = Subjects::find()->asArray()->select('name')->orderBy('name')->all();
+
+        $subjects = ArrayHelper::getColumn($array, 'name');
+
+        //$subjects=array('Предмет 1', 'Предмет 2', 'Предмет 3', 'Предмет 4', 'Предмет 5', 'Предмет 6', 'Предмет 7', 'Предмет 8');
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
