@@ -54,12 +54,12 @@ AppAsset::register($this);
                     ['label' => 'Створити новий', 'url' => ['/subjects/create']],
                 ]
                 ],
-                ['label' => 'Корпуси', 'url' => ['#'], 'items' => [
-                    ['label' => 'Cтворити новий', 'url' => ['#']],
+                ['label' => 'Корпуси', 'url' => ['/corps'], 'items' => [
+                    ['label' => 'Cтворити новий', 'url' => ['/corps/create']],
                     ]
                 ],
-                ['label' => 'Аудиторії', 'url' => ['#'], 'items' => [
-                    ['label' => 'Cтворити нову', 'url' => ['#']],
+                ['label' => 'Аудиторії', 'url' => ['/audience'], 'items' => [
+                    ['label' => 'Cтворити нову', 'url' => ['/audience/create']],
                 ]
                 ],
                 ['label' => 'Заняття', 'url' => ['#']],
