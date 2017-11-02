@@ -34,8 +34,7 @@ use \app\controllers\AudienceController;
                 'options' =>  [
                         0 => [
                                 'disabled' => true,
-                            'name' => 'choose'
-                            //'' => '',
+                                //'' => '',
                         ],
                         //1 => ...
                 ]
@@ -43,7 +42,7 @@ use \app\controllers\AudienceController;
         //['options' => [0 => ['disabled' => true]]]
     ?>
 
-    <?= $form->field($model, 'corps')->label('Оберіть корпус')->dropDownList($corps, $options)  ?>
+    <?php //echo $form->field($model, 'corps')->label('Оберіть корпус')->dropDownList($corps, $options);  ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Створити' : 'Оновити', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

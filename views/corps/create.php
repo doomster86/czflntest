@@ -12,7 +12,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="corps-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <p>Статус: <?= Html::encode($status)?></p>
 
     <hr />
     <?= $this->render('_form', [

@@ -12,24 +12,8 @@ use yii\filters\VerbFilter;
 /**
  * CorpsController implements the CRUD actions for Corps model.
  */
-class CorpsController extends Controller
-{
-    /**
-     * @inheritdoc
-     */
-    /*
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
-*/
+class CorpsController extends Controller {
+
     /**
      * Lists all Corps models.
      * @return mixed
@@ -67,7 +51,7 @@ class CorpsController extends Controller
     {
         $model = new Corps();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             //редирект на страницу элемента
             //return $this->redirect(['view', 'id' => $model->ID]);
 
@@ -97,9 +81,9 @@ class CorpsController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             //return $this->redirect(['view', 'id' => $model->ID]);
-
+            $model->update();
             return $this->render('update', [
                 'model' => $model,
                 'status' => 'updated'
@@ -137,7 +121,7 @@ class CorpsController extends Controller
         if (($model = Corps::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException('Корпус не знайдено');
         }
     }
 }

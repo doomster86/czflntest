@@ -13,22 +13,7 @@ use yii\helpers\ArrayHelper;
 /**
  * AudienceController implements the CRUD actions for Audience model.
  */
-class AudienceController extends Controller
-{
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
+class AudienceController extends Controller {
 
     /**
      * Lists all Audience models.
@@ -72,11 +57,12 @@ class AudienceController extends Controller
         $corps = ArrayHelper::merge($corps_add, $corps);
 
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
             return $this->render('create', [
                 'model' => $model,
-                'corps' => $corps
+                'corps' => $corps,
+                'status' => 'created'
             ]);
 
         } else {
@@ -93,15 +79,28 @@ class AudienceController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id) {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->ID]);
+        $corps_add = array('Оберіть корпус');
+        $corps = Corps::find()->asArray()->select('name')->orderBy('ID')->all();
+        $corps = ArrayHelper::getColumn($corps, 'name');
+
+        $corps = ArrayHelper::merge($corps_add, $corps);
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            //return $this->redirect(['view', 'id' => $model->ID]);
+            $model->update();
+            return $this->render('update', [
+                'model' => $model,
+                'corps' => $corps,
+                'status' => 'updated'
+            ]);
+
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'corps' => $corps,
             ]);
         }
     }
@@ -116,7 +115,7 @@ class AudienceController extends Controller
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['audience']);
+        return $this->redirect(['index']);
     }
 
     /**

@@ -2,14 +2,14 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\CorpsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-
+$this->title = 'Всі корпуси';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
-<?php $this->title = 'Всі корпуси';
-$this->params['breadcrumbs'][] = $this->title; ?>
 <div class="corps-index">
 
     <h1><?= Html::encode($this->title) ?></h1>

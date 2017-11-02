@@ -1,8 +1,12 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+//use yii\widgets\ActiveForm;
+
+use yii\bootstrap\ActiveForm;
 use yii\widgets\Pjax;
+use \app\models\Corps;
+use \app\controllers\AudienceController;
 /* @var $this yii\web\View */
 /* @var $model app\models\Corps */
 /* @var $form yii\widgets\ActiveForm */

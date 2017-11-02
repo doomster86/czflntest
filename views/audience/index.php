@@ -2,11 +2,12 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\AudienceSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Аудиторії';
+$this->title = 'Всі аудиторії';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="audience-index">
@@ -14,10 +15,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Додати', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-<?php Pjax::begin(); ?>    <?= GridView::widget([
+    <p><?= Html::a('Додати аудиторію', ['create'], ['class' => 'btn btn-success']) ?></p>
+
+    <?php Pjax::begin(); ?>
+
+    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'emptyText' => 'Нічого не знайдено',
@@ -54,10 +56,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
 
-
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{update} {delete}',
+
                 'buttons' => [
 
                     'update' => function ($url, $model, $key) {
@@ -67,7 +69,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'title' => 'Оновити',
                                 'aria-label' => 'Оновити',
-                                'alt' => 'Оновити'
+                                'alt' => 'Оновити',
+                                'data-pjax' => '0',
                             ]
                         );
                     },
@@ -79,7 +82,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'title' => 'Видалити',
                                 'aria-label' => 'Видалити',
-                                'alt' => 'Видалити'
+                                'alt' => 'Видалити',
+                                'data-pjax' => '0',
                             ]
                         );
 
@@ -88,7 +92,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' =>function ($model, $key, $index, $column){
                     return ['class' => 'col-xs-1'];
                 }
+
             ],
         ],
-    ]); ?>
-<?php Pjax::end(); ?></div>
+    ]);
+
+    Pjax::end(); ?>
+
+</div>
