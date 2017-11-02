@@ -34,50 +34,55 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
+
+    $menuItems = [
+        ['label' => 'Головна', 'url' => ['/site/index']],
+        ['label' => 'Про центр', 'url' => ['/site/about']],
+        ['label' => 'Розклад', 'url' => ['#'], /*'visible' => !Yii::$app->user->isGuest*/],
+        ['label' => 'Графік відвідування', 'url' => ['#'], /*'visible' => Yii::$app->user->identity->role=='admin'*/],
+        ['label' => 'Контакти', 'url' => ['/site/contact']],
+        ['label' => 'Адміністрування', 'url' => ['/product/index'], 'items' => [
+            ['label' => 'Користувачі', 'url' => ['#']],
+            ['label' => 'Групи', 'url' => ['#']],
+            ['label' => 'Професії', 'url' => ['/prof/courses'], 'items' => [
+                ['label' => 'Створити нову', 'url' => ['/prof/courses-create']],
+            ]
+            ],
+            ['label' => 'Предмети', 'url' => ['/subjects/all-subjects'], 'items' => [
+                ['label' => 'Створити новий', 'url' => ['/subjects/create']],
+            ]
+            ],
+            ['label' => 'Корпуси', 'url' => ['#'], 'items' => [
+                ['label' => 'Cтворити новий', 'url' => ['#']],
+            ]
+            ],
+            ['label' => 'Аудиторії', 'url' => ['#'], 'items' => [
+                ['label' => 'Cтворити нову', 'url' => ['#']],
+            ]
+            ],
+            ['label' => 'Заняття', 'url' => ['#']],
+            ['label' => 'Управління розкладом', 'url' => ['#']],
+        ]]
+    ];
+
+    if (Yii::$app->user->isGuest) {
+        $menuItems[] = ['label' => 'Зареєеструватися', 'url' => ['/site/signup']];
+        $menuItems[] = ['label' => 'Увійти', 'url' => ['/site/login']];
+    } else {
+        $menuItems[] = '<li>'
+            . Html::beginForm(['/site/logout'], 'post')
+            . Html::submitButton(
+                'Вийти (' . Yii::$app->user->identity->username . ')',
+                ['class' => 'btn btn-link logout']
+            )
+            . Html::endForm()
+            . '</li>';
+    }
+
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'activateParents'=>true,
-        'items' => [
-            ['label' => 'Головна', 'url' => ['/site/index']],
-            ['label' => 'Про центр', 'url' => ['/site/about']],
-            ['label' => 'Розклад', 'url' => ['#'], 'visible' => !Yii::$app->user->isGuest],
-            ['label' => 'Графік відвідування', 'url' => ['#'], 'visible' => Yii::$app->user->identity->role=='admin'],
-            ['label' => 'Контакти', 'url' => ['/site/contact']],
-            ['label' => 'Адміністрування', 'url' => ['/product/index'], 'items' => [
-                ['label' => 'Користувачі', 'url' => ['#']],
-                ['label' => 'Групи', 'url' => ['#']],
-                ['label' => 'Професії', 'url' => ['/prof/courses'], 'items' => [
-                    ['label' => 'Створити нову', 'url' => ['/prof/courses-create']],
-                    ]
-                ],
-                ['label' => 'Предмети', 'url' => ['/subjects/all-subjects'], 'items' => [
-                    ['label' => 'Створити новий', 'url' => ['/subjects/create']],
-                ]
-                ],
-                ['label' => 'Корпуси', 'url' => ['#'], 'items' => [
-                    ['label' => 'Cтворити новий', 'url' => ['#']],
-                    ]
-                ],
-                ['label' => 'Аудиторії', 'url' => ['#'], 'items' => [
-                    ['label' => 'Cтворити нову', 'url' => ['#']],
-                ]
-                ],
-                ['label' => 'Заняття', 'url' => ['#']],
-                ['label' => 'Управління розкладом', 'url' => ['#']],
-            ] , 'visible' => Yii::$app->user->identity->role=='admin'],
-            Yii::$app->user->isGuest ? (
-                ['label' => 'Увійти', 'url' => ['/site/login']]
-            ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
-                . Html::submitButton(
-                    'Вийти (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-            )
-        ],
+        'items' => $menuItems,
     ]);
     NavBar::end();
     ?>
