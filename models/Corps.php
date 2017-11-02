@@ -27,7 +27,7 @@ class Corps extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'location'], 'required'],
+            [['name', 'location'], 'required','message'=>'Обов\'язкове поле'],
             [['name', 'location'], 'string', 'max' => 255],
         ];
     }

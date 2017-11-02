@@ -2,24 +2,59 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $model app\models\Corps */
 /* @var $form yii\widgets\ActiveForm */
+
+Pjax::begin([
+    // Pjax options
+]);
+
 ?>
 
 <div class="corps-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php if (Html::encode($status_form) == 'created') : ?>
+        <div class="alert alert-success">
+            <p>Додано новий корпус. </p>
+            <p>Назва: <strong><?= Html::encode($model->name) ?></strong></p>
+            <p>Розташування: <strong><?= Html::encode($model->location) ?></strong></p>
+        </div>
+    <?php endif; ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    <?php if (Html::encode($status_form) == 'updated') : ?>
+        <div class="alert alert-success">
+            <p>Корпус оновлено.</p>
+        </div>
+    <?php endif; ?>
 
-    <?= $form->field($model, 'location')->textInput(['maxlength' => true]) ?>
+    <?php
+    $nameValue = '';
+    $nameLocation = '';
+
+    if (Html::encode($current_action) == 'update') {
+        $nameValue = $model->name;
+        $nameLocation = $model->location;
+    }
+    $form = ActiveForm::begin([
+    'options' => ['data' => ['pjax' => true], 'id' => 'courses-form'],
+    ]);
+    ?>
+    <?= $form->field($model, 'name')->textInput(['placeholder' => 'Введіть назву', 'value' => $nameValue]) ?>
+
+    <?= $form->field($model, 'location')->textInput(['placeholder' => 'Введіть розташування', 'value' => $nameLocation]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($current_action == 'create' ? 'Додати' : 'Оновити', ['class' => $current_action == 'create' ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
-    <?php ActiveForm::end(); ?>
-
+    <?php
+    ActiveForm::end();
+    ?>
 </div>
+
+<?php
+
+Pjax::end();
+?>

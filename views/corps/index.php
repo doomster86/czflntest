@@ -6,17 +6,17 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\CorpsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Корпуси';
-$this->params['breadcrumbs'][] = $this->title;
+
 ?>
+<?php $this->title = 'Всі корпуси';
+$this->params['breadcrumbs'][] = $this->title; ?>
 <div class="corps-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Додати корпус', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <p><?= Html::a('Додати корпус', ['create'], ['class' => 'btn btn-success']) ?></p>
+
     <?php Pjax::begin(); ?>
 
     <?= GridView::widget([
@@ -58,25 +58,27 @@ $this->params['breadcrumbs'][] = $this->title;
                     'update' => function ($url, $model, $key) {
                         return Html::a(
                             "<span class=\"glyphicon glyphicon-pencil left\"></span>",
-                                $url,
-                                [
-                                    'title' => 'Оновити',
-                                    'aria-label' => 'Оновити',
-                                    'alt' => 'Оновити'
-                                ]
+                            $url,
+                            [
+                                'title' => 'Оновити',
+                                'aria-label' => 'Оновити',
+                                'alt' => 'Оновити',
+                                'data-pjax' => '0',
+                            ]
                         );
                     },
 
                     'delete' => function ($url, $model, $key) {
                         return Html::a(
-                                    "<span class=\"glyphicon glyphicon-trash right\"></span>",
-                                    $url,
-                                    [
-                                        'title' => 'Видалити',
-                                        'aria-label' => 'Видалити',
-                                        'alt' => 'Видалити'
-                                    ]
-                                );
+                            "<span class=\"glyphicon glyphicon-trash right\"></span>",
+                            $url,
+                            [
+                                'title' => 'Видалити',
+                                'aria-label' => 'Видалити',
+                                'alt' => 'Видалити',
+                                'data-pjax' => '0',
+                            ]
+                        );
 
                     },
                 ],
@@ -86,7 +88,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ],
         ],
-    ]); ?>
+    ]);
 
-    <?php Pjax::end(); ?>
+    Pjax::end(); ?>
+
 </div>

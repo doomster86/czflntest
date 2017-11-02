@@ -116,8 +116,7 @@ class ProfController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id) {
         $model = $this->findModel($id);
 
         $array = Subjects::find()->asArray()->select('name')->orderBy('name')->all();

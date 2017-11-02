@@ -17,6 +17,7 @@ class CorpsController extends Controller
     /**
      * @inheritdoc
      */
+    /*
     public function behaviors()
     {
         return [
@@ -28,7 +29,7 @@ class CorpsController extends Controller
             ],
         ];
     }
-
+*/
     /**
      * Lists all Corps models.
      * @return mixed
@@ -38,7 +39,7 @@ class CorpsController extends Controller
         $searchModel = new CorpsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('corps', [
+        return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -49,6 +50,7 @@ class CorpsController extends Controller
      * @param integer $id
      * @return mixed
      */
+
     public function actionView($id)
     {
         return $this->render('view', [
@@ -66,7 +68,18 @@ class CorpsController extends Controller
         $model = new Corps();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->ID]);
+            //редирект на страницу элемента
+            //return $this->redirect(['view', 'id' => $model->ID]);
+
+            //просто редирект, поля формы очищаются
+            //return $this->redirect('create');
+
+            return $this->render('create', [
+                'model' => $model,
+                'status' => 'created'
+            ]);
+
+
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -85,7 +98,13 @@ class CorpsController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->ID]);
+            //return $this->redirect(['view', 'id' => $model->ID]);
+
+            return $this->render('update', [
+                'model' => $model,
+                'status' => 'updated'
+            ]);
+
         } else {
             return $this->render('update', [
                 'model' => $model,
