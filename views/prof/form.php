@@ -10,44 +10,45 @@ Pjax::begin([
 
 if( Html::encode($operation) == 'created'):
 
-    $coursesName = Html::encode($model->name);
-    $coursesPract = Html::encode($model->pract);
+        $coursesName = Html::encode($model->name);
+       $coursesPract = Html::encode($model->pract);
     $coursesWorklect = Html::encode($model->worklect);
     $coursesTeorlect = Html::encode($model->teorlect);
-    $coursesSubject = Html::encode($model->subject);
-    $subject
+     $coursesSubject = Html::encode($model->subject);
+     $coursesSubject = explode(", ", $coursesSubject);
+    $coursesSubject = array_flip($coursesSubject);
+    $coursesSubject = array_intersect_key ($subjects, $coursesSubject);
+    $coursesSubject = implode ( ", " , $coursesSubject );
     ?>
 
     <div class="alert alert-success">
         <p>Нова професія створена!</p>
-
         <ul>
             <li><label>Назва професії: </label> <?= $coursesName ?></li>
-            <li><label>Кількість занять виробничої практики</label>: <?= $coursesPract ?></li>
-            <li><label>Кількість занять виробничого навчання</label>: <?= $coursesWorklect ?></li>
-            <li><label>Кількість занять теоретичного навчання</label>: <?= $coursesTeorlect ?></li>
-            <li><label>Предмети: </label>: <?= $coursesSubject ?></li>
+            <li><label>Кількість занять виробничої практики: </label> <?= $coursesPract ?></li>
+            <li><label>Кількість занять виробничого навчання: </label> <?= $coursesWorklect ?></li>
+            <li><label>Кількість занять теоретичного навчання: </label> <?= $coursesTeorlect ?></li>
+            <li><label>Предмети: </label> <?= $coursesSubject ?></li>
         </ul>
     </div>
 
-    <?php
-endif;
+    <?php endif;
 
-if( Html::encode($operation) == 'updated'):
+    if( Html::encode($operation) == 'updated'):
+        ?>
+
+        <div class="alert alert-success">
+            <p>Професія оновлена!</p>
+        </div>
+
+        <?php
+    endif;
+
+    $form = ActiveForm::begin([
+        'options' => ['data' => ['pjax' => true], 'id' => 'courses-form'],
+    ]);
+
     ?>
-
-    <div class="alert alert-success">
-        <p>Професія оновлена!</p>
-    </div>
-
-    <?php
-endif;
-
-$form = ActiveForm::begin([
-    'options' => ['data' => ['pjax' => true], 'id' => 'courses-form'],
-]);
-
-?>
     <div class="col-md-3">
 
         <?php
