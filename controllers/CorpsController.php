@@ -20,26 +20,17 @@ class CorpsController extends Controller {
      */
     public function actionIndex()
     {
-        $searchModel = new CorpsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        if(Yii::$app->user->identity->role==1) {
+            $searchModel = new CorpsSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * Displays a single Corps model.
-     * @param integer $id
-     * @return mixed
-     */
-
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        } else {
+            return $this->render('/site/access_denied');
+        }
     }
 
     /**
@@ -49,25 +40,29 @@ class CorpsController extends Controller {
      */
     public function actionCreate()
     {
-        $model = new Corps();
+        if(Yii::$app->user->identity->role==1) {
+            $model = new Corps();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            //редирект на страницу элемента
-            //return $this->redirect(['view', 'id' => $model->ID]);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                //редирект на страницу элемента
+                //return $this->redirect(['view', 'id' => $model->ID]);
 
-            //просто редирект, поля формы очищаются
-            //return $this->redirect('create');
+                //просто редирект, поля формы очищаются
+                //return $this->redirect('create');
 
-            return $this->render('create', [
-                'model' => $model,
-                'status' => 'created'
-            ]);
+                return $this->render('create', [
+                    'model' => $model,
+                    'status' => 'created'
+                ]);
 
 
+            } else {
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
+            }
         } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+            return $this->render('/site/access_denied');
         }
     }
 
@@ -79,20 +74,24 @@ class CorpsController extends Controller {
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        if(Yii::$app->user->identity->role==1) {
+            $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            //return $this->redirect(['view', 'id' => $model->ID]);
-            $model->update();
-            return $this->render('update', [
-                'model' => $model,
-                'status' => 'updated'
-            ]);
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+                //return $this->redirect(['view', 'id' => $model->ID]);
+                $model->update();
+                return $this->render('update', [
+                    'model' => $model,
+                    'status' => 'updated'
+                ]);
 
+            } else {
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
         } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+            return $this->render('/site/access_denied');
         }
     }
 
@@ -104,9 +103,13 @@ class CorpsController extends Controller {
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if(Yii::$app->user->identity->role==1) {
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['index']);
+        } else {
+            return $this->render('/site/access_denied');
+        }
     }
 
     /**
@@ -118,10 +121,14 @@ class CorpsController extends Controller {
      */
     protected function findModel($id)
     {
-        if (($model = Corps::findOne($id)) !== null) {
-            return $model;
+        if(Yii::$app->user->identity->role==1) {
+            if (($model = Corps::findOne($id)) !== null) {
+                return $model;
+            } else {
+                throw new NotFoundHttpException('Корпус не знайдено');
+            }
         } else {
-            throw new NotFoundHttpException('Корпус не знайдено');
+            return $this->render('/site/access_denied');
         }
     }
 }

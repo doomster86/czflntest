@@ -68,7 +68,7 @@ AppAsset::register($this);
     ?>
 
     <?php
-    if(Yii::$app->user->identity->username=='admin') {
+    if(Yii::$app->user->identity->role==1) {
         NavBar::begin([
             'brandLabel' => 'Адміністрування',
             'brandUrl' => null,

@@ -21,26 +21,18 @@ class AudienceController extends Controller {
      */
     public function actionIndex()
     {
-        $searchModel = new AudienceSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $modelCorps = new Corps();
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'model_corps' => $modelCorps,
-        ]);
-    }
-
-    /**
-     * Displays a single Audience model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        if(Yii::$app->user->identity->role==1) {
+            $searchModel = new AudienceSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $modelCorps = new Corps();
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'model_corps' => $modelCorps,
+            ]);
+        } else {
+            return $this->render('/site/access_denied');
+        }
     }
 
     /**
@@ -50,33 +42,37 @@ class AudienceController extends Controller {
      */
     public function actionCreate()
     {
-        $model = new Audience();
+        if(Yii::$app->user->identity->role==1) {
+            $model = new Audience();
 
-        $corps_add = array( 0 => 'Оберіть корпус');
+            $corps_add = array( 0 => 'Оберіть корпус');
 
-        $corps_values = Corps::find()->asArray()->select('name')->orderBy('ID')->all();
-        $corps_values = ArrayHelper::getColumn($corps_values, 'name');
+            $corps_values = Corps::find()->asArray()->select('name')->orderBy('ID')->all();
+            $corps_values = ArrayHelper::getColumn($corps_values, 'name');
 
-        $corps_ids = Corps::find()->asArray()->select('ID')->orderBy('ID')->all();
-        $corps_ids = ArrayHelper::getColumn($corps_ids, 'ID');
+            $corps_ids = Corps::find()->asArray()->select('ID')->orderBy('ID')->all();
+            $corps_ids = ArrayHelper::getColumn($corps_ids, 'ID');
 
-        $corps = array_combine($corps_ids,$corps_values);
-        $corps = ArrayHelper::merge($corps_add, $corps);
+            $corps = array_combine($corps_ids,$corps_values);
+            $corps = ArrayHelper::merge($corps_add, $corps);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-            return $this->render('create', [
-                'model' => $model,
-                'corps' => $corps,
+                return $this->render('create', [
+                    'model' => $model,
+                    'corps' => $corps,
 
-                'status' => 'created'
-            ]);
+                    'status' => 'created'
+                ]);
 
+            } else {
+                return $this->render('create', [
+                    'model' => $model,
+                    'corps' => $corps
+                ]);
+            }
         } else {
-            return $this->render('create', [
-                'model' => $model,
-                'corps' => $corps
-            ]);
+            return $this->render('/site/access_denied');
         }
     }
 
@@ -87,28 +83,32 @@ class AudienceController extends Controller {
      * @return mixed
      */
     public function actionUpdate($id) {
-        $model = $this->findModel($id);
+        if(Yii::$app->user->identity->role==1) {
+            $model = $this->findModel($id);
 
-        $corps_add = array('Оберіть корпус');
-        $corps = Corps::find()->asArray()->select('name')->orderBy('ID')->all();
-        $corps = ArrayHelper::getColumn($corps, 'name');
+            $corps_add = array('Оберіть корпус');
+            $corps = Corps::find()->asArray()->select('name')->orderBy('ID')->all();
+            $corps = ArrayHelper::getColumn($corps, 'name');
 
-        $corps = ArrayHelper::merge($corps_add, $corps);
+            $corps = ArrayHelper::merge($corps_add, $corps);
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            //return $this->redirect(['view', 'id' => $model->ID]);
-            $model->update();
-            return $this->render('update', [
-                'model' => $model,
-                'corps' => $corps,
-                'status' => 'updated'
-            ]);
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+                //return $this->redirect(['view', 'id' => $model->ID]);
+                $model->update();
+                return $this->render('update', [
+                    'model' => $model,
+                    'corps' => $corps,
+                    'status' => 'updated'
+                ]);
 
+            } else {
+                return $this->render('update', [
+                    'model' => $model,
+                    'corps' => $corps,
+                ]);
+            }
         } else {
-            return $this->render('update', [
-                'model' => $model,
-                'corps' => $corps,
-            ]);
+            return $this->render('/site/access_denied');
         }
     }
 
@@ -120,9 +120,13 @@ class AudienceController extends Controller {
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if(Yii::$app->user->identity->role==1) {
+            $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+            return $this->redirect(['index']);
+        } else {
+            return $this->render('/site/access_denied');
+        }
     }
 
     /**
@@ -134,10 +138,14 @@ class AudienceController extends Controller {
      */
     protected function findModel($id)
     {
-        if (($model = Audience::findOne($id)) !== null) {
-            return $model;
+        if(Yii::$app->user->identity->role==1) {
+            if (($model = Audience::findOne($id)) !== null) {
+                return $model;
+            } else {
+                throw new NotFoundHttpException('Аудиторія не знайдена.');
+            }
         } else {
-            throw new NotFoundHttpException('Аудиторія не знайдена.');
+            return $this->render('/site/access_denied');
         }
     }
 
