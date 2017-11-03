@@ -55,15 +55,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'corps',
                 'format' => 'text',
                 'label' => 'Корпус',
-
+                'content' => function ($model, $key, $index, $column){
+                    return 'ttt';
+                },
                 'contentOptions' =>function ($model, $key, $index, $column){
                     //return '<span class=\"glyphicon glyphicon-pencil left\">qqq</span>"';
                     return [
                             'class' => 'col-xs-4',
-                            'value' => 'ttt',
-                        'content' => 'ttt',
-
-
                     ];
                 }
             ],
