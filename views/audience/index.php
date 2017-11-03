@@ -19,6 +19,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php Pjax::begin(); ?>
 
+    <?php var_dump($model_corps);
+
+    $column = '444'?>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -51,8 +55,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'corps',
                 'format' => 'text',
                 'label' => 'Корпус',
+
                 'contentOptions' =>function ($model, $key, $index, $column){
-                    return ['class' => 'col-xs-4'];
+                    //return '<span class=\"glyphicon glyphicon-pencil left\">qqq</span>"';
+                    return [
+                            'class' => 'col-xs-4',
+                            'value' => 'ttt',
+                        'content' => 'ttt',
+
+
+                    ];
                 }
             ],
 
@@ -89,7 +101,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     },
                 ],
-                'contentOptions' =>function ($model, $key, $index, $column){
+                'contentOptions' => function ($model, $key, $index, $column){
                     return ['class' => 'col-xs-1'];
                 }
 

@@ -29,7 +29,7 @@ class Audience extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'num', 'corps'], 'required'], //список обязательных полей
-            [['corps'], 'integer'],
+            //[['corps'], 'string'],
             [['name', 'num'], 'string',   'max' => 255],
         ];
     }

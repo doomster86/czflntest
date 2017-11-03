@@ -53,12 +53,6 @@ Pjax::begin([
         <?= Html::submitButton($current_action == 'create' ? 'Додати' : 'Оновити', ['class' => $current_action == 'create' ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
-    <?php
-    ActiveForm::end();
-    ?>
+    <?php ActiveForm::end(); ?>
 </div>
-
-<?php
-
-Pjax::end();
-?>
+<?php Pjax::end(); ?>

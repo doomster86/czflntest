@@ -51,7 +51,7 @@ class CorpsController extends Controller {
     {
         $model = new Corps();
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             //редирект на страницу элемента
             //return $this->redirect(['view', 'id' => $model->ID]);
 
