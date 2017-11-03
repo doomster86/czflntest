@@ -2,7 +2,8 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
-
+use \app\models\Corps;
+use yii\helpers\ArrayHelper;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\AudienceSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -18,10 +19,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <p><?= Html::a('Додати аудиторію', ['create'], ['class' => 'btn btn-success']) ?></p>
 
     <?php Pjax::begin(); ?>
-
-    <?php var_dump($model_corps);
-
-    $column = '444'?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -55,9 +52,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'corps',
                 'format' => 'text',
                 'label' => 'Корпус',
+
                 'content' => function ($model, $key, $index, $column){
-                    return 'ttt';
+                    $corps_name = Corps::find()->asArray()->where(['ID' => $model->corps])->one();
+                    return $corps_name['name'];
                 },
+
                 'contentOptions' =>function ($model, $key, $index, $column){
                     //return '<span class=\"glyphicon glyphicon-pencil left\">qqq</span>"';
                     return [
