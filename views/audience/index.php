@@ -58,6 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $corps_name['name'];
                 },
 
+
                 'contentOptions' =>function ($model, $key, $index, $column){
                     //return '<span class=\"glyphicon glyphicon-pencil left\">qqq</span>"';
                     return [
