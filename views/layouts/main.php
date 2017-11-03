@@ -31,7 +31,7 @@ AppAsset::register($this);
         'brandLabel' => 'Центр зайнятості: Розклад',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
+            'class' => 'navbar-inverse',
         ],
     ]);
 
@@ -41,33 +41,13 @@ AppAsset::register($this);
         ['label' => 'Розклад', 'url' => ['#'], /*'visible' => !Yii::$app->user->isGuest*/],
         ['label' => 'Графік відвідування', 'url' => ['#'], /*'visible' => Yii::$app->user->identity->role=='admin'*/],
         ['label' => 'Контакти', 'url' => ['/site/contact']],
-        ['label' => 'Адміністрування', 'url' => ['/product/index'], 'items' => [
-            ['label' => 'Користувачі', 'url' => ['#']],
-            ['label' => 'Групи', 'url' => ['#']],
-            ['label' => 'Професії', 'url' => ['/prof/courses'], 'items' => [
-                ['label' => 'Створити нову', 'url' => ['/prof/courses-create']],
-            ]
-            ],
-            ['label' => 'Предмети', 'url' => ['/subjects/all-subjects'], 'items' => [
-                ['label' => 'Створити новий', 'url' => ['/subjects/create']],
-            ]
-            ],
-            ['label' => 'Корпуси', 'url' => ['/corps/index'], 'items' => [
-                ['label' => 'Cтворити новий', 'url' => ['/corps/create']],
-            ]
-            ],
-            ['label' => 'Аудиторії', 'url' => ['/audience/index'], 'items' => [
-                ['label' => 'Cтворити нову', 'url' => ['/audience/create']],
-            ]
-            ],
-            ['label' => 'Заняття', 'url' => ['#']],
-            ['label' => 'Управління розкладом', 'url' => ['#']],
-        ]]
     ];
 
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Зареєеструватися', 'url' => ['/site/signup']];
-        $menuItems[] = ['label' => 'Увійти', 'url' => ['/site/login']];
+        $menuItems[] = ['label' => 'Вхід', 'url' => ['/subjects/all-subjects'], 'items' => [
+            ['label' => 'Увійти', 'url' => ['/site/login']],
+            ['label' => 'Зареєеструватись', 'url' => ['/site/signup']],
+        ]];
     } else {
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
@@ -85,6 +65,48 @@ AppAsset::register($this);
         'items' => $menuItems,
     ]);
     NavBar::end();
+    ?>
+
+    <?php
+    if(Yii::$app->user->identity->username=='admin') {
+        NavBar::begin([
+            'brandLabel' => 'Адміністрування',
+            'brandUrl' => null,
+            'options' => [
+                'class' => 'navbar grey-menu',
+            ],
+        ]);
+
+        $menuItems = [
+            ['label' => 'Користувачі', 'url' => ['#']],
+            ['label' => 'Групи', 'url' => ['#']],
+            ['label' => 'Професії', 'url' => ['/prof/courses'], 'items' => [
+                ['label' => 'Всі професії', 'url' => ['/prof/courses']],
+                ['label' => 'Створити нову', 'url' => ['/prof/courses-create']],
+            ]],
+            ['label' => 'Предмети', 'url' => ['/subjects/all-subjects'], 'items' => [
+                ['label' => 'Всі предмети', 'url' => ['/subjects/all-subjects']],
+                ['label' => 'Створити новий', 'url' => ['/subjects/create']],
+            ]],
+            ['label' => 'Корпуси', 'url' => ['/corps/index'], 'items' => [
+                ['label' => 'Всі корпуси', 'url' => ['/corps/index']],
+                ['label' => 'Cтворити новий', 'url' => ['/corps/create']],
+            ]],
+            ['label' => 'Аудиторії', 'url' => ['/audience/index'], 'items' => [
+                ['label' => 'Всі аудиторії', 'url' => ['/audience/index']],
+                ['label' => 'Cтворити нову', 'url' => ['/audience/create']],
+            ]],
+            ['label' => 'Заняття', 'url' => ['#']],
+            ['label' => 'Управління розкладом', 'url' => ['#']],
+        ];
+
+        echo Nav::widget([
+            'options' => ['class' => 'navbar-nav navbar-right'],
+            'activateParents'=>true,
+            'items' => $menuItems,
+        ]);
+        NavBar::end();
+    }
     ?>
 
     <div class="container">
