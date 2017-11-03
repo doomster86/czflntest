@@ -50,6 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     $subject_name_arr = ArrayHelper::getColumn($subject_name_arr, 'name');
                     $subject_names = implode(", ",$subject_name_arr);
                     return $subject_names;
+
                 },
                 'contentOptions' =>function ($model, $key, $index, $column){
                     return ['class' => 'col-xs-5'];
