@@ -15,10 +15,7 @@ if( Html::encode($operation) == 'created'):
 
     <div class="alert alert-success">
         <p>Новий предмет створено!</p>
-
-        <ul>
-            <li><label>Назва предмету: </label>: <?= $subjectName ?></li>
-        </ul>
+        <p>Назва предмету: <strong><?= $subjectName ?></p>
     </div>
 
     <?php

@@ -15,17 +15,17 @@ if( Html::encode($operation) == 'created'):
     $coursesWorklect = Html::encode($model->worklect);
     $coursesTeorlect = Html::encode($model->teorlect);
     $coursesSubject = Html::encode($model->subject);
-
+    $subject
     ?>
 
     <div class="alert alert-success">
         <p>Нова професія створена!</p>
 
         <ul>
-            <li><label>Назва професії: </label>: <?= $coursesName ?></li>
+            <li><label>Назва професії: </label> <?= $coursesName ?></li>
             <li><label>Кількість занять виробничої практики</label>: <?= $coursesPract ?></li>
             <li><label>Кількість занять виробничого навчання</label>: <?= $coursesWorklect ?></li>
-            <li><label>Кількість занять теоритичного навчання</label>: <?= $coursesTeorlect ?></li>
+            <li><label>Кількість занять теоретичного навчання</label>: <?= $coursesTeorlect ?></li>
             <li><label>Предмети: </label>: <?= $coursesSubject ?></li>
         </ul>
     </div>
@@ -81,7 +81,7 @@ $form = ActiveForm::begin([
                 'value' =>$worlectValue
         ]) ?>
 
-        <?= $form->field($model, 'teorlect')->label('Кількість занять теоритичного навчання')->textInput([
+        <?= $form->field($model, 'teorlect')->label('Кількість занять теоретичного навчання')->textInput([
                 'type' => 'number',
                 'min' => '1',
                 'value' =>$teorlectValue
@@ -89,14 +89,22 @@ $form = ActiveForm::begin([
 
     </div>
     <div class="col-md-9">
+
+        <?php //var_dump($subjects); ?>
+
         <?php if($courses_status == 'create') {
 
-            echo $form->field($model, 'subject', ['options' => ['class' => 'col-md-12']])->label('Оберіть предмети')
-                ->checkboxList($subjects, [
-                    'item' => function ($index, $label, $name, $checked, $value) {
-                        return "<div class='checkbox col-md-4'><label><input type='checkbox' {$checked} name='{$name}' value='{$label}'>{$label}</label></div>";
-                    }
-                ]);
+            echo $form->field($model, 'subject', [
+                    'options' => [
+                            'class' => 'col-md-12'
+                    ]
+            ])
+            ->label('Оберіть предмети:')
+            ->checkboxList($subjects, [
+                'item' => function ($index, $label, $name, $checked, $value) {
+                    return "<div class='checkbox col-md-4'><label><input type='checkbox' {$checked} name='{$name}' value='{$value}'>{$label}</label></div>";
+                }
+            ]);
 
         } else  {
 

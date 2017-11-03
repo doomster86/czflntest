@@ -33,9 +33,12 @@ class ProfController extends Controller
         $model = new Courses();
 
         $array = Subjects::find()->asArray()->select('name')->orderBy('name')->all();
-
         $subjects = ArrayHelper::getColumn($array, 'name');
 
+        $subjects_ids = Subjects::find()->asArray()->select('ID')->orderBy('ID')->all(); ///
+        $subjects_ids = ArrayHelper::getColumn($subjects_ids, 'ID');
+
+        $subjects = array_combine($subjects_ids,$subjects);
 
         //$subjects=array('Предмет 1', 'Предмет 2', 'Предмет 3', 'Предмет 4', 'Предмет 5', 'Предмет 6', 'Предмет 7', 'Предмет 8');
 
@@ -71,6 +74,7 @@ class ProfController extends Controller
                 'model' => $model,
                 'operation' => 'created',
                 'subjects' => $subjects,
+
             ]);
         } else {
             // либо страница отображается первый раз, либо есть ошибка в данных
@@ -120,7 +124,6 @@ class ProfController extends Controller
         $model = $this->findModel($id);
 
         $array = Subjects::find()->asArray()->select('name')->orderBy('name')->all();
-
         $subjects = ArrayHelper::getColumn($array, 'name');
 
         //$subjects=array('Предмет 1', 'Предмет 2', 'Предмет 3', 'Предмет 4', 'Предмет 5', 'Предмет 6', 'Предмет 7', 'Предмет 8');

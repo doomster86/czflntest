@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use \app\models\Corps;
-use yii\helpers\ArrayHelper;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\AudienceSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -24,6 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'emptyText' => 'Нічого не знайдено',
+        'layout'=>"{pager}\n{summary}\n{items}\n{summary}\n{pager}",
         'summary' => "<div class=\"summary\">Показано {begin} - {end} з {totalCount} аудиторій</div>",
         'columns' => [
 
@@ -52,15 +53,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'corps',
                 'format' => 'text',
                 'label' => 'Корпус',
-
                 'content' => function ($model, $key, $index, $column){
                     $corps_name = Corps::find()->asArray()->where(['ID' => $model->corps])->one();
                     return $corps_name['name'];
                 },
-
-
                 'contentOptions' =>function ($model, $key, $index, $column){
-                    //return '<span class=\"glyphicon glyphicon-pencil left\">qqq</span>"';
                     return [
                             'class' => 'col-xs-4',
                     ];

@@ -2,7 +2,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
-
+use \app\models\Subjects;
 $this->title = 'Всі професії';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
