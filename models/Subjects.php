@@ -26,10 +26,11 @@ class Subjects extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required', 'message'=>'Обовязкове поле'],
+            [['name'], 'required', 'message'=>'Обовязкове поле'], // обязательные поля
             [['name'], 'string', 'max' => 255],
         ];
     }
+
 
     /**
      * @inheritdoc

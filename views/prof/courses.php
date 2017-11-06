@@ -55,6 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return ['class' => 'col-xs-1'];
                 }
             ],
+
             [
                 'attribute'=>'teorlect',
                 'label'=>'Кількість занять теоритичного навчання',
