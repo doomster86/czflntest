@@ -109,7 +109,7 @@ class SubjectsController extends Controller
             return $this->render('update', [
                 'model' => $model,
                 'operation' => 'updated',
-                'id' => $model->ID,
+                //'id' => $model->ID,
             ]);
 
         } else {
