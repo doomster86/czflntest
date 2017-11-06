@@ -20,6 +20,7 @@ class Subjects extends \yii\db\ActiveRecord
         return 'subjects';
     }
 
+
     /**
      * @inheritdoc
      */
@@ -30,6 +31,7 @@ class Subjects extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 255],
         ];
     }
+
 
     /**
      * @inheritdoc
