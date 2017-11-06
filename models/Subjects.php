@@ -20,7 +20,6 @@ class Subjects extends \yii\db\ActiveRecord
         return 'subjects';
     }
 
-
     /**
      * @inheritdoc
      */
