@@ -25,7 +25,7 @@ class SubjectsController extends Controller
         $searchModel = new SubjectsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('subjects', [
+        return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -85,7 +85,7 @@ class SubjectsController extends Controller
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['all-subjects']);
+        return $this->redirect(['index']);
     }
 
     /**
