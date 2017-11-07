@@ -80,12 +80,12 @@ AppAsset::register($this);
         $menuItems = [
             ['label' => 'Користувачі', 'url' => ['#']],
             ['label' => 'Групи', 'url' => ['#']],
-            ['label' => 'Професії', 'url' => ['/prof/courses'], 'items' => [
-                ['label' => 'Всі професії', 'url' => ['/prof/courses']],
-                ['label' => 'Створити нову', 'url' => ['/prof/courses-create']],
+            ['label' => 'Професії', 'url' => ['/courses/index'], 'items' => [
+                ['label' => 'Всі професії', 'url' => ['/courses/index']],
+                ['label' => 'Створити нову', 'url' => ['/courses/create']],
             ]],
-            ['label' => 'Предмети', 'url' => ['/subjects/all-subjects'], 'items' => [
-                ['label' => 'Всі предмети', 'url' => ['/subjects/all-subjects']],
+            ['label' => 'Предмети', 'url' => ['/subjects/index'], 'items' => [
+                ['label' => 'Всі предмети', 'url' => ['/subjects/index']],
                 ['label' => 'Створити новий', 'url' => ['/subjects/create']],
             ]],
             ['label' => 'Корпуси', 'url' => ['/corps/index'], 'items' => [

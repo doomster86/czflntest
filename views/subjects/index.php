@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+//use \app\models\Teachers;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\SubjectsSearch */
@@ -15,10 +16,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Створити новий', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+
+    <p><?= Html::a('Створити новий предмет', ['create'], ['class' => 'btn btn-success']) ?></p>
+
     <?php Pjax::begin(); ?>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -26,16 +28,49 @@ $this->params['breadcrumbs'][] = $this->title;
         'layout'=>"{pager}\n{summary}\n{items}\n{summary}\n{pager}",
         'summary' => "<div class='summary'>Показано {begin} - {end} з {totalCount} предметів</div>",
         'tableOptions' => [
-            'class' => 'table table-striped table-bordered col-xs-12 courses-table'
+            'class' => 'table table-striped table-bordered col-xs-12 subjects-table'
         ],
         'columns' => [
             [
                 'attribute'=>'name',
                 'label'=>'Предмет',
                 'contentOptions' =>function ($model, $key, $index, $column){
-                    return ['class' => 'col-xs-11'];
+                    return ['class' => 'col-xs-2'];
                 }
             ],
+
+            [
+                'attribute'=>'teacher',
+                'label'=>'Викладач',
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-3'];
+                }
+            ],
+
+            [
+                'attribute'=>'dur_lesson',
+                'label'=>'Тривалість занять',
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-2'];
+                }
+            ],
+
+            [
+                'attribute'=>'dur_break',
+                'label'=>'Тривалість перерв',
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-2'];
+                }
+            ],
+
+            [
+                'attribute'=>'max_week',
+                'label'=>'Макс. на тиждень',
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-2'];
+                }
+            ],
+
 
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -43,16 +78,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{update} {delete}',
                 'buttons' => [
                     /*
-                'view' => function ($url,$model) {
-                    return Html::a(
-                        '<span class="glyphicon glyphicon-eye-open"></span>',
-                        $url,
-                        [
-                            'title' => 'Переглянути',
-                            'data-pjax' => '0',
-                        ]
-                        );
-                },
+                    'view' => function ($url,$model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-eye-open"></span>',
+                            $url,
+                            [
+                                'title' => 'Переглянути',
+                                'data-pjax' => '0',
+                            ]
+                            );
+                    },
                     */
                     'update' => function ($url,$model) {
                         return Html::a(

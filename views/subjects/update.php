@@ -2,14 +2,28 @@
 
 use yii\helpers\Html;
 
-$this->title = 'Редагувати предмет';
-$this->params['breadcrumbs'][] = ['label' => 'Предмети', 'url' => ['all-subjects']];
-$this->params['breadcrumbs'][] = $this->title;
+/* @var $this yii\web\View */
+/* @var $model app\models\Audience */
+
+$this->title = 'Оновити: ' . $model->name;
+$this->params['breadcrumbs'][] = ['label' => 'Предмети', 'url' => ['index']];
+$this->params['breadcrumbs'][] = 'Оновити';
 
 ?>
+<div class="subjects-update">
 
-<?= $this->render('_form', [
-    'model' => $model,
-    'subject_status' =>'update',
-    'operation' => $operation,
-]) ?>
+    <h1><?= Html::encode($this->title) ?></h1>
+
+    <hr />
+
+    <?= $this->render('form', [
+        'model' => $model,
+        'teachers' => $teachers,
+        'current_action' => 'update',
+        'status_form' => $status
+        /*
+        'subject_status' =>'update',
+        'operation' => $operation,
+        */
+    ]) ?>
+</div>

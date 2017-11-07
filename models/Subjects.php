@@ -26,11 +26,12 @@ class Subjects extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required', 'message'=>'Обовязкове поле'], // обязательные поля
-            [['name'], 'string', 'max' => 255],
+            [['name', 'teacher', 'dur_lesson', 'dur_break', 'max_week'], 'required', 'message'=>'Обов\'язкове поле'],
+            ['name', 'string', 'min' => 3, 'max' => 255, 'message'=>'Мін 3 літери'],
+            [['dur_lesson','dur_break'], 'number', 'min' => 1, 'message' => 'Тільки цифри'],
+            [['max_week'], 'integer', 'min' => 0]
         ];
     }
-
 
     /**
      * @inheritdoc

@@ -10,20 +10,20 @@ use app\models\Subjects;
 use yii\helpers\Html;
 use app\models\CoursesSearch;
 
-class ProfController extends Controller
+class CoursesController extends Controller
 {
 
     /**
      * Validate CoursesForm
      */
-    public function actionCourses()
+    public function actionIndex()
     {
         if(Yii::$app->user->identity->role==1) {
             $searchModel = new CoursesSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $dataProvider->pagination = ['pageSize' => 15];
 
-            return $this->render('courses', [
+            return $this->render('index', [
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
             ]);
@@ -32,7 +32,7 @@ class ProfController extends Controller
         }
     }
 
-    public function  actionCoursesCreate()
+    public function  actionCreate()
     {
         if(Yii::$app->user->identity->role==1) {
             $model = new Courses();
@@ -75,7 +75,7 @@ class ProfController extends Controller
                 $model->save();
 
                 //return $this->redirect(['courses-create', 'id' => $model->ID]);
-                return $this->render('courses-create', [
+                return $this->render('create', [
                     'model' => $model,
                     'operation' => 'created',
                     'subjects' => $subjects,
@@ -83,7 +83,7 @@ class ProfController extends Controller
                 ]);
             } else {
                 // либо страница отображается первый раз, либо есть ошибка в данных
-                return $this->render('courses-create', [
+                return $this->render('create', [
                     'model' => $model,
                     'subjects' => $subjects,
                 ]);
@@ -124,7 +124,7 @@ class ProfController extends Controller
         if(Yii::$app->user->identity->role==1) {
             $this->findModel($id)->delete();
 
-            return $this->redirect(['courses']);
+            return $this->redirect(['index']);
         } else {
             return $this->render('/site/access_denied');
         }

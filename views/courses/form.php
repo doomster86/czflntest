@@ -15,23 +15,24 @@ if( Html::encode($operation) == 'created'):
     $coursesWorklect = Html::encode($model->worklect);
     $coursesTeorlect = Html::encode($model->teorlect);
     $coursesSubject = Html::encode($model->subject);
-    $subject
+    $coursesSubject = explode(", ", $coursesSubject);
+    $coursesSubject = array_flip($coursesSubject);
+    $coursesSubject = array_intersect_key ($subjects, $coursesSubject);
+    $coursesSubject = implode ( ", " , $coursesSubject );
     ?>
 
     <div class="alert alert-success">
         <p>Нова професія створена!</p>
-
         <ul>
             <li><label>Назва професії: </label> <?= $coursesName ?></li>
-            <li><label>Кількість занять виробничої практики</label>: <?= $coursesPract ?></li>
-            <li><label>Кількість занять виробничого навчання</label>: <?= $coursesWorklect ?></li>
-            <li><label>Кількість занять теоретичного навчання</label>: <?= $coursesTeorlect ?></li>
-            <li><label>Предмети: </label>: <?= $coursesSubject ?></li>
+            <li><label>Кількість занять виробничої практики: </label> <?= $coursesPract ?></li>
+            <li><label>Кількість занять виробничого навчання: </label> <?= $coursesWorklect ?></li>
+            <li><label>Кількість занять теоретичного навчання: </label> <?= $coursesTeorlect ?></li>
+            <li><label>Предмети: </label> <?= $coursesSubject ?></li>
         </ul>
     </div>
 
-    <?php
-endif;
+<?php endif;
 
 if( Html::encode($operation) == 'updated'):
     ?>
@@ -51,40 +52,40 @@ $form = ActiveForm::begin([
     <div class="col-md-3">
 
         <?php
-            if ($courses_status == 'create') {
-                $nameValue = '';
-                $practValue = 1;
-                $worlectValue = 1;
-                $teorlectValue = 1;
-            } else {
-                $nameValue = $model->name;
-                $practValue = $model->pract;
-                $worlectValue = $model->worklect;
-                $teorlectValue = $model->teorlect;
-            }
+        if ($courses_status == 'create') {
+            $nameValue = '';
+            $practValue = 1;
+            $worlectValue = 1;
+            $teorlectValue = 1;
+        } else {
+            $nameValue = $model->name;
+            $practValue = $model->pract;
+            $worlectValue = $model->worklect;
+            $teorlectValue = $model->teorlect;
+        }
         ?>
 
         <?= $form->field($model, 'name')->label('Назва професії')->textInput([
-                'placeholder' => 'Введіть назву професії',
-                'value' =>$nameValue])
+            'placeholder' => 'Введіть назву професії',
+            'value' =>$nameValue])
         ?>
 
         <?= $form->field($model, 'pract')->label('Кількість занять виробничої практики')->textInput([
-                'type' => 'number',
-                'min' => '1',
-                'value' =>$practValue
+            'type' => 'number',
+            'min' => '1',
+            'value' =>$practValue
         ]) ?>
 
         <?= $form->field($model, 'worklect')->label('Кількість занять виробничого навчання')->textInput([
-                'type' => 'number',
-                'min' => '1',
-                'value' =>$worlectValue
+            'type' => 'number',
+            'min' => '1',
+            'value' =>$worlectValue
         ]) ?>
 
         <?= $form->field($model, 'teorlect')->label('Кількість занять теоретичного навчання')->textInput([
-                'type' => 'number',
-                'min' => '1',
-                'value' =>$teorlectValue
+            'type' => 'number',
+            'min' => '1',
+            'value' =>$teorlectValue
         ]) ?>
 
     </div>
@@ -95,16 +96,16 @@ $form = ActiveForm::begin([
         <?php if($courses_status == 'create') {
 
             echo $form->field($model, 'subject', [
-                    'options' => [
-                            'class' => 'col-md-12'
-                    ]
+                'options' => [
+                    'class' => 'col-md-12'
+                ]
             ])
-            ->label('Оберіть предмети:')
-            ->checkboxList($subjects, [
-                'item' => function ($index, $label, $name, $checked, $value) {
-                    return "<div class='checkbox col-md-4'><label><input type='checkbox' {$checked} name='{$name}' value='{$value}'>{$label}</label></div>";
-                }
-            ]);
+                ->label('Оберіть предмети:')
+                ->checkboxList($subjects, [
+                    'item' => function ($index, $label, $name, $checked, $value) {
+                        return "<div class='checkbox col-md-4'><label><input type='checkbox' {$checked} name='{$name}' value='{$value}'>{$label}</label></div>";
+                    }
+                ]);
 
         } else  {
 

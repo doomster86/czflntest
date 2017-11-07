@@ -9,7 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Html;
-
+use yii\helpers\ArrayHelper;
 /**
  * SubjectsController implements the CRUD actions for Subjects model.
  */
@@ -20,15 +20,22 @@ class SubjectsController extends Controller
      * Lists all Subjects models.
      * @return mixed
      */
-    public function actionAllSubjects()
-    {
-        $searchModel = new SubjectsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+    public function actionIndex() {
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        if(Yii::$app->user->identity->role==1) {
+
+            $searchModel = new SubjectsSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            //$modelTeachers = new Teacher();
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                //'model_teachers' => $modelTeachers,
+            ]);
+
+        } else {
+            return $this->render('/site/access_denied');
+        }
     }
 
 
@@ -37,25 +44,108 @@ class SubjectsController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
-        $model = new Subjects();
+    public function actionCreate() {
+        if(Yii::$app->user->identity->role==1) {
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $subjectName = Html::encode($model->name);
+            $model = new Subjects();
 
-            $model->name = $subjectName;
+            $teachers_add = array( 0 => 'Оберіть викладача');
 
-            $model->save();
+            $teachers = array(
+                'Свирид Опанасович' => 'Свирид Опанасович',
+                'Мурзік Васильович' => 'Мурзік Васильович',
+                'Пророк Самуїл' => 'Пророк Самуїл'
+            );
 
-            return $this->render('create', [
-                'model' => $model,
-                'operation' => 'created',
-            ]);
+            //добавить подгрузку из класса Teacher
+            /*
+            $teachers_values = Teachers::find()->asArray()->select('name')->orderBy('ID')->all();
+            $teachers_values = ArrayHelper::getColumn($teachers_values, 'name');
+
+            $teachers_ids = Teachers::find()->asArray()->select('ID')->orderBy('ID')->all();
+            $teachers_ids = ArrayHelper::getColumn($teachers_ids, 'ID');
+
+            $teachers = array_combine($teachers_ids,$teachers_values);
+            */
+            $teachers = ArrayHelper::merge($teachers_add, $teachers);
+
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+                return $this->render('create', [
+                    'model' => $model,
+                    'teachers' => $teachers,
+                    'status' => 'created',
+                ]);
+            } else {
+                return $this->render('create', [
+                    'model' => $model,
+                    'teachers' => $teachers,
+                ]);
+            }
+
         } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+            return $this->render('/site/access_denied');
+        }
+    }
+
+    /**
+     * Updates an existing Subjects model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionUpdate($id) {
+        if(Yii::$app->user->identity->role==1) {
+            $model = $this->findModel($id);
+
+            $teachers_add = array('Оберіть викладача');
+
+            $teachers = array(
+                'Свирид Опанасович' => 'Свирид Опанасович',
+                'Мурзік Васильович' => 'Мурзік Васильович',
+                'Пророк Самуїл' => 'Пророк Самуїл'
+            );
+
+            /* из модели/таблицы Teachers
+            $teachers = Teachers::find()->asArray()->select('name')->orderBy('ID')->all();
+            $teachers = ArrayHelper::getColumn($teachers, 'name');
+               */
+            $teachers = ArrayHelper::merge($teachers_add, $teachers);
+
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
+                $model->update();
+                return $this->render('update', [
+                    'model' => $model,
+                    'teachers' => $teachers,
+                    'status' => 'updated',
+                ]);
+
+            } else {
+                return $this->render('update', [
+                    'model' => $model,
+                    'teachers' => $teachers,
+                ]);
+            }
+        } else {
+            return $this->render('/site/access_denied');
+        }
+
+    }
+
+    /**
+     * Deletes an existing Subjects model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionDelete($id) {
+        if(Yii::$app->user->identity->role==1) {
+            $this->findModel($id)->delete();
+
+            return $this->redirect(['index']);
+        } else {
+            return $this->render('/site/access_denied');
         }
     }
 
@@ -66,56 +156,15 @@ class SubjectsController extends Controller
      * @return Subjects the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
-    {
-        if (($model = Subjects::findOne($id)) !== null) {
-            return $model;
+    protected function findModel($id) {
+        if(Yii::$app->user->identity->role==1) {
+            if (($model = Subjects::findOne($id)) !== null) {
+                return $model;
+            } else {
+                throw new NotFoundHttpException('Сторінку не знайдено.');
+            }
         } else {
-            throw new NotFoundHttpException('Сторінку не знайдено.');
-        }
-    }
-
-    /**
-     * Deletes an existing Subjects model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Updates an existing Subjects model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-
-            $subjectName = Html::encode($model->name);
-
-            $model->name = $subjectName;
-
-            $model->update();
-
-            return $this->render('update', [
-                'model' => $model,
-                'operation' => 'updated',
-                //'id' => $model->ID,
-            ]);
-
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+            return $this->render('/site/access_denied');
         }
     }
 
