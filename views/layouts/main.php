@@ -78,7 +78,7 @@ AppAsset::register($this);
         ]);
 
         $menuItems = [
-            ['label' => 'Користувачі', 'url' => ['#']],
+            ['label' => 'Користувачі', 'url' => ['/user/index']],
             ['label' => 'Групи', 'url' => ['#']],
             ['label' => 'Професії', 'url' => ['/courses/index'], 'items' => [
                 ['label' => 'Всі професії', 'url' => ['/courses/index']],
