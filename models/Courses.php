@@ -10,9 +10,6 @@ use Yii;
  * @property integer $ID
  * @property string $name
  * @property string $subject
- * @property integer $pract
- * @property integer $worklect
- * @property integer $teorlect
  */
 class Courses extends \yii\db\ActiveRecord
 {
@@ -30,7 +27,7 @@ class Courses extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'subject','pract', 'worklect', 'teorlect'], 'required', 'message'=>'Обовязкове поле'],
+            [['name', 'subject'], 'required', 'message'=>'Обовязкове поле'],
         ];
     }
 
@@ -43,9 +40,7 @@ class Courses extends \yii\db\ActiveRecord
             'ID' => 'ID',
             'name' => 'Name',
             'subject' => 'Subject',
-            'pract' => 'Pract',
-            'worklect' => 'Worklect',
-            'teorlect' => 'Teorlect',
+
         ];
     }
 }

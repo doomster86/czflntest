@@ -61,27 +61,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     return ['class' => 'col-xs-5'];
                 }
             ],
-            [
-                'attribute'=>'pract',
-                'label'=>'Кількість занять виробничої практики',
-                'contentOptions' =>function ($model, $key, $index, $column){
-                    return ['class' => 'col-xs-1'];
-                }
-            ],
-            [
-                'attribute'=>'worklect',
-                'label'=>'Кількість занять виробничого навчання',
-                'contentOptions' =>function ($model, $key, $index, $column){
-                    return ['class' => 'col-xs-1'];
-                }
-            ],
-            [
-                'attribute'=>'teorlect',
-                'label'=>'Кількість занять теоритичного навчання',
-                'contentOptions' =>function ($model, $key, $index, $column){
-                    return ['class' => 'col-xs-1'];
-                }
-            ],
 
             [
                 'class' => 'yii\grid\ActionColumn',

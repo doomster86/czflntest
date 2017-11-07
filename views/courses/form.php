@@ -11,9 +11,6 @@ Pjax::begin([
 if( Html::encode($operation) == 'created'):
 
     $coursesName = Html::encode($model->name);
-    $coursesPract = Html::encode($model->pract);
-    $coursesWorklect = Html::encode($model->worklect);
-    $coursesTeorlect = Html::encode($model->teorlect);
     $coursesSubject = Html::encode($model->subject);
     $coursesSubject = explode(", ", $coursesSubject);
     $coursesSubject = array_flip($coursesSubject);
@@ -25,9 +22,6 @@ if( Html::encode($operation) == 'created'):
         <p>Нова професія створена!</p>
         <ul>
             <li><label>Назва професії: </label> <?= $coursesName ?></li>
-            <li><label>Кількість занять виробничої практики: </label> <?= $coursesPract ?></li>
-            <li><label>Кількість занять виробничого навчання: </label> <?= $coursesWorklect ?></li>
-            <li><label>Кількість занять теоретичного навчання: </label> <?= $coursesTeorlect ?></li>
             <li><label>Предмети: </label> <?= $coursesSubject ?></li>
         </ul>
     </div>
@@ -54,14 +48,8 @@ $form = ActiveForm::begin([
         <?php
         if ($courses_status == 'create') {
             $nameValue = '';
-            $practValue = 1;
-            $worlectValue = 1;
-            $teorlectValue = 1;
         } else {
             $nameValue = $model->name;
-            $practValue = $model->pract;
-            $worlectValue = $model->worklect;
-            $teorlectValue = $model->teorlect;
         }
         ?>
 
@@ -69,24 +57,6 @@ $form = ActiveForm::begin([
             'placeholder' => 'Введіть назву професії',
             'value' =>$nameValue])
         ?>
-
-        <?= $form->field($model, 'pract')->label('Кількість занять виробничої практики')->textInput([
-            'type' => 'number',
-            'min' => '1',
-            'value' =>$practValue
-        ]) ?>
-
-        <?= $form->field($model, 'worklect')->label('Кількість занять виробничого навчання')->textInput([
-            'type' => 'number',
-            'min' => '1',
-            'value' =>$worlectValue
-        ]) ?>
-
-        <?= $form->field($model, 'teorlect')->label('Кількість занять теоретичного навчання')->textInput([
-            'type' => 'number',
-            'min' => '1',
-            'value' =>$teorlectValue
-        ]) ?>
 
     </div>
     <div class="col-md-9">

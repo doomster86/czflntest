@@ -18,7 +18,6 @@ class CoursesSearch extends Courses
     public function rules()
     {
         return [
-            [['pract', 'worklect', 'teorlect'], 'integer'],
             [['name', 'subject'], 'safe'],
         ];
     }
@@ -60,9 +59,6 @@ class CoursesSearch extends Courses
         // grid filtering conditions
         $query->andFilterWhere([
             'ID' => $this->ID,
-            'pract' => $this->pract,
-            'worklect' => $this->worklect,
-            'teorlect' => $this->teorlect,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])

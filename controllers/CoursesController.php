@@ -37,7 +37,7 @@ class CoursesController extends Controller
         if(Yii::$app->user->identity->role==1) {
             $model = new Courses();
 
-            $array = Subjects::find()->asArray()->select('name')->orderBy('name')->all();
+            $array = Subjects::find()->asArray()->select('name')->orderBy('ID')->all();
             $subjects = ArrayHelper::getColumn($array, 'name');
 
             $subjects_ids = Subjects::find()->asArray()->select('ID')->orderBy('ID')->all(); ///
@@ -51,9 +51,6 @@ class CoursesController extends Controller
                 // данные в $model удачно проверены
 
                 $coursesName = Html::encode($model->name);
-                $coursesPract = Html::encode($model->pract);
-                $coursesWorklect = Html::encode($model->worklect);
-                $coursesTeorlect = Html::encode($model->teorlect);
                 $coursesSubject ='';
                 $subjectCount = count($model->subject);
                 $i=0;
@@ -67,9 +64,6 @@ class CoursesController extends Controller
                 }
 
                 $model->name = $coursesName;
-                $model->pract = $coursesPract;
-                $model->worklect = $coursesWorklect;
-                $model->teorlect = $coursesTeorlect;
                 $model->subject = $coursesSubject;
 
                 $model->save();
@@ -148,18 +142,12 @@ class CoursesController extends Controller
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
                 $coursesName = Html::encode($model->name);
-                $coursesPract = Html::encode($model->pract);
-                $coursesWorklect = Html::encode($model->worklect);
-                $coursesTeorlect = Html::encode($model->teorlect);
                 $coursesSubject='';
                 foreach ($model->subject as $subject) {
                     $coursesSubject = $coursesSubject . Html::encode($subject.", ");
                 }
 
                 $model->name = $coursesName;
-                $model->pract = $coursesPract;
-                $model->worklect = $coursesWorklect;
-                $model->teorlect = $coursesTeorlect;
                 $model->subject = $coursesSubject;
 
                 $model->update();
@@ -168,7 +156,6 @@ class CoursesController extends Controller
                 return $this->render('update', [
                     'model' => $model,
                     'operation' => 'updated',
-                    'id' => $model->ID,
                     'subjects' => $subjects,
                 ]);
             } else {
