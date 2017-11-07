@@ -44,7 +44,7 @@ AppAsset::register($this);
     ];
 
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Вхід', 'url' => ['/subjects/all-subjects'], 'items' => [
+        $menuItems[] = ['label' => 'Вхід', 'url' => ['/subjects/index'], 'items' => [
             ['label' => 'Увійти', 'url' => ['/site/login']],
             ['label' => 'Зареєеструватись', 'url' => ['/site/signup']],
         ]];

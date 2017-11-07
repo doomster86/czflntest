@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 $this->title = 'Створити нову професію';
-$this->params['breadcrumbs'][] = ['label' => 'Професії', 'url' => ['courses']];
+$this->params['breadcrumbs'][] = ['label' => 'Професії', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title; ?>
 
 <div class="subjects-create">
@@ -14,7 +14,6 @@ $this->params['breadcrumbs'][] = $this->title; ?>
         'model' => $model,
         'courses_status' =>'create',
         'operation' => $operation,
-        'subjects' => $subjects,
     ]) ?>
 
 </div>

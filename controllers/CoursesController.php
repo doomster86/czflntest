@@ -7,6 +7,7 @@ use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use app\models\Courses;
 use app\models\Subjects;
+use app\models\Lessons;
 use yii\helpers\Html;
 use app\models\CoursesSearch;
 
@@ -32,39 +33,17 @@ class CoursesController extends Controller
         }
     }
 
-    public function  actionCreate()
+    public function actionCreate()
     {
         if(Yii::$app->user->identity->role==1) {
             $model = new Courses();
-
-            $array = Subjects::find()->asArray()->select('name')->orderBy('ID')->all();
-            $subjects = ArrayHelper::getColumn($array, 'name');
-
-            $subjects_ids = Subjects::find()->asArray()->select('ID')->orderBy('ID')->all(); ///
-            $subjects_ids = ArrayHelper::getColumn($subjects_ids, 'ID');
-
-            $subjects = array_combine($subjects_ids,$subjects);
-
-            //$subjects=array('Предмет 1', 'Предмет 2', 'Предмет 3', 'Предмет 4', 'Предмет 5', 'Предмет 6', 'Предмет 7', 'Предмет 8');
 
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
                 // данные в $model удачно проверены
 
                 $coursesName = Html::encode($model->name);
-                $coursesSubject ='';
-                $subjectCount = count($model->subject);
-                $i=0;
-                foreach ($model->subject as $subject) {
-                    $i++;
-                    if($i==$subjectCount) {
-                        $coursesSubject = $coursesSubject . Html::encode($subject);
-                    } else {
-                        $coursesSubject = $coursesSubject . Html::encode($subject.", ");
-                    }
-                }
 
                 $model->name = $coursesName;
-                $model->subject = $coursesSubject;
 
                 $model->save();
 
@@ -72,16 +51,29 @@ class CoursesController extends Controller
                 return $this->render('create', [
                     'model' => $model,
                     'operation' => 'created',
-                    'subjects' => $subjects,
 
                 ]);
             } else {
                 // либо страница отображается первый раз, либо есть ошибка в данных
                 return $this->render('create', [
                     'model' => $model,
-                    'subjects' => $subjects,
                 ]);
             }
+        } else {
+            return $this->render('/site/access_denied');
+        }
+    }
+
+    public function actionView($id) {
+
+        if(Yii::$app->user->identity->role==1) {
+
+
+                return $this->render('view', [
+                    'model' => $this->findModel($id),
+                ]);
+
+
         } else {
             return $this->render('/site/access_denied');
         }
@@ -117,7 +109,6 @@ class CoursesController extends Controller
     {
         if(Yii::$app->user->identity->role==1) {
             $this->findModel($id)->delete();
-
             return $this->redirect(['index']);
         } else {
             return $this->render('/site/access_denied');
@@ -134,34 +125,20 @@ class CoursesController extends Controller
         if(Yii::$app->user->identity->role==1) {
             $model = $this->findModel($id);
 
-            $array = Subjects::find()->asArray()->select('name')->orderBy('name')->all();
-            $subjects = ArrayHelper::getColumn($array, 'name');
-
-            //$subjects=array('Предмет 1', 'Предмет 2', 'Предмет 3', 'Предмет 4', 'Предмет 5', 'Предмет 6', 'Предмет 7', 'Предмет 8');
-
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
                 $coursesName = Html::encode($model->name);
-                $coursesSubject='';
-                foreach ($model->subject as $subject) {
-                    $coursesSubject = $coursesSubject . Html::encode($subject.", ");
-                }
-
                 $model->name = $coursesName;
-                $model->subject = $coursesSubject;
-
                 $model->update();
 
                 //return $this->redirect(['update', 'id' => $model->ID, 'operation' => 'updated']);
                 return $this->render('update', [
                     'model' => $model,
                     'operation' => 'updated',
-                    'subjects' => $subjects,
                 ]);
             } else {
                 return $this->render('update', [
                     'model' => $model,
-                    'subjects' => $subjects,
                 ]);
             }
         } else {

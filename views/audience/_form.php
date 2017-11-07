@@ -44,7 +44,7 @@ Pjax::begin([
     <?= $form->field($model, 'num')->label('Номер аудиторії')->textInput(['placeholder' => 'Введіть номер']) ?>
 
     <?php
-        AudienceController::v($corps);
+        //AudienceController::v($corps);
         $options = array(
                 'options' =>  [
                         0 => [

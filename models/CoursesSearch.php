@@ -18,7 +18,7 @@ class CoursesSearch extends Courses
     public function rules()
     {
         return [
-            [['name', 'subject'], 'safe'],
+            ['name', 'safe'],
         ];
     }
 
@@ -61,8 +61,7 @@ class CoursesSearch extends Courses
             'ID' => $this->ID,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'subject', $this->subject]);
+        $query->andFilterWhere(['like', 'name', $this->name]);
 
         return $dataProvider;
     }

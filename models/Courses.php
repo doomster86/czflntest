@@ -27,7 +27,7 @@ class Courses extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'subject'], 'required', 'message'=>'Обовязкове поле'],
+            ['name', 'required', 'message'=>'Обовязкове поле'],
         ];
     }
 
@@ -39,7 +39,6 @@ class Courses extends \yii\db\ActiveRecord
         return [
             'ID' => 'ID',
             'name' => 'Name',
-            'subject' => 'Subject',
 
         ];
     }

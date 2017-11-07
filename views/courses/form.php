@@ -11,19 +11,11 @@ Pjax::begin([
 if( Html::encode($operation) == 'created'):
 
     $coursesName = Html::encode($model->name);
-    $coursesSubject = Html::encode($model->subject);
-    $coursesSubject = explode(", ", $coursesSubject);
-    $coursesSubject = array_flip($coursesSubject);
-    $coursesSubject = array_intersect_key ($subjects, $coursesSubject);
-    $coursesSubject = implode ( ", " , $coursesSubject );
     ?>
 
     <div class="alert alert-success">
         <p>Нова професія створена!</p>
-        <ul>
-            <li><label>Назва професії: </label> <?= $coursesName ?></li>
-            <li><label>Предмети: </label> <?= $coursesSubject ?></li>
-        </ul>
+        <p>Назва професії: <strong> <?= $coursesName ?></strong></p>
     </div>
 
 <?php endif;
@@ -39,11 +31,14 @@ if( Html::encode($operation) == 'updated'):
 endif;
 
 $form = ActiveForm::begin([
-    'options' => ['data' => ['pjax' => true], 'id' => 'courses-form'],
+    'options' => [
+        'data' => ['pjax' => true],
+        'id' => 'courses-form'
+    ],
 ]);
 
 ?>
-    <div class="col-md-3">
+    <div class="col-xs-12 col-md-12">
 
         <?php
         if ($courses_status == 'create') {
@@ -53,58 +48,59 @@ $form = ActiveForm::begin([
         }
         ?>
 
-        <?= $form->field($model, 'name')->label('Назва професії')->textInput([
+        <?php
+            echo $form->field($model, 'name')->label('Назва професії')->textInput([
             'placeholder' => 'Введіть назву професії',
             'value' =>$nameValue])
         ?>
 
     </div>
-    <div class="col-md-9">
 
-        <?php //var_dump($subjects); ?>
+    <?php
+    /*
+    if($courses_status == 'create') {
 
-        <?php if($courses_status == 'create') {
+        echo $form->field($model, 'subject', [
+            'options' => [
+                'class' => 'col-md-12'
+            ]
+        ])
+            ->label('Оберіть предмети:')
+            ->checkboxList($subjects, [
+                'item' => function ($index, $label, $name, $checked, $value) {
+                    return "<div class='checkbox col-md-4'><label><input type='checkbox' {$checked} name='{$name}' value='{$value}'>{$label}</label></div>";
+                }
+            ]);
 
-            echo $form->field($model, 'subject', [
-                'options' => [
-                    'class' => 'col-md-12'
-                ]
-            ])
-                ->label('Оберіть предмети:')
-                ->checkboxList($subjects, [
-                    'item' => function ($index, $label, $name, $checked, $value) {
-                        return "<div class='checkbox col-md-4'><label><input type='checkbox' {$checked} name='{$name}' value='{$value}'>{$label}</label></div>";
-                    }
-                ]);
+    } else  {
 
-        } else  {
+        $coursesSubject = Html::encode($model->subject);
 
-            $coursesSubject = Html::encode($model->subject);
+        $coursesSubjectArray = explode(", ", $coursesSubject);
 
-            $coursesSubjectArray = explode(", ", $coursesSubject);
+        $checkedList = []; //Массив номеров выбранных элементов checkboxList
 
-            $checkedList = []; //Массив номеров выбранных элементов checkboxList
-
-            for ($i=0; $i<count($subjects); $i++) {
-                foreach ($coursesSubjectArray as $subject) {
-                    if($subjects[$i]==$subject) {
-                        array_push($checkedList, $i);
-                    }
+        for ($i=0; $i<count($subjects); $i++) {
+            foreach ($coursesSubjectArray as $subject) {
+                if($subjects[$i]==$subject) {
+                    array_push($checkedList, $i);
                 }
             }
+        }
 
-            $model->subject = $checkedList;
+        $model->subject = $checkedList;
 
-            echo $form->field($model, 'subject', ['options' => ['class' => 'col-md-12']])->label('Оберіть предмети')
-                ->checkboxList($subjects, [
-                    'item' => function ($index, $label, $name, $checked, $value) {
-                        $checked = $checked ? 'checked' : '';
-                        return "<div class='checkbox col-md-4'><label><input type='checkbox' {$checked} name='{$name}' value='{$label}'>{$label}</label></div>";
-                    }
-                ]);
+        echo $form->field($model, 'subject', ['options' => ['class' => 'col-md-12']])->label('Оберіть предмети')
+            ->checkboxList($subjects, [
+                'item' => function ($index, $label, $name, $checked, $value) {
+                    $checked = $checked ? 'checked' : '';
+                    return "<div class='checkbox col-md-4'><label><input type='checkbox' {$checked} name='{$name}' value='{$label}'>{$label}</label></div>";
+                }
+            ]);
 
-        } ?>
-    </div>
+    }
+    */
+    ?>
 
     <div class="form-group col-md-12">
         <?php if($courses_status == 'create') {
