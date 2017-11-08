@@ -93,9 +93,14 @@ class CoursesController extends Controller {
 
         if(Yii::$app->user->identity->role==1) {
 
+            //$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            //$dataProvider->pagination = ['pageSize' => 15];
+
             $model = $this->findModel($id);
 
-            $subjects_add = array(0 => 'Оберіть предмет');
+            $selected_subjects = Lessons::find()->asArray()->select('subject_id')->where(['course_id' => $id])->orderBy('subject_id')->all();
+            $selected_subjects = ArrayHelper::getColumn($selected_subjects, 'subject_id');
+            $selected_subjects = array_combine($selected_subjects, $selected_subjects);
 
             $subjects_values = Subjects::find()->asArray()->select('name')->orderBy('ID')->all();
             $subjects_values = ArrayHelper::getColumn($subjects_values, 'name');
@@ -104,34 +109,57 @@ class CoursesController extends Controller {
             $subjects_ids = ArrayHelper::getColumn($subjects_ids, 'ID');
 
             $subjects = array_combine($subjects_ids, $subjects_values);
+
+            $subjects_add = array(0 => 'Оберіть предмет');
             $subjects = ArrayHelper::merge($subjects_add, $subjects);
 
+            $subjects = array_diff_key($subjects, $selected_subjects);
 
             $modelLessons = new Lessons();
 
             if ($modelLessons->load(Yii::$app->request->post()) && $modelLessons->validate()) { //если нажата зеленая кнопка
 
-               // написать список переменных из формы _form.php
+                $selected_subjects = Lessons::find()->asArray()->select('subject_id')->where(['course_id' => $id])->orderBy('subject_id')->all();
+                $selected_subjects = ArrayHelper::getColumn($selected_subjects, 'subject_id');
+                $selected_subjects = array_combine($selected_subjects, $selected_subjects);
+
+                $subjects_values = Subjects::find()->asArray()->select('name')->orderBy('ID')->all();
+                $subjects_values = ArrayHelper::getColumn($subjects_values, 'name');
+
+                $subjects_ids = Subjects::find()->asArray()->select('ID')->orderBy('ID')->all();
+                $subjects_ids = ArrayHelper::getColumn($subjects_ids, 'ID');
+
+                $subjects = array_combine($subjects_ids, $subjects_values);
+
+                $subjects_add = array(0 => 'Оберіть предмет');
+                $subjects = ArrayHelper::merge($subjects_add, $subjects);
+
+
+
 
                 $modelLessons->course_id = $id;
-                $modelLessons->subject = Html::encode($modelLessons->subject);
+                $modelLessons->subject_id = Html::encode($modelLessons->subject_id); //select->option->value
                 $modelLessons->quantity = Html::encode($modelLessons->quantity);
 
-                $modelLessons->save();
+                $modelLessons->save(); //запись в таблицу
+
+                $subjects = array_diff_key($subjects, $selected_subjects);
 
                 return $this->render('view', [
                     'model' => $model,
                     'modelLessons' => $modelLessons,
                     'subjects' => $subjects,
-
-
+                    'test' => $selected_subjects,
+                    'status' => 'added',
+                    //'data-pjax' => 0
 
                 ]);
-            } else {
+            } else { //если зашли первый раз
                 return $this->render('view', [
                     'model' => $model,
                     'modelLessons' => $modelLessons,
                     'subjects' => $subjects,
+                    'test' => $selected_subjects
                 ]);
             }
             /*

@@ -1,10 +1,16 @@
 <?php
 
 use yii\helpers\Html;
+use yii\grid\GridView;
 use yii\widgets\DetailView;
 use \app\models\Lessons;
+use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $model app\models\Courses */
+
+Pjax::begin([
+    // Pjax options
+]);
 
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Професії', 'url' => ['index']];
@@ -21,7 +27,9 @@ $this->params['breadcrumbs'][] = $this->title;
     echo $this->render('_form', [
         'model' => $model,
         'modelLessons' => $modelLessons,
-        'subjects' => $subjects
+        'subjects' => $subjects,
+        'status' => $status,
+        'test' => $test
         //'id' => $model->ID,
     ])
 
@@ -29,8 +37,67 @@ $this->params['breadcrumbs'][] = $this->title;
     <hr />
     <h4>table</h4>
     <hr />
-    <?php
 
+
+    <?php
+    /*
+    echo GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'emptyText' => 'Нічого не знайдено',
+        'layout'=>"{pager}\n{summary}\n{items}\n{summary}\n{pager}",
+        'columns' => [
+            [
+                'attribute' => 'course_id',
+                'format' => 'text',
+                'label' => 'Назва',
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-5'];
+                }
+            ],
+        ],
+        [
+            'class' => 'yii\grid\ActionColumn',
+            'template' => '{update} {delete}',
+
+            'buttons' => [
+
+                'update' => function ($url, $model, $key) {
+                    return Html::a(
+                        "<span class=\"glyphicon glyphicon-pencil left\"></span>",
+                        $url,
+                        [
+                            'title' => 'Оновити',
+                            'aria-label' => 'Оновити',
+                            'alt' => 'Оновити',
+                            'data-pjax' => '0',
+                        ]
+                    );
+                },
+
+                'delete' => function ($url, $model, $key) {
+                    return Html::a(
+                        "<span class=\"glyphicon glyphicon-trash right\"></span>",
+                        $url,
+                        [
+                            'title' => 'Видалити',
+                            'aria-label' => 'Видалити',
+                            'alt' => 'Видалити',
+                            'data-pjax' => '0',
+                        ]
+                    );
+
+                },
+            ],
+            'contentOptions' => function ($model, $key, $index, $column){
+                return ['class' => 'col-xs-1'];
+            }
+
+        ],
+    ]);
+
+    //хз что
+    /*
     echo DetailView::widget([
         'model' => $model,
         'attributes' => [
@@ -38,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
         ],
     ]);
-
+*/
     ?>
 
     <hr />
@@ -55,3 +122,5 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
 </div>
+
+<?php Pjax::end(); ?>
