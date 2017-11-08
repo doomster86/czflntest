@@ -2,7 +2,6 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\widgets\Pjax;
-use \app\models\Lessons;
 
 Pjax::begin([
     // Pjax options
@@ -45,7 +44,7 @@ $form = ActiveForm::begin([
         //['options' => [0 => ['disabled' => true]]]
         ?>
 
-        <?php echo $form->field($modelLessons, 'course_id')->label('Оберіть предмет')->dropDownList($subjects, $options);  ?>
+        <?php echo $form->field($modelLessons, 'subject')->label('Оберіть предмет')->dropDownList($subjects, $options);  ?>
     </div>
     <div class="col-xs-6">
         <?php
@@ -61,7 +60,7 @@ $form = ActiveForm::begin([
         ?>
     </div>
     <div class="form-group col-xs-12">
-        <?= Html::submitButton($modelLessons->isNewRecord ? 'Створити' : 'Додати', ['class' => $modelLessons->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton('Створити', ['class' => 'btn btn-success']) ?>
     </div>
 </div>
 <?php

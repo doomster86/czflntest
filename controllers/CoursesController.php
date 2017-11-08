@@ -113,8 +113,8 @@ class CoursesController extends Controller {
 
                // написать список переменных из формы _form.php
 
-                //$modelLessons->course_id = 161;
-                $modelLessons->course_id = Html::encode($modelLessons->course_id);
+                $modelLessons->course_id = $id;
+                $modelLessons->subject = Html::encode($modelLessons->subject);
                 $modelLessons->quantity = Html::encode($modelLessons->quantity);
 
                 $modelLessons->save();

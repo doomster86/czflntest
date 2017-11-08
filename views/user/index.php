@@ -7,7 +7,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\UserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Users';
+$this->title = 'Користувачі';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
@@ -20,6 +20,12 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'emptyText' => 'Нічого не знайдено',
+        'layout'=>"{pager}\n{summary}\n{items}\n{summary}\n{pager}",
+        'summary' => "<div class='summary'>Показано {begin} - {end} з {totalCount} користувачів</div>",
+        'tableOptions' => [
+            'class' => 'table table-striped table-bordered col-xs-12 courses-table'
+        ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
