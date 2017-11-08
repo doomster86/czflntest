@@ -5,8 +5,13 @@ use yii\grid\GridView;
 use yii\widgets\DetailView;
 use \app\models\Lessons;
 use yii\widgets\Pjax;
+use yii\data\ActiveDataProvider;
+use \app\models\Subjects;
 /* @var $this yii\web\View */
 /* @var $model app\models\Courses */
+/* @var $this yii\web\View */
+/* @var $searchModel app\models\AudienceSearch */
+/* @var $dataProvider yii\data\ActiveDataProvider */
 
 Pjax::begin([
     // Pjax options
@@ -20,7 +25,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <h4>_form.php</h4>
     <hr />
     <?php
 
@@ -35,26 +39,94 @@ $this->params['breadcrumbs'][] = $this->title;
 
     ?>
     <hr />
-    <h4>table</h4>
-    <hr />
-
 
     <?php
-    /*
+
+    //v($searchModel);
+
+    echo GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'emptyText' => 'Нічого не знайдено',
+        'layout'=>"{pager}\n{summary}\n{items}\n{summary}\n{pager}",
+        'summary' => "<div class=\"summary\">Показано {begin} - {end} з {totalCount} предметів</div>",
+        'columns' => [
+            //'ID',
+
+            [
+                'attribute' => 'subject_id',
+                'format' => 'text',
+                'label' => 'Предмет',
+                'content' => function ($model, $key, $index, $column){
+                    $subject_name = Subjects::find()->asArray()->where(['ID' => $model->subject_id])->one();
+                    return $subject_name['name'];
+                },
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-6'];
+                }
+            ],
+            [
+                'attribute' => 'quantity',
+                'format' => 'text',
+                'label' => 'Кількість занять',
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-5'];
+                }
+            ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{update} {delete}',
+
+                'buttons' => [
+
+                    'update' => function ($url, $model, $key) {
+                        return Html::a(
+                            "<span class=\"glyphicon glyphicon-pencil left\"></span>",
+                            $url,
+                            [
+                                'title' => 'Оновити',
+                                'aria-label' => 'Оновити',
+                                'alt' => 'Оновити',
+                                'data-pjax' => '0',
+                            ]
+                        );
+                    },
+
+                    'delete' => function ($url, $model, $key) {
+                        return Html::a(
+                            "<span class=\"glyphicon glyphicon-trash right\"></span>",
+                            $url,
+                            [
+                                'title' => 'Видалити',
+                                'aria-label' => 'Видалити',
+                                'alt' => 'Видалити',
+                                'data-pjax' => '0',
+                            ]
+                        );
+
+                    },
+                ],
+
+                'contentOptions' => function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-1'];
+                }
+
+            ],
+        ],
+
+    ]);
+
+/*
     echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'emptyText' => 'Нічого не знайдено',
         'layout'=>"{pager}\n{summary}\n{items}\n{summary}\n{pager}",
         'columns' => [
-            [
-                'attribute' => 'course_id',
-                'format' => 'text',
-                'label' => 'Назва',
-                'contentOptions' =>function ($model, $key, $index, $column){
-                    return ['class' => 'col-xs-5'];
-                }
-            ],
+            //'ID',
+            'course_id',
+            'subject_id',
+            'quantity'
         ],
         [
             'class' => 'yii\grid\ActionColumn',
@@ -89,6 +161,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 },
             ],
+
             'contentOptions' => function ($model, $key, $index, $column){
                 return ['class' => 'col-xs-1'];
             }
@@ -97,12 +170,13 @@ $this->params['breadcrumbs'][] = $this->title;
     ]);
 
     //хз что
-    /*
+/*
     echo DetailView::widget([
         'model' => $model,
         'attributes' => [
             //'ID',
             'name',
+            ''
         ],
     ]);
 */

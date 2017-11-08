@@ -36,8 +36,8 @@ $form = ActiveForm::begin([
 
         <?php
 
-        v($test);
-        v($subjects);
+        //v($test);
+        //v($subjects);
 
         ?>
 

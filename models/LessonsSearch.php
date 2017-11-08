@@ -2,44 +2,24 @@
 
 namespace app\models;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Courses;
 
-/**
- * CoursesSearch represents the model behind the search form about `app\models\Courses`.
- */
-class CoursesSearch extends Courses
-{
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
+class LessonsSearch extends Lessons {
+
+    public function rules() {
         return [
-            ['name', 'safe'],
+            [['ID', 'course_id', 'subject_id', 'quantity'], 'integer'],
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function scenarios()
-    {
+    public function scenarios() {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
 
-    /**
-     * Creates data provider instance with search query applied
-     *
-     * @param array $params
-     *
-     * @return ActiveDataProvider
-     */
     public function search($params) {
-        $query = Courses::find();
+        $query = Lessons::find();
 
         // add conditions that should always apply here
 
@@ -55,13 +35,18 @@ class CoursesSearch extends Courses
             return $dataProvider;
         }
 
-        // grid filtering conditions
+        // grid filtering conditions cюда цифры
         $query->andFilterWhere([
             'ID' => $this->ID,
+            'course_id' => $this->course_id,
+            'subject_id' => $this->subject_id,
+            'quantity' => $this->quantity
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name]);
+        // сюда буквы
+        $query->andFilterWhere([]);
 
         return $dataProvider;
     }
+
 }

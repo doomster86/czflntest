@@ -6,10 +6,11 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use app\models\Courses;
-use app\models\Subjects;
-use app\models\Lessons;
-use yii\helpers\Html;
 use app\models\CoursesSearch;
+use app\models\Subjects;
+use yii\helpers\Html;
+use app\models\Lessons;
+use app\models\LessonsSearch;
 
 class CoursesController extends Controller {
 
@@ -93,8 +94,9 @@ class CoursesController extends Controller {
 
         if(Yii::$app->user->identity->role==1) {
 
-            //$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-            //$dataProvider->pagination = ['pageSize' => 15];
+            $searchModel = new LessonsSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->pagination = ['pageSize' => 15];
 
             $model = $this->findModel($id);
 
@@ -119,6 +121,12 @@ class CoursesController extends Controller {
 
             if ($modelLessons->load(Yii::$app->request->post()) && $modelLessons->validate()) { //если нажата зеленая кнопка
 
+                $modelLessons->course_id = $id;
+                $modelLessons->subject_id = Html::encode($modelLessons->subject_id); //select->option->value
+                $modelLessons->quantity = Html::encode($modelLessons->quantity);
+
+                $modelLessons->save(); //запись в таблицу
+
                 $selected_subjects = Lessons::find()->asArray()->select('subject_id')->where(['course_id' => $id])->orderBy('subject_id')->all();
                 $selected_subjects = ArrayHelper::getColumn($selected_subjects, 'subject_id');
                 $selected_subjects = array_combine($selected_subjects, $selected_subjects);
@@ -134,18 +142,11 @@ class CoursesController extends Controller {
                 $subjects_add = array(0 => 'Оберіть предмет');
                 $subjects = ArrayHelper::merge($subjects_add, $subjects);
 
-
-
-
-                $modelLessons->course_id = $id;
-                $modelLessons->subject_id = Html::encode($modelLessons->subject_id); //select->option->value
-                $modelLessons->quantity = Html::encode($modelLessons->quantity);
-
-                $modelLessons->save(); //запись в таблицу
-
                 $subjects = array_diff_key($subjects, $selected_subjects);
 
                 return $this->render('view', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
                     'model' => $model,
                     'modelLessons' => $modelLessons,
                     'subjects' => $subjects,
@@ -156,6 +157,8 @@ class CoursesController extends Controller {
                 ]);
             } else { //если зашли первый раз
                 return $this->render('view', [
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
                     'model' => $model,
                     'modelLessons' => $modelLessons,
                     'subjects' => $subjects,
