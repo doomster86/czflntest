@@ -11,14 +11,13 @@ use app\models\Lessons;
 use yii\helpers\Html;
 use app\models\CoursesSearch;
 
-class CoursesController extends Controller
-{
+class CoursesController extends Controller {
 
     /**
      * Validate CoursesForm
      */
-    public function actionIndex()
-    {
+
+    public function actionIndex() {
         if(Yii::$app->user->identity->role==1) {
             $searchModel = new CoursesSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -33,8 +32,8 @@ class CoursesController extends Controller
         }
     }
 
-    public function actionCreate()
-    {
+    public function actionCreate() {
+
         if(Yii::$app->user->identity->role==1) {
             $model = new Courses();
 
@@ -62,22 +61,10 @@ class CoursesController extends Controller
         } else {
             return $this->render('/site/access_denied');
         }
+
     }
 
-    public function actionView($id) {
 
-        if(Yii::$app->user->identity->role==1) {
-
-
-                return $this->render('view', [
-                    'model' => $this->findModel($id),
-                ]);
-
-
-        } else {
-            return $this->render('/site/access_denied');
-        }
-    }
 
     /**
      * Finds the Courses model based on its primary key value.
@@ -86,8 +73,8 @@ class CoursesController extends Controller
      * @return Courses the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
-    {
+    protected function findModel($id) {
+
         if(Yii::$app->user->identity->role==1) {
             if (($model = Courses::findOne($id)) !== null) {
                 return $model;
@@ -97,7 +84,73 @@ class CoursesController extends Controller
         } else {
             return $this->render('/site/access_denied');
         }
+
     }
+
+
+
+    public function actionView($id) {
+
+        if(Yii::$app->user->identity->role==1) {
+
+            $model = $this->findModel($id);
+
+            $subjects_add = array(0 => 'Оберіть предмет');
+
+            $subjects_values = Subjects::find()->asArray()->select('name')->orderBy('ID')->all();
+            $subjects_values = ArrayHelper::getColumn($subjects_values, 'name');
+
+            $subjects_ids = Subjects::find()->asArray()->select('ID')->orderBy('ID')->all();
+            $subjects_ids = ArrayHelper::getColumn($subjects_ids, 'ID');
+
+            $subjects = array_combine($subjects_ids, $subjects_values);
+            $subjects = ArrayHelper::merge($subjects_add, $subjects);
+
+
+            $modelLessons = new Lessons();
+
+            if ($modelLessons->load(Yii::$app->request->post()) && $modelLessons->validate()) { //если нажата зеленая кнопка
+
+               // написать список переменных из формы _form.php
+
+                $modelLessons->course_id = 161;
+                $modelLessons->subject = Html::encode($modelLessons->subject);
+                $modelLessons->quantity = Html::encode($modelLessons->quantity);
+
+                $modelLessons->save();
+
+                return $this->render('view', [
+                    'model' => $model,
+                    'modelLessons' => $modelLessons,
+                    'subjects' => $subjects,
+
+
+
+                ]);
+            } else {
+                return $this->render('view', [
+                    'model' => $model,
+                    'modelLessons' => $modelLessons,
+                    'subjects' => $subjects,
+                ]);
+            }
+            /*
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
+                return $this->render('view', [
+                    'model' => $this->findModel($id),
+                    //'subjects' => $subjects,
+                ]);
+            } else {
+
+            }
+            */
+        } else {
+            return $this->render('/site/access_denied');
+        }
+
+    }
+
 
     /**
      * Deletes an existing Courses model.
@@ -105,15 +158,17 @@ class CoursesController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
+    public function actionDelete($id) {
+
         if(Yii::$app->user->identity->role==1) {
             $this->findModel($id)->delete();
             return $this->redirect(['index']);
         } else {
             return $this->render('/site/access_denied');
         }
+
     }
+
 
     /**
      * Updates an existing Courses model.
@@ -122,6 +177,7 @@ class CoursesController extends Controller
      * @return mixed
      */
     public function actionUpdate($id) {
+
         if(Yii::$app->user->identity->role==1) {
             $model = $this->findModel($id);
 
@@ -144,6 +200,7 @@ class CoursesController extends Controller
         } else {
             return $this->render('/site/access_denied');
         }
+
     }
 
 }

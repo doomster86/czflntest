@@ -7,32 +7,37 @@ use yii\widgets\DetailView;
 /* @var $model app\models\Courses */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Професіїї / Courses', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Професії', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="courses-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
+    <h4>_form.php</h4>
+    <hr />
     <?php
-    /*
+
     echo $this->render('_form', [
         'model' => $model,
-        'id' => $model->ID,
+        'modelLessons' => $modelLessons,
+        'subjects' => $subjects
+        //'id' => $model->ID,
     ])
-    */
-    ?>
 
+    ?>
+    <hr />
+    <h4>table</h4>
+    <hr />
     <?php
 
     echo DetailView::widget([
         'model' => $model,
-
         'attributes' => [
             //'ID',
             'name',
         ],
-    ])
+    ]);
 
     ?>
 
