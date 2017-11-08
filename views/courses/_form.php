@@ -45,7 +45,7 @@ $form = ActiveForm::begin([
         //['options' => [0 => ['disabled' => true]]]
         ?>
 
-        <?php echo $form->field($modelLessons, 'subject')->label('Оберіть предмет')->dropDownList($subjects, $options);  ?>
+        <?php echo $form->field($modelLessons, 'course_id')->label('Оберіть предмет')->dropDownList($subjects, $options);  ?>
     </div>
     <div class="col-xs-6">
         <?php

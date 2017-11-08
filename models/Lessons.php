@@ -29,9 +29,9 @@ class Lessons extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['course_id', 'course_name', 'subject', 'quantity'], 'required'],
+            [['course_id', 'subject', 'quantity'], 'required'],
             [['course_id', 'quantity'], 'integer'],
-            [['course_name', 'subject'], 'string', 'max' => 255],
+            [['subject'], 'string', 'max' => 255],
         ];
     }
 
@@ -43,7 +43,7 @@ class Lessons extends \yii\db\ActiveRecord
         return [
             'ID' => 'ID',
             'course_id' => 'Course ID',
-            'course_name' => 'Course Name',
+            //'course_name' => 'Course Name',
             'subject' => 'Subject',
             'quantity' => 'Quantity',
         ];
