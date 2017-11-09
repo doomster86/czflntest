@@ -12,6 +12,8 @@ use yii\helpers\Html;
 use app\models\Lessons;
 use app\models\LessonsSearch;
 
+use yii\web\NotFoundHttpException;
+
 class CoursesController extends Controller {
 
     /**
@@ -65,8 +67,6 @@ class CoursesController extends Controller {
 
     }
 
-
-
     /**
      * Finds the Courses model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -87,7 +87,6 @@ class CoursesController extends Controller {
         }
 
     }
-
 
 
     public function actionView($id) {

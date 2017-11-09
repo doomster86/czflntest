@@ -86,7 +86,7 @@ $form = ActiveForm::begin([
         ?>
     </div>
     <div class="form-group col-xs-12">
-        <?= Html::submitButton('Створити', [
+        <?= Html::submitButton('Додати', [
                 'class' => 'btn btn-success' ,
                 'data-pjax' => '0',
         ]) ?>

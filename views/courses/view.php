@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
 
     //v($searchModel);
-
+    //$model = $modelLessons;
     echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -58,8 +58,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'text',
                 'label' => 'Предмет',
                 'content' => function ($model, $key, $index, $column){
-                    $subject_name = Subjects::find()->asArray()->where(['ID' => $model->subject_id])->one();
-                    return $subject_name['name'];
+                    $subject = Subjects::find()->asArray()->where(['ID' => $model->subject_id])->one();
+                    return $subject['name'] . ' (' .$model->subject_id. ')';
                 },
                 'contentOptions' =>function ($model, $key, $index, $column){
                     return ['class' => 'col-xs-6'];
@@ -75,6 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
+                'controller' => 'lessons',
                 'template' => '{update} {delete}',
 
                 'buttons' => [
@@ -83,8 +84,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::a(
                             "<span class=\"glyphicon glyphicon-pencil left\"></span>",
                             $url,
+
                             [
-                                'title' => 'Оновити',
+                                //'title' => v($model),
                                 'aria-label' => 'Оновити',
                                 'alt' => 'Оновити',
                                 'data-pjax' => '0',
