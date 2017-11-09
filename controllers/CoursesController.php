@@ -95,7 +95,9 @@ class CoursesController extends Controller {
         if(Yii::$app->user->identity->role==1) {
 
             $searchModel = new LessonsSearch();
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $params = Yii::$app->request->queryParams;
+            $params['course_id'] = $id;
+            $dataProvider = $searchModel->search($params);
             $dataProvider->pagination = ['pageSize' => 15];
 
             $model = $this->findModel($id);

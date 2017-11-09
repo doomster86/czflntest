@@ -38,7 +38,7 @@ class LessonsSearch extends Lessons {
         // grid filtering conditions cюда цифры
         $query->andFilterWhere([
             'ID' => $this->ID,
-            'course_id' => $this->course_id,
+            'course_id' => $params['course_id'],
             'subject_id' => $this->subject_id,
             'quantity' => $this->quantity
         ]);
