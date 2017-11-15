@@ -2,22 +2,50 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\widgets\Pjax;
 
-/* @var $this yii\web\View */
-/* @var $model app\models\User */
-/* @var $form yii\widgets\ActiveForm */
+Pjax::begin([
+    // Pjax options
+]);
+
+if( Html::encode($operation) == 'updated'):
+    ?>
+
+    <div class="alert alert-success">
+        <p>Оновлено!</p>
+    </div>
+
+    <?php
+endif;
 ?>
 
 <div class="user-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php
+        $form = ActiveForm::begin([
+            'options' => [
+                'data' => ['pjax' => true],
+                'id' => 'user-form'
+            ],
+        ]);
+    ?>
 
-    <?= $form->field($model, 'status')->textInput() ?>
+    <?php
+        $status = array('0' => 'Заблоковано', '10' =>'Активний');
+        $roles = array('0' =>'Студент', '1' =>'Адміністратор', '2' => 'Викладач');
+    ?>
+
+    <?php echo $form->field($model, 'status')->label('Встановити статус')->dropDownList($status);  ?>
+
+    <?php echo $form->field($model, 'role')->label('Обрати роль')->dropDownList($roles);  ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton('Оновити', ['class' => 'btn btn-primary']) ?>
     </div>
 
-    <?php ActiveForm::end(); ?>
+    <?php
+        ActiveForm::end();
+        Pjax::end();
+    ?>
 
 </div>

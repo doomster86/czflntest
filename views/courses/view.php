@@ -13,10 +13,6 @@ use \app\models\Subjects;
 /* @var $searchModel app\models\AudienceSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-Pjax::begin([
-    // Pjax options
-]);
-
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Професії', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
@@ -198,5 +194,3 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
 </div>
-
-<?php Pjax::end(); ?>

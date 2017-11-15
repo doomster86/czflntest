@@ -22,25 +22,101 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'emptyText' => 'Нічого не знайдено',
         'layout'=>"{pager}\n{summary}\n{items}\n{summary}\n{pager}",
-        'summary' => "<div class='summary'>Показано {begin} - {end} з {totalCount} користувачів</div>",
+        'summary' => "<div class='summary'>Показано {begin} - {end} з {totalCount} професій</div>",
         'tableOptions' => [
-            'class' => 'table table-striped table-bordered col-xs-12 courses-table'
+            'class' => 'table table-striped table-bordered col-xs-12 user-table'
         ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'username',
-            //'auth_key',
-            //'password_hash',
-            //'password_reset_token',
-             'email:email',
-             'status',
-             'created_at',
-             'updated_at',
-             'role',
+            [
+                'attribute'=>'id',
+                'label'=>'ID',
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-1'];
+                }
+            ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'attribute'=>'username',
+                'label'=>'Логін',
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-2'];
+                }
+            ],
+
+            [
+                'attribute'=>'email',
+                'label'=>'Email',
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-2'];
+                }
+            ],
+
+            [
+                'attribute'=>'status',
+                'label'=>'Статус',
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-2'];
+                },
+                'content'=>function($data){
+                    return $data->getStatusType();
+                }
+            ],
+
+            [
+                'attribute'=>'created_at',
+                'label'=>'Дата реєстрації',
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-2'];
+                },
+                'content'=>function($data){
+                    return $data->getRegisterDate();
+                }
+            ],
+
+            [
+                'attribute'=>'role',
+                'label'=>'Роль',
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-1'];
+                },
+                'content'=>function($data){
+                    return $data->getRoleType();
+                }
+            ],
+
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{update} {delete}',
+                'buttons' => [
+
+                    'update' => function ($url,$model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-pencil left"></span>',
+                            $url,
+                            [
+                                'title' => 'Редагувати',
+                                'data-pjax' => '0',
+                            ]
+                        );
+                    },
+
+                    'delete' => function ($url,$model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-trash right"></span>',
+                            $url,
+                            [
+                                'title' => 'Видалити',
+                                'data-pjax' => '0',
+                            ]
+                        );
+                    },
+                ],
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-1'];
+                }
+            ],
         ],
     ]); ?>
 <?php Pjax::end(); ?></div>

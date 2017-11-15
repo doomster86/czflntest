@@ -21,11 +21,16 @@ use yii\web\IdentityInterface;
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
+ * @property integer $role write-only password
  */
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
+
+    const ROLE_STUDENT = 0;
+    const ROLE_ADMIN = 1;
+    const ROLE_TEACHER = 2;
 
     /**
      * @inheritdoc
@@ -53,6 +58,8 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['role', 'default', 'value' => self::ROLE_STUDENT],
+            ['role', 'in', 'range' => [self::ROLE_STUDENT, self::ROLE_ADMIN, self::ROLE_TEACHER]],
         ];
     }
 
@@ -174,4 +181,44 @@ class User extends ActiveRecord implements IdentityInterface
         $this->password_reset_token = null;
     }
 
+    /*
+     * Custom get methods
+     */
+    public function getRegisterDate()
+    {
+        return date('d.m.Y', $this->created_at);
+    }
+
+    public function getRoleType()
+    {
+        $role = $this->role;
+        switch ($role) {
+            case self::ROLE_ADMIN:
+                $roleType = 'Адміністратор';
+                break;
+            case self::ROLE_TEACHER:
+                $roleType = 'Викладач';
+                break;
+            default:
+                $roleType = 'Слухач';
+                break;
+        }
+
+        return $roleType;
+    }
+
+    public function getStatusType()
+    {
+        $status = $this->status;
+        switch ($status) {
+            case self::STATUS_DELETED:
+                $roleType = 'Заблокований';
+                break;
+            default:
+                $roleType = 'Активний';
+                break;
+        }
+
+        return $roleType;
+    }
 }
