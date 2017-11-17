@@ -139,7 +139,7 @@ Relevator::register($this);
     echo ListView::widget([
         'dataProvider' => $dataProvider,
         'itemView' => '_list',
-        'layout' => "{items}\n{summary}\n{pager}",
+        'layout' => "<h4 class='clicktxt'>Натисніть на зображення для редагування</h4>{items}\n{summary}\n{pager}",
         'summary' => "<div class='summary'>Показано {begin} - {end} з {totalCount} користувачів</div>",
         'options' => ['id'    => 'userlist-wrapper',],
         'itemOptions' =>function ($model, $key, $index, $widget){

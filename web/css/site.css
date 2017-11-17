@@ -185,7 +185,8 @@ a.desc:after {
     padding-top: 0;
 }
 
-#userlist-wrapper h2 {
+#userlist-wrapper h2,
+.user-index  .clicktxt {
     text-align: center;
 }
 

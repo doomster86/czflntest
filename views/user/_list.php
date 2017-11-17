@@ -34,7 +34,7 @@ use yii\helpers\Url;
     }
     ?>
     <div class="img-holder">
-        <?= Html::img(Url::to('@web/').$img) ?>
+        <?= Html::a(Html::img(Url::to('@web/').$img), Url::to('update/'.$model->id)); ?>
     </div>
 
     <table class="table table-striped table-bordered">
