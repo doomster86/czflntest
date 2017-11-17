@@ -4,7 +4,7 @@ use yii\helpers\Url;
 ?>
 
 <div class="user-item">
-    <h2><?= Html::encode($model->username) ?></h2>
+    <h2><?= Html::encode($model->firstname) ?> <?= Html::encode($model->lastname) ?></h2>
 
     <?php
     switch ($model->role){
@@ -19,6 +19,17 @@ use yii\helpers\Url;
         default:
             $img = "/img/student.png";
             $role = "Студент";
+            break;
+    }
+
+    switch ($model->status) {
+        case 0:
+            $roleType = 'Заблокований';
+            $roleClass = 'blocked';
+            break;
+        default:
+            $roleType = 'Активний';
+            $roleClass = 'active';
             break;
     }
     ?>
@@ -46,6 +57,10 @@ use yii\helpers\Url;
                 <td><?= Html::encode($model->lastname) ?></td>
             </tr>
             <tr>
+                <td>Логін</td>
+                <td><?= Html::encode($model->username) ?></td>
+            </tr>
+            <tr>
                 <td>Email</td>
                 <td><?= Html::encode($model->email) ?></td>
             </tr>
@@ -55,4 +70,5 @@ use yii\helpers\Url;
             </tr>
         </tbody>
     </table>
+    <p class="center <?= $roleClass ?>"><?= $roleType ?></p>
 </div>

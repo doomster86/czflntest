@@ -149,6 +149,10 @@ a.desc:after {
     float: right;
 }
 
+.center {
+    text-align: center;
+}
+
 .courses-table .glyphicon {
     padding: 0 5px;
 }
@@ -187,4 +191,19 @@ a.desc:after {
 
 #userlist-wrapper .img-holder {
     text-align: center;
+    padding-bottom: 10px;
+}
+
+#userlist-wrapper .active {
+    color: #2aabd2;
+}
+
+#userlist-wrapper .blocked {
+    color: #985f0d;
+}
+
+.user-index .scroller {
+    color: #2aabd2;
+    text-align: center;
+    padding: 20px;
 }

@@ -132,12 +132,14 @@ Relevator::register($this);
 <?php Pjax::end(); ?>
  */ ?>
 
+    <h2 class="scroller">Гортайте вниз для перегляду ↓↓↓</h2>
+
     <?php
 
     echo ListView::widget([
         'dataProvider' => $dataProvider,
         'itemView' => '_list',
-        'layout' => "{pager}\n{summary}\n{items}\n{summary}\n{pager}",
+        'layout' => "{items}\n{summary}\n{pager}",
         'summary' => "<div class='summary'>Показано {begin} - {end} з {totalCount} користувачів</div>",
         'options' => ['id'    => 'userlist-wrapper',],
         'itemOptions' =>function ($model, $key, $index, $widget){
