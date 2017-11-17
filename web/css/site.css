@@ -164,8 +164,27 @@ a.desc:after {
     clear: both;
 }
 
-.revealator-slideleft {
-    background-color: rgba(0,0,0,.1);
-    margin: 0 auto;
-    display: inline-block;
+#userlist-wrapper .user-item {
+    border: 2px solid #e0e0e0;
+    padding: 5px;
+    background: #f5f5f5;
+}
+
+#userlist-wrapper .revealator-slideleft {
+    padding-top: 15px;
+    padding-bottom: 0;
+ }
+
+#userlist-wrapper .revealator-slideleft .revealator-delay0,
+#userlist-wrapper .revealator-slideleft .revealator-delay1,
+#userlist-wrapper .revealator-slideleft .revealator-delay2 {
+    padding-top: 0;
+}
+
+#userlist-wrapper h2 {
+    text-align: center;
+}
+
+#userlist-wrapper .img-holder {
+    text-align: center;
 }

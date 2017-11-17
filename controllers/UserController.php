@@ -26,7 +26,7 @@ class UserController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => User::find()->orderBy('username ASC'),
             'pagination' => [
-                'pageSize' => 20,
+                'pageSize' => 10,
             ],
         ]);
 
