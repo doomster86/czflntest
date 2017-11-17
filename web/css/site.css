@@ -158,3 +158,14 @@ a.desc:after {
     border-color: #e0e0e0;
     margin-top: -20px;
 }
+
+#userlist-wrapper .summary {
+    padding: 10px 0;
+    clear: both;
+}
+
+.revealator-slideleft {
+    background-color: rgba(0,0,0,.1);
+    margin: 0 auto;
+    display: inline-block;
+}

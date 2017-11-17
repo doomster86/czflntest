@@ -3,13 +3,18 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use yii\widgets\ListView;
+use app\assets\Relevator;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\UserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* https://github.com/QODIO/revealator */
 
 $this->title = 'Користувачі';
 $this->params['breadcrumbs'][] = $this->title;
+
+Relevator::register($this);
 ?>
 <div class="user-index">
 
@@ -18,7 +23,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?php // echo Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-<?php Pjax::begin(); ?>    <?= GridView::widget([
+
+<?php /**
+<?php Pjax::begin(); ?>
+    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'emptyText' => 'Нічого не знайдено',
@@ -121,4 +129,24 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]);
 ?>
-<?php Pjax::end(); ?></div>
+<?php Pjax::end(); ?>
+ */ ?>
+
+    <?php
+
+    echo ListView::widget([
+        'dataProvider' => $dataProvider,
+        'itemView' => '_list',
+        'layout' => "{pager}\n{summary}\n{items}\n{summary}\n{pager}",
+        'summary' => "<div class='summary'>Показано {begin} - {end} з {totalCount} користувачів</div>",
+        'options' => ['id'    => 'userlist-wrapper',],
+        'itemOptions' =>function ($model, $key, $index, $widget){
+            return [
+                'tag' => 'div',
+                'class' => 'col-md-4 revealator-slideleft revealator-delay'.$index,
+            ];
+        }
+    ]);
+    ?>
+
+</div>
