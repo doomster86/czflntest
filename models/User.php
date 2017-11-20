@@ -41,7 +41,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     const ROLES = array(
         '0' => array (
-            'name' => 'Студент',
+            'name' => 'Слухач',
             'img' => '/img/student.png',
             'roles' =>'0',
         ),
