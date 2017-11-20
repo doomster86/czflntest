@@ -2,11 +2,6 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\widgets\Pjax;
-
-Pjax::begin([
-    // Pjax options
-]);
 
 if( Html::encode($operation) == 'updated'):
     ?>
@@ -72,7 +67,7 @@ endif;
 
     <?php
         ActiveForm::end();
-        Pjax::end();
+
     ?>
 
 </div>
