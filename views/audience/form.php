@@ -36,20 +36,43 @@ Pjax::begin([
 
     <?php
     $form = ActiveForm::begin([
-        'options' => ['data' => ['pjax' => true], 'id' => 'audience-form'],
+        'options' => [
+            'data' => [
+                'pjax' => true,
+                //'data-pjax' => '0',
+            ],
+            'id' => 'audience-form'
+        ],
     ]);
-    ?>
-    <?= $form->field($model, 'name')->label('Назва аудиторії')->textInput(['placeholder' => 'Введіть назву']); ?>
 
-    <?= $form->field($model, 'num')->label('Номер аудиторії')->textInput(['placeholder' => 'Введіть номер']) ?>
+    $nameValue = '';
+    $numValue = '';
+    if (Html::encode($current_action) == 'update') {
+        $nameValue = $model->name;
+        $numValue = $model->num;
+    }
+
+    ?>
+    <?= $form->field($model, 'name')
+        ->label('Назва аудиторії')
+        ->textInput([
+                'placeholder' => 'Введіть назву',
+                'value' => $nameValue
+        ]); ?>
+
+    <?= $form->field($model, 'num')
+        ->label('Номер аудиторії')
+        ->textInput([
+                'placeholder' => 'Введіть номер',
+	            'value' => $numValue
+        ]) ?>
 
     <?php
-        //AudienceController::v($corps);
         $options = array(
                 'options' =>  [
                         0 => [
                                 'disabled' => true,
-                                //'' => '',
+	                            'selected' => 'selected',
                         ],
                         //1 => ...
                 ]
@@ -60,7 +83,8 @@ Pjax::begin([
     <?php echo $form->field($model, 'corps')->label('Оберіть корпус')->dropDownList($corps, $options);  ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Створити' : 'Оновити', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+	    <?= Html::submitButton($current_action == 'create' ? 'Додати' : 'Оновити', ['class' => $current_action == 'create' ? 'btn btn-success' : 'btn btn-primary', 'data-pjax' => '0',]) ?>
+
     </div>
 
     <?php ActiveForm::end(); ?>

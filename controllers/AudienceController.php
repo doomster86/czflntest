@@ -61,7 +61,6 @@ class AudienceController extends Controller {
                 return $this->render('create', [
                     'model' => $model,
                     'corps' => $corps,
-
                     'status' => 'created'
                 ]);
 
@@ -86,15 +85,20 @@ class AudienceController extends Controller {
         if(Yii::$app->user->identity->role==1) {
             $model = $this->findModel($id);
 
-            $corps_add = array('Оберіть корпус');
-            $corps = Corps::find()->asArray()->select('name')->orderBy('ID')->all();
-            $corps = ArrayHelper::getColumn($corps, 'name');
+	        $corps_ids = Corps::find()->asArray()->select('ID')->orderBy('ID')->all();
+	        $corps_ids = ArrayHelper::getColumn($corps_ids, 'ID');
 
+            $corps_values = Corps::find()->asArray()->select('name')->orderBy('ID')->all();
+            $corps_values = ArrayHelper::getColumn($corps_values, 'name');
+
+	        $corps = array_combine($corps_ids,$corps_values);
+
+	        $corps_add = array(0 => 'Оберіть корпус');
             $corps = ArrayHelper::merge($corps_add, $corps);
 
-            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 //return $this->redirect(['view', 'id' => $model->ID]);
-                $model->update();
+                //$model->update();
                 return $this->render('update', [
                     'model' => $model,
                     'corps' => $corps,
@@ -102,6 +106,7 @@ class AudienceController extends Controller {
                 ]);
 
             } else {
+
                 return $this->render('update', [
                     'model' => $model,
                     'corps' => $corps,

@@ -5,20 +5,20 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "courses".
+ * This is the model class for table "groups".
  *
  * @property integer $ID
  * @property string $name
- * @property string $subject
+ * @property integer $course
  */
-class Courses extends \yii\db\ActiveRecord
+class Groups extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'courses';
+        return 'groups';
     }
 
     /**
@@ -27,7 +27,8 @@ class Courses extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            ['name', 'required', 'message'=>'Обов\'язкове поле'],
+            [['name', 'course', 'curator'], 'required','message'=>'Обов\'язкове поле'],
+            [['name'], 'string', 'max' => 255],
         ];
     }
 
@@ -38,8 +39,9 @@ class Courses extends \yii\db\ActiveRecord
     {
         return [
             'ID' => 'ID',
-            'name' => 'Name',
-
+            'name' => 'Назва/номер',
+            'course' => 'Професія',
+	        'curator' => 'Куратор'
         ];
     }
 }

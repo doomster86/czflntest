@@ -47,11 +47,7 @@ $form = ActiveForm::begin([
 
 <div class="row">
     <div class="col-xs-6">
-
-
         <?php
-
-
         //AudienceController::v($corps);
         $options = array(
 
@@ -85,13 +81,18 @@ $form = ActiveForm::begin([
         ]);
         ?>
     </div>
+
+</div>
+
+<div class="row">
     <div class="form-group col-xs-12">
-        <?= Html::submitButton('Додати', [
-                'class' => 'btn btn-success' ,
-                'data-pjax' => '0',
-        ]) ?>
+		<?= Html::submitButton('Додати', [
+			'class' => 'btn btn-success' ,
+			'data-pjax' => '0',
+		]) ?>
     </div>
 </div>
+
 <?php
 
 ActiveForm::end(); ?>
