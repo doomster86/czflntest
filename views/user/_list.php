@@ -25,16 +25,16 @@ use app\models\User;
         </thead>
         <tbody>
             <tr>
+                <td>Прізвище</td>
+                <td><?= Html::encode($model->lastname) ?></td>
+            </tr>
+            <tr>
                 <td>Ім'я</td>
                 <td><?= Html::encode($model->firstname) ?></td>
             </tr>
             <tr>
                 <td>По батькові</td>
                 <td><?= Html::encode($model->middlename) ?></td>
-            </tr>
-            <tr>
-                <td>Прізвище</td>
-                <td><?= Html::encode($model->lastname) ?></td>
             </tr>
             <tr>
                 <td>Логін</td>
@@ -50,5 +50,6 @@ use app\models\User;
             </tr>
         </tbody>
     </table>
+    <p class="center">Зареєстровано <?php echo $model->getRegisterDate(); ?></p>
     <p class="center <?= Html::encode($status[$model->status]['cssClass']) ?>"><?= Html::encode($status[$model->status]['name']) ?></p>
 </div>
