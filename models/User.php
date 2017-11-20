@@ -26,11 +26,37 @@ use yii\web\IdentityInterface;
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
-    const STATUS_ACTIVE = 10;
+    const STATUS_ACTIVE = 1;
 
     const ROLE_STUDENT = 0;
     const ROLE_ADMIN = 1;
     const ROLE_TEACHER = 2;
+
+    const STATUS = array(
+        self::STATUS_DELETED => array(
+            'name' => 'Заблоковано',
+            'cssClass' => 'blocked',
+        ),
+        self::STATUS_ACTIVE => array(
+            'name' => 'Активний',
+            'cssClass' => 'active',
+        ),
+    );
+
+    const ROLES = array(
+        self::ROLE_STUDENT => array (
+            'name' => 'Студент',
+            'img' => '/img/student.png',
+        ),
+        self::ROLE_ADMIN => array(
+            'name' => 'Адміністратор',
+            'img' => '/img/admin.png',
+        ),
+        self::ROLE_TEACHER => array(
+            'name' => 'Викладач',
+            'img' => '/img/lector.png'
+        ),
+    );
 
     /**
      * @inheritdoc

@@ -19,6 +19,7 @@ class UserController extends Controller
      * Lists all User models.
      * @return mixed
      */
+
     public function actionIndex()
     {
         $searchModel = new UserSearch();

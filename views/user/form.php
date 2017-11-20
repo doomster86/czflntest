@@ -30,11 +30,6 @@ endif;
         ]);
     ?>
 
-    <?php
-        $status = array('0' => 'Заблоковано', '10' =>'Активний');
-        $roles = array('0' =>'Студент', '1' =>'Адміністратор', '2' => 'Викладач');
-    ?>
-
     <?php echo $form->field($model, 'status')->label('Встановити статус')->dropDownList($status);  ?>
 
     <?php echo $form->field($model, 'role')->label('Обрати роль')->dropDownList($roles);  ?>

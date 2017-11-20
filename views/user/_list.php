@@ -1,46 +1,26 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+use app\models\User;
 ?>
 
 <div class="user-item">
     <h2><?= Html::encode($model->firstname) ?> <?= Html::encode($model->lastname) ?></h2>
 
     <?php
-    switch ($model->role){
-        case 1:
-            $img = "/img/admin.png";
-            $role = "Адміністратор";
-            break;
-        case 2:
-            $img = "/img/lector.png";
-            $role = "Викладач";
-            break;
-        default:
-            $img = "/img/student.png";
-            $role = "Студент";
-            break;
-    }
 
-    switch ($model->status) {
-        case 0:
-            $roleType = 'Заблокований';
-            $roleClass = 'blocked';
-            break;
-        default:
-            $roleType = 'Активний';
-            $roleClass = 'active';
-            break;
-    }
+    $roles = User::ROLES;
+    $status = User::STATUS;
+
     ?>
     <div class="img-holder">
-        <?= Html::a(Html::img(Url::to('@web/').$img), Url::to('update/'.$model->id)); ?>
+        <?= Html::a(Html::img(Url::to('@web/').$roles[$model->role]['img']), Url::to('update/'.$model->id)); ?>
     </div>
 
     <table class="table table-striped table-bordered">
         <thead>
         <tr>
-            <th colspan="2"><h3><?= Html::encode($role) ?></h3></th>
+            <th colspan="2"><h3><?= Html::encode($roles[$model->role]['name']) ?></h3></th>
         </tr>
         </thead>
         <tbody>
@@ -70,5 +50,5 @@ use yii\helpers\Url;
             </tr>
         </tbody>
     </table>
-    <p class="center <?= $roleClass ?>"><?= $roleType ?></p>
+    <p class="center <?= Html::encode($status[$model->status]['cssClass']) ?>"><?= Html::encode($status[$model->status]['name']) ?></p>
 </div>
