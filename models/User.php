@@ -25,36 +25,35 @@ use yii\web\IdentityInterface;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    const STATUS_DELETED = 0;
-    const STATUS_ACTIVE = 1;
-
-    const ROLE_STUDENT = 0;
-    const ROLE_ADMIN = 1;
-    const ROLE_TEACHER = 2;
 
     const STATUS = array(
-        self::STATUS_DELETED => array(
+        '0' => array(
             'name' => 'Заблоковано',
             'cssClass' => 'blocked',
+            'status' => '0',
         ),
-        self::STATUS_ACTIVE => array(
+        '1' => array(
             'name' => 'Активний',
             'cssClass' => 'active',
+            'status' => '1',
         ),
     );
 
     const ROLES = array(
-        self::ROLE_STUDENT => array (
+        '0' => array (
             'name' => 'Студент',
             'img' => '/img/student.png',
+            'roles' =>'0',
         ),
-        self::ROLE_ADMIN => array(
+        '1' => array(
             'name' => 'Адміністратор',
             'img' => '/img/admin.png',
+            'roles' => '1',
         ),
-        self::ROLE_TEACHER => array(
+        '2' => array(
             'name' => 'Викладач',
-            'img' => '/img/lector.png'
+            'img' => '/img/lector.png',
+            'roles' => '2',
         ),
     );
 
@@ -82,10 +81,10 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
-            ['role', 'default', 'value' => self::ROLE_STUDENT],
-            ['role', 'in', 'range' => [self::ROLE_STUDENT, self::ROLE_ADMIN, self::ROLE_TEACHER]],
+            ['status', 'default', 'value' => self::STATUS['1']['status'] ],
+            ['status', 'in', 'range' => [ self::STATUS['1']['status'], self::STATUS['0']['status'] ]],
+            ['role', 'default', 'value' => self::ROLES['0']['roles'] ],
+            ['role', 'in', 'range' => [ self::ROLES['0']['roles'], self::ROLES['1']['roles'], self::ROLES['2']['roles'] ]],
         ];
     }
 
@@ -94,7 +93,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['id' => $id, 'status' => self::STATUS['1']['status'] ]);
     }
 
     /**
@@ -113,7 +112,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['username' => $username, 'status' => self::STATUS['1']['status'] ]);
     }
 
     /**
@@ -181,7 +180,7 @@ class User extends ActiveRecord implements IdentityInterface
 
         return static::findOne([
             'password_reset_token' => $token,
-            'status' => self::STATUS_ACTIVE,
+            'status' => self::STATUS['1']['status'],
         ]);
     }
 
@@ -215,36 +214,4 @@ class User extends ActiveRecord implements IdentityInterface
         return date('d.m.Y', $this->created_at);
     }
 
-    public function getRoleType()
-    {
-        $role = $this->role;
-        switch ($role) {
-            case self::ROLE_ADMIN:
-                $roleType = 'Адміністратор';
-                break;
-            case self::ROLE_TEACHER:
-                $roleType = 'Викладач';
-                break;
-            default:
-                $roleType = 'Слухач';
-                break;
-        }
-
-        return $roleType;
-    }
-
-    public function getStatusType()
-    {
-        $status = $this->status;
-        switch ($status) {
-            case self::STATUS_DELETED:
-                $roleType = 'Заблокований';
-                break;
-            default:
-                $roleType = 'Активний';
-                break;
-        }
-
-        return $roleType;
-    }
 }
