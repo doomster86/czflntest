@@ -53,10 +53,10 @@ $this->params['breadcrumbs'][] = $this->title;
 			        return $course_name['name'];
 		        },
 		        'contentOptions' =>function ($model, $key, $index, $column){
-			        return ['class' => 'col-xs-4'];
+			        return ['class' => 'col-xs-3'];
 		        }
 	        ],
-
+/*
 	        [
 		        'attribute' => 'curator',
 		        'label' => 'Куратор',
@@ -66,9 +66,17 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $name;
                 },
 		        'contentOptions' =>function ($model, $key, $index, $column){
-			        return ['class' => 'col-xs-4'];
+			        return ['class' => 'col-xs-2'];
 		        }
 	        ],
+*/
+            [
+                'attribute' => 'userName',
+                'label' => 'Куратор',
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-3'];
+                }
+            ],
 
             [
                 'class' => 'yii\grid\ActionColumn',

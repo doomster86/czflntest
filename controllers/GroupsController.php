@@ -72,13 +72,7 @@ class GroupsController extends Controller
     public function actionCreate() {
 	    if(Yii::$app->user->identity->role==1) {
 	        $model = new Groups();
-/*
-		    $curators  = array(
-				'Свирид Опанасович' => 'Свирид Опанасович',
-			    'Мурзік Васильович' => 'Мурзік Васильович',
-			    'Пророк Самуїл' => 'Пророк Самуїл'
-		    );
-*/
+
             $curators_ids = User::find()->asArray()->select('id')->orderBy('id')->where(['role' => 2])->all();
             $curators_ids = ArrayHelper::getColumn($curators_ids, 'id');
 
@@ -141,13 +135,7 @@ class GroupsController extends Controller
     public function actionUpdate($id) {
 	    if(Yii::$app->user->identity->role==1) {
 	        $model = $this->findModel($id);
-/*
-		    $curators  = array(
-			    'Свирид Опанасович' => 'Свирид Опанасович',
-			    'Мурзік Васильович' => 'Мурзік Васильович',
-			    'Пророк Самуїл' => 'Пророк Самуїл'
-		    );
-*/
+
             $curators_ids = User::find()->asArray()->select('id')->orderBy('id')->where(['role' => 2])->all();
             $curators_ids = ArrayHelper::getColumn($curators_ids, 'id');
 
@@ -179,7 +167,6 @@ class GroupsController extends Controller
 		    $courses = ArrayHelper::merge($courses_add, $courses);
 
 	        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-	            //return $this->redirect(['view', 'id' => $model->ID]);
 
 		        return $this->render('update', [
 			        'model' => $model,

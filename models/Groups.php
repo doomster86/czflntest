@@ -10,24 +10,36 @@ use Yii;
  * @property integer $ID
  * @property string $name
  * @property integer $course
+ * @property integer $curator
  */
-class Groups extends \yii\db\ActiveRecord
-{
+class Groups extends \yii\db\ActiveRecord {
+
+    public function getUser() {
+        return $this->hasOne(User::className(), ['id' => 'curator']);
+    }
+
+    public function getUserFirstName() {
+        return $this->user->firstname;
+    }
+
+    public function getUserLastName() {
+        return $this->user->lastname;
+    }
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'groups';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            [['name', 'course', 'curator'], 'required','message'=>'Обов\'язкове поле'],
+            [['name', 'course', 'curator'], 'required'],
+            [['course', 'curator'], 'integer'],
             [['name'], 'string', 'max' => 255],
         ];
     }
@@ -35,13 +47,16 @@ class Groups extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'ID' => 'ID',
-            'name' => 'Назва/номер',
+            'name' => 'Назва',
             'course' => 'Професія',
-	        'curator' => 'Куратор'
+            'curator' => 'Куратор',
+            'userFirstName' => 'Ім\'я куратора',
+            'userLastName' => 'Прізвище куратора',
         ];
     }
+
+
 }
