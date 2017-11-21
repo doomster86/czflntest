@@ -11,7 +11,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\Html;
 use app\models\Courses;
 use yii\helpers\ArrayHelper;
-
+use app\models\User;
 /**
  * GroupsController implements the CRUD actions for Groups model.
  */
@@ -72,12 +72,30 @@ class GroupsController extends Controller
     public function actionCreate() {
 	    if(Yii::$app->user->identity->role==1) {
 	        $model = new Groups();
-
+/*
 		    $curators  = array(
 				'Свирид Опанасович' => 'Свирид Опанасович',
 			    'Мурзік Васильович' => 'Мурзік Васильович',
 			    'Пророк Самуїл' => 'Пророк Самуїл'
 		    );
+*/
+            $curators_ids = User::find()->asArray()->select('id')->orderBy('id')->where(['role' => 2])->all();
+            $curators_ids = ArrayHelper::getColumn($curators_ids, 'id');
+
+            $curators_firstnames = User::find()->asArray()->select('firstname')->orderBy('id')->where(['role' => 2])->all();
+            $curators_firstnames = ArrayHelper::getColumn($curators_firstnames, 'firstname');
+
+            $curators_lastnames = User::find()->asArray()->select('lastname')->orderBy('id')->where(['role' => 2])->all();
+            $curators_lastnames = ArrayHelper::getColumn($curators_lastnames, 'lastname');
+
+            $curators_values = array();
+            for ($i=0; $i  < count($curators_firstnames); $i++) {
+                $curators_values[] = $curators_firstnames[$i].' '.$curators_lastnames[$i];
+            }
+
+            $curators = array_combine($curators_ids, $curators_values);
+
+
 		    $curators_add = array(0 => 'Оберіть куратора');
 		    $curators = ArrayHelper::merge($curators_add, $curators);
 
@@ -123,12 +141,29 @@ class GroupsController extends Controller
     public function actionUpdate($id) {
 	    if(Yii::$app->user->identity->role==1) {
 	        $model = $this->findModel($id);
-
+/*
 		    $curators  = array(
 			    'Свирид Опанасович' => 'Свирид Опанасович',
 			    'Мурзік Васильович' => 'Мурзік Васильович',
 			    'Пророк Самуїл' => 'Пророк Самуїл'
 		    );
+*/
+            $curators_ids = User::find()->asArray()->select('id')->orderBy('id')->where(['role' => 2])->all();
+            $curators_ids = ArrayHelper::getColumn($curators_ids, 'id');
+
+            $curators_firstnames = User::find()->asArray()->select('firstname')->orderBy('id')->where(['role' => 2])->all();
+            $curators_firstnames = ArrayHelper::getColumn($curators_firstnames, 'firstname');
+
+            $curators_lastnames = User::find()->asArray()->select('lastname')->orderBy('id')->where(['role' => 2])->all();
+            $curators_lastnames = ArrayHelper::getColumn($curators_lastnames, 'lastname');
+
+            $curators_values = array();
+            for ($i=0; $i  < count($curators_firstnames); $i++) {
+                $curators_values[] = $curators_firstnames[$i].' '.$curators_lastnames[$i];
+            }
+
+            $curators = array_combine($curators_ids, $curators_values);
+
 		    $curators_add = array(0 => 'Оберіть куратора');
 		    $curators = ArrayHelper::merge($curators_add, $curators);
 

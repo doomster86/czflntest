@@ -4,10 +4,11 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use app\models\Courses;
-
+use app\models\User;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\GroupsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+Pjax::begin();
 
 $this->title = 'Групи';
 $this->params['breadcrumbs'][] = $this->title;
@@ -17,10 +18,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
+
+    <?php  ?>
+
     <p>
+
         <?= Html::a('Додати групу', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-    <?php Pjax::begin(); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -56,6 +60,11 @@ $this->params['breadcrumbs'][] = $this->title;
 	        [
 		        'attribute' => 'curator',
 		        'label' => 'Куратор',
+                'content' => function ($model, $key, $index, $column){
+                    $name = User::find()->asArray()->where(['id' => $model->curator])->one();
+                    $name = $name['firstname'] . ' ' . $name['lastname'];
+                    return $name;
+                },
 		        'contentOptions' =>function ($model, $key, $index, $column){
 			        return ['class' => 'col-xs-4'];
 		        }
