@@ -22,6 +22,13 @@ class Groups extends \yii\db\ActiveRecord {
         return $this->user->firstname . ' ' . $this->user->lastname;
     }
 
+	public function getCourses() {
+    	return $this->hasOne(Courses::className(), ['ID' => 'course']);
+	}
+
+	public function getCoursesName() {
+    	return $this->courses->name;
+	}
 
     /**
      * @inheritdoc
@@ -49,7 +56,8 @@ class Groups extends \yii\db\ActiveRecord {
             'ID' => 'ID',
             'name' => 'Назва',
             'course' => 'Професія',
-            'curator' => 'Куратор',
+            'coursesName' => 'Професія',
+	        'curator' => 'Куратор',
             'userName' => 'Ім\'я куратора',
         ];
     }

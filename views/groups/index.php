@@ -46,30 +46,13 @@ $this->params['breadcrumbs'][] = $this->title;
 	        ],
 
 	        [
-		        'attribute'=>'course',
-		        'label'=>'Професія',
-		        'content' => function ($model, $key, $index, $column){
-			        $course_name = Courses::find()->asArray()->where(['ID' => $model->course])->one();
-			        return $course_name['name'];
-		        },
+		        'attribute' => 'coursesName',
+		        'label' => 'Професія',
 		        'contentOptions' =>function ($model, $key, $index, $column){
 			        return ['class' => 'col-xs-3'];
 		        }
 	        ],
-/*
-	        [
-		        'attribute' => 'curator',
-		        'label' => 'Куратор',
-                'content' => function ($model, $key, $index, $column){
-                    $name = User::find()->asArray()->where(['id' => $model->curator])->one();
-                    $name = $name['firstname'] . ' ' . $name['lastname'];
-                    return $name;
-                },
-		        'contentOptions' =>function ($model, $key, $index, $column){
-			        return ['class' => 'col-xs-2'];
-		        }
-	        ],
-*/
+
             [
                 'attribute' => 'userName',
                 'label' => 'Куратор',

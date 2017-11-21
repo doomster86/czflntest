@@ -10,10 +10,10 @@ use app\models\Groups;
 /**
  * GroupsSearch represents the model behind the search form about `app\models\Groups`.
  */
-class GroupsSearch extends Groups
-{
+class GroupsSearch extends Groups {
 
     public $userName;
+	public $coursesName;
 
     /**
      * @inheritdoc
@@ -22,7 +22,7 @@ class GroupsSearch extends Groups
     {
         return [
             [['ID', 'course'], 'integer'],
-            [['name', 'curator', 'userName'], 'safe'],
+            [['name', 'coursesName', 'curator', 'userName'], 'safe'],
         ];
     }
 
@@ -57,6 +57,11 @@ class GroupsSearch extends Groups
                 'ID',
                 'name',
                 'course',
+	            'coursesName' => [
+		            'asc' => ['courses.name' => SORT_ASC],
+		            'desc' => ['courses.tname' => SORT_DESC],
+		            'label' => 'Професія'
+	            ],
                 'curator',
                 'userName' => [
                     'asc' => ['user.firstname' => SORT_ASC],
@@ -84,7 +89,9 @@ class GroupsSearch extends Groups
 
         $query->andFilterWhere(['like', 'name', $this->name]);
 
-
+	    $query->joinWith(['courses' => function ($q) {
+		    $q->where('courses.name LIKE "%' . $this->coursesName . '%"');
+	    }]);
 
         $query->joinWith(['user' => function ($q) {
             $pieces = explode(" ", $this->userName);
