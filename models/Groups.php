@@ -18,13 +18,10 @@ class Groups extends \yii\db\ActiveRecord {
         return $this->hasOne(User::className(), ['id' => 'curator']);
     }
 
-    public function getUserFirstName() {
-        return $this->user->firstname;
+    public function getUserName() {
+        return $this->user->firstname . ' ' . $this->user->lastname;
     }
 
-    public function getUserLastName() {
-        return $this->user->lastname;
-    }
 
     /**
      * @inheritdoc
@@ -53,8 +50,7 @@ class Groups extends \yii\db\ActiveRecord {
             'name' => 'Назва',
             'course' => 'Професія',
             'curator' => 'Куратор',
-            'userFirstName' => 'Ім\'я куратора',
-            'userLastName' => 'Прізвище куратора',
+            'userName' => 'Ім\'я куратора',
         ];
     }
 

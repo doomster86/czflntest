@@ -13,8 +13,8 @@ use app\models\Groups;
 class GroupsSearch extends Groups
 {
 
-    public $userFirstName;
-    public $userLastName;
+    public $userName;
+
     /**
      * @inheritdoc
      */
@@ -22,7 +22,7 @@ class GroupsSearch extends Groups
     {
         return [
             [['ID', 'course'], 'integer'],
-            [['name', 'curator', 'userFirstName', 'userLastName'], 'safe'],
+            [['name', 'curator', 'userName'], 'safe'],
         ];
     }
 
@@ -58,16 +58,12 @@ class GroupsSearch extends Groups
                 'name',
                 'course',
                 'curator',
-                'userFirstName' => [
+                'userName' => [
                     'asc' => ['user.firstname' => SORT_ASC],
                     'desc' => ['user.firstname' => SORT_DESC],
                     'label' => 'Ім\'я куратора'
                 ],
-                'userLastName' => [
-                    'asc' => ['user.lastname' => SORT_ASC],
-                    'desc' => ['user.lastname' => SORT_DESC],
-                    'label' => 'Прізвище куратора'
-                ]
+
             ]
         ]);
 
@@ -89,7 +85,9 @@ class GroupsSearch extends Groups
         $query->andFilterWhere(['like', 'name', $this->name]);
 
         $query->joinWith(['user' => function ($q) {
-            $q->where('user.firstname LIKE "%' . $this->userName . '%"');
+            //$q->where('user.firstname LIKE "%' . $this->userName . '%"');
+            $q->where('firstname LIKE "%' . $this->userName . '%" ' .
+        'OR lastname LIKE "%' . $this->userName . '%"');
         }]);
 
 
