@@ -49,6 +49,7 @@ class GroupsSearch extends Groups
             'query' => $query,
         ]);
 
+
         $this->load($params);
 
         if (!$this->validate()) {
