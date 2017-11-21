@@ -94,6 +94,7 @@ AppAsset::register($this);
             ['label' => 'Корпуси', 'url' => ['/corps/index'], 'items' => [
                 ['label' => 'Всі корпуси', 'url' => ['/corps/index']],
                 ['label' => 'Cтворити новий', 'url' => ['/corps/create']],
+                ['label' => 'Пари', 'url' => ['/lecture-table/index']]
             ]],
             ['label' => 'Аудиторії', 'url' => ['/audience/index'], 'items' => [
                 ['label' => 'Всі аудиторії', 'url' => ['/audience/index']],

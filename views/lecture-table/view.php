@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model app\models\LectureTable */
 
 $this->title = $model->ID;
-$this->params['breadcrumbs'][] = ['label' => 'Lecture Tables', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Пари', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="lecture-table-view">
@@ -15,8 +15,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->ID], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->ID], [
+        <?= Html::a('Оновити', ['update', 'id' => $model->ID], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Видалити', ['delete', 'id' => $model->ID], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',

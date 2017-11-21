@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "lecture_table".
+ * This is the model class for table "lecture-table".
  *
  * @property integer $ID
  * @property string $time_start
@@ -14,24 +14,22 @@ use Yii;
  *
  * @property Corps $corps0
  */
-class LectureTable extends \yii\db\ActiveRecord
-{
+class LectureTable extends \yii\db\ActiveRecord {
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'lecture_table';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['time_start', 'time_stop', 'corps'], 'required'],
-            [['time_start', 'time_stop'], 'safe'],
+            //[['time_start', 'time_stop'], 'safe'],
+	        [['time_start', 'time_stop'], 'date', 'format' => 'H:i', 'message' => 'Введите правильный формат'],
             [['corps'], 'integer'],
             [['corps'], 'exist', 'skipOnError' => true, 'targetClass' => Corps::className(), 'targetAttribute' => ['corps' => 'ID']],
         ];
@@ -40,13 +38,12 @@ class LectureTable extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'ID' => 'ID',
-            'time_start' => 'Time Start',
-            'time_stop' => 'Time Stop',
-            'corps' => 'Corps',
+            'time_start' => 'Час початку',
+            'time_stop' => 'Час кінця',
+            'corps' => 'Корпус',
         ];
     }
 
