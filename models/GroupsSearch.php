@@ -84,10 +84,20 @@ class GroupsSearch extends Groups
 
         $query->andFilterWhere(['like', 'name', $this->name]);
 
+
+
         $query->joinWith(['user' => function ($q) {
+            $pieces = explode(" ", $this->userName);
+            $userFirstName = $pieces[0];
+            $userLastName = $pieces[1];
             //$q->where('user.firstname LIKE "%' . $this->userName . '%"');
-            $q->where('firstname LIKE "%' . $this->userName . '%" ' .
-        'OR lastname LIKE "%' . $this->userName . '%"');
+            //$q->where('firstname LIKE "%' . $this->userName . '%" ' . 'OR lastname LIKE "%' . $this->userName . '%"');
+            if (!$userLastName) {
+                $q->where('firstname LIKE "%' . $userFirstName . '%" ' . 'OR lastname LIKE "%' . $userFirstName . '%"');
+            } else {
+                $q->where('firstname LIKE "%' . $userFirstName . '%" ' . 'OR lastname LIKE "%' . $userLastName . '%" OR firstname LIKE "%' . $userLastName . '%" ' . 'OR lastname LIKE "%' . $userFirstName . '%" ');
+
+            }
         }]);
 
 
