@@ -62,7 +62,7 @@ endif;
     <?php echo $form->field($model, 'role')->label('Обрати роль')->dropDownList($roles);  ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Оновити', ['class' => 'btn btn-primary']) ?>
+        <?= Html::submitButton('Оновити', ['class' => 'btn btn-primary', 'name' => 'userbtn']) ?>
     </div>
 
     <?php

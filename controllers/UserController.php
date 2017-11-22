@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\User;
+use app\models\TeacherMeta;
 use app\models\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -55,6 +56,19 @@ class UserController extends Controller
         }
     }
 
+    public function actionCreateTeacherMeta()
+    {
+        $model = new TeacherMeta();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            return $this->render('create', [
+                'model' => $model,
+            ]);
+        }
+    }
+
     /**
      * Updates an existing User model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -62,6 +76,38 @@ class UserController extends Controller
      * @return mixed
      */
     public function actionUpdate($id)
+    {
+        if(Yii::$app->user->identity->role==1) {
+            $model = $this->findModel($id);
+            $teacher = $this->findTeacherModel($id);
+
+            if($teacher->load(Yii::$app->request->post()) && $teacher->save()) {
+                return $this->render('update', [
+                    'model' => $model,
+                    'teacher' => $teacher,
+                    'operation' => 'updated',
+                ]);
+            }
+
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->render('update', [
+                    'model' => $model,
+                    'teacher' => $teacher,
+                    'operation' => 'updated',
+                ]);
+            } else {
+                return $this->render('update', [
+                    'model' => $model,
+                    'teacher' => $teacher,
+                ]);
+            }
+
+        } else {
+            return $this->render('/site/access_denied');
+        }
+    }
+
+    public function actionUpdateTeacherMeta($id)
     {
         if(Yii::$app->user->identity->role==1) {
             $model = $this->findModel($id);
@@ -111,6 +157,16 @@ class UserController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException('Сторінку не знайдено..');
+        }
+    }
+
+    protected function findTeacherModel($id)
+    {
+        if (($model = TeacherMeta::findOne( ['user_id'=>$id] )) !== null) {
+            return $model;
+        } else {
+            $model = new TeacherMeta();
+            return $model;
         }
     }
 }

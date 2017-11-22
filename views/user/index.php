@@ -145,7 +145,7 @@ Relevator::register($this);
         'itemOptions' =>function ($model, $key, $index, $widget){
             return [
                 'tag' => 'div',
-                'class' => 'col-md-4 left revealator-once revealator-slideleft revealator-delay'.$key,
+                'class' => 'col-md-4 left revealator-once revealator-slideleft revealator-delay'.$index,
             ];
         }
     ]);
