@@ -208,3 +208,14 @@ a.desc:after {
     text-align: center;
     padding: 20px;
 }
+
+#workdays .form-group {
+    float: left;
+    padding-right: 10px;
+    width: 25%;
+}
+
+#workdays {
+    clear: both;
+    float: left;
+}

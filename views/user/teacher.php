@@ -2,41 +2,59 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use app\models\TeacherMeta;
 
-/* @var $this yii\web\View */
-/* @var $model app\models\TeacherMeta */
-/* @var $form yii\widgets\ActiveForm */
+$type = TeacherMeta::TEACHER_TYPE;
+
+if( Html::encode($operation) == 'teacher_updated'):
+    ?>
+
+    <div class="alert alert-success">
+        <p>Оновлено!</p>
+    </div>
+
+    <?php
+endif;
 ?>
 
 <div class="teacher-meta-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php
+    $form = ActiveForm::begin([
+        'options' => [
+            'data' => ['pjax' => true],
+            'id' => 'teacher-form'
+        ],
+    ]);
+    ?>
 
-    <?= $form->field($model, 'user_id')->textInput() ?>
+    <?php echo $form->field($model, 'teacher_type')->label('Тип викладача')->dropDownList($type);  ?>
 
-    <?= $form->field($model, 'teacher_type')->textInput() ?>
+    <?php echo $form->field($model, 'rank_id')->label('Педагогічне звання')->dropDownList($model->getAllRanks());  ?>
 
-    <?= $form->field($model, 'rank_id')->textInput() ?>
+    <?php echo $form->field($model, 'degree_id')->label('Вчена ступінь')->dropDownList($model->getAllDegrees());  ?>
 
-    <?= $form->field($model, 'degree_id')->textInput() ?>
+    <?php echo $form->field($model, 'skill_id')->label('Кваліфікація')->dropDownList($model->getAllSkills());  ?>
 
-    <?= $form->field($model, 'skill_id')->textInput() ?>
+    <?= $form->field($model, 'hours')->label('Навантаження г./тиж.')->textInput() ?>
 
-    <?= $form->field($model, 'hours')->textInput() ?>
+    <div id="workdays">
+        <h3>Робочі дні</h3>
 
-    <?= $form->field($model, 'monday')->textInput() ?>
+        <?= $form->field($model, 'monday')->checkbox(['label' => 'Понеділок']); ?>
 
-    <?= $form->field($model, 'tuesday')->textInput() ?>
+        <?= $form->field($model, 'tuesday')->checkbox(['label' => 'Вівторок']); ?>
 
-    <?= $form->field($model, 'wednesday')->textInput() ?>
+        <?= $form->field($model, 'friday')->checkbox(['label' => 'Середа']); ?>
 
-    <?= $form->field($model, 'thursday')->textInput() ?>
+        <?= $form->field($model, 'saturday')->checkbox(['label' => 'Четвер']); ?>
 
-    <?= $form->field($model, 'friday')->textInput() ?>
+        <?= $form->field($model, 'tuesday')->checkbox(['label' => 'П\'ятниця']); ?>
 
-    <?= $form->field($model, 'saturday')->textInput() ?>
+        <?= $form->field($model, 'saturday')->checkbox(['label' => 'Суббота']); ?>
 
-    <?= $form->field($model, 'sunday')->textInput() ?>
+        <?= $form->field($model, 'sunday')->checkbox(['label' => 'Неділля']); ?>
+    </div>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Додати' : 'Оновити', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'name' => 'teacherbtn']) ?>

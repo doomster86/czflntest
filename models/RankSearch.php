@@ -19,7 +19,7 @@ class RankSearch extends Rank
     {
         return [
             [['ID'], 'integer'],
-            [['rank'], 'safe'],
+            [['rank_name'], 'safe'],
         ];
     }
 
@@ -62,7 +62,7 @@ class RankSearch extends Rank
             'ID' => $this->ID,
         ]);
 
-        $query->andFilterWhere(['like', 'rank', $this->rank]);
+        $query->andFilterWhere(['like', 'rank_name', $this->rank_name]);
 
         return $dataProvider;
     }

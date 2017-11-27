@@ -19,7 +19,7 @@ class DegreeSearch extends Degree
     {
         return [
             [['ID'], 'integer'],
-            [['degree'], 'safe'],
+            [['degree_name'], 'safe'],
         ];
     }
 
@@ -62,7 +62,7 @@ class DegreeSearch extends Degree
             'ID' => $this->ID,
         ]);
 
-        $query->andFilterWhere(['like', 'degree', $this->degree]);
+        $query->andFilterWhere(['like', 'degree_name', $this->degree_name]);
 
         return $dataProvider;
     }

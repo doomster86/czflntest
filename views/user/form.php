@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\widgets\Pjax;
 
 if( Html::encode($operation) == 'updated'):
     ?>
@@ -24,8 +25,6 @@ endif;
             ],
         ]);
     ?>
-
-    <h2><?= $model->username ?></h2>
 
     <?php
     echo $form->field($model, 'lastname')->label("Прізвище")->textInput([
@@ -67,7 +66,6 @@ endif;
 
     <?php
         ActiveForm::end();
-
     ?>
 
 </div>

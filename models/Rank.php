@@ -8,7 +8,9 @@ use Yii;
  * This is the model class for table "rank".
  *
  * @property integer $ID
- * @property string $rank
+ * @property string $rank_name
+ *
+ * @property TeacherMeta[] $teacherMetas
  */
 class Rank extends \yii\db\ActiveRecord
 {
@@ -26,8 +28,8 @@ class Rank extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['rank'], 'required'],
-            [['rank'], 'string', 'max' => 255],
+            [['rank_name'], 'required'],
+            [['rank_name'], 'string', 'max' => 255],
         ];
     }
 
@@ -38,7 +40,15 @@ class Rank extends \yii\db\ActiveRecord
     {
         return [
             'ID' => 'ID',
-            'rank' => 'Rank',
+            'rank_name' => 'Rank Name',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTeacherMetas()
+    {
+        return $this->hasMany(TeacherMeta::className(), ['rank_id' => 'ID']);
     }
 }

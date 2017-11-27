@@ -8,7 +8,9 @@ use Yii;
  * This is the model class for table "degree".
  *
  * @property integer $ID
- * @property string $degree
+ * @property string $degree_name
+ *
+ * @property TeacherMeta[] $teacherMetas
  */
 class Degree extends \yii\db\ActiveRecord
 {
@@ -26,8 +28,8 @@ class Degree extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['degree'], 'required'],
-            [['degree'], 'string', 'max' => 255],
+            [['degree_name'], 'required'],
+            [['degree_name'], 'string', 'max' => 255],
         ];
     }
 
@@ -38,7 +40,15 @@ class Degree extends \yii\db\ActiveRecord
     {
         return [
             'ID' => 'ID',
-            'degree' => 'Degree',
+            'degree_name' => 'Degree Name',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTeacherMetas()
+    {
+        return $this->hasMany(TeacherMeta::className(), ['degree_id' => 'ID']);
     }
 }

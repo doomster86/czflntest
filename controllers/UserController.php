@@ -80,12 +80,13 @@ class UserController extends Controller
         if(Yii::$app->user->identity->role==1) {
             $model = $this->findModel($id);
             $teacher = $this->findTeacherModel($id);
+            $teacher->user_id = $id;
 
             if($teacher->load(Yii::$app->request->post()) && $teacher->save()) {
                 return $this->render('update', [
                     'model' => $model,
                     'teacher' => $teacher,
-                    'operation' => 'updated',
+                    'operation' => 'teacher_updated',
                 ]);
             }
 

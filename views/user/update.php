@@ -19,6 +19,10 @@ foreach (User::ROLES as $rolesName) {
 
 <?php Pjax::begin([ ]); ?>
 
+    <div class="col-lg-12">
+        <h2><?= $model->username ?></h2>
+    </div>
+
     <div class="col-lg-6">
         <?= $this->render('form', [
             'model' => $model,

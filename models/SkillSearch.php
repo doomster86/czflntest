@@ -19,7 +19,7 @@ class SkillSearch extends Skill
     {
         return [
             [['ID'], 'integer'],
-            [['skill'], 'safe'],
+            [['skill_name'], 'safe'],
         ];
     }
 
@@ -62,7 +62,7 @@ class SkillSearch extends Skill
             'ID' => $this->ID,
         ]);
 
-        $query->andFilterWhere(['like', 'skill', $this->skill]);
+        $query->andFilterWhere(['like', 'skill_name', $this->skill_name]);
 
         return $dataProvider;
     }
