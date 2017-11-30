@@ -27,6 +27,7 @@ class TeacherMeta extends \yii\db\ActiveRecord
     /* Геттер селекта Пед.звання */
     public function  getAllRanks() {
         $rank_values = $this->rank->find()->asArray()->select('rank_name')->orderBy('ID')->all();
+
         $rank_values = ArrayHelper::getColumn($rank_values, 'rank_name');
 
         $rank_ids = $this->rank->find()->asArray()->select('ID')->orderBy('ID')->all();

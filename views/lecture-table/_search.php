@@ -21,7 +21,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'time_stop') ?>
 
-    <?= $form->field($model, 'corps') ?>
+    <?= $form->field($model, 'corps_id') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

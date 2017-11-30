@@ -18,7 +18,7 @@ class LectureTableSearch extends LectureTable
     public function rules()
     {
         return [
-            [['ID', 'corps'], 'integer'],
+            [['ID', 'corps_id'], 'integer'],
             [['time_start', 'time_stop'], 'safe'],
         ];
     }
@@ -60,10 +60,11 @@ class LectureTableSearch extends LectureTable
         // grid filtering conditions
         $query->andFilterWhere([
             'ID' => $this->ID,
-            'time_start' => $this->time_start,
-            'time_stop' => $this->time_stop,
-            'corps' => $this->corps,
+            'corps_id' => $this->corps_id,
         ]);
+
+        $query->andFilterWhere(['like', 'time_start', $this->time_start])
+            ->andFilterWhere(['like', 'time_stop', $this->time_stop]);
 
         return $dataProvider;
     }

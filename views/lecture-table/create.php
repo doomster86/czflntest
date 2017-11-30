@@ -1,20 +1,20 @@
 <?php
 
 use yii\helpers\Html;
-//use app\assets\Datepicker;
+
 
 /* @var $this yii\web\View */
 /* @var $model app\models\LectureTable */
 
-$this->title = 'Додати пару';
-$this->params['breadcrumbs'][] = ['label' => 'Пари', 'url' => ['index']];
+$this->title = 'Create Lecture Table';
+$this->params['breadcrumbs'][] = ['label' => 'Lecture Tables', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="lecture-table-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= $this->render('form', [
+    <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
 

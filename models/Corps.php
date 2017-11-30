@@ -43,4 +43,11 @@ class Corps extends \yii\db\ActiveRecord
             'location' => 'Розташування',
         ];
     }
+
+    public function getLectureTable()
+    {
+        return $this->hasMany(LectureTable::className(), ['corps_id' => 'ID']);
+    }
+
+
 }

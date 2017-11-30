@@ -3,55 +3,77 @@
 namespace app\models;
 
 use Yii;
-
+use yii\helpers\ArrayHelper;
 /**
- * This is the model class for table "lecture-table".
+ * This is the model class for table "lecture_table".
  *
  * @property integer $ID
  * @property string $time_start
  * @property string $time_stop
- * @property integer $corps
+ * @property integer $corps_id
  *
- * @property Corps $corps0
+ * @property Corps $corps
  */
-class LectureTable extends \yii\db\ActiveRecord {
+class LectureTable extends \yii\db\ActiveRecord
+{
+
+
+
+
     /**
      * @inheritdoc
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return 'lecture_table';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules() {
+    public function rules()
+    {
         return [
-            [['time_start', 'time_stop', 'corps'], 'required'],
-            //[['time_start', 'time_stop'], 'safe'],
-	        [['time_start', 'time_stop'], 'date', 'format' => 'H:i', 'message' => 'Введите правильный формат'],
-            [['corps'], 'integer'],
-            [['corps'], 'exist', 'skipOnError' => true, 'targetClass' => Corps::className(), 'targetAttribute' => ['corps' => 'ID']],
+            [['time_start', 'time_stop', 'corps_id'], 'required'],
+            [['corps_id'], 'integer'],
+            [['time_start', 'time_stop'], 'string', 'max' => 255],
+            [['corps_id'], 'exist', 'skipOnError' => true, 'targetClass' => Corps::className(), 'targetAttribute' => ['corps_id' => 'ID']],
         ];
     }
 
     /**
      * @inheritdoc
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'ID' => 'ID',
-            'time_start' => 'Час початку',
-            'time_stop' => 'Час кінця',
-            'corps' => 'Корпус',
+            'time_start' => 'Time Start',
+            'time_stop' => 'Time Stop',
+            'corps_id' => 'Corps ID',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCorps0()
+    public function getCorps()
     {
-        return $this->hasOne(Corps::className(), ['ID' => 'corps']);
+        return $this->hasOne(Corps::className(), ['ID' => 'corps_id']);
     }
+
+    public function getCorpsNames() {
+
+        $rank_values = $this->corps->find()->asArray()->select('name')->orderBy('ID')->all();
+
+        $rank_values = ArrayHelper::getColumn($rank_values, 'name');
+
+        $rank_ids = $this->corps->find()->asArray()->select('ID')->orderBy('ID')->all();
+        $rank_ids = ArrayHelper::getColumn($rank_ids, 'ID');
+
+        $ranks = array_combine($rank_ids,$rank_values);
+
+        return $ranks;
+    }
+
 }

@@ -7,7 +7,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\LectureTableSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Пари';
+$this->title = 'Lecture Tables';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="lecture-table-index">
@@ -16,20 +16,18 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Додати пару', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Lecture Table', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-<?php Pjax::begin(); ?>
-
-    <?= GridView::widget([
+<?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            //['class' => 'yii\grid\SerialColumn'],
+            ['class' => 'yii\grid\SerialColumn'],
 
             'ID',
             'time_start',
             'time_stop',
-            'corps',
+            'corps_id',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
