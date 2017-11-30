@@ -7,7 +7,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\LectureTableSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Lecture Tables';
+$this->title = 'Пари';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="lecture-table-index">
@@ -16,20 +16,71 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Lecture Table', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Додати пару', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+		'emptyText' => 'Нічого не знайдено',
+		'layout'=>"{pager}\n{summary}\n{items}\n{summary}\n{pager}",
+		'summary' => "<div class='summary'>Показано {begin} - {end} з {totalCount} пар</div>",
+		'tableOptions' => [
+			'class' => 'table table-striped table-bordered col-xs-12 lecture-table'
+		],
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            [
+                    'attribute' =>  'time_start',
+                    'label' => 'Час початку',
+                    'contentOptions' =>function ($model, $key, $index, $column){
+                        return ['class' => 'col-xs-3'];
+                    }
+            ],
+	        [
+		        'attribute' =>  'time_stop',
+		        'label' => 'Час закінчення',
+		        'contentOptions' =>function ($model, $key, $index, $column){
+			        return ['class' => 'col-xs-3'];
+		        }
+	        ],
+	        [
+		        'attribute' =>  'corpsName',
+		        'label' => 'Корпус',
+		        'contentOptions' =>function ($model, $key, $index, $column){
+			        return ['class' => 'col-xs-4'];
+		        }
+	        ],
 
-            'ID',
-            'time_start',
-            'time_stop',
-            'corps_id',
 
-            ['class' => 'yii\grid\ActionColumn'],
+	        [
+		        'class' => 'yii\grid\ActionColumn',
+		        'template' => '{update} {delete}',
+		        'buttons' => [
+
+			        'update' => function ($url,$model) {
+				        return Html::a(
+					        '<span class="glyphicon glyphicon-pencil"></span>',
+					        $url,
+					        [
+						        'title' => 'Редагувати',
+						        'data-pjax' => '0',
+					        ]
+				        );
+			        },
+			        'delete' => function ($url,$model) {
+				        return Html::a(
+					        '<span class="glyphicon glyphicon-trash right"></span>',
+					        $url,
+					        [
+						        'title' => 'Видалити',
+						        'data-pjax' => '0',
+					        ]
+				        );
+			        },
+		        ],
+		        'contentOptions' =>function ($model, $key, $index, $column){
+			        return ['class' => 'col-xs-1'];
+		        }
+	        ],
         ],
     ]); ?>
 <?php Pjax::end(); ?></div>

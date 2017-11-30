@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use app\models\Corps;
 /**
  * This is the model class for table "lecture_table".
  *
@@ -14,11 +15,16 @@ use yii\helpers\ArrayHelper;
  *
  * @property Corps $corps
  */
-class LectureTable extends \yii\db\ActiveRecord
-{
+class LectureTable extends \yii\db\ActiveRecord {
 
+	public function getCorps()
+	{
+		return $this->hasOne(Corps::className(), ['ID' => 'corps_id']);
+	}
 
-
+	public function getCorpsName() {
+		return $this->corps->name;
+	}
 
     /**
      * @inheritdoc
@@ -48,32 +54,29 @@ class LectureTable extends \yii\db\ActiveRecord
     {
         return [
             'ID' => 'ID',
-            'time_start' => 'Time Start',
-            'time_stop' => 'Time Stop',
-            'corps_id' => 'Corps ID',
+            'time_start' => 'Дата початку',
+            'time_stop' => 'Дата закінчення',
+            'corps_id' => 'Корпус',
+	        'corpsName' => 'Корпус',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCorps()
-    {
-        return $this->hasOne(Corps::className(), ['ID' => 'corps_id']);
-    }
+
 
     public function getCorpsNames() {
 
-        $rank_values = $this->corps->find()->asArray()->select('name')->orderBy('ID')->all();
+        $corps_values = Corps::find()->asArray()->select('name')->orderBy('ID')->all();
+        $corps_values = ArrayHelper::getColumn($corps_values, 'name');
 
-        $rank_values = ArrayHelper::getColumn($rank_values, 'name');
+        $corps_ids = Corps::find()->asArray()->select('ID')->orderBy('ID')->all();
+        $corps_ids = ArrayHelper::getColumn($corps_ids, 'ID');
 
-        $rank_ids = $this->corps->find()->asArray()->select('ID')->orderBy('ID')->all();
-        $rank_ids = ArrayHelper::getColumn($rank_ids, 'ID');
+        $corps = array_combine($corps_ids,$corps_values);
 
-        $ranks = array_combine($rank_ids,$rank_values);
-
-        return $ranks;
+        return $corps;
     }
 
 }
