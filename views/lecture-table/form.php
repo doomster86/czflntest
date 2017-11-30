@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use kartik\time\TimePicker;
 /* @var $this yii\web\View */
 /* @var $model app\models\LectureTable */
 /* @var $form yii\widgets\ActiveForm */
@@ -12,9 +12,27 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'time_start')->textInput(['maxlength' => true]) ?>
+    <?php
 
-    <?= $form->field($model, 'time_stop')->textInput(['maxlength' => true]) ?>
+    echo $form->field($model, 'time_start')->widget(TimePicker::classname(), [
+        'pluginOptions' => [
+            'showSeconds' => true,
+            'showMeridian' => false,
+            'minuteStep' => 1,
+            'secondStep' => 10,
+        ]
+    ]);
+
+    echo $form->field($model, 'time_stop')->widget(TimePicker::classname(), [
+        'pluginOptions' => [
+            'showSeconds' => true,
+            'showMeridian' => false,
+            'minuteStep' => 1,
+            'secondStep' => 10,
+        ]
+    ]);
+
+    ?>
 
     <?= $form->field($model, 'corps')->textInput() ?>
 
