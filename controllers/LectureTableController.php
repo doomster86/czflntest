@@ -16,7 +16,7 @@ class LectureTableController extends Controller
 {
     /**
      * @inheritdoc
-     */
+     *//*
     public function behaviors()
     {
         return [
@@ -28,7 +28,7 @@ class LectureTableController extends Controller
             ],
         ];
     }
-
+*/
     /**
      * Lists all LectureTable models.
      * @return mixed
@@ -118,7 +118,8 @@ class LectureTableController extends Controller
         if (($model = LectureTable::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+	        $model = new LectureTable();
+	        return $model;
         }
     }
 }

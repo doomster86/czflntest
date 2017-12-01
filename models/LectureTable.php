@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use app\models\Corps;
 /**
  * This is the model class for table "lecture_table".
  *
@@ -14,11 +15,16 @@ use yii\helpers\ArrayHelper;
  *
  * @property Corps $corps
  */
-class LectureTable extends \yii\db\ActiveRecord
-{
+class LectureTable extends \yii\db\ActiveRecord {
 
+	public function getCorps()
+	{
+		return $this->hasOne(Corps::className(), ['ID' => 'corps_id']);
+	}
 
-
+	public function getCorpsName() {
+		return $this->corps->name;
+	}
 
     /**
      * @inheritdoc
@@ -37,6 +43,7 @@ class LectureTable extends \yii\db\ActiveRecord
             [['time_start', 'time_stop', 'corps_id'], 'required'],
             [['corps_id'], 'integer'],
             [['time_start', 'time_stop'], 'string', 'max' => 255],
+            [['corps_id'], 'exist', 'skipOnError' => true, 'targetClass' => Corps::className(), 'targetAttribute' => ['corps_id' => 'ID']],
         ];
     }
 
@@ -47,33 +54,29 @@ class LectureTable extends \yii\db\ActiveRecord
     {
         return [
             'ID' => 'ID',
-            'time_start' => 'Time Start',
-            'time_stop' => 'Time Stop',
-            'corps_id' => 'Corps ID',
+            'time_start' => 'Дата початку',
+            'time_stop' => 'Дата закінчення',
+            'corps_id' => 'Корпус',
+	        'corpsName' => 'Корпус',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCorps()
-    {
-        return $this->hasMany(Corps::className(), ['ID' => 'corps_id']);
-    }
 
-    public function getCorpsName() {
-        return $this->corps->name;
-    }
 
     public function getCorpsNames() {
 
-        $corps = $this->getCorps();
+        $corps_values = Corps::find()->asArray()->select('name')->orderBy('ID')->all();
+        $corps_values = ArrayHelper::getColumn($corps_values, 'name');
 
-        $skill_values = $corps->name;
+        $corps_ids = Corps::find()->asArray()->select('ID')->orderBy('ID')->all();
+        $corps_ids = ArrayHelper::getColumn($corps_ids, 'ID');
 
-        $skill_ids = $corps->ID
+        $corps = array_combine($corps_ids,$corps_values);
 
-        return $skill_values;
+        return $corps;
     }
 
 }

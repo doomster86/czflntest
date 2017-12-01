@@ -59,7 +59,7 @@ class GroupsSearch extends Groups {
                 'course',
 	            'coursesName' => [
 		            'asc' => ['courses.name' => SORT_ASC],
-		            'desc' => ['courses.tname' => SORT_DESC],
+		            'desc' => ['courses.name' => SORT_DESC],
 		            'label' => 'Професія'
 	            ],
                 'curator',

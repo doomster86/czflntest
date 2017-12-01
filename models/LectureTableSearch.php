@@ -5,13 +5,15 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\LectureTable;
+//use app\models\LectureTable;
 
 /**
  * LectureTableSearch represents the model behind the search form about `app\models\LectureTable`.
  */
-class LectureTableSearch extends LectureTable
-{
+class LectureTableSearch extends LectureTable {
+
+	public $corpsName;
+
     /**
      * @inheritdoc
      */
@@ -19,7 +21,7 @@ class LectureTableSearch extends LectureTable
     {
         return [
             [['ID', 'corps_id'], 'integer'],
-            [['time_start', 'time_stop'], 'safe'],
+            [['time_start', 'time_stop', 'corpsName'], 'safe'],
         ];
     }
 
@@ -39,8 +41,7 @@ class LectureTableSearch extends LectureTable
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
-    {
+    public function search($params) {
         $query = LectureTable::find();
 
         // add conditions that should always apply here
@@ -48,6 +49,21 @@ class LectureTableSearch extends LectureTable
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
+	    $dataProvider->setSort([
+		    'attributes' => [
+		        'ID',
+		        'time_start',
+		        'time_stop',
+		        'corps_id',
+
+			    'corpsName' => [
+				    'asc' => ['corps.name' => SORT_ASC],
+				    'desc' => ['corps.name' => SORT_DESC],
+				    'label' => 'Корпус'
+			    ]
+		    ]
+	    ]);
 
         $this->load($params);
 
@@ -65,6 +81,10 @@ class LectureTableSearch extends LectureTable
 
         $query->andFilterWhere(['like', 'time_start', $this->time_start])
             ->andFilterWhere(['like', 'time_stop', $this->time_stop]);
+
+	    $query->joinWith(['corps' => function ($q) {
+		    $q->where('corps.name LIKE "%' . $this->corpsName . '%"');
+	    }]);
 
         return $dataProvider;
     }
