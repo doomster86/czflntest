@@ -62,5 +62,11 @@ class Groups extends \yii\db\ActiveRecord {
         ];
     }
 
-
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getStudentMetas()
+    {
+        return $this->hasMany(StudentMeta::className(), ['group_id' => 'ID']);
+    }
 }
