@@ -25,7 +25,7 @@ endif;
     ]);
     ?>
 
-    <?php echo $form->field($model, 'group_id')->label('Группа')->dropDownList($model->getAllGroups());  ?>
+    <?php echo $form->field($model, 'group_id')->label('Група')->dropDownList($model->getAllGroups());  ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Додати' : 'Оновити', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'name' => 'studentbtn']) ?>
