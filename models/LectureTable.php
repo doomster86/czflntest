@@ -17,36 +17,32 @@ use app\models\Corps;
  */
 class LectureTable extends \yii\db\ActiveRecord {
 
-	public function getCorps()
-	{
-		return $this->hasOne(Corps::className(), ['ID' => 'corps_id']);
-	}
-
-	public function getCorpsName() {
-		return $this->corps->name;
-	}
 
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'lecture_table';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            [['time_start', 'time_stop', 'corps_id'], 'required'],
+            [['time_start', 'time_stop', 'corpsName'], 'required'],
             [['corps_id'], 'integer'],
             [['time_start', 'time_stop'], 'string', 'max' => 255],
             [['corps_id'], 'exist', 'skipOnError' => true, 'targetClass' => Corps::className(), 'targetAttribute' => ['corps_id' => 'ID']],
+            //[['time_start'], 'in', 'range' => range(5, 20), 'message' => 'Not in range!']
+            //[['time_start'], 'myValidate']
         ];
     }
+/*
+    public function myValidate($attribute,$params) {
 
+    }
+*/
     /**
      * @inheritdoc
      */
@@ -65,6 +61,15 @@ class LectureTable extends \yii\db\ActiveRecord {
      * @return \yii\db\ActiveQuery
      */
 
+    //связь таблиц
+    public function getCorps() {
+        return $this->hasOne(Corps::className(), ['ID' => 'corps_id']);
+    }
+
+    //для поиска
+    public function getCorpsName() {
+        return $this->corps->name;
+    }
 
     public function getCorpsNames() {
 
@@ -75,6 +80,9 @@ class LectureTable extends \yii\db\ActiveRecord {
         $corps_ids = ArrayHelper::getColumn($corps_ids, 'ID');
 
         $corps = array_combine($corps_ids,$corps_values);
+
+        $corps_add = array( 0 => 'Оберіть корпус');
+        $corps = ArrayHelper::merge($corps_add, $corps);
 
         return $corps;
     }

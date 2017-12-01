@@ -19,16 +19,15 @@ class AudienceController extends Controller {
      * Lists all Audience models.
      * @return mixed
      */
-    public function actionIndex()
-    {
+    public function actionIndex() {
         if(Yii::$app->user->identity->role==1) {
             $searchModel = new AudienceSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-            $modelCorps = new Corps();
+            //$modelCorps = new Corps();
             return $this->render('index', [
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
-                'model_corps' => $modelCorps,
+                //'model_corps' => $modelCorps,
             ]);
         } else {
             return $this->render('/site/access_denied');
@@ -40,34 +39,21 @@ class AudienceController extends Controller {
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
+    public function actionCreate(){
         if(Yii::$app->user->identity->role==1) {
+
             $model = new Audience();
-
-            $corps_add = array( 0 => 'Оберіть корпус');
-
-            $corps_values = Corps::find()->asArray()->select('name')->orderBy('ID')->all();
-            $corps_values = ArrayHelper::getColumn($corps_values, 'name');
-
-            $corps_ids = Corps::find()->asArray()->select('ID')->orderBy('ID')->all();
-            $corps_ids = ArrayHelper::getColumn($corps_ids, 'ID');
-
-            $corps = array_combine($corps_ids,$corps_values);
-            $corps = ArrayHelper::merge($corps_add, $corps);
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
                 return $this->render('create', [
                     'model' => $model,
-                    'corps' => $corps,
                     'status' => 'created'
                 ]);
 
             } else {
                 return $this->render('create', [
                     'model' => $model,
-                    'corps' => $corps
                 ]);
             }
         } else {
@@ -85,23 +71,11 @@ class AudienceController extends Controller {
         if(Yii::$app->user->identity->role==1) {
             $model = $this->findModel($id);
 
-	        $corps_ids = Corps::find()->asArray()->select('ID')->orderBy('ID')->all();
-	        $corps_ids = ArrayHelper::getColumn($corps_ids, 'ID');
-
-            $corps_values = Corps::find()->asArray()->select('name')->orderBy('ID')->all();
-            $corps_values = ArrayHelper::getColumn($corps_values, 'name');
-
-	        $corps = array_combine($corps_ids,$corps_values);
-
-	        $corps_add = array(0 => 'Оберіть корпус');
-            $corps = ArrayHelper::merge($corps_add, $corps);
-
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 //return $this->redirect(['view', 'id' => $model->ID]);
                 //$model->update();
                 return $this->render('update', [
                     'model' => $model,
-                    'corps' => $corps,
                     'status' => 'updated'
                 ]);
 
@@ -109,7 +83,6 @@ class AudienceController extends Controller {
 
                 return $this->render('update', [
                     'model' => $model,
-                    'corps' => $corps,
                 ]);
             }
         } else {

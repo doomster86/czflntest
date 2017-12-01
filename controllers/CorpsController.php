@@ -7,6 +7,7 @@ use app\models\Corps;
 use app\models\CorpsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\db\IntegrityException;
 use yii\filters\VerbFilter;
 
 /**
@@ -101,12 +102,23 @@ class CorpsController extends Controller {
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
+    public function actionDelete($id) {
         if(Yii::$app->user->identity->role==1) {
-            $this->findModel($id)->delete();
 
-            return $this->redirect(['index']);
+            try {
+                $this->findModel($id)->delete();
+                return $this->redirect(['index']);
+            } catch (IntegrityException $e) {
+                return $this->redirect(['index', 'status' => 'cannotdelete']);
+            }
+
+            /*
+            if ('если можно удалить') {
+                $this->findModel($id)->delete();
+                return $this->redirect(['index']);
+            } else {
+            */
+
         } else {
             return $this->render('/site/access_denied');
         }
@@ -119,8 +131,7 @@ class CorpsController extends Controller {
      * @return Corps the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
-    {
+    protected function findModel($id) {
         if(Yii::$app->user->identity->role==1) {
             if (($model = Corps::findOne($id)) !== null) {
                 return $model;

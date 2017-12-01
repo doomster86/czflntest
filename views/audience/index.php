@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             //select
             [
-                'attribute' => 'corps',
+                'attribute' => 'corpsName',
                 'format' => 'text',
                 'label' => 'Корпус',
                 'content' => function ($model, $key, $index, $column){

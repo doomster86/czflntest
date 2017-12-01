@@ -17,7 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <hr />
     <?= $this->render('form', [
         'model' => $model,
-        'corps' => $corps,
         'current_action' => 'create',
         'status_form' => $status
     ]) ?>

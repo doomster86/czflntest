@@ -17,6 +17,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p><?= Html::a('Додати корпус', ['create'], ['class' => 'btn btn-success']) ?></p>
 
+    <?php
+    //v($status);
+
+    ?>
+
+    <?php if ($_GET['status'] == 'cannotdelete') : ?>
+        <div class="alert alert-danger">
+            <p>Ви не можете видалити цей корпус.</p>
+        </div>
+    <?php endif; ?>
+
     <?php Pjax::begin(); ?>
 
     <?= GridView::widget([

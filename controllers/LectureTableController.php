@@ -8,7 +8,7 @@ use app\models\LectureTableSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use \app\models\Corps;
 /**
  * LectureTableController implements the CRUD actions for LectureTable model.
  */
@@ -33,8 +33,7 @@ class LectureTableController extends Controller
      * Lists all LectureTable models.
      * @return mixed
      */
-    public function actionIndex()
-    {
+    public function actionIndex() {
         $searchModel = new LectureTableSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -48,29 +47,40 @@ class LectureTableController extends Controller
      * Displays a single LectureTable model.
      * @param integer $id
      * @return mixed
-     */
+
     public function actionView($id)
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
     }
+    */
 
     /**
      * Creates a new LectureTable model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
-        $model = new LectureTable();
+    public function actionCreate() {
+        if(Yii::$app->user->identity->role==1) {
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->ID]);
+            $model = new LectureTable();
+
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+
+                return $this->render('create', [
+                    'model' => $model,
+                    'status' => 'created'
+                ]);
+
+            } else {
+                return $this->render('create', [
+                    'model' => $model,
+                ]);
+            }
+
         } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+            return $this->render('/site/access_denied');
         }
     }
 
@@ -80,15 +90,27 @@ class LectureTableController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id) {
+
+        $searchModel = new LectureTableSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->ID]);
+            //return $this->redirect(['view', 'id' => $model->ID]);
+
+            return $this->render('update', [
+                'model' => $model,
+                'status' => 'updated',
+                'dataProvider' => $dataProvider,
+
+            ]);
+
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'dataProvider' => $dataProvider,
             ]);
         }
     }

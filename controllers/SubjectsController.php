@@ -48,7 +48,7 @@ class SubjectsController extends Controller
         if(Yii::$app->user->identity->role==1) {
 
             $model = new Subjects();
-
+/*
             $teachers_add = array( 0 => 'Оберіть викладача');
 
             $teachers = array(
@@ -56,7 +56,7 @@ class SubjectsController extends Controller
                 'Мурзік Васильович' => 'Мурзік Васильович',
                 'Пророк Самуїл' => 'Пророк Самуїл'
             );
-
+*/
             //добавить подгрузку из класса Teacher
             /*
             $teachers_values = Teachers::find()->asArray()->select('name')->orderBy('ID')->all();
@@ -66,20 +66,20 @@ class SubjectsController extends Controller
             $teachers_ids = ArrayHelper::getColumn($teachers_ids, 'ID');
 
             $teachers = array_combine($teachers_ids,$teachers_values);
-            */
-            $teachers = ArrayHelper::merge($teachers_add, $teachers);
 
+            $teachers = ArrayHelper::merge($teachers_add, $teachers);
+*/
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
                 return $this->render('create', [
                     'model' => $model,
-                    'teachers' => $teachers,
+                    //'teachers' => $teachers,
                     'status' => 'created',
                 ]);
             } else {
                 return $this->render('create', [
                     'model' => $model,
-                    'teachers' => $teachers,
+                    //'teachers' => $teachers,
                 ]);
             }
 
