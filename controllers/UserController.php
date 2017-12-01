@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\User;
 use app\models\TeacherMeta;
+use app\models\StudentMeta;
 use app\models\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -69,6 +70,19 @@ class UserController extends Controller
         }
     }
 
+    public function actionCreateStudentMeta()
+    {
+        $model = new StudentMeta();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            return $this->render('create', [
+                'model' => $model,
+            ]);
+        }
+    }
+
     /**
      * Updates an existing User model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -80,7 +94,9 @@ class UserController extends Controller
         if(Yii::$app->user->identity->role==1) {
             $model = $this->findModel($id);
             $teacher = $this->findTeacherModel($id);
+            $student = $this->findStudentModel($id);
             $teacher->user_id = $id;
+            $student->user_id = $id;
 
             if($teacher->load(Yii::$app->request->post()) && $teacher->save()) {
                 return $this->render('update', [
@@ -90,16 +106,26 @@ class UserController extends Controller
                 ]);
             }
 
+            if($student->load(Yii::$app->request->post()) && $student->save()) {
+                return $this->render('update', [
+                    'model' => $model,
+                    'student' => $student,
+                    'operation' => 'student_updated',
+                ]);
+            }
+
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 return $this->render('update', [
                     'model' => $model,
                     'teacher' => $teacher,
+                    'student' => $student,
                     'operation' => 'updated',
                 ]);
             } else {
                 return $this->render('update', [
                     'model' => $model,
                     'teacher' => $teacher,
+                    'student' => $student,
                 ]);
             }
 
@@ -111,7 +137,27 @@ class UserController extends Controller
     public function actionUpdateTeacherMeta($id)
     {
         if(Yii::$app->user->identity->role==1) {
-            $model = $this->findModel($id);
+            $model = $this->findTeacherModel($id);
+
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->render('update', [
+                    'model' => $model,
+                    'operation' => 'updated',
+                ]);
+            } else {
+                return $this->render('update', [
+                    'model' => $model,
+                ]);
+            }
+        } else {
+            return $this->render('/site/access_denied');
+        }
+    }
+
+    public function actionUpdateStudentMeta($id)
+    {
+        if(Yii::$app->user->identity->role==1) {
+            $model = $this->findStudentModel($id);
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 return $this->render('update', [
@@ -167,6 +213,16 @@ class UserController extends Controller
             return $model;
         } else {
             $model = new TeacherMeta();
+            return $model;
+        }
+    }
+
+    protected function findStudentModel($id)
+    {
+        if (($model = StudentMeta::findOne( ['user_id'=>$id] )) !== null) {
+            return $model;
+        } else {
+            $model = new StudentMeta();
             return $model;
         }
     }

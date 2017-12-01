@@ -37,7 +37,7 @@ foreach (User::ROLES as $rolesName) {
         <?php
         if( $model->role==User::ROLES['0']['roles'] ) {
             echo $this->render('student', [
-                'model' => $model,
+                'model' => $student,
                 'courses_status' =>'update',
                 'operation' => $operation,
                 'status' => $arrStatus,

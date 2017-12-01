@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "student_meta".
@@ -51,5 +52,23 @@ class StudentMeta extends \yii\db\ActiveRecord
     public function getGroup()
     {
         return $this->hasOne(Groups::className(), ['ID' => 'group_id']);
+    }
+
+    /* Геттер для названия Пед.звання */
+    public function getGroupName() {
+        return $this->group->name;
+    }
+
+    /* Геттер селекта Пед.звання */
+    public function  getAllGroups() {
+        $groups_values = Groups::find()->asArray()->select('name')->orderBy('ID')->all();
+        $groups_values = ArrayHelper::getColumn($groups_values, 'name');
+
+        $groups_ids = Groups::find()->asArray()->select('ID')->orderBy('ID')->all();
+        $groups_ids = ArrayHelper::getColumn($groups_ids, 'ID');
+
+        $groups = array_combine($groups_ids, $groups_values);
+
+        return $groups;
     }
 }

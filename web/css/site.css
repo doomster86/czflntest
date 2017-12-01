@@ -230,3 +230,12 @@ a.desc:after {
 .info h3 {
     color: #ac2925;
 }
+
+.center {
+    text-align: center;
+}
+
+.student-meta-form .center {
+    font-size: 16px;
+    padding: 15px 10px;
+}
