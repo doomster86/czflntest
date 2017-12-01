@@ -26,11 +26,11 @@ class TeacherMeta extends \yii\db\ActiveRecord
 
     /* Геттер селекта Пед.звання */
     public function  getAllRanks() {
-        $rank_values = $this->rank->find()->asArray()->select('rank_name')->orderBy('ID')->all();
+        $rank_values = Rank::find()->asArray()->select('rank_name')->orderBy('ID')->all();
 
         $rank_values = ArrayHelper::getColumn($rank_values, 'rank_name');
 
-        $rank_ids = $this->rank->find()->asArray()->select('ID')->orderBy('ID')->all();
+        $rank_ids = Rank::find()->asArray()->select('ID')->orderBy('ID')->all();
         $rank_ids = ArrayHelper::getColumn($rank_ids, 'ID');
 
         $ranks = array_combine($rank_ids,$rank_values);
@@ -51,10 +51,10 @@ class TeacherMeta extends \yii\db\ActiveRecord
 
     /* Геттер селекта Вч.ступінь */
     public function  getAllDegrees() {
-        $degree_values = $this->degree->find()->asArray()->select('degree_name')->orderBy('ID')->all();
+        $degree_values = Degree::find()->asArray()->select('degree_name')->orderBy('ID')->all();
         $degree_values = ArrayHelper::getColumn($degree_values, 'degree_name');
 
-        $degree_ids = $this->degree->find()->asArray()->select('ID')->orderBy('ID')->all();
+        $degree_ids = Degree::find()->asArray()->select('ID')->orderBy('ID')->all();
         $degree_ids = ArrayHelper::getColumn($degree_ids, 'ID');
 
         $degrees = array_combine($degree_ids,$degree_values);
@@ -75,10 +75,10 @@ class TeacherMeta extends \yii\db\ActiveRecord
 
     /* Геттер селекта Кваліфікація */
     public function  getAllSkills() {
-        $skill_values = $this->skill->find()->asArray()->select('skill_name')->orderBy('ID')->all();
+        $skill_values = Skill::find()->asArray()->select('skill_name')->orderBy('ID')->all();
         $skill_values = ArrayHelper::getColumn($skill_values, 'skill_name');
 
-        $skill_ids = $this->skill->find()->asArray()->select('ID')->orderBy('ID')->all();
+        $skill_ids = Skill::find()->asArray()->select('ID')->orderBy('ID')->all();
         $skill_ids = ArrayHelper::getColumn($skill_ids, 'ID');
 
         $skills = array_combine($skill_ids,$skill_values);

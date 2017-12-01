@@ -16,7 +16,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'time_stop')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'corps_id')->textInput() ?>
+    <?= $form->field($model, 'corps_id')->label($model->getCorpsName())->textInput() ?>
 
     <?php
     $corps_names = $model->getCorpsNames();

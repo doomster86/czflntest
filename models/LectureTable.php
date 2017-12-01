@@ -37,7 +37,6 @@ class LectureTable extends \yii\db\ActiveRecord
             [['time_start', 'time_stop', 'corps_id'], 'required'],
             [['corps_id'], 'integer'],
             [['time_start', 'time_stop'], 'string', 'max' => 255],
-            [['corps_id'], 'exist', 'skipOnError' => true, 'targetClass' => Corps::className(), 'targetAttribute' => ['corps_id' => 'ID']],
         ];
     }
 
@@ -59,21 +58,22 @@ class LectureTable extends \yii\db\ActiveRecord
      */
     public function getCorps()
     {
-        return $this->hasOne(Corps::className(), ['ID' => 'corps_id']);
+        return $this->hasMany(Corps::className(), ['ID' => 'corps_id']);
+    }
+
+    public function getCorpsName() {
+        return $this->corps->name;
     }
 
     public function getCorpsNames() {
 
-        $rank_values = $this->corps->find()->asArray()->select('name')->orderBy('ID')->all();
+        $corps = $this->getCorps();
 
-        $rank_values = ArrayHelper::getColumn($rank_values, 'name');
+        $skill_values = $corps->name;
 
-        $rank_ids = $this->corps->find()->asArray()->select('ID')->orderBy('ID')->all();
-        $rank_ids = ArrayHelper::getColumn($rank_ids, 'ID');
+        $skill_ids = $corps->ID
 
-        $ranks = array_combine($rank_ids,$rank_values);
-
-        return $ranks;
+        return $skill_values;
     }
 
 }

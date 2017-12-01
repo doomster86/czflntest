@@ -219,3 +219,14 @@ a.desc:after {
     clear: both;
     float: left;
 }
+
+.info {
+    padding: 8px 15px;
+    margin-bottom: 20px;
+    background-color: #f5f5f5;
+    border-radius: 4px;
+}
+
+.info h3 {
+    color: #ac2925;
+}
