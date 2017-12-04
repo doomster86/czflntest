@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\SkillSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Skills';
+$this->title = 'Кваліфікації';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="skill-index">
@@ -16,13 +16,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Skill', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Додати', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            //['class' => 'yii\grid\SerialColumn'],
 
             'ID',
             'skill_name',

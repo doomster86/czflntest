@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Degree */
 
-$this->title = 'Create Degree';
-$this->params['breadcrumbs'][] = ['label' => 'Degrees', 'url' => ['index']];
+$this->title = 'Додати ступінь';
+$this->params['breadcrumbs'][] = ['label' => 'Ступені', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="degree-create">

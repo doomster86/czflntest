@@ -60,6 +60,7 @@ class CorpsController extends Controller {
             } else {
                 return $this->render('create', [
                     'model' => $model,
+                    'status' => ''
                 ]);
             }
         } else {
@@ -89,6 +90,7 @@ class CorpsController extends Controller {
             } else {
                 return $this->render('update', [
                     'model' => $model,
+                    'status' => ''
                 ]);
             }
         } else {

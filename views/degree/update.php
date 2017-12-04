@@ -5,10 +5,9 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Degree */
 
-$this->title = 'Update Degree: ' . $model->ID;
-$this->params['breadcrumbs'][] = ['label' => 'Degrees', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->ID, 'url' => ['view', 'id' => $model->ID]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->title = 'Оновити ступінь: ';
+$this->params['breadcrumbs'][] = ['label' => 'Ступені', 'url' => ['index']];
+$this->params['breadcrumbs'][] = 'Оновити';
 ?>
 <div class="degree-update">
 

@@ -119,6 +119,7 @@ class GroupsController extends Controller
 	                'model' => $model,
 		            'courses' => $courses,
 		            'curators' => $curators,
+                    'status' => ''
 	            ]);
 	        }
 	    } else {
@@ -181,6 +182,7 @@ class GroupsController extends Controller
 	                'model' => $model,
 		            'courses' => $courses,
 		            'curators' => $curators,
+                    'status' => ''
 	            ]);
 	        }
 	    } else {

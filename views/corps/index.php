@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     ?>
 
-    <?php if ($_GET['status'] == 'cannotdelete') : ?>
+    <?php if (isset($_GET['status']) == 'cannotdelete') : ?>
         <div class="alert alert-danger">
             <p>Ви не можете видалити цей корпус.</p>
         </div>

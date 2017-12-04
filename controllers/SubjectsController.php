@@ -79,6 +79,7 @@ class SubjectsController extends Controller
             } else {
                 return $this->render('create', [
                     'model' => $model,
+                    'status' => ''
                     //'teachers' => $teachers,
                 ]);
             }
@@ -97,7 +98,7 @@ class SubjectsController extends Controller
     public function actionUpdate($id) {
         if(Yii::$app->user->identity->role==1) {
             $model = $this->findModel($id);
-
+            /*
             $teachers_add = array('Оберіть викладача');
 
             $teachers = array(
@@ -106,25 +107,27 @@ class SubjectsController extends Controller
                 'Пророк Самуїл' => 'Пророк Самуїл'
             );
 
-            /* из модели/таблицы Teachers
+             из модели/таблицы Teachers
             $teachers = Teachers::find()->asArray()->select('name')->orderBy('ID')->all();
             $teachers = ArrayHelper::getColumn($teachers, 'name');
-               */
+               
             $teachers = ArrayHelper::merge($teachers_add, $teachers);
-
+            */
             if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
                 $model->update();
                 return $this->render('update', [
                     'model' => $model,
-                    'teachers' => $teachers,
                     'status' => 'updated',
+                    //'teachers' => $teachers,
+                    
                 ]);
 
             } else {
                 return $this->render('update', [
                     'model' => $model,
-                    'teachers' => $teachers,
+                    'status' => ''
+                    //'teachers' => $teachers,
                 ]);
             }
         } else {

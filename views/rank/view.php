@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model app\models\Rank */
 
 $this->title = $model->ID;
-$this->params['breadcrumbs'][] = ['label' => 'Ranks', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Звання', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="rank-view">
@@ -15,11 +15,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->ID], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->ID], [
+        <?= Html::a('Оновити', ['update', 'id' => $model->ID], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Видалити', ['delete', 'id' => $model->ID], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Ви впевені?',
                 'method' => 'post',
             ],
         ]) ?>

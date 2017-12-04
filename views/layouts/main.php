@@ -68,6 +68,7 @@ AppAsset::register($this);
     ?>
 
     <?php
+if(!Yii::$app->user->isGuest) {
     if(Yii::$app->user->identity->role==1) {
         NavBar::begin([
             'brandLabel' => 'Адміністрування',
@@ -78,7 +79,11 @@ AppAsset::register($this);
         ]);
 
         $menuItems = [
-            ['label' => 'Користувачі', 'url' => ['/user/index']],
+            ['label' => 'Користувачі', 'url' => ['/user/index'],	'items' => [
+				['label' => 'Звання', 'url' => ['/rank/index']],
+	            ['label' => 'Ступінь', 'url' => ['/degree/index']],
+	            ['label' => 'Кваліфікація', 'url' => ['/skill/index']],
+            ]],
             ['label' => 'Групи', 'url' => ['/groups/index'], 'items' => [
 	            ['label' => 'Всі групи', 'url' => ['/groups/index']],
 	            ['label' => 'Створити нову', 'url' => ['/groups/create']],
@@ -111,6 +116,8 @@ AppAsset::register($this);
         ]);
         NavBar::end();
     }
+
+}
     ?>
 
     <div class="container">

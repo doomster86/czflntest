@@ -17,6 +17,7 @@ $this->params['breadcrumbs'][] = 'Оновити';
         'model' => $model,
         'status_form' => $status,
         'dataProvider' => $dataProvider,
+        'current_action' => 'update',
     ]) ?>
 
 </div>

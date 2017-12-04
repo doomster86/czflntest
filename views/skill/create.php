@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Skill */
 
-$this->title = 'Create Skill';
-$this->params['breadcrumbs'][] = ['label' => 'Skills', 'url' => ['index']];
+$this->title = 'Додати кваліфікацію';
+$this->params['breadcrumbs'][] = ['label' => 'Кваліфікація', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="skill-create">

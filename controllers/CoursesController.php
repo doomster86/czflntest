@@ -59,6 +59,7 @@ class CoursesController extends Controller {
                 // либо страница отображается первый раз, либо есть ошибка в данных
                 return $this->render('create', [
                     'model' => $model,
+                    'operation' => ''
                 ]);
             }
         } else {
@@ -163,7 +164,9 @@ class CoursesController extends Controller {
                     'model' => $model,
                     'modelLessons' => $modelLessons,
                     'subjects' => $subjects,
-                    'test' => $selected_subjects
+                    'test' => $selected_subjects,
+                    'operation' => '',
+                    'status' => ''
                 ]);
             }
             /*

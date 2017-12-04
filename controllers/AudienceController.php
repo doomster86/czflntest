@@ -54,6 +54,7 @@ class AudienceController extends Controller {
             } else {
                 return $this->render('create', [
                     'model' => $model,
+                    'status' => ''
                 ]);
             }
         } else {
@@ -70,7 +71,6 @@ class AudienceController extends Controller {
     public function actionUpdate($id) {
         if(Yii::$app->user->identity->role==1) {
             $model = $this->findModel($id);
-
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
                 //return $this->redirect(['view', 'id' => $model->ID]);
                 //$model->update();
@@ -83,6 +83,7 @@ class AudienceController extends Controller {
 
                 return $this->render('update', [
                     'model' => $model,
+                    'status' => ''
                 ]);
             }
         } else {

@@ -82,7 +82,7 @@ Pjax::begin([
     );
 
 
-    echo $form->field($model, 'teacher')->label('Оберіть викладача')->dropDownList($teachers, $options);
+    echo $form->field($model, 'teacher')->label('Оберіть викладача')->dropDownList($model->getTeachersNames(), $options);
 
     //Продолжительность занятия
     echo $form->field($model, 'dur_lesson')->label('Тривалість заняття')->textInput([

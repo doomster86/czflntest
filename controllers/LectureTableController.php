@@ -63,19 +63,24 @@ class LectureTableController extends Controller
      */
     public function actionCreate() {
         if(Yii::$app->user->identity->role==1) {
-
+            $searchModel = new LectureTableSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $model = new LectureTable();
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
                 return $this->render('create', [
+                    'dataProvider' => $dataProvider,
                     'model' => $model,
                     'status' => 'created'
                 ]);
 
             } else {
                 return $this->render('create', [
+                    'dataProvider' => $dataProvider,
                     'model' => $model,
+                    'status' => '',
+                    
                 ]);
             }
 
@@ -111,6 +116,7 @@ class LectureTableController extends Controller
             return $this->render('update', [
                 'model' => $model,
                 'dataProvider' => $dataProvider,
+                'status' => ''
             ]);
         }
     }

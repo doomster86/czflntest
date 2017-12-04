@@ -5,10 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Rank */
 
-$this->title = 'Update Rank: ' . $model->ID;
-$this->params['breadcrumbs'][] = ['label' => 'Ranks', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->ID, 'url' => ['view', 'id' => $model->ID]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->title = 'Оновити звання: ';
+$this->params['breadcrumbs'][] = ['label' => 'Звання', 'url' => ['index']];
+//$this->params['breadcrumbs'][] = ['label' => $model->ID, 'url' => ['view', 'id' => $model->ID]];
+$this->params['breadcrumbs'][] = 'оновити';
 ?>
 <div class="rank-update">
 

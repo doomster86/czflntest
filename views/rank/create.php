@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Rank */
 
-$this->title = 'Create Rank';
-$this->params['breadcrumbs'][] = ['label' => 'Ranks', 'url' => ['index']];
+$this->title = 'Додати звання';
+$this->params['breadcrumbs'][] = ['label' => 'Звання', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="rank-create">
