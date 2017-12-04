@@ -19,7 +19,7 @@ class SubjectsSearch extends Subjects
     {
         return [
             [['ID', 'dur_lesson', 'dur_break', 'max_week'], 'integer', 'message' => 'Повинно бути числом'],
-            [['name', 'teacher'], 'safe'],
+            [['name', 'teacher_id'], 'safe'],
         ];
     }
 
@@ -71,7 +71,7 @@ class SubjectsSearch extends Subjects
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'teacher', $this->teacher]);
+            ->andFilterWhere(['like', 'teacher_id', $this->teacher_id]);
 
         return $dataProvider;
     }

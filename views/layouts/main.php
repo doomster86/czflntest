@@ -80,9 +80,10 @@ if(!Yii::$app->user->isGuest) {
 
         $menuItems = [
             ['label' => 'Користувачі', 'url' => ['/user/index'],	'items' => [
-				['label' => 'Звання', 'url' => ['/rank/index']],
-	            ['label' => 'Ступінь', 'url' => ['/degree/index']],
-	            ['label' => 'Кваліфікація', 'url' => ['/skill/index']],
+                ['label' => 'Всі користувачі', 'url' => ['/user/index']],
+				['label' => 'Викладачі: Звання', 'url' => ['/rank/index']],
+	            ['label' => 'Викладачі: Ступінь', 'url' => ['/degree/index']],
+	            ['label' => 'Викладачі: Кваліфікація', 'url' => ['/skill/index']],
             ]],
             ['label' => 'Групи', 'url' => ['/groups/index'], 'items' => [
 	            ['label' => 'Всі групи', 'url' => ['/groups/index']],

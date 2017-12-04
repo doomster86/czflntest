@@ -40,8 +40,11 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             [
-                'attribute'=>'teacher',
+                'attribute'=>'teacher_id',
                 'label'=>'Викладач',
+                'content' => function ($model, $key, $index, $column){
+                    return $model->getTeacherName();
+                },
                 'contentOptions' =>function ($model, $key, $index, $column){
                     return ['class' => 'col-xs-3'];
                 }

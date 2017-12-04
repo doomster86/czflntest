@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "subjects".
@@ -23,7 +24,7 @@ class Subjects extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['name', 'teacher', 'dur_lesson', 'dur_break', 'max_week'], 'required', 'message'=>'Обов\'язкове поле'],
+            [['name', 'teacher_id', 'dur_lesson', 'dur_break', 'max_week'], 'required', 'message'=>'Обов\'язкове поле'],
             ['name', 'string', 'min' => 3, 'max' => 255, 'message'=>'Мін 3 літери'],
             [['dur_lesson','dur_break'], 'number', 'min' => 1, 'message' => 'Тільки цифри'],
             [['max_week'], 'integer', 'min' => 0]
@@ -39,35 +40,33 @@ class Subjects extends \yii\db\ActiveRecord {
             'name' => 'Назва',
         ];
     }
-// шаблон, поменяй имена переменных
-    /*
-    public function getCorps() {
-        return $this->hasOne(Corps::className(), ['ID' => 'corps_id']);
+
+    public function getTeacher() {
+        return $this->hasOne(User::className(), ['id' => 'teacher_id']);
     }
 
-    public function getCorpsName() {
-        return $this->corps->name;
+    public function getTeacherName() {
+        $firstname = $this->teacher->firstname;
+        $middlenamde = $this->teacher->middlename;
+        $lastname = $this->teacher->lastname;
+        return $firstname." ".$middlenamde." ".$lastname;
     }
-
-    public function getCorpsNames() {
-
-        $corps_values = Corps::find()->asArray()->select('name')->orderBy('ID')->all();
-        $corps_values = ArrayHelper::getColumn($corps_values, 'name');
-
-        $corps_ids = Corps::find()->asArray()->select('ID')->orderBy('ID')->all();
-        $corps_ids = ArrayHelper::getColumn($corps_ids, 'ID');
-
-        $corps = array_combine($corps_ids,$corps_values);
-
-        $corps_add = array( 0 => 'Оберіть корпус');
-        $corps = ArrayHelper::merge($corps_add, $corps);
-
-        return $corps;
-    }
-*/
 
     public function getTeachersNames() {
-        $teachers = [];
+
+        $teacher_values = User::find()->asArray()->select(['id', "CONCAT(firstname, ' ', middlename, ' ',lastname) AS full_name"])
+            ->where(['role' => 2, 'status' => 1])
+            ->orderBy('id')
+            ->all();
+        $teacher_names = ArrayHelper::getColumn($teacher_values, 'full_name');
+        $teacher_ids = ArrayHelper::getColumn($teacher_values, 'id');
+
+        $teachers = array_combine($teacher_ids, $teacher_names);
+
+        //$corps_add = array( 0 => 'Оберіть викладача');
+        //$corps = ArrayHelper::merge($corps_add, $corps);
+
         return $teachers;
     }
+
 }
