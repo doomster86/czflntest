@@ -51,16 +51,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             [
-                'attribute'=>'dur_lesson',
-                'label'=>'Тривалість занять',
-                'contentOptions' =>function ($model, $key, $index, $column){
-                    return ['class' => 'col-xs-2'];
-                }
-            ],
-
-            [
-                'attribute'=>'dur_break',
-                'label'=>'Тривалість перерв',
+                'attribute'=>'total',
+                'label'=>'Загальна кількість',
                 'contentOptions' =>function ($model, $key, $index, $column){
                     return ['class' => 'col-xs-2'];
                 }
