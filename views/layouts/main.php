@@ -96,6 +96,8 @@ if(!Yii::$app->user->isGuest) {
             ['label' => 'Предмети', 'url' => ['/subjects/index'], 'items' => [
                 ['label' => 'Всі предмети', 'url' => ['/subjects/index']],
                 ['label' => 'Створити новий', 'url' => ['/subjects/create']],
+                ['label' => 'Вся вир.практика', 'url' => ['/practice/index']],
+                ['label' => 'Створити нову', 'url' => ['/practice/create']],
             ]],
             ['label' => 'Корпуси', 'url' => ['/corps/index'], 'items' => [
                 ['label' => 'Всі корпуси', 'url' => ['/corps/index']],
