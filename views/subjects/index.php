@@ -51,14 +51,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             [
-                'attribute'=>'total',
-                'label'=>'Загальна кількість',
-                'contentOptions' =>function ($model, $key, $index, $column){
-                    return ['class' => 'col-xs-2'];
-                }
-            ],
-
-            [
                 'attribute'=>'max_week',
                 'label'=>'Макс. на тиждень',
                 'contentOptions' =>function ($model, $key, $index, $column){

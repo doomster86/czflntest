@@ -24,9 +24,9 @@ class Subjects extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['name', 'teacher_id', 'total', 'max_week'], 'required', 'message'=>'Обов\'язкове поле'],
+            [['name', 'teacher_id', 'max_week'], 'required', 'message'=>'Обов\'язкове поле'],
             ['name', 'string', 'min' => 3, 'max' => 255, 'message'=>'Мін 3 літери'],
-            [['max_week', 'total'], 'integer', 'min' => 0, 'message' => 'Тільки цифри']
+            [['max_week'], 'integer', 'min' => 0, 'message' => 'Тільки цифри']
         ];
     }
 

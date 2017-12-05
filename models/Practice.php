@@ -31,8 +31,8 @@ class Practice extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'master_id', 'max_week', 'total'], 'required'],
-            [['master_id', 'max_week', 'total'], 'integer'],
+            [['name', 'master_id', 'max_week'], 'required'],
+            [['master_id', 'max_week'], 'integer'],
             [['name'], 'string', 'max' => 255],
             [['master_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['master_id' => 'id']],
         ];
@@ -48,7 +48,6 @@ class Practice extends \yii\db\ActiveRecord
             'name' => 'Name',
             'master_id' => 'Master ID',
             'max_week' => 'Max Week',
-            'total' => 'Total',
         ];
     }
 

@@ -15,7 +15,6 @@ Pjax::begin([
     if( Html::encode($status_form) == 'created'):
         $name = Html::encode($model->name);
         $teacher = Html::encode($model->teacher);
-        $total = Html::encode($model->total);
         $max_week = Html::encode($model->max_week);
         ?>
 
@@ -23,7 +22,6 @@ Pjax::begin([
             <p>Новий предмет створено!</p>
             <p>Назва предмету: <strong><?= $name; ?></strong></p>
             <p>Викладач: <strong><?= $teacher; ?></strong></p>
-            <p>Загальна кількість: <strong><?= $total; ?></strong></p>
             <p>Макс. на тиждень: <strong><?= $max_week; ?></strong></p>
         </div>
 
@@ -47,12 +45,10 @@ Pjax::begin([
     <?php
     if ($current_action == 'create') {
         $nameValue = '';
-        $totalValue = '';
         $max_weekValue = '';
     } else {
         //если update
         $nameValue = $model->name;
-        $totalValue = $model->total;
         $max_weekValue = $model->max_week;
     }
     ?>
@@ -79,13 +75,6 @@ Pjax::begin([
 
 
     echo $form->field($model, 'teacher_id')->label('Оберіть викладача')->dropDownList($model->getTeachersNames(), $options);
-
-    //Общее кол-во
-    echo $form->field($model, 'total')->label('Загальна кількість')->textInput([
-        'type' => 'number',
-        'min' => '1',
-        'placeholder' => 'Загальна кількість',
-        'value' =>$totalValue]);
 
     //Макс. в неделю
     echo $form->field($model, 'max_week')->label('Макс. у тиждень')->textInput([

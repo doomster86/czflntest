@@ -18,7 +18,7 @@ class SubjectsSearch extends Subjects
     public function rules()
     {
         return [
-            [['ID', 'total', 'max_week'], 'integer', 'message' => 'Повинно бути числом'],
+            [['ID', 'max_week'], 'integer', 'message' => 'Повинно бути числом'],
             [['name', 'teacher_id'], 'safe'],
         ];
     }
@@ -60,7 +60,6 @@ class SubjectsSearch extends Subjects
         // grid filtering conditions
         $query->andFilterWhere([
             'ID' => $this->ID,
-            'total' => $this->total,
             'max_week' => $this->max_week
 
             //'name' => $this->name,
