@@ -28,7 +28,7 @@ class Rank extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['rank_name'], 'required'],
+            [['rank_name'], 'required', 'message' => 'Обов\'язкове поле'],
             [['rank_name'], 'string', 'max' => 255],
         ];
     }

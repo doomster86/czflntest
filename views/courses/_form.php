@@ -8,20 +8,7 @@ Pjax::begin([
 ]);
 ?>
 
-<?php
 
-$form = ActiveForm::begin([
-    'options' => [
-        'data' => [
-            'pjax' => true,
-            //'data-pjax' => '0',
-        ],
-        'id' => 'course-form',
-    ],
-
-]);
-
-?>
 
 <div class="row">
     <div class="col-xs-12">
@@ -29,26 +16,26 @@ $form = ActiveForm::begin([
             <div class="alert alert-success">
                 <p>Предмет доданий!</p>
             </div>
-
-
-
         <?php endif; ?>
-
-        <?php
-
-        //v($test);
-        //v($subjects);
-
-        ?>
-
-
     </div>
 </div>
 
+<?php
+
+$form = ActiveForm::begin([
+    'options' => [
+        'data' => [
+            'pjax' => true,
+        ],
+        'id' => 'course-form',
+    ],
+
+]);
+
+?>
 <div class="row">
     <div class="col-xs-6">
         <?php
-        //AudienceController::v($corps);
         $options = array(
 
             'options' =>  [
@@ -60,7 +47,6 @@ $form = ActiveForm::begin([
             ]
 
         );
-        //['options' => [0 => ['disabled' => true]]]
         ?>
 
         <?php echo $form->field($modelLessons, 'subject_id')
@@ -88,7 +74,7 @@ $form = ActiveForm::begin([
     <div class="form-group col-xs-12">
 		<?= Html::submitButton('Додати', [
 			'class' => 'btn btn-success' ,
-			'data-pjax' => '0',
+			//'data-pjax' => '0',
 		]) ?>
     </div>
 </div>

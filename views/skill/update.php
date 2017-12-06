@@ -6,16 +6,17 @@ use yii\helpers\Html;
 /* @var $model app\models\Skill */
 
 $this->title = 'Оновити кваліфікацію: ';
-$this->params['breadcrumbs'][] = ['label' => 'Skills', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->ID, 'url' => ['view', 'id' => $model->ID]];
+$this->params['breadcrumbs'][] = ['label' => 'Кваліфікація', 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'Оновити';
 ?>
 <div class="skill-update">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= $this->render('_form', [
+    <?= $this->render('form', [
         'model' => $model,
+        'status' => $status,
+        'current_action' => 'update',
     ]) ?>
 
 </div>

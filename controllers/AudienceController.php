@@ -97,8 +97,7 @@ class AudienceController extends Controller {
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
+    public function actionDelete($id) {
         if(Yii::$app->user->identity->role==1) {
             $this->findModel($id)->delete();
 
@@ -115,8 +114,7 @@ class AudienceController extends Controller {
      * @return Audience the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
-    {
+    protected function findModel($id) {
         if(Yii::$app->user->identity->role==1) {
             if (($model = Audience::findOne($id)) !== null) {
                 return $model;

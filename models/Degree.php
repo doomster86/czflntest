@@ -12,13 +12,11 @@ use Yii;
  *
  * @property TeacherMeta[] $teacherMetas
  */
-class Degree extends \yii\db\ActiveRecord
-{
+class Degree extends \yii\db\ActiveRecord {
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'degree';
     }
 
@@ -28,7 +26,7 @@ class Degree extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['degree_name'], 'required'],
+            [['degree_name'], 'required', 'message' => 'Обов\'язкове поле'],
             [['degree_name'], 'string', 'max' => 255],
         ];
     }
@@ -36,19 +34,17 @@ class Degree extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'ID' => 'ID',
-            'degree_name' => 'Degree Name',
+            'degree_name' => 'Ступінь',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTeacherMetas()
-    {
+    public function getTeacherMetas() {
         return $this->hasMany(TeacherMeta::className(), ['degree_id' => 'ID']);
     }
 }

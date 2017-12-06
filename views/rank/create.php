@@ -14,8 +14,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= $this->render('_form', [
+    <?= $this->render('form', [
         'model' => $model,
+        'status' => $status,
+        'current_action' => 'create',
     ]) ?>
 
 </div>

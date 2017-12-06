@@ -11,21 +11,19 @@ use Yii;
  * @property string $name
  * @property string $subject
  */
-class Courses extends \yii\db\ActiveRecord
-{
+class Courses extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'courses';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             ['name', 'required', 'message'=>'Обов\'язкове поле'],
         ];
@@ -34,12 +32,12 @@ class Courses extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'ID' => 'ID',
             'name' => 'Name',
 
         ];
     }
+    
 }

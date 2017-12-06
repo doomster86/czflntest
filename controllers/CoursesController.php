@@ -52,14 +52,16 @@ class CoursesController extends Controller {
                 //return $this->redirect(['courses-create', 'id' => $model->ID]);
                 return $this->render('create', [
                     'model' => $model,
-                    'operation' => 'created',
+                    'status' => 'created'
+                    //'operation' => 'created',
 
                 ]);
             } else {
                 // либо страница отображается первый раз, либо есть ошибка в данных
                 return $this->render('create', [
                     'model' => $model,
-                    'operation' => ''
+                    'status' => '',
+                    //'operation' => ''
                 ]);
             }
         } else {
@@ -154,8 +156,6 @@ class CoursesController extends Controller {
                     'subjects' => $subjects,
                     'test' => $selected_subjects,
                     'status' => 'added',
-                    //'data-pjax' => 0
-
                 ]);
             } else { //если зашли первый раз
                 return $this->render('view', [

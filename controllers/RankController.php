@@ -12,48 +12,25 @@ use yii\filters\VerbFilter;
 /**
  * RankController implements the CRUD actions for Rank model.
  */
-class RankController extends Controller
-{
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
+class RankController extends Controller {
+
 
     /**
      * Lists all Rank models.
      * @return mixed
      */
-    public function actionIndex()
-    {
-        $searchModel = new RankSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+    public function actionIndex() {
+        if(Yii::$app->user->identity->role==1) {
+            $searchModel = new RankSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * Displays a single Rank model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        } else {
+            return $this->render('/site/access_denied');
+        }
     }
 
     /**
@@ -61,16 +38,22 @@ class RankController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
-        $model = new Rank();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->ID]);
+    public function actionCreate(){
+        if(Yii::$app->user->identity->role==1) {
+            $model = new Rank();
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->render('create', [
+                    'model' => $model,
+                    'status' => 'created'
+                ]);
+            } else {
+                return $this->render('create', [
+                    'model' => $model,
+                    'status' => ''
+                ]);
+            }
         } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+            return $this->render('/site/access_denied');
         }
     }
 
@@ -80,16 +63,22 @@ class RankController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->ID]);
+    public function actionUpdate($id) {
+        if(Yii::$app->user->identity->role==1) {
+            $model = $this->findModel($id);
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return $this->render('update', [
+                    'model' => $model,
+                    'status' => 'updated'
+                ]);
+            } else {
+                return $this->render('update', [
+                    'model' => $model,
+                    'status' => ''
+                ]);
+            }
         } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+            return $this->render('/site/access_denied');
         }
     }
 
@@ -99,11 +88,13 @@ class RankController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+    public function actionDelete($id) {
+        if(Yii::$app->user->identity->role==1) {
+            $this->findModel($id)->delete();
+            return $this->redirect(['index']);
+        } else {
+            return $this->render('/site/access_denied');
+        }
     }
 
     /**
@@ -113,12 +104,15 @@ class RankController extends Controller
      * @return Rank the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
-    {
-        if (($model = Rank::findOne($id)) !== null) {
-            return $model;
+    protected function findModel($id) {
+        if(Yii::$app->user->identity->role==1) {
+            if (($model = Rank::findOne($id)) !== null) {
+                return $model;
+            } else {
+                throw new NotFoundHttpException('The requested page does not exist.');
+            }
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            return $this->render('/site/access_denied');
         }
     }
 }

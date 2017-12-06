@@ -21,13 +21,58 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'emptyText' => 'Нічого не знайдено',
+        'layout'=>"{pager}\n{summary}\n{items}\n{summary}\n{pager}",
+        'summary' => "<div class=\"summary\">Показано {begin} - {end} з {totalCount} звань</div>",
         'columns' => [
-            //['class' => 'yii\grid\SerialColumn'],
 
-            'ID',
-            'rank_name',
+            [
+                'attribute' => 'rank_name',
+                'format' => 'text',
+                'label' => 'Назва',
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-11'];
+                }
+            ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{update} {delete}',
+
+                'buttons' => [
+
+                    'update' => function ($url, $model, $key) {
+                        return Html::a(
+                            "<span class=\"glyphicon glyphicon-pencil left\"></span>",
+                            $url,
+                            [
+                                'title' => 'Оновити',
+                                'aria-label' => 'Оновити',
+                                'alt' => 'Оновити',
+                                'data-pjax' => '0',
+                            ]
+                        );
+                    },
+
+                    'delete' => function ($url, $model, $key) {
+                        return Html::a(
+                            "<span class=\"glyphicon glyphicon-trash right\"></span>",
+                            $url,
+                            [
+                                'title' => 'Видалити',
+                                'aria-label' => 'Видалити',
+                                'alt' => 'Видалити',
+                                'data-pjax' => '0',
+                            ]
+                        );
+
+                    },
+                ],
+                'contentOptions' => function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-1'];
+                }
+
+            ],
         ],
     ]); ?>
 </div>

@@ -7,41 +7,38 @@ use yii\widgets\Pjax;
 Pjax::begin([
     // Pjax options
 ]);
+?>
 
-if( Html::encode($operation) == 'created'):
+<div class="courses-form">
 
-    $coursesName = Html::encode($model->name);
-    ?>
+    <?php if( Html::encode($operation) == 'created') : ?>
+        <div class="alert alert-success">
+            <p>Нова професія створена!</p>
+            <p>Назва професії: <strong> <?php echo Html::encode($model->name); ?></strong></p>
+        </div>
+    <?php endif; ?>
 
-    <div class="alert alert-success">
-        <p>Нова професія створена!</p>
-        <p>Назва професії: <strong> <?= $coursesName ?></strong></p>
-    </div>
-
-<?php endif;
-
-if( Html::encode($operation) == 'updated'):
-    ?>
-
-    <div class="alert alert-success">
-        <p>Професія оновлена!</p>
-    </div>
+    <?php if( Html::encode($operation) == 'updated'): ?>
+        <div class="alert alert-success">
+            <p>Професія оновлена!</p>
+        </div>
+    <?php endif; ?>
 
     <?php
-endif;
+    $form = ActiveForm::begin([
+        'options' => [
+            'data' => [
+                    'pjax' => true
+            ],
+            'id' => 'courses-form'
+        ],
+    ]);
+    ?>
 
-$form = ActiveForm::begin([
-    'options' => [
-        'data' => ['pjax' => true],
-        'id' => 'courses-form'
-    ],
-]);
-
-?>
     <div class="col-xs-12 col-md-12">
 
         <?php
-        if ($courses_status == 'create') {
+        if ($current_action == 'create') {
             $nameValue = '';
         } else {
             $nameValue = $model->name;
@@ -56,7 +53,7 @@ $form = ActiveForm::begin([
 
     </div>
 
-    <?php
+        <?php
     /*
     if($courses_status == 'create') {
 
@@ -102,15 +99,14 @@ $form = ActiveForm::begin([
     */
     ?>
 
-    <div class="form-group col-md-12">
-        <?php if($courses_status == 'create') {
-            echo Html::submitButton('Створити', ['class' => 'btn btn-success']);
-        } else {
-            echo Html::submitButton('Оновити', ['class' => 'btn btn-primary']);
-        } ?>
-    </div>
+        <div class="form-group col-md-12">
+            <?php if($courses_status == 'create') {
+                echo Html::submitButton('Створити', ['class' => 'btn btn-success']);
+            } else {
+                echo Html::submitButton('Оновити', ['class' => 'btn btn-primary']);
+            } ?>
+        </div>
 
-<?php
-ActiveForm::end();
-Pjax::end();
-?>
+    <?php ActiveForm::end(); ?>
+    </div>
+<?php Pjax::end(); ?>

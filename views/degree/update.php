@@ -13,8 +13,10 @@ $this->params['breadcrumbs'][] = 'Оновити';
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= $this->render('_form', [
+    <?= $this->render('form', [
         'model' => $model,
+        'status' => $status,
+        'current_action' => 'update',
     ]) ?>
 
 </div>
