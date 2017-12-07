@@ -51,6 +51,17 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             [
+                'attribute'=>'audience_id',
+                'label'=>'Аудиторія',
+                'content' => function ($model, $key, $index, $column){
+                    return $model->getAudienceName();
+                },
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-3'];
+                }
+            ],
+
+            [
                 'attribute'=>'max_week',
                 'label'=>'Макс. на тиждень',
                 'contentOptions' =>function ($model, $key, $index, $column){

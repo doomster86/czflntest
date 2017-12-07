@@ -18,8 +18,8 @@ class SubjectsSearch extends Subjects
     public function rules()
     {
         return [
-            [['ID', 'max_week'], 'integer', 'message' => 'Повинно бути числом'],
-            [['name', 'teacher_id'], 'safe'],
+            [['ID', 'max_week', 'required'], 'integer', 'message' => 'Повинно бути числом'],
+            [['name', 'teacher_id', 'audience_id'], 'safe'],
         ];
     }
 
