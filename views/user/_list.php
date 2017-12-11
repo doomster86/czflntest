@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use app\models\User;
 use app\models\StudentMeta;
+use app\models\TeacherMeta;
 ?>
 
 <div class="user-item">
@@ -53,20 +54,25 @@ use app\models\StudentMeta;
             // если студент
             if ($roles[$model->role]['roles'] == 0) : ?>
             <tr>
-                <td><?php ?></td>
-                <td></td>
+                <td>Група</td>
+                <td><?= StudentMeta::getCurrentGroupName($model->ID) ?></td>
             </tr>
             <?php endif; ?>
             <?php
             // если препод
             if ($roles[$model->role]['roles'] == 2) : ?>
                 <tr>
-                    <td><?= Html::encode($roles[$model->role]['roles']) ?></td>
-                    <td></td>
+                    <td>Тип викладача</td>
+                    <td><?= TeacherMeta::getTeacherType($model->ID); ?></td>
+                </tr>
+                <tr>
+                    <td>Робочі дні</td>
+                    <td><?php echo TeacherMeta::getTeacherWorkDays($model->ID); ?></td>
                 </tr>
             <?php endif; ?>
         </tbody>
     </table>
+
     <p class="center">Зареєстровано <?php echo $model->getRegisterDate(); ?></p>
     <p class="center <?= Html::encode($status[$model->status]['cssClass']) ?>"><?= Html::encode($status[$model->status]['name']) ?></p>
 </div>

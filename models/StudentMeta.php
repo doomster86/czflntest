@@ -71,4 +71,16 @@ class StudentMeta extends \yii\db\ActiveRecord
 
         return $groups;
     }
+
+    public function getCurrentGroupName($user_id) {
+        $groupID = StudentMeta::find()->asArray()->select('group_id')->where(['user_id' => $user_id])->one();
+        if ($groupID) {
+            $groupName = Groups::find()->asArray()->select('name')->where(['id' => $groupID['group_id']])->one();
+            return $groupName['name'];
+        } else {
+            return 'Група не обрана';
+        }
+
+    }
+
 }

@@ -101,4 +101,30 @@ class TeacherMeta extends \yii\db\ActiveRecord
             [['user_id', 'teacher_type', 'rank_id', 'degree_id', 'skill_id', 'hours', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'], 'integer'],
         ];
     }
+
+    public function getTeacherType($user_id) {
+        $type_id = TeacherMeta::find()->asArray()->select('teacher_type')->where(['user_id' => $user_id])->one();
+        if ($type_id) {
+            $type = self::TEACHER_TYPE[$type_id['teacher_type']];
+            return $type;
+        } else {
+            return 'Тип викладача не обраний';
+        }
+    }
+
+    public function getTeacherWorkDays($user_id) {
+        $days_array = TeacherMeta::find()->asArray()->select(['monday','tuesday','wednesday','thursday','friday','saturday','sunday'] )->where(['user_id' => $user_id])->all();
+        $days_array = $days_array[0];
+        $days_array = array_values($days_array);
+        $arr_length = count($days_array);
+        $day_names = array(0 => 'Понеділок', 1 => 'Вівторок', 2 => 'Середа', 3 => 'Четвер', 4 => 'П\'ятниця', 5 => 'Субота', 6 => 'Неділя');
+        $result = array();
+        for($i = 0; $i < $arr_length; $i++ ) {
+            if($days_array[$i]) {
+                $result[] = $day_names[$i];
+            }
+        }
+        return implode ( ', ' , $result );
+    }
+
 }
