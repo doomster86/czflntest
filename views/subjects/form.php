@@ -84,6 +84,9 @@ Pjax::begin([
         'min' => '0',
         'placeholder' => 'Макс. у тиждень',
         'value' =>$max_weekValue]);
+
+    echo $form->field($model, 'required')->checkbox(['label' => 'Обов\'язкова аудиторія']);
+
     ?>
 
 

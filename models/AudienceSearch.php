@@ -59,8 +59,8 @@ class AudienceSearch extends Audience {
                 'corps_id',
 
                 'corpsName' => [
-                    'asc' => ['corps.name' => SORT_ASC],
-                    'desc' => ['corps.name' => SORT_DESC],
+                    'asc' => ['corps.corps_name' => SORT_ASC],
+                    'desc' => ['corps.corps_name' => SORT_DESC],
                     'label' => 'Корпус'
                 ]
             ]
@@ -84,7 +84,7 @@ class AudienceSearch extends Audience {
             ->andFilterWhere(['like', 'num', $this->num]);
 
         $query->joinWith(['corps' => function ($q) {
-            $q->where('corps.name LIKE "%' . $this->corpsName . '%"');
+            $q->where('corps.corps_name LIKE "%' . $this->corpsName . '%"');
         }]);
 
         return $dataProvider;

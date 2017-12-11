@@ -19,7 +19,7 @@ class CorpsSearch extends Corps
     {
         return [
             [['ID'], 'integer'],
-            [['name', 'location'], 'safe'],
+            [['corps_name', 'location'], 'safe'],
         ];
     }
 
@@ -62,7 +62,7 @@ class CorpsSearch extends Corps
             'ID' => $this->ID,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
+        $query->andFilterWhere(['like', 'corps_name', $this->name])
             ->andFilterWhere(['like', 'location', $this->location]);
 
         return $dataProvider;

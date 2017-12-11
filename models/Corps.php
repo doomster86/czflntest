@@ -27,8 +27,8 @@ class Corps extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'location'], 'required','message'=>'Обов\'язкове поле'],
-            [['name', 'location'], 'string', 'max' => 255],
+            [['corps_name', 'location'], 'required','message'=>'Обов\'язкове поле'],
+            [['corps_name', 'location'], 'string', 'max' => 255],
         ];
     }
 
@@ -39,7 +39,7 @@ class Corps extends \yii\db\ActiveRecord
     {
         return [
             'ID' => 'ID',
-            'name' => 'Назва',
+            'corps_name' => 'Назва',
             'location' => 'Розташування',
         ];
     }

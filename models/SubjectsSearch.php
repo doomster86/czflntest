@@ -10,24 +10,24 @@ use app\models\Subjects;
 /**
  * SubjectsSearch represents the model behind the search form about `app\models\Subjects`.
  */
-class SubjectsSearch extends Subjects
-{
+class SubjectsSearch extends Subjects {
+
+	public $teacher;
+
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['ID', 'max_week', 'required'], 'integer', 'message' => 'Повинно бути числом'],
-            [['name', 'teacher_id', 'audience_id'], 'safe'],
+            [['name', 'teacher_id', 'audience_id', 'teacher'], 'safe'],
         ];
     }
 
     /**
      * @inheritdoc
      */
-    public function scenarios()
-    {
+    public function scenarios() {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
@@ -39,8 +39,7 @@ class SubjectsSearch extends Subjects
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
-    {
+    public function search($params) {
         $query = Subjects::find();
 
         // add conditions that should always apply here
@@ -60,11 +59,16 @@ class SubjectsSearch extends Subjects
         // grid filtering conditions
         $query->andFilterWhere([
             'ID' => $this->ID,
-            'max_week' => $this->max_week
+            'max_week' => $this->max_week,
 
             //'name' => $this->name,
-            //'teacher' => $this->teacher,
-
+	        /*
+            'teacher' => [
+	            'asc' => ['.corps_name' => SORT_ASC],
+	            'desc' => ['corps.corps_name' => SORT_DESC],
+	            'label' => 'Корпус'
+            ]
+*/
 
         ]);
 

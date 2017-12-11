@@ -2,6 +2,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\models\User;
+use app\models\StudentMeta;
 ?>
 
 <div class="user-item">
@@ -48,6 +49,22 @@ use app\models\User;
                 <td>Телефон</td>
                 <td><?= Html::encode($model->phone) ?></td>
             </tr>
+            <?php
+            // если студент
+            if ($roles[$model->role]['roles'] == 0) : ?>
+            <tr>
+                <td><?php ?></td>
+                <td></td>
+            </tr>
+            <?php endif; ?>
+            <?php
+            // если препод
+            if ($roles[$model->role]['roles'] == 2) : ?>
+                <tr>
+                    <td><?= Html::encode($roles[$model->role]['roles']) ?></td>
+                    <td></td>
+                </tr>
+            <?php endif; ?>
         </tbody>
     </table>
     <p class="center">Зареєстровано <?php echo $model->getRegisterDate(); ?></p>

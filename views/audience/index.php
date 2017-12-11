@@ -55,7 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Корпус',
                 'content' => function ($model, $key, $index, $column){
                     $corps_name = Corps::find()->asArray()->where(['ID' => $model->corps])->one();
-                    return $corps_name['name'];
+                    return $corps_name['corps_name'];
                 },
                 'contentOptions' =>function ($model, $key, $index, $column){
                     return [
