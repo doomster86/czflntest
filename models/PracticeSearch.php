@@ -13,6 +13,7 @@ use app\models\Practice;
 class PracticeSearch extends Practice {
 
     public $teacherName;
+	public $audienceName;
 
     /**
      * @inheritdoc
@@ -21,7 +22,7 @@ class PracticeSearch extends Practice {
     {
         return [
             [['ID', 'max_week'], 'integer', 'message' => 'Повинно бути числом'],
-            [['name', 'master_id', 'teacherName'], 'safe'],
+            [['name', 'master_id', 'teacherName', 'audienceName'], 'safe'],
         ];
     }
 
@@ -61,6 +62,11 @@ class PracticeSearch extends Practice {
                     'desc' => ['user.firstname' => SORT_DESC],
                     'label' => 'Викладач'
                 ],
+	            'audienceName' => [
+		            'asc' => ['audience.name' => SORT_ASC],
+		            'desc' => ['audience.name' => SORT_DESC],
+		            'label' => 'Аудиторія'
+	            ],
                 'max_week'
             ]
         ]);
@@ -90,6 +96,21 @@ class PracticeSearch extends Practice {
         $query->joinWith(['user' => function ($q) {
             $q->where('firstname LIKE "%' . $this->teacherName . '%" ' . 'OR middlename LIKE "%' . $this->teacherName . '%" ' . 'OR lastname LIKE "%' . $this->teacherName . '%"');
         }]);
+
+	    $query->joinWith(['audience' => function ($q) {
+
+		    $pieces = explode(" ", $this->audienceName);
+		    $firstWord = $pieces[0];
+		    if (!empty($pieces[1])) {
+			    $secondWord = $pieces[1];
+		    }
+
+		    if (empty($secondWord)) {
+			    $q->where('audience.name LIKE "%' . $firstWord . '%" ');
+		    } else {
+			    $q->where('audience.name LIKE "%' . $firstWord . '%" ' . 'OR audience.name LIKE "%' . $secondWord . '%"');
+		    }
+	    }]);
 
         return $dataProvider;
     }

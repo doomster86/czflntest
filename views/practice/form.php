@@ -76,6 +76,9 @@ Pjax::begin([
 
     echo $form->field($model, 'master_id')->label('Оберіть викладача')->dropDownList($model->getTeachersNames(), $options);
 
+    echo $form->field($model, 'audience_id')->label('Оберіть аудиторію')->dropDownList($model->getAudienceNames(), $options);
+
+
     //Макс. в неделю
     echo $form->field($model, 'max_week')->label('Макс. у тиждень')->textInput([
         'type' => 'number',
