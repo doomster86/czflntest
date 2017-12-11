@@ -6,21 +6,21 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Subjects;
-
 /**
  * SubjectsSearch represents the model behind the search form about `app\models\Subjects`.
  */
 class SubjectsSearch extends Subjects {
 
-	public $teacher;
+    public $teacherName;
+    public $audienceName;
 
     /**
      * @inheritdoc
      */
     public function rules() {
         return [
-            [['ID', 'max_week', 'required'], 'integer', 'message' => 'Повинно бути числом'],
-            [['name', 'teacher_id', 'audience_id', 'teacher'], 'safe'],
+            [['ID', 'teacher_id', 'audience_id', 'required', 'max_week'], 'integer'],
+            [['name', 'teacherName', 'audienceName'], 'safe'],
         ];
     }
 
@@ -44,8 +44,30 @@ class SubjectsSearch extends Subjects {
 
         // add conditions that should always apply here
 
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+        ]);
+
+        $dataProvider->setSort([
+            'attributes' => [
+                'ID',
+                'name',
+                'teacher_id',
+                'teacherName' => [
+                    'asc' => ['user.firstname' => SORT_ASC],
+                    'desc' => ['user.firstname' => SORT_DESC],
+                    'label' => 'Ім\'я куратора'
+                ],
+                'audienceName' => [
+                    'asc' => ['audience.name' => SORT_ASC],
+                    'desc' => ['audience.name' => SORT_DESC],
+                    'label' => 'Аудиторія'
+                ],
+                'audience_id',
+                'required',
+                'max_week'
+            ]
         ]);
 
         $this->load($params);
@@ -59,21 +81,32 @@ class SubjectsSearch extends Subjects {
         // grid filtering conditions
         $query->andFilterWhere([
             'ID' => $this->ID,
+            'teacher_id' => $this->teacher_id,
+            'audience_id' => $this->audience_id,
+            'required' => $this->required,
             'max_week' => $this->max_week,
-
-            //'name' => $this->name,
-	        /*
-            'teacher' => [
-	            'asc' => ['.corps_name' => SORT_ASC],
-	            'desc' => ['corps.corps_name' => SORT_DESC],
-	            'label' => 'Корпус'
-            ]
-*/
-
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'teacher_id', $this->teacher_id]);
+        $query->andFilterWhere(['like', 'name', $this->name]);
+
+        $query->joinWith(['user' => function ($q) {
+            $q->where('firstname LIKE "%' . $this->teacherName . '%" ' . 'OR middlename LIKE "%' . $this->teacherName . '%" ' . 'OR lastname LIKE "%' . $this->teacherName . '%"');
+        }]);
+
+        $query->joinWith(['audience' => function ($q) {
+
+            $pieces = explode(" ", $this->audienceName);
+            $firstWord = $pieces[0];
+            if (!empty($pieces[1])) {
+                $secondWord = $pieces[1];
+            }
+
+            if (empty($secondWord)) {
+                $q->where('audience.name LIKE "%' . $firstWord . '%" ');
+            } else {
+                $q->where('audience.name LIKE "%' . $firstWord . '%" ' . 'OR audience.name LIKE "%' . $secondWord . '%"');
+            }
+        }]);
 
         return $dataProvider;
     }

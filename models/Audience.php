@@ -59,8 +59,8 @@ class Audience extends \yii\db\ActiveRecord {
 
     public function getCorpsNames() {
 
-        $corps_values = Corps::find()->asArray()->select('name')->orderBy('ID')->all();
-        $corps_values = ArrayHelper::getColumn($corps_values, 'name');
+        $corps_values = Corps::find()->asArray()->select('corps_name')->orderBy('ID')->all();
+        $corps_values = ArrayHelper::getColumn($corps_values, 'corps_name');
 
         $corps_ids = Corps::find()->asArray()->select('ID')->orderBy('ID')->all();
         $corps_ids = ArrayHelper::getColumn($corps_ids, 'ID');
@@ -71,6 +71,14 @@ class Audience extends \yii\db\ActiveRecord {
         $corps = ArrayHelper::merge($corps_add, $corps);
 
         return $corps;
+    }
+
+    public function getCorpsNameByAudienceID($id) {
+        $corps_id = Audience::find()->asArray()->select('corps_id')->where(['ID' => $id])->one();
+        $corps_id = $corps_id['corps_id'];
+        $corps_name = Corps::find()->asArray()->select('corps_name')->where(['ID' => $corps_id])->one();
+        $corps_name = $corps_name['corps_name'];
+       return $corps_name;
     }
 
 }

@@ -62,7 +62,7 @@ class CorpsSearch extends Corps
             'ID' => $this->ID,
         ]);
 
-        $query->andFilterWhere(['like', 'corps_name', $this->name])
+        $query->andFilterWhere(['like', 'corps_name', $this->corps_name])
             ->andFilterWhere(['like', 'location', $this->location]);
 
         return $dataProvider;

@@ -92,15 +92,14 @@ class GroupsSearch extends Groups {
 	    $query->joinWith(['courses' => function ($q) {
 		    $q->where('courses.name LIKE "%' . $this->coursesName . '%"');
 	    }]);
- 
+
         $query->joinWith(['user' => function ($q) {
             $pieces = explode(" ", $this->userName);
             $userFirstName = $pieces[0];
             if (!empty($pieces[1])) {
             $userLastName = $pieces[1];
             }
-            //$q->where('user.firstname LIKE "%' . $this->userName . '%"');
-            //$q->where('firstname LIKE "%' . $this->userName . '%" ' . 'OR lastname LIKE "%' . $this->userName . '%"');
+
             if (empty($userLastName)) {
                 $q->where('firstname LIKE "%' . $userFirstName . '%" ' . 'OR lastname LIKE "%' . $userFirstName . '%"');
             } else {

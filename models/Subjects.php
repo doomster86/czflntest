@@ -4,12 +4,21 @@ namespace app\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
-
 /**
  * This is the model class for table "subjects".
  *
  * @property integer $ID
  * @property string $name
+ * @property integer $teacher_id
+ * @property integer $audience_id
+ * @property integer $required
+ * @property integer $max_week
+ *
+ * @property CountLecture[] $countLectures
+ * @property Groups[] $groups
+ * @property Schedule[] $schedules
+ * @property Audience $audience
+ * @property User $teacher
  */
 class Subjects extends \yii\db\ActiveRecord {
     /**
@@ -24,9 +33,11 @@ class Subjects extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['name', 'teacher_id', 'max_week', 'audience_id', 'required'], 'required', 'message'=>'Обов\'язкове поле'],
-            ['name', 'string', 'min' => 3, 'max' => 255, 'message'=>'Мін 3 літери'],
-            [['max_week'], 'integer', 'min' => 0, 'message' => 'Тільки цифри']
+            [['name', 'teacher_id', 'audience_id', 'max_week'], 'required', 'message'=>'Обов\'язкове поле'],
+            [['teacher_id', 'audience_id', 'required', 'max_week'], 'integer', 'min' => 0, 'message' => 'Тільки цифри'],
+            [['name'], 'string', 'min' => 3, 'max' => 255, 'message'=>'Мін 3 літери'],
+            [['audience_id'], 'exist', 'skipOnError' => true, 'targetClass' => Audience::className(), 'targetAttribute' => ['audience_id' => 'ID']],
+            [['teacher_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['teacher_id' => 'id']],
         ];
     }
 
@@ -36,19 +47,54 @@ class Subjects extends \yii\db\ActiveRecord {
     public function attributeLabels() {
         return [
             'ID' => 'ID',
-            'name' => 'Назва',
+            'name' => 'Предмет',
+            'teacher_id' => 'Викладач (id)',
+            'userName' => 'Викладач',
+            'audience_id' => 'Аудиторія',
+            'required' => 'Required',
+            'max_week' => 'Макс. на тиждень',
         ];
     }
 
-    public function getTeacher() {
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCountLectures() {
+        return $this->hasMany(CountLecture::className(), ['subject_id' => 'ID']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGroups() {
+        return $this->hasMany(Groups::className(), ['ID' => 'group_id'])->viaTable('count_lecture', ['subject_id' => 'ID']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSchedules() {
+        return $this->hasMany(Schedule::className(), ['subjects_id' => 'ID']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAudience() {
+        return $this->hasOne(Audience::className(), ['ID' => 'audience_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser() {
         return $this->hasOne(User::className(), ['id' => 'teacher_id']);
     }
 
+    /* функции для вывода в index и поиска */
+
     public function getTeacherName() {
-        $firstname = $this->teacher->firstname;
-        $middlenamde = $this->teacher->middlename;
-        $lastname = $this->teacher->lastname;
-        return $firstname." ".$middlenamde." ".$lastname;
+        return $this->user->firstname . ' ' . $this->user->middlename . ' ' . $this->user->lastname;
     }
 
     public function getTeachersNames() {
@@ -68,16 +114,6 @@ class Subjects extends \yii\db\ActiveRecord {
         return $teachers;
     }
 
-    public function getAudience() {
-        return $this->hasOne(Audience::className(), ['id' => 'audience_id']);
-    }
-
-    public function getAudienceName() {
-        $audience_num = $this->audience->num;
-        $audience_name = $this->audience->name;
-        return "Аудиторія №".$audience_num." | ".$audience_name;
-    }
-
     public function getAudienceNames() {
 
         $audience_values = Audience::find()->asArray()->select(["ID", "corps_id", "CONCAT('№ ', num, ' - ', name) AS full_name"])
@@ -89,24 +125,29 @@ class Subjects extends \yii\db\ActiveRecord {
         $corps_ids = ArrayHelper::getColumn($audience_values, 'corps_id');
 
         foreach ($corps_ids as $id) {
-            $corps_names[] = Corps::find()->asArray()->select(["name"])
+            $corps_names[] = Corps::find()->asArray()->select(["corps_name"])
                 ->where(['ID' => $id])
                 ->orderBy('ID')
                 ->one();
         }
 
-        $corps_names = ArrayHelper::getColumn($corps_names, 'name');
+        $corps_names = ArrayHelper::getColumn($corps_names, 'corps_name');
 
         for($i = 0; $i < count($audience_names); $i++ ) {
             $audience_names[$i] = "Корпус: ".$corps_names[$i]." || Аудиторія: ".$audience_names[$i];
         }
 
         $audience = array_combine($audience_ids, $audience_names);
-
         //$corps_add = array( 0 => 'Оберіть викладача');
         //$corps = ArrayHelper::merge($corps_add, $corps);
-
         return $audience;
+    }
+
+    public function getAudienceName() {
+        return Audience::getCorpsNameByAudienceID($this->audience->ID). ' ' . $this->audience->num. ' ' . $this->audience->name;
+        //$audience_id = $this->audience->ID;
+        //return Audience::getCorpsNameByID(3);
+        //return  $this->audience->num. ' ' . $this->audience->name;
     }
 
 }

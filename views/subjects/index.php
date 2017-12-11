@@ -31,6 +31,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'class' => 'table table-striped table-bordered col-xs-12 subjects-table'
         ],
         'columns' => [
+
+            //'ID',
             [
                 'attribute'=>'name',
                 'label'=>'Предмет',
@@ -38,6 +40,42 @@ $this->params['breadcrumbs'][] = $this->title;
                     return ['class' => 'col-xs-2'];
                 }
             ],
+            //'teacher_id',
+
+            [
+                'attribute' => 'teacherName',
+                'label' => 'Викладач',
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-3'];
+                }
+            ],
+
+            [
+                'attribute' => 'audienceName',
+                'label' => 'Аудиторія',
+                /*
+                'content' => function ($model, $key, $index, $column) {
+                   return 'Номер '.$model->getAudienceName();
+                },*/
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-3'];
+                }
+            ],
+            //'audience_id',
+            //'required',
+            [
+                'attribute'=>'max_week',
+                'label'=>'Макс. на тиждень',
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-2'];
+                }
+            ],
+
+
+            /*
+
+
+
 
             [
                 'attribute'=>'teacher_id',
@@ -61,32 +99,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
 
-            [
-                'attribute'=>'max_week',
-                'label'=>'Макс. на тиждень',
-                'contentOptions' =>function ($model, $key, $index, $column){
-                    return ['class' => 'col-xs-2'];
-                }
-            ],
 
+*/
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                //'template' => '{view} {update} {delete}',
                 'template' => '{update} {delete}',
                 'buttons' => [
-                    /*
-                    'view' => function ($url,$model) {
-                        return Html::a(
-                            '<span class="glyphicon glyphicon-eye-open"></span>',
-                            $url,
-                            [
-                                'title' => 'Переглянути',
-                                'data-pjax' => '0',
-                            ]
-                            );
-                    },
-                    */
+
                     'update' => function ($url,$model) {
                         return Html::a(
                             '<span class="glyphicon glyphicon-pencil left"></span>',

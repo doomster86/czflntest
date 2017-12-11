@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //['class' => 'yii\grid\SerialColumn'],
 
             [
-                'attribute' => 'name',
+                'attribute' => 'corps_name',
                 'format' => 'text',
                 'label' => 'Назва',
                 'contentOptions' =>function ($model, $key, $index, $column){

@@ -40,6 +40,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             [
+                'attribute' => 'teacherName',
+                'label' => 'Викладач',
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-3'];
+                }
+            ],
+/*
+            [
                 'attribute'=>'master_id',
                 'label'=>'Викладач',
                 'content' => function ($model, $key, $index, $column){
@@ -49,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return ['class' => 'col-xs-3'];
                 }
             ],
-
+*/
             [
                 'attribute'=>'max_week',
                 'label'=>'Макс. на тиждень',

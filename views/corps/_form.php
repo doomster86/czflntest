@@ -22,7 +22,7 @@ Pjax::begin([
     <?php if (Html::encode($status_form) == 'created') : ?>
         <div class="alert alert-success">
             <p>Додано новий корпус. </p>
-            <p>Назва: <strong><?= Html::encode($model->name) ?></strong></p>
+            <p>Назва: <strong><?= Html::encode($model->corps_name) ?></strong></p>
             <p>Розташування: <strong><?= Html::encode($model->location) ?></strong></p>
         </div>
     <?php endif; ?>
@@ -38,14 +38,14 @@ Pjax::begin([
     $nameLocation = '';
 
     if (Html::encode($current_action) == 'update') {
-        $nameValue = $model->name;
+        $nameValue = $model->corps_name;
         $nameLocation = $model->location;
     }
     $form = ActiveForm::begin([
     'options' => ['data' => ['pjax' => true], 'id' => 'courses-form'],
     ]);
     ?>
-    <?= $form->field($model, 'name')->textInput(['placeholder' => 'Введіть назву', 'value' => $nameValue]) ?>
+    <?= $form->field($model, 'corps_name')->textInput(['placeholder' => 'Введіть назву', 'value' => $nameValue]) ?>
 
     <?= $form->field($model, 'location')->textInput(['placeholder' => 'Введіть розташування', 'value' => $nameLocation]) ?>
 

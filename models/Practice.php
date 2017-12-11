@@ -26,7 +26,8 @@ class Practice extends \yii\db\ActiveRecord {
         return [
             [['name', 'master_id', 'max_week'], 'required', 'message'=>'Обов\'язкове поле'],
             ['name', 'string', 'min' => 3, 'max' => 255, 'message'=>'Мін 3 літери'],
-            [['max_week'], 'integer', 'min' => 0, 'message' => 'Тільки цифри']
+            [['max_week'], 'integer', 'min' => 0, 'message' => 'Тільки цифри'],
+            [['master_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['master_id' => 'id']], //добавил вручную
         ];
     }
 
@@ -37,17 +38,18 @@ class Practice extends \yii\db\ActiveRecord {
         return [
             'ID' => 'ID',
             'name' => 'Назва',
+            'teacherName' => 'Викладач',
         ];
     }
 
-    public function getTeacher() {
+    public function getUser() {
         return $this->hasOne(User::className(), ['id' => 'master_id']);
     }
 
     public function getTeacherName() {
-        $firstname = $this->teacher->firstname;
-        $middlenamde = $this->teacher->middlename;
-        $lastname = $this->teacher->lastname;
+        $firstname = $this->user->firstname;
+        $middlenamde = $this->user->middlename;
+        $lastname = $this->user->lastname;
         return $firstname." ".$middlenamde." ".$lastname;
     }
 
@@ -66,6 +68,13 @@ class Practice extends \yii\db\ActiveRecord {
         //$corps = ArrayHelper::merge($corps_add, $corps);
 
         return $teachers;
+    }
+
+    public function getAudienceName() {
+        return Audience::getCorpsNameByAudienceID($this->audience->ID). ' ' . $this->audience->num. ' ' . $this->audience->name;
+        //$audience_id = $this->audience->ID;
+        //return Audience::getCorpsNameByID(3);
+        //return  $this->audience->num. ' ' . $this->audience->name;
     }
 
 }

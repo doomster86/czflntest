@@ -10,8 +10,10 @@ use app\models\Practice;
 /**
  * SubjectsSearch represents the model behind the search form about `app\models\Subjects`.
  */
-class PracticeSearch extends Practice
-{
+class PracticeSearch extends Practice {
+
+    public $teacherName;
+
     /**
      * @inheritdoc
      */
@@ -19,7 +21,7 @@ class PracticeSearch extends Practice
     {
         return [
             [['ID', 'max_week'], 'integer', 'message' => 'Повинно бути числом'],
-            [['name', 'master_id'], 'safe'],
+            [['name', 'master_id', 'teacherName'], 'safe'],
         ];
     }
 
@@ -49,6 +51,20 @@ class PracticeSearch extends Practice
             'query' => $query,
         ]);
 
+        $dataProvider->setSort([
+            'attributes' => [
+                'ID',
+                'name',
+                'master_id',
+                'teacherName' => [
+                    'asc' => ['user.firstname' => SORT_ASC],
+                    'desc' => ['user.firstname' => SORT_DESC],
+                    'label' => 'Викладач'
+                ],
+                'max_week'
+            ]
+        ]);
+
         $this->load($params);
 
         if (!$this->validate()) {
@@ -70,6 +86,10 @@ class PracticeSearch extends Practice
 
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'master_id', $this->master_id]);
+
+        $query->joinWith(['user' => function ($q) {
+            $q->where('firstname LIKE "%' . $this->teacherName . '%" ' . 'OR middlename LIKE "%' . $this->teacherName . '%" ' . 'OR lastname LIKE "%' . $this->teacherName . '%"');
+        }]);
 
         return $dataProvider;
     }
