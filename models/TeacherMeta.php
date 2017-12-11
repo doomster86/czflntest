@@ -126,7 +126,7 @@ class TeacherMeta extends \yii\db\ActiveRecord
                 $result[] = $day_names[$i];
             }
         }
-        return implode(', ', $result);
+        return implode('. ', $result);
     }
 
 }

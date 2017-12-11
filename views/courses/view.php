@@ -7,6 +7,7 @@ use \app\models\Lessons;
 use yii\widgets\Pjax;
 use yii\data\ActiveDataProvider;
 use \app\models\Subjects;
+use \app\models\Practice;
 /* @var $this yii\web\View */
 /* @var $model app\models\Courses */
 /* @var $this yii\web\View */
@@ -38,8 +39,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php
 
-    //v($searchModel);
-    //$model = $modelLessons;
     echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -113,71 +112,99 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
 
     ]);
+    ?>
 
-/*
+    <hr />
+
+    <?php
+
+    echo $this->render('_formp', [
+        'model' => $model,
+        'modelPracticeLessons' => $modelPracticeLessons,
+        'practice' => $practice,
+        'status' => $status,
+        'test' => $test
+        //'id' => $model->ID,
+    ])
+
+    ?>
+    <hr />
+
+    <?php
+
     echo GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        'dataProvider' => $dataProviderPractice,
+        'filterModel' => $searchModelPractice,
         'emptyText' => 'Нічого не знайдено',
         'layout'=>"{pager}\n{summary}\n{items}\n{summary}\n{pager}",
+        'summary' => "<div class=\"summary\">Показано {begin} - {end} з {totalCount} практики</div>",
         'columns' => [
             //'ID',
-            'course_id',
-            'subject_id',
-            'quantity'
-        ],
-        [
-            'class' => 'yii\grid\ActionColumn',
-            'template' => '{update} {delete}',
 
-            'buttons' => [
-
-                'update' => function ($url, $model, $key) {
-                    return Html::a(
-                        "<span class=\"glyphicon glyphicon-pencil left\"></span>",
-                        $url,
-                        [
-                            'title' => 'Оновити',
-                            'aria-label' => 'Оновити',
-                            'alt' => 'Оновити',
-                            'data-pjax' => '0',
-                        ]
-                    );
+            [
+                'attribute' => 'practice_id',
+                'format' => 'text',
+                'label' => 'Практика',
+                'content' => function ($model, $key, $index, $column){
+                    $practice = Practice::find()->asArray()->where(['ID' => $model->practice_id])->one();
+                    return $practice['name'] . ' (' .$model->practice_id. ')';
                 },
-
-                'delete' => function ($url, $model, $key) {
-                    return Html::a(
-                        "<span class=\"glyphicon glyphicon-trash right\"></span>",
-                        $url,
-                        [
-                            'title' => 'Видалити',
-                            'aria-label' => 'Видалити',
-                            'alt' => 'Видалити',
-                            'data-pjax' => '0',
-                        ]
-                    );
-
-                },
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-6'];
+                }
             ],
+            [
+                'attribute' => 'quantity',
+                'format' => 'text',
+                'label' => 'Кількість занять',
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-5'];
+                }
+            ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'controller' => 'lessons',
+                'template' => '{update} {delete}',
 
-            'contentOptions' => function ($model, $key, $index, $column){
-                return ['class' => 'col-xs-1'];
-            }
+                'buttons' => [
 
+                    'update' => function ($url, $model, $key) {
+                        return Html::a(
+                            "<span class=\"glyphicon glyphicon-pencil left\"></span>",
+                            $url,
+
+                            [
+                                //'title' => v($model),
+                                'aria-label' => 'Оновити',
+                                'alt' => 'Оновити',
+                                'data-pjax' => '0',
+                            ]
+                        );
+                    },
+
+                    'delete' => function ($url, $model, $key) {
+                        return Html::a(
+                            "<span class=\"glyphicon glyphicon-trash right\"></span>",
+                            $url,
+                            [
+                                'title' => 'Видалити',
+                                'aria-label' => 'Видалити',
+                                'alt' => 'Видалити',
+                                'data-pjax' => '0',
+                            ]
+                        );
+
+                    },
+                ],
+
+                'contentOptions' => function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-1'];
+                }
+
+            ],
         ],
-    ]);
 
-    //хз что
-/*
-    echo DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            //'ID',
-            'name',
-            ''
-        ],
     ]);
-*/
     ?>
 
     <hr />

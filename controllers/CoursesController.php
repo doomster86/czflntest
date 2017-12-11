@@ -8,9 +8,12 @@ use yii\web\Controller;
 use app\models\Courses;
 use app\models\CoursesSearch;
 use app\models\Subjects;
+use app\models\Practice;
 use yii\helpers\Html;
 use app\models\Lessons;
 use app\models\LessonsSearch;
+use app\models\PracticeLessons;
+use app\models\PracticeLessonsSearch;
 
 use yii\web\NotFoundHttpException;
 
@@ -96,6 +99,7 @@ class CoursesController extends Controller {
 
         if(Yii::$app->user->identity->role==1) {
 
+            //lessons
             $searchModel = new LessonsSearch();
             $params = Yii::$app->request->queryParams;
             $params['course_id'] = $id;
@@ -122,6 +126,37 @@ class CoursesController extends Controller {
             $subjects = array_diff_key($subjects, $selected_subjects);
 
             $modelLessons = new Lessons();
+
+            //practice
+
+            $searchModelPractice = new PracticeLessonsSearch();
+            $params = Yii::$app->request->queryParams;
+            $params['practice_id'] = $id;
+            $dataProviderPractice = $searchModelPractice->search($params);
+            $dataProviderPractice->pagination = ['pageSize' => 15];
+
+            $model = $this->findModel($id);
+
+            $selected_practice = PracticeLessons::find()->asArray()->select('practice_id')->where(['course_id' => $id])->orderBy('practice_id')->all();
+            $selected_practice = ArrayHelper::getColumn($selected_practice, 'practice_id');
+            $selected_practice = array_combine($selected_practice, $selected_practice);
+
+            $practice_values = Practice::find()->asArray()->select('name')->orderBy('ID')->all();
+            $practice_values = ArrayHelper::getColumn($practice_values, 'name');
+
+            $practice_ids = Practice::find()->asArray()->select('ID')->orderBy('ID')->all();
+            $practice_ids = ArrayHelper::getColumn($practice_ids, 'ID');
+
+            $practice = array_combine($practice_ids, $practice_values);
+
+            $practice_add = array(0 => 'Оберіть виробничу практику');
+            $practice = ArrayHelper::merge($practice_add, $practice);
+
+            $practice = array_diff_key($practice, $selected_practice);
+
+            $modelPracticeLessons = new PracticeLessons();
+
+            //end practice
 
             if ($modelLessons->load(Yii::$app->request->post()) && $modelLessons->validate()) { //если нажата зеленая кнопка
 
@@ -157,29 +192,55 @@ class CoursesController extends Controller {
                     'test' => $selected_subjects,
                     'status' => 'added',
                 ]);
+            } elseif ($modelPracticeLessons->load(Yii::$app->request->post()) && $modelPracticeLessons->validate()) {
+                $modelPracticeLessons->course_id = $id;
+                $modelPracticeLessons->practice_id = Html::encode($modelPracticeLessons->practice_id); //select->option->value
+                $modelPracticeLessons->quantity = Html::encode($modelPracticeLessons->quantity);
+
+                $modelPracticeLessons->save(); //запись в таблицу
+
+                $selected_practice = PracticeLessons::find()->asArray()->select('practice_id')->where(['course_id' => $id])->orderBy('practice_id')->all();
+                $selected_practice = ArrayHelper::getColumn($selected_practice, 'practice_id');
+                $selected_practice = array_combine($selected_practice, $selected_practice);
+
+                $practice_values = Practice::find()->asArray()->select('name')->orderBy('ID')->all();
+                $practice_values = ArrayHelper::getColumn($practice_values, 'name');
+
+                $practice_ids = Practice::find()->asArray()->select('ID')->orderBy('ID')->all();
+                $practice_ids = ArrayHelper::getColumn($practice_ids, 'ID');
+
+                $practice = array_combine($practice_ids, $practice_values);
+
+                $practice_add = array(0 => 'Оберіть предмет');
+                $practice = ArrayHelper::merge($practice_add, $practice);
+
+                $practice = array_diff_key($practice, $selected_practice);
+
+                return $this->render('view', [
+                    'searchModelPractice' => $searchModelPractice,
+                    'dataProviderPractice' => $dataProviderPractice,
+                    'model' => $model,
+                    'modelPracticeLessons' => $modelPracticeLessons,
+                    'practice' => $practice,
+                    'test' => $selected_practice,
+                    'status' => 'PAdded',
+                ]);
             } else { //если зашли первый раз
                 return $this->render('view', [
                     'searchModel' => $searchModel,
+                    'searchModelPractice' => $searchModelPractice,
                     'dataProvider' => $dataProvider,
+                    'dataProviderPractice' => $dataProviderPractice,
                     'model' => $model,
                     'modelLessons' => $modelLessons,
+                    'modelPracticeLessons' => $modelPracticeLessons,
                     'subjects' => $subjects,
+                    'practice' => $practice,
                     'test' => $selected_subjects,
                     'operation' => '',
                     'status' => ''
                 ]);
             }
-            /*
-            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-
-                return $this->render('view', [
-                    'model' => $this->findModel($id),
-                    //'subjects' => $subjects,
-                ]);
-            } else {
-
-            }
-            */
         } else {
             return $this->render('/site/access_denied');
         }
