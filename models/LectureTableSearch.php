@@ -58,8 +58,8 @@ class LectureTableSearch extends LectureTable {
 		        'corps_id',
 
 			    'corpsName' => [
-				    'asc' => ['corps.name' => SORT_ASC],
-				    'desc' => ['corps.name' => SORT_DESC],
+				    'asc' => ['corps.corps_name' => SORT_ASC],
+				    'desc' => ['corps.corps_name' => SORT_DESC],
 				    'label' => 'Корпус'
 			    ]
 		    ]
@@ -83,7 +83,7 @@ class LectureTableSearch extends LectureTable {
             ->andFilterWhere(['like', 'time_stop', $this->time_stop]);
 
 	    $query->joinWith(['corps' => function ($q) {
-		    $q->where('corps.name LIKE "%' . $this->corpsName . '%"');
+		    $q->where('corps.corps_name LIKE "%' . $this->corpsName . '%"');
 	    }]);
 
         return $dataProvider;

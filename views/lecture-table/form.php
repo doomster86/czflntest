@@ -17,12 +17,6 @@ Pjax::begin([
 ?>
 
 <div class="lecture-table-form">
-    <?php
-    $time1 = '0:05';
-    $startsec = strtotime('01/01/1970'.$time1.' gmt').'<br/>';
-    $stopsec = strtotime('01/01/1970 '.$time1.' gmt').'<br/>';
-    //echo $startsec;
-    ?>
     <?php if (Html::encode($status_form) == 'created') : ?>
         <div class="alert alert-success">
             <p>Додано нову пару. </p>
@@ -87,7 +81,7 @@ Pjax::begin([
     <?= $form->field($model, 'corps_id')->label('Корпус')->dropDownList($model->getCorpsNames()) ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Додати' : 'Оновити', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($current_action == 'create' ? 'Додати' : 'Оновити', ['class' => $current_action == 'create' ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

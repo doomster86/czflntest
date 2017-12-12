@@ -22,7 +22,7 @@ Pjax::begin([
             <p>Додано нову аудиторію. </p>
             <p>Назва: <strong><?= Html::encode($model->name) ?></strong></p>
             <p>Номер: <strong><?= Html::encode($model->num) ?></strong></p>
-            <p>Корпус: <strong><?= Html::encode($model->corps_id) ?></strong></p>
+            <p>Корпус: <strong><?= $model->getCorpsNameByAudienceID($model->ID); ?></strong></p>
         </div>
     <?php endif; ?>
 
@@ -67,13 +67,13 @@ Pjax::begin([
 
     <?php
         $options = array(
-                'options' =>  [
-                        0 => [
-                                'disabled' => true,
-	                            'selected' => 'selected',
-                        ],
-                        //1 => ...
-                ]
+            'options' =>  [
+                0 => [
+                    'disabled' => true,
+                    'selected' => 'selected',
+                ],
+                //1 => ...
+            ]
         );
         //['options' => [0 => ['disabled' => true]]]
     ?>

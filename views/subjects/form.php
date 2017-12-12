@@ -11,22 +11,15 @@ Pjax::begin([
 
 <div class="subjects-form">
 
-    <?php
-    if( Html::encode($status_form) == 'created'):
-        $name = Html::encode($model->name);
-        $teacher = Html::encode($model->teacher);
-        $max_week = Html::encode($model->max_week);
-        ?>
+    <?php if( Html::encode($status_form) == 'created'): ?>
 
         <div class="alert alert-success">
             <p>Новий предмет створено!</p>
-            <p>Назва предмету: <strong><?= $name; ?></strong></p>
-            <p>Викладач: <strong><?= $teacher; ?></strong></p>
-            <p>Макс. на тиждень: <strong><?= $max_week; ?></strong></p>
+            <p>Назва предмету: <strong><?= Html::encode($model->name); ?></strong></p>
+            <p>Викладач: <strong><?= $model->getTeacherNameById($model->teacher_id) ?></strong></p>
+            <p>Макс. на тиждень: <strong><?= Html::encode($model->max_week); ?></strong></p>
         </div>
-
-        <?php
-    endif;
+    <?php endif;
 
     if( Html::encode($status_form) == 'updated'):
         ?>
@@ -37,9 +30,13 @@ Pjax::begin([
     endif;
 
     $form = ActiveForm::begin([
-        'options' => ['data' => ['pjax' => true], 'id' => 'subjects-form'],
+        'options' => [
+                'data' => [
+                        'pjax' => true
+                ],
+            'id' => 'subjects-form'
+        ],
     ]);
-
     ?>
 
     <?php
@@ -73,7 +70,6 @@ Pjax::begin([
         ]
     );
 
-
     echo $form->field($model, 'teacher_id')->label('Оберіть викладача')->dropDownList($model->getTeachersNames(), $options);
 
     echo $form->field($model, 'audience_id')->label('Оберіть аудиторію')->dropDownList($model->getAudienceNames(), $options);
@@ -89,10 +85,8 @@ Pjax::begin([
 
     ?>
 
-
-
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Створити' : 'Оновити', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($current_action == 'create' ? 'Створити' : 'Оновити', ['class' => $current_action == 'create' ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

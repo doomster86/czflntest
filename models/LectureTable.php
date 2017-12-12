@@ -68,13 +68,13 @@ class LectureTable extends \yii\db\ActiveRecord {
 
     //для поиска
     public function getCorpsName() {
-        return $this->corps->name;
+        return $this->corps->corps_name;
     }
 
     public function getCorpsNames() {
 
-        $corps_values = Corps::find()->asArray()->select('name')->orderBy('ID')->all();
-        $corps_values = ArrayHelper::getColumn($corps_values, 'name');
+        $corps_values = Corps::find()->asArray()->select('corps_name')->orderBy('ID')->all();
+        $corps_values = ArrayHelper::getColumn($corps_values, 'corps_name');
 
         $corps_ids = Corps::find()->asArray()->select('ID')->orderBy('ID')->all();
         $corps_ids = ArrayHelper::getColumn($corps_ids, 'ID');

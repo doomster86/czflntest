@@ -150,4 +150,9 @@ class Subjects extends \yii\db\ActiveRecord {
         //return  $this->audience->num. ' ' . $this->audience->name;
     }
 
+    public function getTeacherNameById($id) {
+        $user_name = User::find()->asArray()->select(["CONCAT(firstname, ' ', middlename, ' ',lastname) AS full_name"])->where(['id' => $id])->one();
+        return $user_name['full_name'];
+    }
+
 }

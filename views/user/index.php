@@ -17,7 +17,12 @@ $this->params['breadcrumbs'][] = $this->title;
 Relevator::register($this);
 ?>
 <div class="user-index">
-
+<style>
+    .row-flex {
+        display: flex;
+        flex-flow: row wrap;
+    }
+</style>
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
@@ -133,19 +138,19 @@ Relevator::register($this);
  */ ?>
 
     <h2 class="scroller">Гортайте вниз для перегляду ↓↓↓</h2>
-
+    <h4 class='clicktxt'>Натисніть на зображення для редагування</h4>
     <?php
 
     echo ListView::widget([
         'dataProvider' => $dataProvider,
         'itemView' => '_list',
-        'layout' => "<h4 class='clicktxt'>Натисніть на зображення для редагування</h4>{items}\n{summary}\n{pager}",
+        'layout' => "{items}\n{summary}\n{pager}",
         'summary' => "<div class='summary'>Показано {begin} - {end} з {totalCount} користувачів</div>",
-        'options' => ['id'    => 'userlist-wrapper',],
+        'options' => ['id'    => 'userlist-wrapper', 'class' => 'row-flex'],
         'itemOptions' =>function ($model, $key, $index, $widget){
             return [
                 'tag' => 'div',
-                'class' => 'col-md-4 left revealator-once revealator-slideleft revealator-delay'.$index,
+                'class' => 'col-xs-12 col-sm-6 col-md-4 left revealator-once revealator-slideleft revealator-delay'.$index,
             ];
         }
     ]);

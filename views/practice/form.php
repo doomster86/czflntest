@@ -11,22 +11,16 @@ Pjax::begin([
 
 <div class="subjects-form">
 
-    <?php
-    if( Html::encode($status_form) == 'created'):
-        $name = Html::encode($model->name);
-        $teacher = Html::encode($model->teacher);
-        $max_week = Html::encode($model->max_week);
-        ?>
+    <?php if( Html::encode($status_form) == 'created'): ?>
 
         <div class="alert alert-success">
             <p>Нову практику створено!</p>
-            <p>Назва практики: <strong><?= $name; ?></strong></p>
-            <p>Викладач: <strong><?= $teacher; ?></strong></p>
-            <p>Макс. на тиждень: <strong><?= $max_week; ?></strong></p>
+            <p>Назва практики: <strong><?= Html::encode($model->name); ?></strong></p>
+            <p>Викладач: <strong><?= $model->getTeacherNameById($model->master_id) ?></strong></p>
+            <p>Макс. на тиждень: <strong><?= Html::encode($model->max_week); ?></strong></p>
         </div>
 
-        <?php
-    endif;
+    <?php endif;
 
     if( Html::encode($status_form) == 'updated'):
         ?>
@@ -90,7 +84,7 @@ Pjax::begin([
 
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Створити' : 'Оновити', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($current_action == 'create' ? 'Створити' : 'Оновити', ['class' => $current_action == 'create' ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

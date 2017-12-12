@@ -48,6 +48,4 @@ class Corps extends \yii\db\ActiveRecord
     {
         return $this->hasMany(LectureTable::className(), ['corps_id' => 'ID']);
     }
-
-
 }
