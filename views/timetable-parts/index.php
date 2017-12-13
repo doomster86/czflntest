@@ -1,0 +1,36 @@
+<?php
+
+use yii\helpers\Html;
+use yii\grid\GridView;
+
+/* @var $this yii\web\View */
+/* @var $searchModel app\models\TimetablePartsSearch */
+/* @var $dataProvider yii\data\ActiveDataProvider */
+
+$this->title = 'Timetable Parts';
+$this->params['breadcrumbs'][] = $this->title;
+?>
+<div class="timetable-parts-index">
+
+    <h1><?= Html::encode($this->title) ?></h1>
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
+    <p>
+        <?= Html::a('Create Timetable Parts', ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            'id',
+            'datestart',
+            'dateend',
+            'cols',
+            'rows',
+
+            ['class' => 'yii\grid\ActionColumn'],
+        ],
+    ]); ?>
+</div>
