@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Timetable;
+use app\models\TimetableCreator;
 use app\models\TimetableSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -14,20 +15,6 @@ use yii\filters\VerbFilter;
  */
 class TimetableController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
 
     /**
      * Lists all Timetable models.
@@ -63,7 +50,7 @@ class TimetableController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Timetable();
+        $model = new TimetableCreator();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);

@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Timetable */
 
-$this->title = 'Create Timetable';
-$this->params['breadcrumbs'][] = ['label' => 'Timetables', 'url' => ['index']];
+$this->title = 'Створити розклад';
+$this->params['breadcrumbs'][] = ['label' => 'Розклад', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="timetable-create">

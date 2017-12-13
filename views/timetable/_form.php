@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use bootui\datepicker\Datepicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Timetable */
@@ -12,24 +13,18 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'corps_id')->textInput() ?>
+    <?=  $form->field($model, 'datestart')
+        ->label('Дата початку')
+        ->widget(DatePicker::className(),[
+        ]); ?>
 
-    <?= $form->field($model, 'audience_id')->textInput() ?>
-
-    <?= $form->field($model, 'subjects_id')->textInput() ?>
-
-    <?= $form->field($model, 'teacher_id')->textInput() ?>
-
-    <?= $form->field($model, 'group_id')->textInput() ?>
-
-    <?= $form->field($model, 'lecture_id')->textInput() ?>
-
-    <?= $form->field($model, 'date')->textarea(['rows' => 6]) ?>
-
-    <?= $form->field($model, 'status')->textInput() ?>
+    <?=  $form->field($model, 'dateend')
+        ->label('Дата кінця')
+        ->widget(DatePicker::className(),[
+        ]); ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton('Create', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

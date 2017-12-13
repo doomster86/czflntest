@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\TimetableSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Timetables';
+$this->title = 'Розклад';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="timetable-index">
@@ -29,10 +29,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'audience_id',
             'subjects_id',
             'teacher_id',
-            // 'group_id',
-            // 'lecture_id',
-            // 'date:ntext',
-            // 'status',
+            'group_id',
+            'lecture_id',
+            'date:ntext',
+            'status',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

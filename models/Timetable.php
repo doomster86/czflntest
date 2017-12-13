@@ -26,6 +26,10 @@ use Yii;
  */
 class Timetable extends \yii\db\ActiveRecord
 {
+
+    public $datestart;
+    public $dateend;
+
     /**
      * @inheritdoc
      */
