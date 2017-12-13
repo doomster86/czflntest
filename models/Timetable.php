@@ -44,8 +44,8 @@ class Timetable extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['corps_id', 'audience_id', 'subjects_id', 'teacher_id', 'group_id', 'lecture_id', 'date', 'status'], 'required'],
-            [['corps_id', 'audience_id', 'subjects_id', 'teacher_id', 'group_id', 'lecture_id', 'status'], 'integer'],
+            [['corps_id', 'audience_id', 'subjects_id', 'teacher_id', 'group_id', 'lecture_id', 'date', 'status','part_id', 'x', 'y'], 'required'],
+            [['corps_id', 'audience_id', 'subjects_id', 'teacher_id', 'group_id', 'lecture_id', 'status','part_id', 'x', 'y'], 'integer'],
             [['date'], 'string'],
             [['corps_id'], 'exist', 'skipOnError' => true, 'targetClass' => Corps::className(), 'targetAttribute' => ['corps_id' => 'ID']],
             [['audience_id'], 'exist', 'skipOnError' => true, 'targetClass' => Audience::className(), 'targetAttribute' => ['audience_id' => 'ID']],
@@ -71,6 +71,9 @@ class Timetable extends \yii\db\ActiveRecord
             'lecture_id' => 'Lecture ID',
             'date' => 'Date',
             'status' => 'Status',
+            'part_id' => 'Part ID',
+            'x' => 'X',
+            'y' => 'y',
         ];
     }
 
@@ -120,5 +123,10 @@ class Timetable extends \yii\db\ActiveRecord
     public function getLecture()
     {
         return $this->hasOne(LectureTable::className(), ['ID' => 'lecture_id']);
+    }
+
+    public function getPartId()
+    {
+        return $this->hasOne(LectureTable::className(), ['id' => 'part_id']);
     }
 }

@@ -50,9 +50,20 @@ class TimetableController extends Controller
      */
     public function actionCreate()
     {
-        $model = new TimetableCreator();
+        $model = new TimetableParts();
+        $timetable = new Timetable();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            /*
+             * получаем дату начала и конца генерации расписания
+             * формируем сетку
+             * - формируем кол-во столбцов по количеству дней от начала до конца дат генерации
+             * - формируем кол-во строк по максимальному количеству пар среди корпусов
+             * записываем в тиблицу timetable_parts даты начала и конца генерации расписания, количество строки и столбцов
+             * по заданным правилам наполняем сетку занятиями, указывая id расписания (чтобы было можно хранить их в памяти)
+             *  указываем координаты ячейки расписания в сетке с данным id
+             * Правила формирования:
+             */
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
