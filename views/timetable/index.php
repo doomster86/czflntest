@@ -38,3 +38,43 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 </div>
+
+<div class="generate-timetable">
+	<?php
+
+	function renderTable($rows, $cols) {
+		echo '<table class="table table-striped table-bordered">';
+		for ($tr = 0; $tr <= $rows; $tr++) {
+			if (!$tr) {
+				echo '<thead><tr>';
+				for ($td = 0; $td <= count($cols); $td++) {
+				    if (!$td) {
+					    echo '<th>#</th>';
+                    } else {
+					    echo '<th>' . $cols[$td-1] . '</th>';
+				    }
+				}
+				echo '</tr></thead>';
+			} else {
+				echo '<tr>';
+				for ($td = 0; $td <= count($cols); $td++) {
+					if (!$td) {
+						echo '<td>' . $tr . '</td>';
+					} else {
+						echo '<td>' . 'tr = ' . $tr . '; td = ' . $td . '</td>';
+					}
+				}
+				echo '</tr>';
+			}
+		}
+		echo "</table>";
+	}
+
+
+	$cols_array = array (
+		'col1', 'col2', 'col3', 'col4', 'col5', 'col6'
+	);
+	renderTable(10,$cols_array);
+
+	?>
+</div>
