@@ -24,8 +24,9 @@ class TimetableController extends Controller
     {
         $searchModel = new TimetableSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        $model = new Timetable();
         return $this->render('index', [
+            'model' => $model,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);

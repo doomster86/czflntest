@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-
+use \app\models\Timetable;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\TimetableSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -38,43 +38,10 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 </div>
-
+<hr />
 <div class="generate-timetable">
+    <h3>$model->renderTable()</h3>
 	<?php
-
-	function renderTable($rows, $cols) {
-		echo '<table class="table table-striped table-bordered">';
-		for ($tr = 0; $tr <= $rows; $tr++) {
-			if (!$tr) {
-				echo '<thead><tr>';
-				for ($td = 0; $td <= count($cols); $td++) {
-				    if (!$td) {
-					    echo '<th>#</th>';
-                    } else {
-					    echo '<th>' . $cols[$td-1] . '</th>';
-				    }
-				}
-				echo '</tr></thead>';
-			} else {
-				echo '<tr>';
-				for ($td = 0; $td <= count($cols); $td++) {
-					if (!$td) {
-						echo '<td>' . $tr . '</td>';
-					} else {
-						echo '<td>' . 'tr = ' . $tr . '; td = ' . $td . '</td>';
-					}
-				}
-				echo '</tr>';
-			}
-		}
-		echo "</table>";
-	}
-
-
-	$cols_array = array (
-		'col1', 'col2', 'col3', 'col4', 'col5', 'col6'
-	);
-	renderTable(10,$cols_array);
-
+	echo $model->renderTable(27);
 	?>
 </div>

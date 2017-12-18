@@ -79,8 +79,6 @@ $form = ActiveForm::begin([
     </div>
 </div>
 
-<?php
-
-ActiveForm::end(); ?>
+<?php ActiveForm::end(); ?>
 
 <?php Pjax::end(); ?>

@@ -3,7 +3,8 @@
 namespace app\models;
 
 use Yii;
-
+use yii\helpers\ArrayHelper;
+use \app\models\TimetableParts;
 /**
  * This is the model class for table "timetable".
  *
@@ -129,4 +130,55 @@ class Timetable extends \yii\db\ActiveRecord
     {
         return $this->hasOne(LectureTable::className(), ['id' => 'part_id']);
     }
+
+    public function renderTable($id) {
+
+        $timetable = new TimetableParts();
+        /*
+        $rows = $timetable->find()->asArray()->select('rows')->where(['id' => $id])->all();
+        $rows = ArrayHelper::getColumn($rows, 'rows');
+        $rows = $rows[0];
+        $cols = $timetable->find()->asArray()->select('cols')->where(['id' => $id])->all();
+        $cols = ArrayHelper::getColumn($cols, 'cols');
+        $cols = $cols[0];
+        */
+        $date_array = $timetable->find()->asArray()->where(['id' => $id])->all();
+        $date_array = $date_array[0];
+        $datestart = $date_array['datestart'];
+        $datestart = (int)$datestart;
+        $cols = $date_array['cols'];
+        $rows = $date_array['rows'];
+
+        $output = '<table class="table table-striped table-bordered">';
+        for ($tr = 0; $tr <= $rows; $tr++) {
+            if (!$tr) {
+                $output .= '<thead><tr>';
+                for ($td = 0; $td <= $cols; $td++) {
+                    if (!$td) {
+                        $output .= '<th>#</th>';
+                    } else {
+                        //date('l', $datestart)
+                        $output .= '<th>'.date('l', $datestart).'</th>';
+                        $datestart = $datestart + 86400;
+                    }
+                }
+                $output .= '</tr></thead>';
+            } else {
+                $output .= '<tr>';
+                for ($td = 0; $td <= $cols; $td++) {
+                    if (!$td) {
+                        $output .= '<td>' . $tr . '</td>';
+                    } else {
+                        $output .= '<td>' . 'tr = ' . $tr . '; td = ' . $td . '</td>';
+                    }
+                }
+                $output .= '</tr>';
+            }
+        }
+        $output .= "</table>";
+
+        return $output;
+
+    }
+
 }
