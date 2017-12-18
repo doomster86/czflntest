@@ -146,10 +146,13 @@ class Timetable extends \yii\db\ActiveRecord
         $date_array = $date_array[0];
         $datestart = $date_array['datestart'];
         $datestart = (int)$datestart;
+        $dateend = $date_array['dateend'];
+        $dateend = (int)$dateend;
         $cols = $date_array['cols'];
         $rows = $date_array['rows'];
 
-        $output = '<table class="table table-striped table-bordered">';
+        $output = '<h2>Розклад з ' . date('d/m/Y', $datestart) . ' по ' . date('d/m/Y', $dateend) . '</h2>';
+        $output .= '<table class="table table-striped table-bordered">';
         for ($tr = 0; $tr <= $rows; $tr++) {
             if (!$tr) {
                 $output .= '<thead><tr>';
@@ -158,7 +161,7 @@ class Timetable extends \yii\db\ActiveRecord
                         $output .= '<th>#</th>';
                     } else {
                         //date('l', $datestart)
-                        $output .= '<th>'.date('l', $datestart).'</th>';
+                        $output .= '<th>'.date('l', $datestart). ' (' . date('d/m/Y', $datestart) . ')</th>';
                         $datestart = $datestart + 86400;
                     }
                 }
