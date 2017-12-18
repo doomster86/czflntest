@@ -2,29 +2,33 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use bootui\datepicker\Datepicker;
+use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Timetable */
+/* @var $model app\models\TimetableParts */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="timetable-form">
+<div class="timetable-parts-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <?php
+    //$datetime = strtotime('now');
+    //echo $datetime;
+    //echo Yii::$app->dtConverter->toDisplayDate($datetime);
+    ?>
+
     <?=  $form->field($model, 'datestart')
-        ->label('Дата початку')
         ->widget(DatePicker::className(),[
         ]); ?>
 
     <?=  $form->field($model, 'dateend')
-        ->label('Дата кінця')
         ->widget(DatePicker::className(),[
         ]); ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Create', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
