@@ -2,12 +2,13 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use app\models\LectureTable;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\TimetableParts */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Timetable Parts', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Розклади', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="timetable-parts-view">

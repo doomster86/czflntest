@@ -15,21 +15,6 @@ use yii\filters\VerbFilter;
 class TimetablePartsController extends Controller
 {
     /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
-
-    /**
      * Lists all TimetableParts models.
      * @return mixed
      */
@@ -73,7 +58,8 @@ class TimetablePartsController extends Controller
             * записываем в тиблицу timetable_parts даты начала и конца генерации расписания, количество строки и столбцов
              */
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->seveStrtotime();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [

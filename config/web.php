@@ -5,6 +5,7 @@ $db = require(__DIR__ . '/db.php');
 
 $config = [
     'id' => 'basic',
+    'language' => 'uk-UK',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => [
@@ -40,6 +41,22 @@ $config = [
             ],
         ],
         'db' => $db,
+        'dtConverter' => [
+            'class' => 'bupy7\datetime\converter\Converter',
+            // 'saveTimeZone' => 'UTC' - by default
+            // 'saveDate' => 'php:Y-m-d' - by default
+            // 'saveTime' => 'php:H:i:s' - by default
+            // 'saveDateTime' => 'php:U' - by default
+            // add format patterns if need for your locales (by default uses `en`)
+            'patterns' => [
+                'uk-UK' => [
+                    'displayTimeZone' => 'GMT+2',
+                    'displayDate' => 'php:d.m.Y',
+                    'displayTime' => 'php:H:i',
+                    'displayDateTime' => 'php:d.m.Y, H:i',
+                ],
+            ],
+        ],
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,

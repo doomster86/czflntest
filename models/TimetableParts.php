@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use bupy7\datetime\converter\ConverterBehavior;
 
 /**
  * This is the model class for table "timetable_parts".
@@ -31,8 +32,9 @@ class TimetableParts extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['datestart', 'dateend', 'cols', 'rows'], 'required'],
-            [['datestart', 'dateend', 'cols', 'rows'], 'integer'],
+            [['datestart', 'dateend'], 'required'],
+            [['cols', 'rows'], 'safe'],
+            [['cols', 'rows'], 'integer'],
         ];
     }
 
@@ -43,8 +45,8 @@ class TimetableParts extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'datestart' => 'Datestart',
-            'dateend' => 'Dateend',
+            'datestart' => 'Дата початку',
+            'dateend' => 'Дата кінця',
             'cols' => 'Cols',
             'rows' => 'Rows',
         ];
@@ -56,5 +58,25 @@ class TimetableParts extends \yii\db\ActiveRecord
     public function getTimetables()
     {
         return $this->hasMany(Timetable::className(), ['corps_id' => 'id']);
+    }
+
+    public function seveStrtotime() {
+        $datestart = strtotime($this->datestart);
+        $dateend = strtotime($this->dateend);
+
+        $this->datestart = $datestart;
+        $this->dateend = $dateend;
+
+        $lecturesCounter = LectureTable::find()
+            ->asArray()
+            ->select(['COUNT(corps_id) AS corps_id'])
+            ->groupBy(['corps_id'])
+            ->all();
+        $lecturesCounter = max($lecturesCounter);
+        $lecturesCounter = $lecturesCounter['corps_id'];
+
+        $this->cols = ($dateend - $datestart)/(60*60*24)+1;
+        $this->rows = $lecturesCounter;
+        $this->save();
     }
 }
