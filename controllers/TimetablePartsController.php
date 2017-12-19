@@ -50,15 +50,14 @@ class TimetablePartsController extends Controller
     {
         $model = new TimetableParts();
 
-        /*
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            /*
             * получаем дату начала и конца генерации расписания
             * формируем сетку
             * - формируем кол-во столбцов по количеству дней от начала до конца дат генерации
             * - формируем кол-во строк по максимальному количеству пар среди корпусов
             * записываем в тиблицу timetable_parts даты начала и конца генерации расписания, количество строки и столбцов
-             */
-
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            */
             $model->seveStrtotime();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {

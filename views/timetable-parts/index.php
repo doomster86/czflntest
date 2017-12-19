@@ -9,6 +9,7 @@ use yii\grid\GridView;
 
 $this->title = 'Розклади';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="timetable-parts-index">
 
@@ -16,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Timetable Parts', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Створити новий розклад', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -33,7 +34,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'text',
                 'label' => 'Дата початку розкладу',
                 'content' => function ($model, $key, $index, $column){
-                    return Yii::$app->dtConverter->toDisplayDate($model->datestart);
+                    $formatter = new \yii\i18n\Formatter;
+                    return $formatter->asDate($model->datestart, 'dd.MM.yyyy');
                 },
                 'contentOptions' =>function ($model, $key, $index, $column){
                     return ['class' => 'col-xs-5'];
@@ -45,7 +47,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'text',
                 'label' => 'Дата кінця розкладу',
                 'content' => function ($model, $key, $index, $column){
-                    return Yii::$app->dtConverter->toDisplayDate($model->dateend);
+                    $formatter = new \yii\i18n\Formatter;
+                    return $formatter->asDate($model->dateend, 'dd.MM.yyyy');
                 },
                 'contentOptions' =>function ($model, $key, $index, $column){
                     return ['class' => 'col-xs-5'];

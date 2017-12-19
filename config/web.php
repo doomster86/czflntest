@@ -41,8 +41,15 @@ $config = [
             ],
         ],
         'db' => $db,
+        'formatter' => [
+            'class' => 'yii\i18n\Formatter',
+            'dateFormat' => 'dd.MM.yyyy',
+            'timeZone' => 'Europe/Kiev',
+            'locale' => 'uk-UK'
+        ],
         'dtConverter' => [
             'class' => 'bupy7\datetime\converter\Converter',
+            'saveTimeZone' => 'Europe/Kiev',
             // 'saveTimeZone' => 'UTC' - by default
             // 'saveDate' => 'php:Y-m-d' - by default
             // 'saveTime' => 'php:H:i:s' - by default
@@ -50,7 +57,6 @@ $config = [
             // add format patterns if need for your locales (by default uses `en`)
             'patterns' => [
                 'uk-UK' => [
-                    'displayTimeZone' => 'GMT+2',
                     'displayDate' => 'php:d.m.Y',
                     'displayTime' => 'php:H:i',
                     'displayDateTime' => 'php:d.m.Y, H:i',

@@ -151,7 +151,8 @@ class Timetable extends \yii\db\ActiveRecord
         $cols = $date_array['cols'];
         $rows = $date_array['rows'];
 
-        $output = '<h2>Розклад з ' . date('d/m/Y', $datestart) . ' по ' . date('d/m/Y', $dateend) . '</h2>';
+        $formatter = new \yii\i18n\Formatter;
+        $output = '<h2>Розклад з ' . $formatter->asDate($datestart, "dd.MM.yyyy") . ' по ' . $formatter->asDate($dateend, "dd.MM.yyyy") . '</h2>';
         $output .= '<table class="table table-striped table-bordered">';
         for ($tr = 0; $tr <= $rows; $tr++) {
             if (!$tr) {
@@ -160,8 +161,33 @@ class Timetable extends \yii\db\ActiveRecord
                     if (!$td) {
                         $output .= '<th>#</th>';
                     } else {
-                        //date('l', $datestart)
-                        $output .= '<th>'.date('l', $datestart). ' (' . date('d/m/Y', $datestart) . ')</th>';
+                        $days = array ("Понеділок", "Вівторок", "Середа", "Четвер", "П'ятниця", "Суббота", "Неділля");
+                        $day = $formatter->asDate($datestart, "l");
+                        switch ($day) {
+                            case 'Monday':
+                                $day = $days[0];
+                                break;
+                            case 'Tuesday':
+                                $day = $days[1];
+                                break;
+                            case 'Wednesday':
+                                $day = $days[2];
+                                break;
+                            case 'Thursday':
+                                $day = $days[3];
+                                break;
+                            case 'Friday':
+                                $day = $days[4];
+                                break;
+                            case 'Saturday':
+                                $day = $days[5];
+                                break;
+                            case 'Sunday':
+                                $day = $days[6];
+                                break;
+                        }
+                        $date = $formatter->asDate($datestart, "dd.MM.yyyy");
+                        $output .= '<th>'. $date . '<br/>' . $day . '</th>';
                         $datestart = $datestart + 86400;
                     }
                 }
