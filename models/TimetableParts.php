@@ -35,7 +35,25 @@ class TimetableParts extends \yii\db\ActiveRecord
             [['datestart', 'dateend'], 'required'],
             [['cols', 'rows'], 'safe'],
             [['cols', 'rows'], 'integer'],
+            [['dateend', 'datestart'], 'validateDateend'],
         ];
+    }
+
+    public function validateDateend($attribute, $params)
+    {
+        $datestart = strtotime($this->datestart);
+        $dateend = strtotime($this->dateend);
+
+        if ($dateend < $datestart) {
+            $this->addError($attribute, 'Дата кінця не може бути меншою за дату початку');
+        }
+
+        $timetableParts = $this->find()
+            ->asArray()
+            ->select('datestart, dateend')
+            ->all();
+
+        //$dateStart = ArrayHelper::getColumn($corps_ids, 'ID');
     }
 
     /**

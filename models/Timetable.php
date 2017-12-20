@@ -161,7 +161,7 @@ class Timetable extends \yii\db\ActiveRecord
                     if (!$td) {
                         $output .= '<th>#</th>';
                     } else {
-                        $days = array ("Понеділок", "Вівторок", "Середа", "Четвер", "П'ятниця", "Суббота", "Неділля");
+                        $days = array ("Понеділок", "Вівторок", "Середа", "Четвер", "П'ятниця", "Субота", "Неділя");
                         $day = $formatter->asDate($datestart, "l");
                         switch ($day) {
                             case 'Monday':
