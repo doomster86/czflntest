@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use bupy7\datetime\converter\ConverterBehavior;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "timetable_parts".
@@ -53,7 +54,15 @@ class TimetableParts extends \yii\db\ActiveRecord
             ->select('datestart, dateend')
             ->all();
 
-        //$dateStart = ArrayHelper::getColumn($corps_ids, 'ID');
+        $dateStartAr = ArrayHelper::getColumn($timetableParts, 'datestart');
+        $dateEndAr = ArrayHelper::getColumn($timetableParts, 'dateend');
+        $arrLenght = count($dateStartAr);
+
+        for ($i = 0; $i < $arrLenght; $i++) {
+            if($datestart <= $dateEndAr[$i] && $dateend >= $dateStartAr[$i]) {
+                $this->addError($attribute, 'Ці дати попадають в вже існуючий період. Оберіть інші дати.');
+            }
+        }
     }
 
     /**
