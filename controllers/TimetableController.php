@@ -54,12 +54,6 @@ class TimetableController extends Controller
         $model = new Timetable();
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            /*
-             * получаем дату начала и конца генерации расписания, размерность сетки, id расписания
-             * по заданным правилам наполняем сетку занятиями
-             *  указываем координаты ячейки расписания в сетке с данным id
-             * Правила формирования:
-             */
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [

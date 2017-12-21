@@ -3,7 +3,6 @@
 namespace app\models;
 
 use Yii;
-use bupy7\datetime\converter\ConverterBehavior;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -87,7 +86,7 @@ class TimetableParts extends \yii\db\ActiveRecord
         return $this->hasMany(Timetable::className(), ['corps_id' => 'id']);
     }
 
-    public function seveStrtotime() {
+    public function seveTimetableParts() {
         $datestart = strtotime($this->datestart);
         $dateend = strtotime($this->dateend);
 
@@ -105,5 +104,35 @@ class TimetableParts extends \yii\db\ActiveRecord
         $this->cols = ($dateend - $datestart)/(60*60*24)+1;
         $this->rows = $lecturesCounter;
         $this->save();
+        $this->generate();
+    }
+
+    public function generate() {
+        $timetable = new Timetable();
+
+        //все преподаватели users (role 2)
+        $teachers = new User;
+        $allTeachers = $teachers->find()
+            ->asArray()
+            ->where(['role' => 2])
+            ->all();
+
+        //все завершённые лекции count_lecture
+
+        //все лекции, закреплённые за профессиями lessons и оставшееся их кол-во
+
+        //желаемые\обязательные аудитории для лекций subjects
+
+        //вся практика и осташееся её кол-во practice_lessons
+
+        //все корпуса corps
+
+        //все пары lecture_table
+
+        //всі аудиторії audience
+
+        //echo '<pre>';
+        //echo var_dump($allTeachers);
+        //die('</pre>');
     }
 }

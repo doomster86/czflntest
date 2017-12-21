@@ -41,6 +41,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <hr />
 <div class="generate-timetable">
 	<?php
-	echo $model->renderTable(48);
+	echo $model->renderTable(57);
 	?>
 </div>
