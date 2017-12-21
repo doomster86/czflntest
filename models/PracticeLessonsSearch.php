@@ -35,6 +35,7 @@ class PracticeLessonsSearch extends PracticeLessons {
             return $dataProviderPractice;
         }
 
+
         // grid filtering conditions cюда цифры
         $query->andFilterWhere([
             'ID' => $this->ID,
