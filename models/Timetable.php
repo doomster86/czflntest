@@ -328,19 +328,11 @@ class Timetable extends \yii\db\ActiveRecord
         $rows_num = $date_array['rows'];
 
         foreach ($input_array as &$value) {
-            //$value['date'] = ( (strtotime( $value['date'] ) - $datestart ) % 86400 ) + 1 ;
             $value['date'] = (strtotime( $value['date']) - $datestart)/86400+1;
-            //$value['date'] =  strtotime( $value['date']);
         }
-        $output .= v($input_array);
-        //$cols = '';
-        //$rows = '';
+
         $formatter = new \yii\i18n\Formatter;
 
-
-        //$datestart = $input_array[0]['date'];
-        //$dateend = $input_array[count($input_array)-1]['date'];
-        //$output .= $cols_num;
         $output .= '<h2>Розклад з ' . $formatter->asDate($datestart, "dd.MM.yyyy") . ' по ' . $formatter->asDate($dateend, "dd.MM.yyyy") . '</h2>';
         $output .= '<table class="table table-striped table-bordered">';
         for ($tr = 0; $tr <= $rows_num; $tr++) {
@@ -389,16 +381,24 @@ class Timetable extends \yii\db\ActiveRecord
                         $output .= '<td>' . $tr . '</td>';
                     } else {
                         //$output .= '<td> '.$tr.$td.' </td>';
-
                         $output .= '<td>';
+                        $class_bg = 'light';
                         foreach ($input_array as $cell) {
                             if(($cell['date'] == $td) && ($cell['lectureN'] == $tr) ) {
-
+                                $output .= '<div class="'.$class_bg.'">';
                                 $output .= '<p>'.$cell['corps'].'</p>';
                                 $output .= '<p>'.$cell['audience'].'</p>';
                                 $output .= '<p>'.$cell['teacher'].'</p>';
                                 $output .= '<p>'.$cell['group'].'</p>';
-                                $output .= '<hr/>';
+                                $output .= '</div>';
+                                if($class_bg == 'dark') {
+                                    $class_bg = 'light';
+                                    break;
+                                }
+                                if($class_bg == 'light') {
+                                    $class_bg = 'dark';
+                                }
+
                             } else {
                                 $output .= '';
                             }
