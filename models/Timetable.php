@@ -45,7 +45,7 @@ class Timetable extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['corps_id', 'audience_id', 'subjects_id', 'teacher_id', 'group_id', 'lecture_id', 'date', 'status','part_id', 'x', 'y'], 'required'],
+            [['corps_id', 'audience_id', 'subjects_id', 'teacher_id', 'group_id', 'lecture_id', 'status','part_id', 'x', 'y'], 'required'],
             [['corps_id', 'audience_id', 'subjects_id', 'teacher_id', 'group_id', 'lecture_id', 'status','part_id', 'x', 'y'], 'integer'],
             [['date'], 'string'],
             [['corps_id'], 'exist', 'skipOnError' => true, 'targetClass' => Corps::className(), 'targetAttribute' => ['corps_id' => 'ID']],
