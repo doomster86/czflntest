@@ -104,11 +104,13 @@ class TimetableParts extends \yii\db\ActiveRecord
         $this->cols = ($dateend - $datestart)/(60*60*24)+1;
         $this->rows = $lecturesCounter;
         $this->save();
-        $this->generate();
+        $this->generate($datestart, $dateend);
     }
 
-    public function generate() {
+    public function generate($datestart, $dateend) {
         $timetable = new Timetable();
+        //$datestart = $this->datestart;
+        //$dateend =$this->dateend;
 
         //все преподаватели users (role 2)
         $teachers = new User;
@@ -117,22 +119,81 @@ class TimetableParts extends \yii\db\ActiveRecord
             ->where(['role' => 2])
             ->all();
 
+        //Рабочие дни преподавателей и максимальная нагрузка часов в неделю
+        $teacherMeta = new TeacherMeta();
+        $allTeacherMeta = $teacherMeta->find()
+            ->asArray()
+            ->select('id, user_id, hours, monday, tuesday, wednesday, thursday, friday, saturday, sunday')
+            ->all();
+
+
         //все завершённые лекции count_lecture
 
         //все лекции, закреплённые за профессиями lessons и оставшееся их кол-во
-
-        //желаемые\обязательные аудитории для лекций subjects
+        $lessons = new Lessons();
+        $allLessons = $lessons->find()
+            ->asArray()
+            ->all();
 
         //вся практика и осташееся её кол-во practice_lessons
+        $practiceLessons = new PracticeLessons();
+        $allPracticeLessons = $practiceLessons->find()
+            ->asArray()
+            ->all();
+
+        //желаемые\обязательные аудитории для лекций subjects, макс. число в неделю
+        $subjects = new Subjects();
+        $allSubjects = $subjects->find()
+            ->asArray()
+            ->all();
+
+        //желаемые\обязательные аудитории для практики practice, макс. число в неделю
+        $practice = new Practice();
+        $allPractice = $practice->find()
+            ->asArray()
+            ->all();
 
         //все корпуса corps
 
-        //все пары lecture_table
+        //все пары lecture_table (1-я пара в корпусе 1, 2-я пара в корпусе 2... 4-я пара в корпусе 2)
+        $lectureTable = new LectureTable();
+        $allLectureTable = $lectureTable->find()
+            ->asArray()
+            ->all();
 
-        //всі аудиторії audience
+        //все аудитории audience
+        $audience = new Audience();
+        $allAudience = $audience->find()
+            ->asArray()
+            ->all();
 
-        //echo '<pre>';
-        //echo var_dump($allTeachers);
-        //die('</pre>');
+        //все группы
+        $groups = new Groups();
+        $allGroups = $groups->find()
+            ->asArray()
+            ->all();
+
+        $lecturesMas = array(); // массив, в который будем помещать лекции для расписания
+
+        //Стартовая точка - генерация расписания для группы
+        foreach ($allGroups as $group) {
+            $groupID = $group['ID'];
+            $groupName = $group['name'];
+            $courseID = $group['course'];
+            $date = $datestart; //первая дата расписания
+
+            //получаем все предметы этой группы
+            $groupLessons = Lessons::find()
+                ->asArray()
+                ->where(['course_id' => $courseID])
+                ->all();
+
+            //делаем расписание группе на день
+            foreach ($groupLessons as $lesson) {
+
+            }
+
+        }
+
     }
 }

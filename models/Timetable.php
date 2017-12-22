@@ -383,16 +383,16 @@ class Timetable extends \yii\db\ActiveRecord
                                 $output .= '<p>'.$cell['teacher'].'</p>';
                                 $output .= '<p>'.$cell['group'].'</p>';
                                 $output .= '</div>';
-                                if($class_bg == 'dark') {
-                                    $class_bg = 'light';
-                                    break;
+                                switch ($class_bg) {
+                                    case 'dark':
+                                        $class_bg = 'light';
+                                        break;
+                                    case 'light':
+                                        $class_bg = 'dark';
+                                        break;
                                 }
-                                if($class_bg == 'light') {
-                                    $class_bg = 'dark';
-                                }
-
                             } else {
-                                $output .= '';
+                                $output .= '<div></div>';
                             }
                         }
                         $output .= '</td>';

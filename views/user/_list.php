@@ -16,7 +16,7 @@ use app\models\TeacherMeta;
 
     ?>
     <div class="img-holder">
-        <?= Html::a(Html::img(Url::to('@web/').$roles[$model->role]['img']), Url::to('update/'.$model->id)); ?>
+        <?= Html::a(Html::img(Url::to('/web/').$roles[$model->role]['img']), Url::to('update/'.$model->id)); ?>
     </div>
 
     <table class="table table-striped table-bordered">
