@@ -18,8 +18,7 @@ class TimetableSearch extends Timetable
     public function rules()
     {
         return [
-            [['id', 'corps_id', 'audience_id', 'subjects_id', 'teacher_id', 'group_id', 'lecture_id', 'status'], 'integer'],
-            [['date'], 'safe'],
+            [['id', 'corps_id', 'audience_id', 'subjects_id', 'teacher_id', 'group_id', 'lecture_id', 'status', 'date'], 'integer'],
         ];
     }
 

@@ -14,6 +14,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="generate-timetable">
 	<?php
 	echo $model->renderTable(57);
-    \app\models\TimetableParts::generate('1514149200', '1514667600', '5');
+    \app\models\TimetableParts::generate('1514149200', '1514667600');
 	?>
 </div>

@@ -110,7 +110,8 @@ class TimetableParts extends \yii\db\ActiveRecord
     //рекурсивная функция?
     //точка входа - дата начада генерации
     //точка выхода - ? дата концка генерации, нет свободных ячеек, больше нельзя поставить лекции, не нарушая правила
-    public function generate($datestart, $dateend, $rows) {
+    //$datestart - дата начала генерации, $dateend - дата конца генерациии
+    public function generate($datestart, $dateend) {
 
         $lecturesCounter = LectureTable::find()
             ->asArray()
@@ -118,165 +119,177 @@ class TimetableParts extends \yii\db\ActiveRecord
             ->groupBy(['corps_id'])
             ->all();
 
-        v($lecturesCounter);
+        //массив ключ-значение, где ключ - id корпуса, значение - максимальное кол-во лекция в этом корпусе
+        $corpsLect = array();
 
         //генерим сетку и проходимся по ней, вставля туда пары
-        //день
-        while ($datestart <= $dateend) {
-            //номер лекции
-            for($i = 1; $i <= $rows; $i++){
-                //все группы
-                $groups = new Groups();
-                $allGroups = $groups->find()
-                    ->asArray()
-                    ->all();
 
-                //Проходим по всем группам
-                foreach ($allGroups as $group) {
-                    $groupID = $group['ID'];
-                    $groupName = $group['name'];
-                    $courseID = $group['course'];
+        //проходимся по корпусам, у каждого корпуса своё макс. кол-во пар в день
+        foreach ($lecturesCounter as $corps) {
 
-                    //получаем все предметы текущей группы
-                    $groupLessons = Lessons::find()
+            //определяем текущий корпус и его кол-во пар
+            $corpsID = $corps['corps_id'];
+            $lectCount = $corps['lessons'];
+
+            //проходимся по всем парам
+            for ($i = 1; $i <= $lectCount; $i++) {
+
+                //проходимся по дням
+                while ($datestart <= $dateend) {
+                    //$i - текущий номер пары,
+                    //$corpsID - текущий id корпуса
+                    //$datestart - текущая дата
+
+                    //все группы
+                    $groups = new Groups();
+                    $allGroups = $groups->find()
                         ->asArray()
-                        ->where(['course_id' => $courseID])
                         ->all();
 
-                    //пробуем поставить предмет в ячейку, если не подходит, пробуем следующий и т.д.
-                    foreach ($groupLessons as $lesson) {
-                        //узнаём аудиторию лекции
+                        //Проходим по всем группам
+                        foreach ($allGroups as $group) {
+                            $groupID = $group['ID'];
+                            $groupName = $group['name'];
+                            $courseID = $group['course'];
 
-                        //узнаём обязательна ли она
+                            //получаем все предметы текущей группы
+                            $groupLessons = Lessons::find()
+                                ->asArray()
+                                ->where(['course_id' => $courseID])
+                                ->all();
 
-                        //узнаём корпус
-
-                        //узнаём преподавателя этой лекции
-                        $teacherID = Subjects::find()
-                            ->asArray()
-                            ->select('teacher_id')
-                            ->where(['ID' => $lesson['subject_id']])
-                            ->one();
-
-                        //узнаём работает ли он в этот день
-                        $formatter = new \yii\i18n\Formatter;
-                        $day = $formatter->asDate($datestart, "l"); //текущий день недели
-                        $workStatus = 0;
-                        switch ($day) {
-                            case 'Monday':
-                                $workStatus = TeacherMeta::find()
+                            //пробуем поставить предмет в ячейку, если не подходит, пробуем следующий и т.д.
+                            //если не можем поставить без окна, то заканчиваем день
+                            //пробуем делать промежутки в 1 день между одинаковыми лекциями?
+                            //перебираем лекции
+                            foreach ($groupLessons as $lesson) {
+                                //узнаём аудиторию лекции
+                                $audienceID = Subjects::find()
                                     ->asArray()
-                                    ->select('monday')
-                                    ->where(['user_id' => $teacherID['teacher_id']])
+                                    ->select('audience_id')
+                                    ->where(['ID' => $lesson['subject_id']])
                                     ->one();
-                                $workStatus = ArrayHelper::getValue($workStatus, 'monday');
-                                break;
-                            case 'Tuesday':
-                                $workStatus = TeacherMeta::find()
+
+                                //узнаём корпус аудитории
+                                $currentCorpsId = Audience::find()
                                     ->asArray()
-                                    ->select('tuesday')
-                                    ->where(['user_id' => $teacherID['teacher_id']])
+                                    ->select('corps_id')
+                                    ->where(['ID' => $audienceID])
                                     ->one();
-                                $workStatus = ArrayHelper::getValue($workStatus, 'tuesday');
-                                break;
-                            case 'Wednesday':
-                                $workStatus = TeacherMeta::find()
+
+                                //если аудитория не из этого корпуса, то берём следующею лекцию из foreach ($groupLessons as $lesson)
+                                if( $currentCorpsId['corps_id'] != $corpsID) {
+                                    break;
+                                }
+
+                                //узнаём преподавателя этой лекции
+                                $teacherID = Subjects::find()
                                     ->asArray()
-                                    ->select('wednesday')
-                                    ->where(['user_id' => $teacherID['teacher_id']])
+                                    ->select('teacher_id')
+                                    ->where(['ID' => $lesson['subject_id']])
                                     ->one();
-                                $workStatus = ArrayHelper::getValue($workStatus, 'wednesday');
-                                break;
-                            case 'Thursday':
-                                $workStatus = TeacherMeta::find()
+
+                                //узнаём работает ли он в этот день
+                                $formatter = new \yii\i18n\Formatter;
+                                $day = $formatter->asDate($datestart, "l"); //текущий день недели
+                                $workStatus = 0;
+                                switch ($day) {
+                                    case 'Monday':
+                                        $workStatus = TeacherMeta::find()
+                                            ->asArray()
+                                            ->select('monday')
+                                            ->where(['user_id' => $teacherID['teacher_id']])
+                                            ->one();
+                                        $workStatus = ArrayHelper::getValue($workStatus, 'monday');
+                                        break;
+                                    case 'Tuesday':
+                                        $workStatus = TeacherMeta::find()
+                                            ->asArray()
+                                            ->select('tuesday')
+                                            ->where(['user_id' => $teacherID['teacher_id']])
+                                            ->one();
+                                        $workStatus = ArrayHelper::getValue($workStatus, 'tuesday');
+                                        break;
+                                    case 'Wednesday':
+                                        $workStatus = TeacherMeta::find()
+                                            ->asArray()
+                                            ->select('wednesday')
+                                            ->where(['user_id' => $teacherID['teacher_id']])
+                                            ->one();
+                                        $workStatus = ArrayHelper::getValue($workStatus, 'wednesday');
+                                        break;
+                                    case 'Thursday':
+                                        $workStatus = TeacherMeta::find()
+                                            ->asArray()
+                                            ->select('thursday')
+                                            ->where(['user_id' => $teacherID['teacher_id']])
+                                            ->one();
+                                        $workStatus = ArrayHelper::getValue($workStatus, 'thursday');
+                                        break;
+                                    case 'Friday':
+                                        $workStatus = TeacherMeta::find()
+                                            ->asArray()
+                                            ->select('friday')
+                                            ->where(['user_id' => $teacherID['teacher_id']])
+                                            ->one();
+                                        $workStatus = ArrayHelper::getValue($workStatus, 'friday');
+                                        break;
+                                    case 'Saturday':
+                                        $workStatus = TeacherMeta::find()
+                                            ->asArray()
+                                            ->select('saturday')
+                                            ->where(['user_id' => $teacherID['teacher_id']])
+                                            ->one();
+                                        $workStatus = ArrayHelper::getValue($workStatus, 'saturday');
+                                        break;
+                                    case 'Sunday':
+                                        $workStatus = TeacherMeta::find()
+                                            ->asArray()
+                                            ->select('sunday')
+                                            ->where(['user_id' => $teacherID['teacher_id']])
+                                            ->one();
+                                        $workStatus = ArrayHelper::getValue($workStatus, 'sunday');
+                                        break;
+                                }
+
+                                //если преподаватель не работает в этот день, то берём следующею лекцию из foreach ($groupLessons as $lesson)
+                                if($workStatus == 0) {
+                                    break;
+                                }
+
+                                //считаем сколько преподаватель наработал часов на этой неделе,
+                                //если больше нормы, то берём следующею лекцию из foreach ($groupLessons as $lesson)
+                                //для начала, определяем первый понедельник в генерируемом расписании
+                                $firstMonday = $datestart;
+                                do {
+                                    $day = $formatter->asDate($firstMonday, "l");
+                                    if($day != 'Monday') {
+                                        $firstMonday = $firstMonday + 86400;
+                                    }
+                                } while ($day != 'Monday');
+
+                                //начиная с первого понедельника, считаем количество пар, которые провёл преподаватель
+                                //!!! надо будет переписать эту часть для более точного учёта, т.к. сейчас все лекции в этой таблицебудут считаться как состоявшиеся
+
+
+                                $lectComplete = Timetable::find()
                                     ->asArray()
-                                    ->select('thursday')
-                                    ->where(['user_id' => $teacherID['teacher_id']])
-                                    ->one();
-                                $workStatus = ArrayHelper::getValue($workStatus, 'thursday');
-                                break;
-                            case 'Friday':
-                                $workStatus = TeacherMeta::find()
-                                    ->asArray()
-                                    ->select('friday')
-                                    ->where(['user_id' => $teacherID['teacher_id']])
-                                    ->one();
-                                $workStatus = ArrayHelper::getValue($workStatus, 'friday');
-                                break;
-                            case 'Saturday':
-                                $workStatus = TeacherMeta::find()
-                                    ->asArray()
-                                    ->select('saturday')
-                                    ->where(['user_id' => $teacherID['teacher_id']])
-                                    ->one();
-                                $workStatus = ArrayHelper::getValue($workStatus, 'saturday');
-                                break;
-                            case 'Sunday':
-                                $workStatus = TeacherMeta::find()
-                                    ->asArray()
-                                    ->select('sunday')
-                                    ->where(['user_id' => $teacherID['teacher_id']])
-                                    ->one();
-                                $workStatus = ArrayHelper::getValue($workStatus, 'sunday');
-                                break;
-                        }
+                                    ->select(['COUNT(teacher_id) AS lectComplete'])
+                                    ->where(
+                                        ['=', 'teacher_id', $teacherID['teacher_id']],
+                                        ['>=', 'date', $firstMonday],
+                                        ['<=', 'date', $dateend]
+                                    )
+                                    ->groupBy(['teacher_id'])
+                                    ->all();
 
-                        //узнаём сколько у текущего корпуса может быть лекций
-                        $maxLesson = 1;
+                            } //цикл по лекциям
+                        } //цикл по всем группам
 
-                        //если преподаватель работает
-                        if($workStatus == 1) {
-                            //если номер пары не больше, чем может быть для корпуса, в котором будет проходить занятие
-                            if($maxLesson <= $i){
-
-                            }
-                        }
-                    }
-                }
-            }
-            $datestart = $datestart + 86400;
-            //self::generate($datestart, $dateend, $rows);
-        }
-
-        /**
-        //все группы
-        $groups = new Groups();
-        $allGroups = $groups->find()
-            ->asArray()
-            ->all();
-
-        $lecturesMas = array(); // массив, в который будем помещать лекции для расписания
-
-        //Стартовая точка - проходим по всем группам
-        foreach ($allGroups as $group) {
-            $groupID = $group['ID'];
-            $groupName = $group['name'];
-            $courseID = $group['course'];
-
-            //получаем все предметы текущей группы
-            $groupLessons = Lessons::find()
-                ->asArray()
-                ->where(['course_id' => $courseID])
-                ->all();
-
-            //пробуем поставить пару в ячейку
-            //проходимся по всем предметам и тот, которые возможно, ставим на этот день на эту пару
-            //в зависимости от того, свободна ли аудитория, работает ли в этот день преподаватель и свободен ли он
-            //первая лекция определяет в каком корпусе в этот день у группы будут проходить занятия
-            foreach ($groupLessons as $lesson) {
-                //узнаём преподавателя этой лекции
-                $teacherID = Subjects::find()
-                    ->asArray()
-                    ->select('teacher_id')
-                    ->where(['ID' => $lesson['subject_id']])
-                    ->one();
-
-                //узнаём работает ли он в этот день
-                $day = $formatter->asDate($datestart, "l");
-            }
-
-        }
-        **/
-
+                        //сегодня в завтрашний день
+                        $datestart = $datestart + 86400;
+                } //цикл по дням
+            } //цикл по парам
+        } //цикл по корпусам
     }
 }
