@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
+use app\models\Timetable;
 
 /**
  * This is the model class for table "timetable_parts".
@@ -417,7 +418,20 @@ class TimetableParts extends \yii\db\ActiveRecord
                                 }
 
                                 //наконец-то прошли все проверки и делаем запись в базу
+                                //id - автоинкремент, не передаём
+                                //corps_id - $currentCorpsId
+                                //audience_id - $audienceID
+                                //subjects_id - $subjId
+                                //teacher_id - $teacherID
+                                //group_id - $groupID
+                                //lecture_id - ? id пары из lecture_table (необходимо вычислять)
+                                //date - $datestart
+                                //status - ? пока не ставим
+                                //part_id - ? id расписания из timetable_parts
+                                //x - ? координата, номер дня п.п.
+                                //y - ? координата, номер пары п.п.
 
+                                $timetable = new Timetable();
 
                             } //цикл по лекциям
                         } //цикл по всем группам
