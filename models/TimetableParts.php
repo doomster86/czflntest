@@ -113,6 +113,9 @@ class TimetableParts extends \yii\db\ActiveRecord
     //$datestart - дата начала генерации, $dateend - дата конца генерациии
     public function generate($datestart, $dateend) {
 
+        $datestart = (int)$datestart;
+        $dateend = (int)$dateend;
+
         $lecturesCounter = LectureTable::find()
             ->asArray()
             ->select(['COUNT(corps_id) AS lessons, corps_id'])
@@ -160,7 +163,6 @@ class TimetableParts extends \yii\db\ActiveRecord
 
                             //пробуем поставить предмет в ячейку, если не подходит, пробуем следующий и т.д.
                             //если не можем поставить без окна, то заканчиваем день
-                            //пробуем делать промежутки в 1 день между одинаковыми лекциями?
                             //перебираем лекции
                             foreach ($groupLessons as $lesson) {
                                 //узнаём аудиторию лекции
@@ -259,35 +261,64 @@ class TimetableParts extends \yii\db\ActiveRecord
 
                                 //считаем сколько преподаватель наработал часов на этой неделе,
                                 //если больше нормы, то берём следующею лекцию из foreach ($groupLessons as $lesson)
-                                //для начала, определяем первый понедельник в генерируемом расписании
+                                //для начала, определяем дату первого понедельника в этой неделе генерируемого расписания
                                 $firstMonday = $datestart;
-                                do {
+                                $day = $formatter->asDate($firstMonday, "l");
+                                while ($day != 'Monday') {
+                                    $firstMonday = $firstMonday - 86400;
                                     $day = $formatter->asDate($firstMonday, "l");
-                                    if($day != 'Monday') {
-                                        $firstMonday = $firstMonday + 86400;
-                                    }
-                                } while ($day != 'Monday');
+                                }
 
-                                //начиная с первого понедельника, считаем количество пар, которые провёл преподаватель
+                                //начиная с первого понедельника до воскресенья, считаем количество пар, которые провёл преподаватель
                                 //!!! надо будет переписать эту часть для более точного учёта, т.к. сейчас все лекции в этой таблицебудут считаться как состоявшиеся
-
-
                                 $lectComplete = Timetable::find()
                                     ->asArray()
-                                    ->select(['COUNT(teacher_id) AS lectComplete'])
-                                    ->where(
-                                        ['=', 'teacher_id', $teacherID['teacher_id']],
-                                        ['>=', 'date', $firstMonday],
-                                        ['<=', 'date', $dateend]
-                                    )
+                                    ->select(['COUNT(teacher_id) AS lectCount'])
+                                    ->where(['>=', 'date', $firstMonday])
+                                    ->andWhere(['<=', 'date', $firstMonday + 518400]) //понедельник + 6 дней
                                     ->groupBy(['teacher_id'])
                                     ->all();
+
+                                //кол-во часов, которое преподватель проработал уже, одна пара - два академических часа
+                                $lectComplete = $lectComplete['lectCount']*2;
+
+                                $lectMax = TeacherMeta::find()
+                                    ->asArray()
+                                    ->select('hours')
+                                    ->where(['user_id' => $teacherID['teacher_id']])
+                                    ->one();
+
+                                if($lectComplete >= $lectMax['hours']) {
+                                    break;
+                                }
+
+                                //проверяем, нет ли такой же пары в этот день у этой же группы, в следующий или предыдущий день в этой же группы
+                                //если есть, то берём следующею лекцию из foreach ($groupLessons as $lesson)
+                                $sameLect = Timetable::find()
+                                    ->asArray()
+                                    ->select(['COUNT(id) AS sameLect'])
+                                    ->where(['=', 'date', $datestart])
+                                    ->andWhere(['=', 'date', $datestart - 86400])
+                                    ->andWhere(['=', 'date', $datestart + 86400])
+                                    ->all();
+
+                                if($sameLect['sameLect'] > 0) {
+                                    break;
+                                }
+
+                                //проверяем, чтобы у преподавателя не было в этот день занятий в разных корпусах
+
+                                //проверяем, чтобы у группы не было в этот день занятий в разных корпусах
+
+                                //проверяем, если в этот день у группы практические занятия, если есть, то не ставим больше лекций в этот день
+
+                                //первое занятие у группы ставить вводное
 
                             } //цикл по лекциям
                         } //цикл по всем группам
 
                         //сегодня в завтрашний день
-                        $datestart = $datestart + 86400;
+                        $datestart = (int)$datestart + 86400;
                 } //цикл по дням
             } //цикл по парам
         } //цикл по корпусам
