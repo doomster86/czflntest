@@ -83,6 +83,8 @@ Pjax::begin([
 
     echo $form->field($model, 'required')->checkbox(['label' => 'Обов\'язкова аудиторія']);
 
+    echo $form->field($model, 'practice')->checkbox(['label' => 'Виробниче навчання']);
+
     ?>
 
     <div class="form-group">

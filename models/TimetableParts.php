@@ -165,12 +165,34 @@ class TimetableParts extends \yii\db\ActiveRecord
                             //если не можем поставить без окна, то заканчиваем день
                             //перебираем лекции
                             foreach ($groupLessons as $lesson) {
+                                //первое занятие у группы ставить производтсвенное обучение
+                                //смотрим сколько всего у группы уже было занятий
+                                $first = Timetable::find()
+                                    ->asArray()
+                                    ->select(['COUNT(id) AS lectCount'])
+                                    ->where(['=', 'group_id', $groupID])
+                                    ->all();
+
+                                if($first['lectCount'] == 0) {
+                                    //узнаём тип лекции, если это не практика, то берём следующею лекцию из foreach ($groupLessons as $lesson)
+                                    $type = Subjects::find()
+                                        ->asArray()
+                                        ->select('practice')
+                                        ->where(['ID' => $lesson['subject_id']])
+                                        ->one();
+
+                                    if($type['practice'] == 0) {
+                                        continue;
+                                    }
+                                }
+
                                 //узнаём аудиторию лекции
                                 $audienceID = Subjects::find()
                                     ->asArray()
                                     ->select('audience_id')
                                     ->where(['ID' => $lesson['subject_id']])
                                     ->one();
+                                $audienceID = $audienceID['audience_id'];
 
                                 //узнаём корпус аудитории
                                 $currentCorpsId = Audience::find()
@@ -178,18 +200,31 @@ class TimetableParts extends \yii\db\ActiveRecord
                                     ->select('corps_id')
                                     ->where(['ID' => $audienceID])
                                     ->one();
+                                $currentCorpsId = $currentCorpsId['corps_id'];
 
-                                //если аудитория не из этого корпуса, то берём следующею лекцию из foreach ($groupLessons as $lesson)
-                                if( $currentCorpsId['corps_id'] != $corpsID) {
-                                    break;
+                                $subjId = $lesson['subject_id'];
+
+                                //проверяем, чтобы у группы не было в этот день занятий в разных корпусах
+                                $sameCorps = Timetable::find()
+                                    ->asArray()
+                                    ->select(['COUNT(id) AS counter'])
+                                    ->where(['!=', 'corps_id', $currentCorpsId])
+                                    ->andWhere(['=', 'date', $datestart])
+                                    ->andWhere(['=', 'group_id', $groupID])
+                                    ->all();
+
+                                //если есть занятия в другом корпусе, то берём следующею лекцию из foreach ($groupLessons as $lesson)
+                                if($sameCorps['counter'] != 0) {
+                                    continue;
                                 }
 
                                 //узнаём преподавателя этой лекции
                                 $teacherID = Subjects::find()
                                     ->asArray()
                                     ->select('teacher_id')
-                                    ->where(['ID' => $lesson['subject_id']])
+                                    ->where(['ID' => $subjId])
                                     ->one();
+                                $teacherID = $teacherID['teacher_id'];
 
                                 //узнаём работает ли он в этот день
                                 $formatter = new \yii\i18n\Formatter;
@@ -200,7 +235,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                                         $workStatus = TeacherMeta::find()
                                             ->asArray()
                                             ->select('monday')
-                                            ->where(['user_id' => $teacherID['teacher_id']])
+                                            ->where(['user_id' => $teacherID])
                                             ->one();
                                         $workStatus = ArrayHelper::getValue($workStatus, 'monday');
                                         break;
@@ -208,7 +243,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                                         $workStatus = TeacherMeta::find()
                                             ->asArray()
                                             ->select('tuesday')
-                                            ->where(['user_id' => $teacherID['teacher_id']])
+                                            ->where(['user_id' => $teacherID])
                                             ->one();
                                         $workStatus = ArrayHelper::getValue($workStatus, 'tuesday');
                                         break;
@@ -216,7 +251,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                                         $workStatus = TeacherMeta::find()
                                             ->asArray()
                                             ->select('wednesday')
-                                            ->where(['user_id' => $teacherID['teacher_id']])
+                                            ->where(['user_id' => $teacherID])
                                             ->one();
                                         $workStatus = ArrayHelper::getValue($workStatus, 'wednesday');
                                         break;
@@ -224,7 +259,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                                         $workStatus = TeacherMeta::find()
                                             ->asArray()
                                             ->select('thursday')
-                                            ->where(['user_id' => $teacherID['teacher_id']])
+                                            ->where(['user_id' => $teacherID])
                                             ->one();
                                         $workStatus = ArrayHelper::getValue($workStatus, 'thursday');
                                         break;
@@ -232,7 +267,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                                         $workStatus = TeacherMeta::find()
                                             ->asArray()
                                             ->select('friday')
-                                            ->where(['user_id' => $teacherID['teacher_id']])
+                                            ->where(['user_id' => $teacherID])
                                             ->one();
                                         $workStatus = ArrayHelper::getValue($workStatus, 'friday');
                                         break;
@@ -240,7 +275,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                                         $workStatus = TeacherMeta::find()
                                             ->asArray()
                                             ->select('saturday')
-                                            ->where(['user_id' => $teacherID['teacher_id']])
+                                            ->where(['user_id' => $teacherID])
                                             ->one();
                                         $workStatus = ArrayHelper::getValue($workStatus, 'saturday');
                                         break;
@@ -248,7 +283,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                                         $workStatus = TeacherMeta::find()
                                             ->asArray()
                                             ->select('sunday')
-                                            ->where(['user_id' => $teacherID['teacher_id']])
+                                            ->where(['user_id' => $teacherID])
                                             ->one();
                                         $workStatus = ArrayHelper::getValue($workStatus, 'sunday');
                                         break;
@@ -256,7 +291,21 @@ class TimetableParts extends \yii\db\ActiveRecord
 
                                 //если преподаватель не работает в этот день, то берём следующею лекцию из foreach ($groupLessons as $lesson)
                                 if($workStatus == 0) {
-                                    break;
+                                    continue;
+                                }
+
+                                //проверяем, чтобы у преподавателя не было в этот день занятий в разных корпусах
+                                $sameCorps = Timetable::find()
+                                    ->asArray()
+                                    ->select(['COUNT(id) AS counter'])
+                                    ->where(['!=', 'corps_id', $currentCorpsId])
+                                    ->andWhere(['=', 'date', $datestart])
+                                    ->andWhere(['=', 'teacher_id', $teacherID])
+                                    ->all();
+
+                                //если есть занятия в другом корпусе, то берём следующею лекцию из foreach ($groupLessons as $lesson)
+                                if($sameCorps['counter'] != 0) {
+                                    continue;
                                 }
 
                                 //считаем сколько преподаватель наработал часов на этой неделе,
@@ -282,17 +331,20 @@ class TimetableParts extends \yii\db\ActiveRecord
                                 //кол-во часов, которое преподватель проработал уже, одна пара - два академических часа
                                 $lectComplete = $lectComplete['lectCount']*2;
 
+                                //максимальное кол-во часов в неделю для преподавателя
                                 $lectMax = TeacherMeta::find()
                                     ->asArray()
                                     ->select('hours')
-                                    ->where(['user_id' => $teacherID['teacher_id']])
+                                    ->where(['user_id' => $teacherID])
                                     ->one();
 
+                                //если больше нормы, то то берём следующею лекцию из foreach ($groupLessons as $lesson)
                                 if($lectComplete >= $lectMax['hours']) {
-                                    break;
+                                    continue;
                                 }
 
                                 //проверяем, нет ли такой же пары в этот день у этой же группы, в следующий или предыдущий день в этой же группы
+                                //параметры следует отрегулировать, чтобы не было пустых дней, когда уже почти никих пар поставить нельзя
                                 //если есть, то берём следующею лекцию из foreach ($groupLessons as $lesson)
                                 $sameLect = Timetable::find()
                                     ->asArray()
@@ -300,19 +352,72 @@ class TimetableParts extends \yii\db\ActiveRecord
                                     ->where(['=', 'date', $datestart])
                                     ->andWhere(['=', 'date', $datestart - 86400])
                                     ->andWhere(['=', 'date', $datestart + 86400])
+                                    ->andWhere(['=', 'group_id', $groupID])
                                     ->all();
 
                                 if($sameLect['sameLect'] > 0) {
-                                    break;
+                                    continue;
                                 }
 
-                                //проверяем, чтобы у преподавателя не было в этот день занятий в разных корпусах
-
-                                //проверяем, чтобы у группы не было в этот день занятий в разных корпусах
-
                                 //проверяем, если в этот день у группы практические занятия, если есть, то не ставим больше лекций в этот день
+                                $lectionsToday = Timetable::find()
+                                    ->asArray()
+                                    ->select('subjects_id')
+                                    ->where(['=', 'date', $datestart])
+                                    ->andWhere(['=', 'group_id', $groupID])
+                                    ->all();
 
-                                //первое занятие у группы ставить вводное
+                                foreach ($lectionsToday as $lection) {
+                                    $isPrectice = Subjects::find()
+                                        ->asArray()
+                                        ->select('practice')
+                                        ->where(['=', 'ID', $lection['subjects_id']])
+                                        ->one();
+                                    //если уже есть практика в этот день, то сразу выходим на следующий день
+                                    if($isPrectice['practice'] == 1) {
+                                        continue 3; //обрываем foreach ($lectionsToday as $lection), foreach ($groupLessons as $lesson), while ($datestart <= $dateend)
+                                    }
+                                }
+
+                                //проверяем чтобы не ставить лекций этого предмета больше, чем можно максимально в неделю
+                                $inWeek = Timetable::find()
+                                    ->asArray()
+                                    ->select(['COUNT(subjects_id) AS subjInWeek'])
+                                    ->where(['>=', 'date', $firstMonday])
+                                    ->andWhere(['<=', 'date', $firstMonday + 518400]) //понедельник + 6 дней
+                                    ->andWhere(['=', 'group_id', $groupID])
+                                    ->one();
+
+                                $maxInWeek = Subjects::find()
+                                    ->asArray()
+                                    ->select('max_week')
+                                    ->where(['=', 'ID', $subjId])
+                                    ->one();
+                                //если на этой неделе предмета больше или равно макс. кол-ву в неделю, то берём следующею лекцию из foreach ($groupLessons as $lesson)
+                                if($inWeek['subjInWeek'] >= $maxInWeek['max_week']) {
+                                    continue;
+                                }
+
+                                //проверяем чтобы не ставить лекций этого предмета больше, чем всего максимально возможно
+                                $allCurrentSubj = Timetable::find()
+                                    ->asArray()
+                                    ->select(['COUNT(subjects_id) AS subj'])
+                                    ->where(['=', 'group_id', $groupID])
+                                    ->one();
+
+                                $maxSubj = Lessons::find()
+                                    ->asArray()
+                                    ->select('quantity')
+                                    ->where(['=', 'course_id', $courseID])
+                                    ->andWhere(['=', 'subject_id', $subjId])
+                                    ->one();
+                                //если предмета больше или равно макс. кол-ву, то берём следующею лекцию из foreach ($groupLessons as $lesson)
+                                if($allCurrentSubj['subj'] >= $maxSubj['quantity']) {
+                                    continue;
+                                }
+
+                                //наконец-то прошли все проверки и делаем запись в базу
+
 
                             } //цикл по лекциям
                         } //цикл по всем группам

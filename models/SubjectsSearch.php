@@ -19,7 +19,7 @@ class SubjectsSearch extends Subjects {
      */
     public function rules() {
         return [
-            [['ID', 'teacher_id', 'audience_id', 'required', 'max_week'], 'integer'],
+            [['ID', 'teacher_id', 'audience_id', 'required', 'max_week', 'practice'], 'integer'],
             [['name', 'teacherName', 'audienceName'], 'safe'],
         ];
     }
@@ -66,7 +66,8 @@ class SubjectsSearch extends Subjects {
                 ],
                 'audience_id',
                 'required',
-                'max_week'
+                'max_week',
+                'practice',
             ]
         ]);
 
@@ -85,6 +86,7 @@ class SubjectsSearch extends Subjects {
             'audience_id' => $this->audience_id,
             'required' => $this->required,
             'max_week' => $this->max_week,
+            'practice' => $this->practice,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name]);

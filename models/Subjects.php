@@ -34,7 +34,7 @@ class Subjects extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             [['name', 'teacher_id', 'audience_id', 'max_week'], 'required', 'message'=>'Обов\'язкове поле'],
-            [['teacher_id', 'audience_id', 'required', 'max_week'], 'integer', 'min' => 0, 'message' => 'Тільки цифри'],
+            [['teacher_id', 'audience_id', 'required', 'max_week', 'practice'], 'integer', 'min' => 0, 'message' => 'Тільки цифри'],
             [['name'], 'string', 'min' => 3, 'max' => 255, 'message'=>'Мін 3 літери'],
             [['audience_id'], 'exist', 'skipOnError' => true, 'targetClass' => Audience::className(), 'targetAttribute' => ['audience_id' => 'ID']],
             [['teacher_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['teacher_id' => 'id']],
@@ -53,6 +53,7 @@ class Subjects extends \yii\db\ActiveRecord {
             'audience_id' => 'Аудиторія',
             'required' => 'Required',
             'max_week' => 'Макс. на тиждень',
+            'practice' => 'Виробниче навчання',
         ];
     }
 
