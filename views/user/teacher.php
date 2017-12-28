@@ -45,11 +45,11 @@ endif;
 
         <?= $form->field($model, 'tuesday')->checkbox(['label' => 'Вівторок']); ?>
 
-        <?= $form->field($model, 'friday')->checkbox(['label' => 'Середа']); ?>
+        <?= $form->field($model, 'wednesday')->checkbox(['label' => 'Середа']); ?>
 
-        <?= $form->field($model, 'saturday')->checkbox(['label' => 'Четвер']); ?>
+        <?= $form->field($model, 'thursday')->checkbox(['label' => 'Четвер']); ?>
 
-        <?= $form->field($model, 'tuesday')->checkbox(['label' => 'П\'ятниця']); ?>
+        <?= $form->field($model, 'friday')->checkbox(['label' => 'П\'ятниця']); ?>
 
         <?= $form->field($model, 'saturday')->checkbox(['label' => 'Суббота']); ?>
 

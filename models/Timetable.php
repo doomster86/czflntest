@@ -188,7 +188,12 @@ class Timetable extends \yii\db\ActiveRecord
 
         $timetable = new TimetableParts();
 
-        $date_array = $timetable->find()->asArray()->where(['id' => $id])->all();
+        $date_array = $timetable
+            ->find()
+            ->asArray()
+            ->where(['id' => $id])
+            ->all();
+
         $date_array = $date_array[0];
         $datestart = $date_array['datestart'];
         $datestart = (int)$datestart;

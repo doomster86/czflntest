@@ -103,7 +103,7 @@ class TimetableParts extends \yii\db\ActiveRecord
         $lecturesCounter = $lecturesCounter['corps_id'];
 
         $cols = ($dateend - $datestart)/(60*60*24)+1;
-        $this->$cols;
+        $this->cols = $cols;
 
         $rows = $lecturesCounter;
         $this->rows = $rows;
@@ -129,40 +129,42 @@ class TimetableParts extends \yii\db\ActiveRecord
             ->asArray()
             ->all();
 
-        //обход по дням
-        for ($i = 0; $i < $cols; $i++ ) {
-            //координата номера дня
-            $x = $i + 1;
+        //обход по всем группам
+        foreach ($allGroups as $group) {
+            $groupID = $group['ID'];
+            $groupName = $group['name'];
+            $courseID = $group['course'];
 
-            //определяем текущею дату
-            $date = $datestart + 86400 * $i;
+            //echo "группа";
+            //v($groupID);
 
-            echo "день";
-            $formatter = new \yii\i18n\Formatter;
-            v($formatter->asDate($date, "dd.MM.yyyy"));
+            //получаем все предметы текущей группы
+            $groupLessons = Lessons::find()
+                ->asArray()
+                ->where(['course_id' => $courseID])
+                ->all();
 
-            //обход по парам
-            for($j = 0; $j < $rows; $j++) {
-                //координата номера пары
-                $y = $j + 1;
 
-                echo "пара";
-                v($y);
+            //обход по дням
+            for ($i = 0; $i < $cols; $i++ ) {
+                //координата номера дня
+                $x = $i + 1;
 
-                //обход по всем группам
-                foreach ($allGroups as $group) {
-                    $groupID = $group['ID'];
-                    $groupName = $group['name'];
-                    $courseID = $group['course'];
+                //определяем текущею дату
+                $date = $datestart + 86400 * $i;
 
-                    echo "группа";
-                    v($groupID);
+                //echo "день";
+                $formatter = new \yii\i18n\Formatter;
+                //v($formatter->asDate($date, "dd.MM.yyyy"));
 
-                    //получаем все предметы текущей группы
-                    $groupLessons = Lessons::find()
-                        ->asArray()
-                        ->where(['course_id' => $courseID])
-                        ->all();
+                //обход по парам
+                for($j = 0; $j < $rows; $j++) {
+                    //координата номера пары
+                    $y = $j + 1;
+
+                    //echo "пара";
+                    //v($y);
+
 
                     //пробуем поставить предмет в ячейку, если не подходит, пробуем следующий и т.д.
                     //если не можем поставить без окна, то заканчиваем день
@@ -173,8 +175,8 @@ class TimetableParts extends \yii\db\ActiveRecord
 
                         $subjId = $lesson['subject_id'];
 
-                        echo "предмет";
-                        v($subjId);
+                        //echo "предмет";
+                        //v($subjId);
 
                         //узнаём преподавателя этой лекции
                         $teacherID = Subjects::find()
@@ -208,6 +210,8 @@ class TimetableParts extends \yii\db\ActiveRecord
                             ->one();
                         $type = $type['practice'];
 
+                        //нельзя ставить пару, если у корпуса их меньше $y
+
                         if($lectFilterStatus == 1) {
                             global $first;
                             //первое занятие у группы ставить производтсвенное обучение
@@ -223,43 +227,49 @@ class TimetableParts extends \yii\db\ActiveRecord
                             if ($first == 0) {
                                 //если это практика, то берём следующею лекцию из foreach ($groupLessons as $lesson)
                                 if ($type == 1) {
-                                    echo "Первый предмет не может быть практикой<br/>";
+                                    //echo "Первый предмет не может быть практикой<br/>";
                                     $lectFilterStatus = 0;
                                 }
                             }
                         }
 
                         if($lectFilterStatus == 1) {
-                            global $lectInThisDateGroup;
-                            //узнаём были ли лекции в этот день у группы, если да, то практику нельзя ставить группе
-                            $lectInThisDateGroup = Timetable::find()
-                                ->asArray()
-                                ->select(['COUNT(id) AS lectCount'])
-                                ->where(['=', 'date', $date])
-                                ->andWhere(['=', 'group_id', $groupID])
-                                ->one();
-                            $lectInThisDateGroup = $lectInThisDateGroup['lectCount'];
+                            //если практика
+                            if($type == 1) {
+                                global $lectInThisDateGroup;
+                                //узнаём были ли лекции в этот день у группы, если да, то практику нельзя ставить группе
+                                $lectInThisDateGroup = Timetable::find()
+                                    ->asArray()
+                                    ->select(['COUNT(id) AS lectCount'])
+                                    ->where(['=', 'date', $date])
+                                    ->andWhere(['=', 'group_id', $groupID])
+                                    ->one();
+                                $lectInThisDateGroup = $lectInThisDateGroup['lectCount'];
 
-                            if ($lectInThisDateGroup > 0) {
-                                echo "Нельзя ставить практику группе, потому что уже были леции в этот день<br/>";
-                                $lectFilterStatus = 0;
+                                if ($lectInThisDateGroup > 0) {
+                                    //echo "Нельзя ставить практику группе, потому что уже были лекции в этот день<br/>";
+                                    $lectFilterStatus = 0;
+                                }
                             }
                         }
 
                         if($lectFilterStatus == 1) {
                             global $lectInThisDateTeacher;
-                            //узнаём были ли лекции в этот день у преподавателя, если да, то практику нельзя ставить преподавателю
-                            $lectInThisDateTeacher = Timetable::find()
-                                ->asArray()
-                                ->select(['COUNT(id) AS lectCount'])
-                                ->where(['=', 'date', $date])
-                                ->andWhere(['=', 'teacher_id', $teacherID])
-                                ->one();
-                            $lectInThisDateTeacher = $lectInThisDateTeacher['lectCount'];
+                            //если практика
+                            if($type == 1) {
+                                //узнаём были ли лекции в этот день у преподавателя, если да, то практику нельзя ставить преподавателю
+                                $lectInThisDateTeacher = Timetable::find()
+                                    ->asArray()
+                                    ->select(['COUNT(id) AS lectCount'])
+                                    ->where(['=', 'date', $date])
+                                    ->andWhere(['=', 'teacher_id', $teacherID])
+                                    ->one();
+                                $lectInThisDateTeacher = $lectInThisDateTeacher['lectCount'];
 
-                            if($lectInThisDateTeacher > 0 ) {
-                                echo "Нельзя ставить практику преподавателю, потому что уже были леции в этот день<br/>";
-                                $lectFilterStatus = 0;
+                                if($lectInThisDateTeacher > 0 ) {
+                                    //echo "Нельзя ставить практику преподавателю, потому что уже были леции в этот день<br/>";
+                                    $lectFilterStatus = 0;
+                                }
                             }
                         }
 
@@ -277,7 +287,7 @@ class TimetableParts extends \yii\db\ActiveRecord
 
                             //если есть занятия в другом корпусе, то берём следующею лекцию из foreach ($groupLessons as $lesson)
                             if ($sameCorps != 0) {
-                                echo "Нельзя ставить группе занятия в разных корпусах в один день<br/>";
+                                //echo "Нельзя ставить группе занятия в разных корпусах в один день<br/>";
                                 $lectFilterStatus = 0;
                             }
                         }
@@ -296,7 +306,7 @@ class TimetableParts extends \yii\db\ActiveRecord
 
                             //если есть занятия в другом корпусе, то берём следующею лекцию из foreach ($groupLessons as $lesson)
                             if ($sameCorps != 0) {
-                                echo "Нельзя ставить преподавателю занятия в разных корпусах в один день<br/>";
+                                //echo "Нельзя ставить преподавателю занятия в разных корпусах в один день<br/>";
                                 $lectFilterStatus = 0;
                             }
                         }
@@ -367,7 +377,7 @@ class TimetableParts extends \yii\db\ActiveRecord
 
                             //если преподаватель не работает в этот день, то берём следующею лекцию из foreach ($groupLessons as $lesson)
                             if ($workStatus == 0) {
-                                echo "Преподаватель в этот день не работает<br/>";
+                                //echo "Преподаватель в этот день не работает<br/>";
                                 $lectFilterStatus = 0;
                             }
                         }
@@ -407,7 +417,7 @@ class TimetableParts extends \yii\db\ActiveRecord
 
                             //если больше нормы, то берём следующею лекцию из foreach ($groupLessons as $lesson)
                             if ($lectComplete >= $lectMax['hours']) {
-                                echo "Преподаватель уже отработал норму<br/>";
+                                //echo "Преподаватель уже отработал норму<br/>";
                                 $lectFilterStatus = 0;
                             }
                         }
@@ -424,11 +434,12 @@ class TimetableParts extends \yii\db\ActiveRecord
                                 //->andWhere(['=', 'date', $date - 86400]) ограничение на такую же пару в предыдущий день
                                 //->andWhere(['=', 'date', $date + 86400]) ограничение на такую же пару на следующий день
                                 ->andWhere(['=', 'group_id', $groupID])
+                                ->andWhere(['=', 'subjects_id', $subjId])
                                 ->one();
                             $sameLect = $sameLect['sameLect'];
 
                             if ($sameLect > 0) {
-                                echo "Нельзя ставить одинаковые пары в один день<br/>";
+                                //echo "Нельзя ставить одинаковые пары в один день<br/>";
                                 $lectFilterStatus = 0;
                             }
                         }
@@ -453,7 +464,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                                 //если уже есть практика в этот день, то берём следующею лекцию из foreach ($groupLessons as $lesson)
                                 //? можно оптимизировать, чтобы сразу переходить на следующий день
                                 if ($isPrectice == 1) {
-                                    echo "Нельзя ставить никакие лекции в один день с практикой<br/>";
+                                    //echo "Нельзя ставить никакие лекции в один день с практикой<br/>";
                                     $lectFilterStatus = 0;
                                 }
                             }
@@ -480,7 +491,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                             $maxInWeek = $maxInWeek['max_week'];
                             //если на этой неделе предмета больше или равно макс. кол-ву в неделю, то берём следующею лекцию из foreach ($groupLessons as $lesson)
                             if ($inWeek >= $maxInWeek) {
-                                echo "Нельзя ставить предмета больше его максимума в неделю<br/>";
+                                //echo "Нельзя ставить предмета больше его максимума в неделю<br/>";
                                 $lectFilterStatus = 0;
                             }
                         }
@@ -506,7 +517,7 @@ class TimetableParts extends \yii\db\ActiveRecord
 
                             //если предмета больше или равно макс. кол-ву, то берём следующею лекцию из foreach ($groupLessons as $lesson)
                             if ($allCurrentSubj >= $maxSubj) {
-                                echo "Нельзя ставить предмета больше его общего количества<br/>";
+                                //echo "Нельзя ставить предмета больше его общего количества<br/>";
                                 $lectFilterStatus = 0;
                             }
                         }
@@ -546,12 +557,15 @@ class TimetableParts extends \yii\db\ActiveRecord
                             $timetable->x = $x;
                             $timetable->y = $y;
                             $timetable->save();
-                            echo "Добавили пару<br/>";
+                            //echo "Добавили пару<br/>";
+                            break;
                         }
 
                     } //цикл по лекциям
-                } //цикл по всем группа
-            } //цикл по парам
-        } //цикл по дням
+
+                } //цикл по парам
+            } //цикл по дням
+
+        }//цикл по группам
     }
 }
