@@ -132,180 +132,59 @@ class Timetable extends \yii\db\ActiveRecord
 
     public function renderTable($id) {
         $output = '';
+        $input_array = Timetable::find()
+            ->asArray()
+            ->where(['=', 'part_id', $id])
+            ->all();
+        //v($input_array);
 
+
+        /*
+        был
         $input_array = array(
             0 =>
                 array(
                     "date" => "01.01.2018", //колонка
                     "lectureN" => "1", //строка
-                    /* от сих */
                     "corps" => "Корпус 1",
                     "audience" => "Аудиторія №1",
                     "subject" => "Практика на заводі",
                     "teacher" => "Коритувач Т.А.",
                     "group" => "ГР-1",
-                    /* до сих в ячейку */
-                    "part" => "56", //timetable_parts id
-                ),
-            1 =>
-                array(
-                    "date" => "01.01.2018", //25.12.17
-                    "lectureN" => "2",
-                    "corps" => "Корпус 1",
-                    "audience" => "Аудиторія №2",
-                    "subject" => "Практика на заводі",
-                    "teacher" => "Коритувач Т.А.",
-                    "group" => "ГР-1",
-                    "part" => "56",
-                ),
-            2 =>
-                array(
-                    "date" => "01.01.2018",//25.12.17
-                    "lectureN" => "3",
-                    "corps" => "Корпус 1",
-                    "audience" => "Аудиторія №3",
-                    "subject" => "Практика на заводі",
-                    "teacher" => "Коритувач Т.А.",
-                    "group" => "ГР-1",
-                    "part" => "56",
-                ),
-            3 =>
-                array(
-                    "date" => "01.01.2018", //25.12.17
-                    "lectureN" => "4",
-                    "corps" => "Корпус 1",
-                    "audience" => "Аудиторія №4",
-                    "subject" => "Практика на заводі",
-                    "teacher" => "Коритувач Т.А.",
-                    "group" => "ГР-1",
-                    "part" => "56",
-                ),
-            4 =>
-                array(
-                    "date" => "02.01.2018", //26.12.17
-                    "lectureN" => "2",
-                    "corps" => "Корпус 1",
-                    "audience" => "Аудиторія №5",
-                    "subject" => "Практика на заводі",
-                    "teacher" => "Коритувач Т.А.",
-                    "group" => "ГР-1",
-                    "part" => "56",
-                ),
-            5 =>
-                array(
-                    "date" => "02.01.2018", //26.12.17
-                    "lectureN" => "3",
-                    "corps" => "Корпус 1",
-                    "audience" => "Аудиторія №6",
-                    "subject" => "Практика на заводі",
-                    "teacher" => "Коритувач Т.А.",
-                    "group" => "ГР-1",
-                    "part" => "56",
-                ),
-            6 =>
-                array(
-                    "date" => "02.01.2018", //26.12.17
-                    "lectureN" => "4",
-                    "corps" => "Корпус 1",
-                    "audience" => "Аудиторія №7",
-                    "subject" => "Практика на заводі",
-                    "teacher" => "Коритувач Т.А.",
-                    "group" => "ГР-1",
-                    "part" => "56",
-                ),
-            7 =>
-                array(
-                    "date" => "03.01.2018", //27.12.17
-                    "lectureN" => "1",
-                    "corps" => "Корпус 1",
-                    "audience" => "Аудиторія №8",
-                    "subject" => "Практика на заводі",
-                    "teacher" => "Коритувач Т.А.",
-                    "group" => "ГР-1",
-                    "part" => "56",
-                ),
-            8 =>
-                array(
-                    "date" => "03.01.2018", //27.12.17
-                    "lectureN" => "2",
-                    "corps" => "Корпус 1",
-                    "audience" => "Аудиторія №9",
-                    "subject" => "Практика на заводі",
-                    "teacher" => "Коритувач Т.А.",
-                    "group" => "ГР-1",
-                    "part" => "56",
-                ),
-            9 =>
-                array(
-                    "date" => "03.01.2018", //27.12.17
-                    "lectureN" => "4",
-                    "corps" => "Корпус 1",
-                    "audience" => "Аудиторія №10",
-                    "subject" => "Практика на заводі",
-                    "teacher" => "Коритувач Т.А.",
-                    "group" => "ГР-1",
-                    "part" => "56",
-                ),
-            10 =>
-                array(
-                    "date" => "04.01.2018", //28.12.17
-                    "lectureN" => "1",
-                    "corps" => "Корпус 1",
-                    "audience" => "Аудиторія №11",
-                    "subject" => "Практика на заводі",
-                    "teacher" => "Коритувач Т.А.",
-                    "group" => "ГР-1",
-                    "part" => "56",
-                ),
-            11 =>
-                array(
-                    "date" => "04.01.2018", //28.12.17
-                    "lectureN" => "2",
-                    "corps" => "Корпус 1",
-                    "audience" => "Аудиторія №12",
-                    "subject" => "Практика на заводі",
-                    "teacher" => "Коритувач Т.А.",
-                    "group" => "ГР-1",
-                    "part" => "56",
-                ),
-            12 =>
-                array(
-                    "date" => "05.01.2018", //29.12.17
-                    "lectureN" => "3",
-                    "corps" => "Корпус 1",
-                    "audience" => "Аудиторія №13",
-                    "subject" => "Практика на заводі",
-                    "teacher" => "Коритувач Т.А.",
-                    "group" => "ГР-1",
-                    "part" => "56",
-                ),
-            13 =>
-                array(
-                    "date" => "05.01.2018", //29.12.17
-                    "lectureN" => "4",
-
-                    "corps" => "Корпус 1",
-                    "audience" => "Аудиторія №14",
-                    "subject" => "Практика на заводі",
-                    "teacher" => "Коритувач Т.А.",
-                    "group" => "ГР-1",
-
-                    "part" => "56",
-                ),
-            14 =>
-                array(
-                    "date" => "05.01.2018", //29.12.17
-                    "lectureN" => "4",
-
-                    "corps" => "Корпус 1",
-                    "audience" => "Аудиторія №14",
-                    "subject" => "Практика на заводі",
-                    "teacher" => "Коритувач Т.А.",
-                    "group" => "ГР-1",
-
                     "part" => "56",
                 ),
         );
+
+        приходит
+               array(9) {
+                  [0]=>
+                  array(12) {
+                    ["id"]=>
+                    string(2) "45"
+                    ["corps_id"]=>
+                    string(1) "4"
+                    ["audience_id"]=>
+                    string(1) "7"
+                    ["subjects_id"]=>
+                    string(2) "22"
+                    ["teacher_id"]=>
+                    string(1) "4"
+                    ["group_id"]=>
+                    string(1) "1"
+                    ["lecture_id"]=>
+                    string(1) "1"
+                    ["date"]=>
+                    string(10) "1514149200"
+                    ["status"]=>
+                    string(1) "1"
+                    ["part_id"]=>
+                    string(2) "48"
+                    ["x"]=>
+                    string(1) "1"
+                    ["y"]=>
+                    string(1) "1"
+                  }
+        */
 
         $timetable = new TimetableParts();
 
@@ -375,12 +254,48 @@ class Timetable extends \yii\db\ActiveRecord
                         $output .= '<td>';
                         $class_bg = 'light';
                         foreach ($input_array as $cell) {
-                            if(($cell['date'] == $td) && ($cell['lectureN'] == $tr) ) {
+                            if(($cell['x'] == $td) && ($cell['y'] == $tr) ) {
+                                $corpsName = Corps::find()
+                                    ->asArray()
+                                    ->select('corps_name')
+                                    ->where(['=', 'ID', $cell['corps_id']])
+                                    ->one();
+                                $corpsName = $corpsName['corps_name'];
+
+                                $audienceName = Audience::find()
+                                    ->asArray()
+                                    ->select('name')
+                                    ->where(['=', 'ID', $cell['audience_id']])
+                                    ->one();
+                                $audienceName = $audienceName['name'];
+
+                                $teacherName = User::find()
+                                    ->asArray()
+                                    ->select('firstname, middlename, lastname')
+                                    ->where(['=', 'id', $cell['teacher_id']])
+                                    ->one();
+                                $teacherName = $teacherName['firstname']." ".$teacherName['lastname'];
+
+                                $groupName = Groups::find()
+                                    ->asArray()
+                                    ->select('name')
+                                    ->where(['=', 'id', $cell['group_id']])
+                                    ->one();
+                                $groupName = $groupName['name'];
+
+                                $subjName = Subjects::find()
+                                    ->asArray()
+                                    ->select('name')
+                                    ->where(['=', 'id', $cell['subjects_id']])
+                                    ->one();
+                                $subjName = $subjName['name'];
+
                                 $output .= '<div class="'.$class_bg.'">';
-                                $output .= '<p>'.$cell['corps'].'<br />';
-                                $output .= $cell['audience'].'</p>';
-                                $output .= '<p>'.$cell['teacher'].'</p>';
-                                $output .= '<p>'.$cell['group'].'</p>';
+                                $output .= '<p> Корпус: '.$corpsName.'<br />';
+                                $output .= 'Аудиторія: '.$audienceName.'</p>';
+                                $output .= '<p>Викладач: '.$teacherName.'</p>';
+                                $output .= '<p>Группа: '.$groupName.'</p>';
+                                $output .= '<p>Предмет: '.$subjName.'</p>';
                                 $output .= '</div>';
                                 switch ($class_bg) {
                                     case 'dark':

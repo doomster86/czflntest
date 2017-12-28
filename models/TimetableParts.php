@@ -102,344 +102,456 @@ class TimetableParts extends \yii\db\ActiveRecord
         $lecturesCounter = max($lecturesCounter);
         $lecturesCounter = $lecturesCounter['corps_id'];
 
-        $this->cols = ($dateend - $datestart)/(60*60*24)+1;
-        $this->rows = $lecturesCounter;
+        $cols = ($dateend - $datestart)/(60*60*24)+1;
+        $this->$cols;
+
+        $rows = $lecturesCounter;
+        $this->rows = $rows;
         $this->save();
-        $this->generate($datestart, $dateend, $lecturesCounter);
+
+        $this->generateLectures($datestart, $dateend, $cols, $rows);
     }
 
-    //рекурсивная функция?
-    //точка входа - дата начада генерации
-    //точка выхода - ? дата концка генерации, нет свободных ячеек, больше нельзя поставить лекции, не нарушая правила
-    //$datestart - дата начала генерации, $dateend - дата конца генерациии
-    public function generate($datestart, $dateend) {
-
+    public function generateLectures($datestart, $dateend, $cols, $rows) {
         $datestart = (int)$datestart;
         $dateend = (int)$dateend;
 
-        $lecturesCounter = LectureTable::find()
+        $id = TimetableParts::find()
             ->asArray()
-            ->select(['COUNT(corps_id) AS lessons, corps_id'])
-            ->groupBy(['corps_id'])
+            ->select('id')
+            ->where(['=', 'datestart', $datestart])
+            ->one();
+        $id = $id['id'];
+
+        //все группы
+        $groups = new Groups();
+        $allGroups = $groups->find()
+            ->asArray()
             ->all();
 
-        //массив ключ-значение, где ключ - id корпуса, значение - максимальное кол-во лекция в этом корпусе
-        $corpsLect = array();
+        //обход по дням
+        for ($i = 0; $i < $cols; $i++ ) {
+            //координата номера дня
+            $x = $i + 1;
 
-        //генерим сетку и проходимся по ней, вставля туда пары
+            //определяем текущею дату
+            $date = $datestart + 86400 * $i;
 
-        //проходимся по корпусам, у каждого корпуса своё макс. кол-во пар в день
-        foreach ($lecturesCounter as $corps) {
+            echo "день";
+            $formatter = new \yii\i18n\Formatter;
+            v($formatter->asDate($date, "dd.MM.yyyy"));
 
-            //определяем текущий корпус и его кол-во пар
-            $corpsID = $corps['corps_id'];
-            $lectCount = $corps['lessons'];
+            //обход по парам
+            for($j = 0; $j < $rows; $j++) {
+                //координата номера пары
+                $y = $j + 1;
 
-            //проходимся по всем парам
-            for ($i = 1; $i <= $lectCount; $i++) {
+                echo "пара";
+                v($y);
 
-                //проходимся по дням
-                while ($datestart <= $dateend) {
-                    //$i - текущий номер пары,
-                    //$corpsID - текущий id корпуса
-                    //$datestart - текущая дата
+                //обход по всем группам
+                foreach ($allGroups as $group) {
+                    $groupID = $group['ID'];
+                    $groupName = $group['name'];
+                    $courseID = $group['course'];
 
-                    //все группы
-                    $groups = new Groups();
-                    $allGroups = $groups->find()
+                    echo "группа";
+                    v($groupID);
+
+                    //получаем все предметы текущей группы
+                    $groupLessons = Lessons::find()
                         ->asArray()
+                        ->where(['course_id' => $courseID])
                         ->all();
 
-                        //Проходим по всем группам
-                        foreach ($allGroups as $group) {
-                            $groupID = $group['ID'];
-                            $groupName = $group['name'];
-                            $courseID = $group['course'];
+                    //пробуем поставить предмет в ячейку, если не подходит, пробуем следующий и т.д.
+                    //если не можем поставить без окна, то заканчиваем день
+                    //перебираем лекции группы
+                    foreach ($groupLessons as $lesson) {
+                        global $lectFilterStatus;
+                        $lectFilterStatus = 1; //по умолчанию, считаем что можем поставить лекцию
 
-                            //получаем все предметы текущей группы
-                            $groupLessons = Lessons::find()
+                        $subjId = $lesson['subject_id'];
+
+                        echo "предмет";
+                        v($subjId);
+
+                        //узнаём преподавателя этой лекции
+                        $teacherID = Subjects::find()
+                            ->asArray()
+                            ->select('teacher_id')
+                            ->where(['ID' => $subjId])
+                            ->one();
+                        $teacherID = $teacherID['teacher_id'];
+
+                        //узнаём аудиторию лекции
+                        $audienceID = Subjects::find()
+                            ->asArray()
+                            ->select('audience_id')
+                            ->where(['ID' => $subjId])
+                            ->one();
+                        $audienceID = $audienceID['audience_id'];
+
+                        //узнаём корпус аудитории
+                        $currentCorpsId = Audience::find()
+                            ->asArray()
+                            ->select('corps_id')
+                            ->where(['ID' => $audienceID])
+                            ->one();
+                        $currentCorpsId = $currentCorpsId['corps_id'];
+
+                        //узнаём тип занятия (практика\не практика)
+                        $type = Subjects::find()
+                            ->asArray()
+                            ->select('practice')
+                            ->where(['ID' => $subjId])
+                            ->one();
+                        $type = $type['practice'];
+
+                        if($lectFilterStatus == 1) {
+                            global $first;
+                            //первое занятие у группы ставить производтсвенное обучение
+                            //смотрим сколько всего у группы уже было занятий
+                            $first = Timetable::find()
                                 ->asArray()
-                                ->where(['course_id' => $courseID])
+                                ->select(['COUNT(id) AS lectCount'])
+                                ->where(['=', 'group_id', $groupID])
+                                ->one();
+                            $first = $first['lectCount'];
+
+                            //если занятий ещё не было
+                            if ($first == 0) {
+                                //если это практика, то берём следующею лекцию из foreach ($groupLessons as $lesson)
+                                if ($type == 1) {
+                                    echo "Первый предмет не может быть практикой<br/>";
+                                    $lectFilterStatus = 0;
+                                }
+                            }
+                        }
+
+                        if($lectFilterStatus == 1) {
+                            global $lectInThisDateGroup;
+                            //узнаём были ли лекции в этот день у группы, если да, то практику нельзя ставить группе
+                            $lectInThisDateGroup = Timetable::find()
+                                ->asArray()
+                                ->select(['COUNT(id) AS lectCount'])
+                                ->where(['=', 'date', $date])
+                                ->andWhere(['=', 'group_id', $groupID])
+                                ->one();
+                            $lectInThisDateGroup = $lectInThisDateGroup['lectCount'];
+
+                            if ($lectInThisDateGroup > 0) {
+                                echo "Нельзя ставить практику группе, потому что уже были леции в этот день<br/>";
+                                $lectFilterStatus = 0;
+                            }
+                        }
+
+                        if($lectFilterStatus == 1) {
+                            global $lectInThisDateTeacher;
+                            //узнаём были ли лекции в этот день у преподавателя, если да, то практику нельзя ставить преподавателю
+                            $lectInThisDateTeacher = Timetable::find()
+                                ->asArray()
+                                ->select(['COUNT(id) AS lectCount'])
+                                ->where(['=', 'date', $date])
+                                ->andWhere(['=', 'teacher_id', $teacherID])
+                                ->one();
+                            $lectInThisDateTeacher = $lectInThisDateTeacher['lectCount'];
+
+                            if($lectInThisDateTeacher > 0 ) {
+                                echo "Нельзя ставить практику преподавателю, потому что уже были леции в этот день<br/>";
+                                $lectFilterStatus = 0;
+                            }
+                        }
+
+                        if($lectFilterStatus == 1) {
+                            global $sameCorps;
+                            //проверяем, чтобы у группы не было в этот день занятий в разных корпусах
+                            $sameCorps = Timetable::find()
+                                ->asArray()
+                                ->select(['COUNT(id) AS counter'])
+                                ->where(['!=', 'corps_id', $currentCorpsId])
+                                ->andWhere(['=', 'date', $date])
+                                ->andWhere(['=', 'group_id', $groupID])
+                                ->all();
+                            $sameCorps = $sameCorps['counter'];
+
+                            //если есть занятия в другом корпусе, то берём следующею лекцию из foreach ($groupLessons as $lesson)
+                            if ($sameCorps != 0) {
+                                echo "Нельзя ставить группе занятия в разных корпусах в один день<br/>";
+                                $lectFilterStatus = 0;
+                            }
+                        }
+
+                        if($lectFilterStatus == 1) {
+                            global $sameCorps;
+                            //проверяем, чтобы у преподавателя не было в этот день занятий в разных корпусах
+                            $sameCorps = Timetable::find()
+                                ->asArray()
+                                ->select(['COUNT(id) AS counter'])
+                                ->where(['!=', 'corps_id', $currentCorpsId])
+                                ->andWhere(['=', 'date', $date])
+                                ->andWhere(['=', 'teacher_id', $teacherID])
+                                ->all();
+                            $sameCorps = $sameCorps['counter'];
+
+                            //если есть занятия в другом корпусе, то берём следующею лекцию из foreach ($groupLessons as $lesson)
+                            if ($sameCorps != 0) {
+                                echo "Нельзя ставить преподавателю занятия в разных корпусах в один день<br/>";
+                                $lectFilterStatus = 0;
+                            }
+                        }
+
+                        if($lectFilterStatus == 1) {
+                            global $workStatus;
+                            //узнаём работает ли преподаватель в этот день
+                            $formatter = new \yii\i18n\Formatter;
+                            $day = $formatter->asDate($date, "l"); //текущий день недели
+                            switch ($day) {
+                                case 'Monday':
+                                    $workStatus = TeacherMeta::find()
+                                        ->asArray()
+                                        ->select('monday')
+                                        ->where(['user_id' => $teacherID])
+                                        ->one();
+                                    $workStatus = ArrayHelper::getValue($workStatus, 'monday');
+                                    break;
+                                case 'Tuesday':
+                                    $workStatus = TeacherMeta::find()
+                                        ->asArray()
+                                        ->select('tuesday')
+                                        ->where(['user_id' => $teacherID])
+                                        ->one();
+                                    $workStatus = ArrayHelper::getValue($workStatus, 'tuesday');
+                                    break;
+                                case 'Wednesday':
+                                    $workStatus = TeacherMeta::find()
+                                        ->asArray()
+                                        ->select('wednesday')
+                                        ->where(['user_id' => $teacherID])
+                                        ->one();
+                                    $workStatus = ArrayHelper::getValue($workStatus, 'wednesday');
+                                    break;
+                                case 'Thursday':
+                                    $workStatus = TeacherMeta::find()
+                                        ->asArray()
+                                        ->select('thursday')
+                                        ->where(['user_id' => $teacherID])
+                                        ->one();
+                                    $workStatus = ArrayHelper::getValue($workStatus, 'thursday');
+                                    break;
+                                case 'Friday':
+                                    $workStatus = TeacherMeta::find()
+                                        ->asArray()
+                                        ->select('friday')
+                                        ->where(['user_id' => $teacherID])
+                                        ->one();
+                                    $workStatus = ArrayHelper::getValue($workStatus, 'friday');
+                                    break;
+                                case 'Saturday':
+                                    $workStatus = TeacherMeta::find()
+                                        ->asArray()
+                                        ->select('saturday')
+                                        ->where(['user_id' => $teacherID])
+                                        ->one();
+                                    $workStatus = ArrayHelper::getValue($workStatus, 'saturday');
+                                    break;
+                                case 'Sunday':
+                                    $workStatus = TeacherMeta::find()
+                                        ->asArray()
+                                        ->select('sunday')
+                                        ->where(['user_id' => $teacherID])
+                                        ->one();
+                                    $workStatus = ArrayHelper::getValue($workStatus, 'sunday');
+                                    break;
+                            }
+
+                            //если преподаватель не работает в этот день, то берём следующею лекцию из foreach ($groupLessons as $lesson)
+                            if ($workStatus == 0) {
+                                echo "Преподаватель в этот день не работает<br/>";
+                                $lectFilterStatus = 0;
+                            }
+                        }
+
+                        if($lectFilterStatus == 1) {
+                            global $lectComplete;
+                            global $lectMax;
+                            //считаем сколько преподаватель наработал часов на этой неделе,
+                            //если больше нормы, то берём следующею лекцию из foreach ($groupLessons as $lesson)
+                            //для начала, определяем дату первого понедельника в этой неделе генерируемого расписания
+                            $firstMonday = $datestart;
+                            $day = $formatter->asDate($firstMonday, "l");
+                            while ($day != 'Monday') {
+                                $firstMonday = $firstMonday - 86400;
+                                $day = $formatter->asDate($firstMonday, "l");
+                            }
+
+                            //начиная с первого понедельника до воскресенья, считаем количество пар, которые провёл преподаватель
+                            //!!! надо будет переписать эту часть для более точного учёта, т.к. сейчас все лекции в этой таблицебудут считаться как состоявшиеся
+                            $lectComplete = Timetable::find()
+                                ->asArray()
+                                ->select(['COUNT(teacher_id) AS lectCount'])
+                                ->where(['>=', 'date', $firstMonday])
+                                ->andWhere(['<=', 'date', $firstMonday + 518400])//понедельник + 6 дней
+                                ->groupBy(['teacher_id'])
                                 ->all();
 
-                            //пробуем поставить предмет в ячейку, если не подходит, пробуем следующий и т.д.
-                            //если не можем поставить без окна, то заканчиваем день
-                            //перебираем лекции
-                            foreach ($groupLessons as $lesson) {
-                                //первое занятие у группы ставить производтсвенное обучение
-                                //смотрим сколько всего у группы уже было занятий
-                                $first = Timetable::find()
+                            //кол-во часов, которое преподатель проработал уже, одна пара - два академических часа
+                            $lectComplete = $lectComplete['lectCount'] * 2;
+
+                            //максимальное кол-во часов в неделю для преподавателя
+                            $lectMax = TeacherMeta::find()
+                                ->asArray()
+                                ->select('hours')
+                                ->where(['user_id' => $teacherID])
+                                ->one();
+
+                            //если больше нормы, то берём следующею лекцию из foreach ($groupLessons as $lesson)
+                            if ($lectComplete >= $lectMax['hours']) {
+                                echo "Преподаватель уже отработал норму<br/>";
+                                $lectFilterStatus = 0;
+                            }
+                        }
+
+                        if($lectFilterStatus == 1) {
+                            global $sameLect;
+                            //проверяем, нет ли такой же пары в этот день у этой же группы, в следующий или предыдущий день в этой же группы
+                            //параметры следует отрегулировать, чтобы не было пустых дней, когда уже почти никих пар поставить нельзя
+                            //если есть, то берём следующею лекцию из foreach ($groupLessons as $lesson)
+                            $sameLect = Timetable::find()
+                                ->asArray()
+                                ->select(['COUNT(id) AS sameLect'])
+                                ->where(['=', 'date', $date])
+                                //->andWhere(['=', 'date', $date - 86400]) ограничение на такую же пару в предыдущий день
+                                //->andWhere(['=', 'date', $date + 86400]) ограничение на такую же пару на следующий день
+                                ->andWhere(['=', 'group_id', $groupID])
+                                ->one();
+                            $sameLect = $sameLect['sameLect'];
+
+                            if ($sameLect > 0) {
+                                echo "Нельзя ставить одинаковые пары в один день<br/>";
+                                $lectFilterStatus = 0;
+                            }
+                        }
+
+                        if($lectFilterStatus == 1) {
+                            global $isPrectice;
+                            //проверяем, если в этот день у группы практические занятия, если есть, то не ставим больше лекций в этот день
+                            $lectionsToday = Timetable::find()
+                                ->asArray()
+                                ->select('subjects_id')
+                                ->where(['=', 'date', $date])
+                                ->andWhere(['=', 'group_id', $groupID])
+                                ->all();
+
+                            foreach ($lectionsToday as $lection) {
+                                $isPrectice = Subjects::find()
                                     ->asArray()
-                                    ->select(['COUNT(id) AS lectCount'])
-                                    ->where(['=', 'group_id', $groupID])
-                                    ->all();
-
-                                if($first['lectCount'] == 0) {
-                                    //узнаём тип лекции, если это не практика, то берём следующею лекцию из foreach ($groupLessons as $lesson)
-                                    $type = Subjects::find()
-                                        ->asArray()
-                                        ->select('practice')
-                                        ->where(['ID' => $lesson['subject_id']])
-                                        ->one();
-
-                                    if($type['practice'] == 0) {
-                                        continue;
-                                    }
-                                }
-
-                                //узнаём аудиторию лекции
-                                $audienceID = Subjects::find()
-                                    ->asArray()
-                                    ->select('audience_id')
-                                    ->where(['ID' => $lesson['subject_id']])
+                                    ->select('practice')
+                                    ->where(['=', 'ID', $lection['subjects_id']])
                                     ->one();
-                                $audienceID = $audienceID['audience_id'];
-
-                                //узнаём корпус аудитории
-                                $currentCorpsId = Audience::find()
-                                    ->asArray()
-                                    ->select('corps_id')
-                                    ->where(['ID' => $audienceID])
-                                    ->one();
-                                $currentCorpsId = $currentCorpsId['corps_id'];
-
-                                $subjId = $lesson['subject_id'];
-
-                                //проверяем, чтобы у группы не было в этот день занятий в разных корпусах
-                                $sameCorps = Timetable::find()
-                                    ->asArray()
-                                    ->select(['COUNT(id) AS counter'])
-                                    ->where(['!=', 'corps_id', $currentCorpsId])
-                                    ->andWhere(['=', 'date', $datestart])
-                                    ->andWhere(['=', 'group_id', $groupID])
-                                    ->all();
-
-                                //если есть занятия в другом корпусе, то берём следующею лекцию из foreach ($groupLessons as $lesson)
-                                if($sameCorps['counter'] != 0) {
-                                    continue;
+                                $isPrectice = $isPrectice['practice'];
+                                //если уже есть практика в этот день, то берём следующею лекцию из foreach ($groupLessons as $lesson)
+                                //? можно оптимизировать, чтобы сразу переходить на следующий день
+                                if ($isPrectice == 1) {
+                                    echo "Нельзя ставить никакие лекции в один день с практикой<br/>";
+                                    $lectFilterStatus = 0;
                                 }
+                            }
+                        }
 
-                                //узнаём преподавателя этой лекции
-                                $teacherID = Subjects::find()
-                                    ->asArray()
-                                    ->select('teacher_id')
-                                    ->where(['ID' => $subjId])
-                                    ->one();
-                                $teacherID = $teacherID['teacher_id'];
+                        if($lectFilterStatus == 1) {
+                            global $inWeek;
+                            global $maxInWeek;
+                            //проверяем чтобы не ставить лекций этого предмета больше, чем можно максимально в неделю
+                            $inWeek = Timetable::find()
+                                ->asArray()
+                                ->select(['COUNT(subjects_id) AS subjInWeek'])
+                                ->where(['>=', 'date', $firstMonday])
+                                ->andWhere(['<=', 'date', $firstMonday + 518400])//понедельник + 6 дней
+                                ->andWhere(['=', 'group_id', $groupID])
+                                ->one();
+                            $inWeek = $inWeek['subjInWeek'];
 
-                                //узнаём работает ли он в этот день
-                                $formatter = new \yii\i18n\Formatter;
-                                $day = $formatter->asDate($datestart, "l"); //текущий день недели
-                                $workStatus = 0;
-                                switch ($day) {
-                                    case 'Monday':
-                                        $workStatus = TeacherMeta::find()
-                                            ->asArray()
-                                            ->select('monday')
-                                            ->where(['user_id' => $teacherID])
-                                            ->one();
-                                        $workStatus = ArrayHelper::getValue($workStatus, 'monday');
-                                        break;
-                                    case 'Tuesday':
-                                        $workStatus = TeacherMeta::find()
-                                            ->asArray()
-                                            ->select('tuesday')
-                                            ->where(['user_id' => $teacherID])
-                                            ->one();
-                                        $workStatus = ArrayHelper::getValue($workStatus, 'tuesday');
-                                        break;
-                                    case 'Wednesday':
-                                        $workStatus = TeacherMeta::find()
-                                            ->asArray()
-                                            ->select('wednesday')
-                                            ->where(['user_id' => $teacherID])
-                                            ->one();
-                                        $workStatus = ArrayHelper::getValue($workStatus, 'wednesday');
-                                        break;
-                                    case 'Thursday':
-                                        $workStatus = TeacherMeta::find()
-                                            ->asArray()
-                                            ->select('thursday')
-                                            ->where(['user_id' => $teacherID])
-                                            ->one();
-                                        $workStatus = ArrayHelper::getValue($workStatus, 'thursday');
-                                        break;
-                                    case 'Friday':
-                                        $workStatus = TeacherMeta::find()
-                                            ->asArray()
-                                            ->select('friday')
-                                            ->where(['user_id' => $teacherID])
-                                            ->one();
-                                        $workStatus = ArrayHelper::getValue($workStatus, 'friday');
-                                        break;
-                                    case 'Saturday':
-                                        $workStatus = TeacherMeta::find()
-                                            ->asArray()
-                                            ->select('saturday')
-                                            ->where(['user_id' => $teacherID])
-                                            ->one();
-                                        $workStatus = ArrayHelper::getValue($workStatus, 'saturday');
-                                        break;
-                                    case 'Sunday':
-                                        $workStatus = TeacherMeta::find()
-                                            ->asArray()
-                                            ->select('sunday')
-                                            ->where(['user_id' => $teacherID])
-                                            ->one();
-                                        $workStatus = ArrayHelper::getValue($workStatus, 'sunday');
-                                        break;
-                                }
+                            $maxInWeek = Subjects::find()
+                                ->asArray()
+                                ->select('max_week')
+                                ->where(['=', 'ID', $subjId])
+                                ->one();
+                            $maxInWeek = $maxInWeek['max_week'];
+                            //если на этой неделе предмета больше или равно макс. кол-ву в неделю, то берём следующею лекцию из foreach ($groupLessons as $lesson)
+                            if ($inWeek >= $maxInWeek) {
+                                echo "Нельзя ставить предмета больше его максимума в неделю<br/>";
+                                $lectFilterStatus = 0;
+                            }
+                        }
 
-                                //если преподаватель не работает в этот день, то берём следующею лекцию из foreach ($groupLessons as $lesson)
-                                if($workStatus == 0) {
-                                    continue;
-                                }
+                        if($lectFilterStatus == 1) {
+                            global $allCurrentSubj;
+                            global $maxSubj;
+                            //проверяем чтобы не ставить лекций этого предмета больше, чем всего максимально возможно
+                            $allCurrentSubj = Timetable::find()
+                                ->asArray()
+                                ->select(['COUNT(subjects_id) AS subj'])
+                                ->where(['=', 'group_id', $groupID])
+                                ->one();
+                            $allCurrentSubj = $allCurrentSubj['subj'];
 
-                                //проверяем, чтобы у преподавателя не было в этот день занятий в разных корпусах
-                                $sameCorps = Timetable::find()
-                                    ->asArray()
-                                    ->select(['COUNT(id) AS counter'])
-                                    ->where(['!=', 'corps_id', $currentCorpsId])
-                                    ->andWhere(['=', 'date', $datestart])
-                                    ->andWhere(['=', 'teacher_id', $teacherID])
-                                    ->all();
+                            $maxSubj = Lessons::find()
+                                ->asArray()
+                                ->select('quantity')
+                                ->where(['=', 'course_id', $courseID])
+                                ->andWhere(['=', 'subject_id', $subjId])
+                                ->one();
+                            $maxSubj = $maxSubj['quantity'];
 
-                                //если есть занятия в другом корпусе, то берём следующею лекцию из foreach ($groupLessons as $lesson)
-                                if($sameCorps['counter'] != 0) {
-                                    continue;
-                                }
+                            //если предмета больше или равно макс. кол-ву, то берём следующею лекцию из foreach ($groupLessons as $lesson)
+                            if ($allCurrentSubj >= $maxSubj) {
+                                echo "Нельзя ставить предмета больше его общего количества<br/>";
+                                $lectFilterStatus = 0;
+                            }
+                        }
 
-                                //считаем сколько преподаватель наработал часов на этой неделе,
-                                //если больше нормы, то берём следующею лекцию из foreach ($groupLessons as $lesson)
-                                //для начала, определяем дату первого понедельника в этой неделе генерируемого расписания
-                                $firstMonday = $datestart;
-                                $day = $formatter->asDate($firstMonday, "l");
-                                while ($day != 'Monday') {
-                                    $firstMonday = $firstMonday - 86400;
-                                    $day = $formatter->asDate($firstMonday, "l");
-                                }
+                        //узнаём lecture_id - id пары из lecture_table
+                        $lecture_id = 1; //пока не высчитываем, возможно стоит убрать эту колонку из таблицы
 
-                                //начиная с первого понедельника до воскресенья, считаем количество пар, которые провёл преподаватель
-                                //!!! надо будет переписать эту часть для более точного учёта, т.к. сейчас все лекции в этой таблицебудут считаться как состоявшиеся
-                                $lectComplete = Timetable::find()
-                                    ->asArray()
-                                    ->select(['COUNT(teacher_id) AS lectCount'])
-                                    ->where(['>=', 'date', $firstMonday])
-                                    ->andWhere(['<=', 'date', $firstMonday + 518400]) //понедельник + 6 дней
-                                    ->groupBy(['teacher_id'])
-                                    ->all();
+                        //состоялась ли лекция
+                        $statusLect = 1; //по умолчанию ставим, что состоялась
 
-                                //кол-во часов, которое преподватель проработал уже, одна пара - два академических часа
-                                $lectComplete = $lectComplete['lectCount']*2;
+                        //наконец-то прошли все проверки и делаем запись в базу
+                        //id - автоинкремент, не передаём
+                        //corps_id - $currentCorpsId
+                        //audience_id - $audienceID
+                        //subjects_id - $subjId
+                        //teacher_id - $teacherID
+                        //group_id - $groupID
+                        //lecture_id - $lecture_id id пары из lecture_table
+                        //date - $date
+                        //status - $status
+                        //part_id - $id расписания из timetable_parts
+                        //x - $x координата, номер дня п.п.
+                        //y - $y координата, номер пары п.п.
 
-                                //максимальное кол-во часов в неделю для преподавателя
-                                $lectMax = TeacherMeta::find()
-                                    ->asArray()
-                                    ->select('hours')
-                                    ->where(['user_id' => $teacherID])
-                                    ->one();
+                        //если предмет прошёл фильтры, то записываем его в базу
+                        if($lectFilterStatus == 1) {
+                            $timetable = new Timetable();
+                            $timetable->corps_id = $currentCorpsId;
+                            $timetable->audience_id = $audienceID;
+                            $timetable->subjects_id = $subjId;
+                            $timetable->teacher_id = $teacherID;
+                            $timetable->group_id = $groupID;
+                            $timetable->lecture_id = $lecture_id;
+                            $timetable->date = $date;
+                            $timetable->status = $statusLect;
+                            $timetable->part_id = $id;
+                            $timetable->x = $x;
+                            $timetable->y = $y;
+                            $timetable->save();
+                            echo "Добавили пару<br/>";
+                        }
 
-                                //если больше нормы, то то берём следующею лекцию из foreach ($groupLessons as $lesson)
-                                if($lectComplete >= $lectMax['hours']) {
-                                    continue;
-                                }
-
-                                //проверяем, нет ли такой же пары в этот день у этой же группы, в следующий или предыдущий день в этой же группы
-                                //параметры следует отрегулировать, чтобы не было пустых дней, когда уже почти никих пар поставить нельзя
-                                //если есть, то берём следующею лекцию из foreach ($groupLessons as $lesson)
-                                $sameLect = Timetable::find()
-                                    ->asArray()
-                                    ->select(['COUNT(id) AS sameLect'])
-                                    ->where(['=', 'date', $datestart])
-                                    ->andWhere(['=', 'date', $datestart - 86400])
-                                    ->andWhere(['=', 'date', $datestart + 86400])
-                                    ->andWhere(['=', 'group_id', $groupID])
-                                    ->all();
-
-                                if($sameLect['sameLect'] > 0) {
-                                    continue;
-                                }
-
-                                //проверяем, если в этот день у группы практические занятия, если есть, то не ставим больше лекций в этот день
-                                $lectionsToday = Timetable::find()
-                                    ->asArray()
-                                    ->select('subjects_id')
-                                    ->where(['=', 'date', $datestart])
-                                    ->andWhere(['=', 'group_id', $groupID])
-                                    ->all();
-
-                                foreach ($lectionsToday as $lection) {
-                                    $isPrectice = Subjects::find()
-                                        ->asArray()
-                                        ->select('practice')
-                                        ->where(['=', 'ID', $lection['subjects_id']])
-                                        ->one();
-                                    //если уже есть практика в этот день, то сразу выходим на следующий день
-                                    if($isPrectice['practice'] == 1) {
-                                        continue 3; //обрываем foreach ($lectionsToday as $lection), foreach ($groupLessons as $lesson), while ($datestart <= $dateend)
-                                    }
-                                }
-
-                                //проверяем чтобы не ставить лекций этого предмета больше, чем можно максимально в неделю
-                                $inWeek = Timetable::find()
-                                    ->asArray()
-                                    ->select(['COUNT(subjects_id) AS subjInWeek'])
-                                    ->where(['>=', 'date', $firstMonday])
-                                    ->andWhere(['<=', 'date', $firstMonday + 518400]) //понедельник + 6 дней
-                                    ->andWhere(['=', 'group_id', $groupID])
-                                    ->one();
-
-                                $maxInWeek = Subjects::find()
-                                    ->asArray()
-                                    ->select('max_week')
-                                    ->where(['=', 'ID', $subjId])
-                                    ->one();
-                                //если на этой неделе предмета больше или равно макс. кол-ву в неделю, то берём следующею лекцию из foreach ($groupLessons as $lesson)
-                                if($inWeek['subjInWeek'] >= $maxInWeek['max_week']) {
-                                    continue;
-                                }
-
-                                //проверяем чтобы не ставить лекций этого предмета больше, чем всего максимально возможно
-                                $allCurrentSubj = Timetable::find()
-                                    ->asArray()
-                                    ->select(['COUNT(subjects_id) AS subj'])
-                                    ->where(['=', 'group_id', $groupID])
-                                    ->one();
-
-                                $maxSubj = Lessons::find()
-                                    ->asArray()
-                                    ->select('quantity')
-                                    ->where(['=', 'course_id', $courseID])
-                                    ->andWhere(['=', 'subject_id', $subjId])
-                                    ->one();
-                                //если предмета больше или равно макс. кол-ву, то берём следующею лекцию из foreach ($groupLessons as $lesson)
-                                if($allCurrentSubj['subj'] >= $maxSubj['quantity']) {
-                                    continue;
-                                }
-
-                                //наконец-то прошли все проверки и делаем запись в базу
-                                //id - автоинкремент, не передаём
-                                //corps_id - $currentCorpsId
-                                //audience_id - $audienceID
-                                //subjects_id - $subjId
-                                //teacher_id - $teacherID
-                                //group_id - $groupID
-                                //lecture_id - ? id пары из lecture_table (необходимо вычислять)
-                                //date - $datestart
-                                //status - ? пока не ставим
-                                //part_id - ? id расписания из timetable_parts
-                                //x - ? координата, номер дня п.п.
-                                //y - ? координата, номер пары п.п.
-
-                                $timetable = new Timetable();
-
-                            } //цикл по лекциям
-                        } //цикл по всем группам
-
-                        //сегодня в завтрашний день
-                        $datestart = (int)$datestart + 86400;
-                } //цикл по дням
+                    } //цикл по лекциям
+                } //цикл по всем группа
             } //цикл по парам
-        } //цикл по корпусам
+        } //цикл по дням
     }
 }

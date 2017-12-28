@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="generate-timetable">
 	<?php
-	echo $model->renderTable(57);
-    \app\models\TimetableParts::generate('1514149200', '1514667600');
+	echo $model->renderTable(48);
+    \app\models\TimetableParts::generateLectures('1514149200', '1514667600','7', '5');
 	?>
 </div>
