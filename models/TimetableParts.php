@@ -211,6 +211,19 @@ class TimetableParts extends \yii\db\ActiveRecord
                         $type = $type['practice'];
 
                         //нельзя ставить пару, если у корпуса их меньше $y
+                        if($lectFilterStatus == 1) {
+                            global $lecturesCounterCorps;
+                            $lecturesCounterCorps = LectureTable::find()
+                                ->asArray()
+                                ->select(['COUNT(corps_id) AS corps_id'])
+                                ->where(['=', 'corps_id', $currentCorpsId])
+                                ->one();
+                            $lecturesCounterCorps = $lecturesCounterCorps['corps_id'];
+                            if($lecturesCounterCorps < $y ) {
+                                //echo "У корпуса не может быть пар в один день больше чем.".$y."<br/>";
+                                $lectFilterStatus = 0;
+                            }
+                        }
 
                         if($lectFilterStatus == 1) {
                             global $first;
@@ -400,8 +413,8 @@ class TimetableParts extends \yii\db\ActiveRecord
                             $lectComplete = Timetable::find()
                                 ->asArray()
                                 ->select(['COUNT(teacher_id) AS lectCount'])
-                                ->where(['>=', 'date', $firstMonday])
-                                ->andWhere(['<=', 'date', $firstMonday + 518400])//понедельник + 6 дней
+                                ->where(['<=', 'date', $firstMonday]) // $firstMonday <= date
+                                ->andWhere(['>=', 'date', $firstMonday + 518400])//понедельник+6 дней >= date
                                 ->groupBy(['teacher_id'])
                                 ->all();
 
@@ -477,8 +490,8 @@ class TimetableParts extends \yii\db\ActiveRecord
                             $inWeek = Timetable::find()
                                 ->asArray()
                                 ->select(['COUNT(subjects_id) AS subjInWeek'])
-                                ->where(['>=', 'date', $firstMonday])
-                                ->andWhere(['<=', 'date', $firstMonday + 518400])//понедельник + 6 дней
+                                ->where(['<=', 'date', $firstMonday])
+                                ->andWhere(['>=', 'date', $firstMonday + 518400])//понедельник + 6 дней
                                 ->andWhere(['=', 'group_id', $groupID])
                                 ->one();
                             $inWeek = $inWeek['subjInWeek'];

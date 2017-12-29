@@ -8,6 +8,7 @@ use app\models\TimetablePartsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\models\Timetable;
 
 /**
  * TimetablePartsController implements the CRUD actions for TimetableParts model.
@@ -109,6 +110,8 @@ class TimetablePartsController extends Controller
      */
     public function actionDelete($id)
     {
+        Timetable::deleteAll(['=', 'part_id', $id]);
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

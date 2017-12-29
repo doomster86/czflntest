@@ -138,24 +138,8 @@ class Timetable extends \yii\db\ActiveRecord
             ->all();
         //v($input_array);
 
-
         /*
-        был
-        $input_array = array(
-            0 =>
-                array(
-                    "date" => "01.01.2018", //колонка
-                    "lectureN" => "1", //строка
-                    "corps" => "Корпус 1",
-                    "audience" => "Аудиторія №1",
-                    "subject" => "Практика на заводі",
-                    "teacher" => "Коритувач Т.А.",
-                    "group" => "ГР-1",
-                    "part" => "56",
-                ),
-        );
-
-        приходит
+        приходит массив вида
                array(9) {
                   [0]=>
                   array(12) {
