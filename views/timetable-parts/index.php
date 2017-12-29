@@ -57,9 +57,20 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update} {delete}',
+                'template' => '{view} {update} {delete}',
 
                 'buttons' => [
+
+                    'view' => function ($url,$model) {
+                        return Html::a(
+                            '<span class="glyphicon glyphicon-eye-open left"></span>',
+                            $url,
+                            [
+                                'title' => 'Переглянути',
+                                'data-pjax' => '0',
+                            ]
+                        );
+                    },
 
                     'update' => function ($url, $model, $key) {
                         return Html::a(

@@ -7,34 +7,19 @@ use app\models\LectureTable;
 /* @var $this yii\web\View */
 /* @var $model app\models\TimetableParts */
 
-$this->title = $model->id;
+$this->title = 'Розклад';
 $this->params['breadcrumbs'][] = ['label' => 'Розклади', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="timetable-parts-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'datestart',
-            'dateend',
-            'cols',
-            'rows',
-        ],
-    ]) ?>
+    <?php
+    $tableID = $model->id;
+    if($tableID != 0) {
+        echo \app\models\Timetable::renderTable($tableID);
+    } else {
+        echo "<p>Інформація відсутня</p>";
+    }
+    ?>
 
 </div>
