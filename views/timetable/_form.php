@@ -37,6 +37,9 @@ use kartik\date\DatePicker;
 		]
 	);
 	//['options' => [0 => ['disabled' => true]]]
+
+    $formatter = new \yii\i18n\Formatter;
+    $model->date = $formatter->asDate($model->date, "dd.MM.yyyy");
 	?>
 
 	<?=  $form->field($model, 'date')->label('Оберіть дату')->widget(DatePicker::className(),[]); ?>

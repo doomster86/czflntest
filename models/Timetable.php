@@ -327,7 +327,7 @@ class Timetable extends \yii\db\ActiveRecord
 
 	public function getLectureTime($corpsId) {
 		$lecturetime_values = LectureTable::find()->asArray()
-            ->select(["ID", "corps_id", "CONCAT( time_start, ' - ', time_stop) AS time"])
+            ->select(["ID", "CONCAT( time_start, ' - ', time_stop) AS time"])
             ->where(['=', 'corps_id', $corpsId])
             ->orderBy('time_start')
             ->all();

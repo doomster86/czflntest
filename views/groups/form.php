@@ -104,7 +104,7 @@ Pjax::begin([
 		    ?>
 
 		    <?php echo $form->field($model, 'curator')
-			    ->label('Оберіть професію')
+			    ->label('Оберіть куратора')
 			    ->dropDownList($curators, $options);  ?>
 
         </div>
