@@ -57,7 +57,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {update} {delete}',
+                //'template' => '{view} {update} {delete}',
+                'template' => '{view} {delete}',
 
                 'buttons' => [
 
@@ -72,9 +73,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         );
                     },
 
+                    /*
                     'update' => function ($url, $model, $key) {
                         return Html::a(
-                            "<span class=\"glyphicon glyphicon-pencil left\"></span>",
+                            "<span class=\"glyphicon glyphicon-pencil\"></span>",
                             $url,
                             [
                                 'title' => 'Оновити',
@@ -84,6 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]
                         );
                     },
+                    */
 
                     'delete' => function ($url, $model, $key) {
                         return Html::a(

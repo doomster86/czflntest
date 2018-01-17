@@ -91,7 +91,7 @@ class UserController extends Controller
      */
     public function actionUpdate($id)
     {
-        if(Yii::$app->user->identity->role==1) {
+        if(Yii::$app->user->identity->role/*==1*/) {
             $model = $this->findModel($id);
             $teacher = $this->findTeacherModel($id);
             $student = $this->findStudentModel($id);
@@ -126,6 +126,7 @@ class UserController extends Controller
                     'model' => $model,
                     'teacher' => $teacher,
                     'student' => $student,
+                    'operation' => '',
                 ]);
             }
 
@@ -136,7 +137,7 @@ class UserController extends Controller
 
     public function actionUpdateTeacherMeta($id)
     {
-        if(Yii::$app->user->identity->role==1) {
+        if(Yii::$app->user->identity->role/*==1*/) {
             $model = $this->findTeacherModel($id);
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -156,7 +157,7 @@ class UserController extends Controller
 
     public function actionUpdateStudentMeta($id)
     {
-        if(Yii::$app->user->identity->role==1) {
+        if(Yii::$app->user->identity->role/*==1*/) {
             $model = $this->findStudentModel($id);
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {

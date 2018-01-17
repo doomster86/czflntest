@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Предмет',
                 'content' => function ($model, $key, $index, $column){
                     $subject = Subjects::find()->asArray()->where(['ID' => $model->subject_id])->one();
-                    return $subject['name'] . ' (' .$model->subject_id. ')';
+                    return $subject['name'];// . ' (' .$model->subject_id. ')';
                 },
                 'contentOptions' =>function ($model, $key, $index, $column){
                     return ['class' => 'col-xs-6'];

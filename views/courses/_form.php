@@ -25,7 +25,7 @@ Pjax::begin([
 $form = ActiveForm::begin([
     'options' => [
         'data' => [
-            'pjax' => true,
+            //'pjax' => true,
         ],
         'id' => 'course-form',
     ],

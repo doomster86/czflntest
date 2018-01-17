@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use yii\helpers\ArrayHelper;
 use \app\models\TimetableParts;
+use yii\helpers\Html;
 /**
  * This is the model class for table "timetable".
  *
@@ -285,6 +286,10 @@ class Timetable extends \yii\db\ActiveRecord
                                 $output .= '<p>Викладач: '.$teacherName.'</p>';
                                 $output .= '<p>Группа: '.$groupName.'</p>';
                                 $output .= '<p>Предмет: '.$subjName.'</p>';
+	                            if(Yii::$app->user->identity->role==1) {
+		                            $output .= '<p><br/><a href="/timetable/update/'.$cell["id"].'">Редагувати</a> | 
+														<a href="/timetable/delete/'.$cell["id"].'">Видалити</a></p>';
+	                            }
                                 $output .= '</div>';
                                 switch ($class_bg) {
                                     case 'dark':
@@ -298,6 +303,13 @@ class Timetable extends \yii\db\ActiveRecord
                                 $output .= '<div></div>';
                             }
                         }
+	                    if(Yii::$app->user->identity->role==1) {
+                        	$curdate = $date_array['datestart'];
+		                    $curdate = (int)$curdate;
+		                    $curdate = $curdate + 86400*($td-1);
+		                    //$curdate = $formatter->asDate($curdate, "dd.MM.yyyy");
+		                    $output .= '<p><br/><a href="/timetable/create/?tp=96&x='.$td.'&y='.$tr.'&date='.$curdate.'">Додати заняття</a>';
+	                    }
                         $output .= '</td>';
 
                     }
@@ -312,5 +324,83 @@ class Timetable extends \yii\db\ActiveRecord
 
 
     }
+
+	public function getLectureTime() {
+		$lecturetime_values = LectureTable::find()->asArray()->select(["ID", "corps_id", "CONCAT( time_start, ' - ', time_stop) AS time"])
+			//->where(['role' => 2, 'status' => 1])
+			                       ->orderBy('ID')
+		                           ->all();
+		$lecturetime_names = ArrayHelper::getColumn($lecturetime_values, 'time');
+		$lecturetime_ids = ArrayHelper::getColumn($lecturetime_values, 'ID');
+
+		$lecturetime = array_combine($lecturetime_ids, $lecturetime_names);
+		return $lecturetime;
+	}
+
+	public function getAudienceNames() {
+		$audience_values = Audience::find()->asArray()->select(["ID", "corps_id", "CONCAT('№ ', num, ' - ', name) AS full_name"])
+			//->where(['role' => 2, 'status' => 1])
+			                       ->orderBy('ID')
+		                           ->all();
+		$audience_names = ArrayHelper::getColumn($audience_values, 'full_name');
+		$audience_ids = ArrayHelper::getColumn($audience_values, 'ID');
+		$corps_ids = ArrayHelper::getColumn($audience_values, 'corps_id');
+
+		foreach ($corps_ids as $id) {
+			$corps_names[] = Corps::find()->asArray()->select(["corps_name"])
+			                      ->where(['ID' => $id])
+			                      ->orderBy('ID')
+			                      ->one();
+		}
+
+		$corps_names = ArrayHelper::getColumn($corps_names, 'corps_name');
+
+		for($i = 0; $i < count($audience_names); $i++ ) {
+			$audience_names[$i] = "Корпус: ".$corps_names[$i]." || Аудиторія: ".$audience_names[$i];
+		}
+
+		$audience = array_combine($audience_ids, $audience_names);
+		return $audience;
+	}
+
+	public function getTeachersNames() {
+
+		$teacher_values = User::find()->asArray()->select(['id', "CONCAT(firstname, ' ', middlename, ' ',lastname) AS full_name"])
+		                      ->where(['role' => 2, 'status' => 1])
+		                      ->orderBy('id')
+		                      ->all();
+		$teacher_names = ArrayHelper::getColumn($teacher_values, 'full_name');
+		$teacher_ids = ArrayHelper::getColumn($teacher_values, 'id');
+
+		$teachers = array_combine($teacher_ids, $teacher_names);
+
+		return $teachers;
+	}
+
+	public function getSubjectsNames() {
+
+		$subjects_values = Subjects::find()->asArray()->select(['ID', 'name'])
+		                      ->orderBy('ID')
+		                      ->all();
+		$subjects_names = ArrayHelper::getColumn($subjects_values, 'name');
+		$subjects_ids = ArrayHelper::getColumn($subjects_values, 'ID');
+
+		$subjects = array_combine($subjects_ids, $subjects_names);
+
+		return $subjects;
+	}
+
+	public function getGroupsNames() {
+
+		$groups_values = Groups::find()->asArray()->select(['ID', 'name'])
+		                           ->orderBy('ID')
+		                           ->all();
+		$groups_names = ArrayHelper::getColumn($groups_values, 'name');
+		$groups_ids = ArrayHelper::getColumn($groups_values, 'ID');
+
+		$groups = array_combine($groups_ids, $groups_names);
+
+		return $groups;
+	}
 
 }

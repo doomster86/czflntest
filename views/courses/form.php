@@ -100,7 +100,7 @@ Pjax::begin([
     ?>
 
         <div class="form-group col-md-12">
-            <?php if($courses_status == 'create') {
+            <?php if($current_action == 'create') {
                 echo Html::submitButton('Створити', ['class' => 'btn btn-success']);
             } else {
                 echo Html::submitButton('Оновити', ['class' => 'btn btn-primary']);

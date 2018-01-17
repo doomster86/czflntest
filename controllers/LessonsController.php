@@ -44,14 +44,15 @@ class LessonsController extends Controller{
 
                 $model->update();
 
-                return $this->redirect('/web/courses/'.$model->course_id);
+                return $this->redirect('/courses/'.$model->course_id);
 
             } else {
 
                 $quantity = Html::encode($model->quantity);
                 return $this->render('update', [
                     'model' => $model,
-                    'quantity' => $quantity
+                    'quantity' => $quantity,
+                    'status' => 'update'
                 ]);
             }
 

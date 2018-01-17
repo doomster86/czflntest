@@ -5,10 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Timetable */
 
-$this->title = 'Update Timetable: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Timetables', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->title = 'Редагувати заняття: ' . $model->id;
 ?>
 <div class="timetable-update">
 

@@ -89,9 +89,11 @@ class TimetableController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+	    $request = Yii::$app->request;
+    	$tp = $request->get('tp');
+	    $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['/timetable-parts/view?id='.$tp]);
     }
 
     /**

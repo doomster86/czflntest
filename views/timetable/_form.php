@@ -11,26 +11,51 @@ use kartik\date\DatePicker;
 
 <div class="timetable-parts-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+	<?php
+	$form = ActiveForm::begin([
+		'options' => [
+			'data' => ['pjax' => true],
+			'id' => 'user-form'
+		],
+	]);
+	?>
 
-    <?php
-    //$datetime = strtotime('now');
-    //echo $datetime;
-    //echo Yii::$app->dtConverter->toDisplayDate($datetime);
-    ?>
+	<?php
+	//$datetime = strtotime('now');
+	//echo $datetime;
+	//echo Yii::$app->dtConverter->toDisplayDate($datetime);
+	?>
 
-    <?=  $form->field($model, 'datestart')
-        ->widget(DatePicker::className(),[
-        ]); ?>
+	<?php
+	$options = array(
+		'options' =>  [
+			0 => [
+				'disabled' => true,
+				'selected' => 'selected',
+			],
+			//1 => ...
+		]
+	);
+	//['options' => [0 => ['disabled' => true]]]
+	?>
 
-    <?=  $form->field($model, 'dateend')
-        ->widget(DatePicker::className(),[
-        ]); ?>
+	<?=  $form->field($model, 'date')->label('Оберіть дату')->widget(DatePicker::className(),[]); ?>
+
+	<?php echo $form->field($model, 'audience_id')->label('Оберіть пару')->dropDownList($model->getLectureTime(), $options);  ?>
+
+	<?php echo $form->field($model, 'audience_id')->label('Оберіть аудиторію')->dropDownList($model->getAudienceNames(), $options);  ?>
+
+	<?php echo $form->field($model, 'teacher_id')->label('Оберіть викладача')->dropDownList($model->getTeachersNames(), $options);  ?>
+
+	<?php echo $form->field($model, 'subjects_id')->label('Оберіть предмет')->dropDownList($model->getSubjectsNames(), $options);  ?>
+
+	<?php echo $form->field($model, 'group_id')->label('Оберіть групу')->dropDownList($model->getGroupsNames(), $options);  ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+		<?= Html::submitButton($model->isNewRecord ? 'Створити' : 'Редагувати', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
-
-    <?php ActiveForm::end(); ?>
+	<?php
+	ActiveForm::end();
+	?>
 
 </div>

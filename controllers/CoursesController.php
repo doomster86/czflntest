@@ -55,8 +55,8 @@ class CoursesController extends Controller {
                 //return $this->redirect(['courses-create', 'id' => $model->ID]);
                 return $this->render('create', [
                     'model' => $model,
-                    'status' => 'created'
-                    //'operation' => 'created',
+                    'status' => 'created',
+                    'operation' => 'created',
 
                 ]);
             } else {
@@ -64,7 +64,7 @@ class CoursesController extends Controller {
                 return $this->render('create', [
                     'model' => $model,
                     'status' => '',
-                    //'operation' => ''
+                    'operation' => ''
                 ]);
             }
         } else {
@@ -96,7 +96,6 @@ class CoursesController extends Controller {
 
 
     public function actionView($id) {
-
         if(Yii::$app->user->identity->role==1) {
 
             //lessons
@@ -291,6 +290,7 @@ class CoursesController extends Controller {
             } else {
                 return $this->render('update', [
                     'model' => $model,
+                    'operation' => '',
                 ]);
             }
         } else {

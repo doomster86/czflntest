@@ -56,7 +56,7 @@ $form = ActiveForm::begin([
         <div class="form-group col-xs-12">
             <?= Html::submitButton('Оновити', [
                 'class' => 'btn btn-primary' ,
-                'data-pjax' => '0',
+                //'data-pjax' => '0',
             ]) ?>
         </div>
     </div>
