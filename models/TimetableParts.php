@@ -210,6 +210,8 @@ class TimetableParts extends \yii\db\ActiveRecord
                             ->one();
                         $type = $type['practice'];
 
+                        //далее идёт проверка по группе правил, которые запрещают ставить лекцию в ячейку
+
                         //нельзя ставить пару, если у корпуса их меньше $y
                         if($lectFilterStatus == 1) {
                             global $lecturesCounterCorps;
@@ -225,9 +227,9 @@ class TimetableParts extends \yii\db\ActiveRecord
                             }
                         }
 
+                        //нельзя ставить первым занятием практику
                         if($lectFilterStatus == 1) {
                             global $first;
-                            //первое занятие у группы ставить производтсвенное обучение
                             //смотрим сколько всего у группы уже было занятий
                             $first = Timetable::find()
                                 ->asArray()
@@ -246,6 +248,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                             }
                         }
 
+                        //нельзя ставить практику студентам вместе с обычными лекциями в один день
                         if($lectFilterStatus == 1) {
                             //если практика
                             if($type == 1) {
@@ -266,6 +269,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                             }
                         }
 
+                        //нельзя ставить практику преподавателю вместе с обычными лекциями в один день
                         if($lectFilterStatus == 1) {
                             global $lectInThisDateTeacher;
                             //если практика
@@ -286,6 +290,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                             }
                         }
 
+                        //нельзя ставить студентам занятия в разных корпусах в один день
                         if($lectFilterStatus == 1) {
                             global $sameCorps;
                             //проверяем, чтобы у группы не было в этот день занятий в разных корпусах
@@ -305,6 +310,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                             }
                         }
 
+                        //нельзя ставить преподавателю занятия в разных корпусах в один день
                         if($lectFilterStatus == 1) {
                             global $sameCorps;
                             //проверяем, чтобы у преподавателя не было в этот день занятий в разных корпусах
@@ -324,6 +330,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                             }
                         }
 
+                        //нельзя ставить преподавателю занятия в его нерабочий день
                         if($lectFilterStatus == 1) {
                             global $workStatus;
                             //узнаём работает ли преподаватель в этот день
@@ -395,6 +402,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                             }
                         }
 
+                        //нельзя ставить преподавателю больше занятий в неделю, чем позволяет норматив
                         if($lectFilterStatus == 1) {
                             global $lectComplete;
                             global $lectMax;
@@ -435,6 +443,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                             }
                         }
 
+                        //нельзя ставить студентам одну и ту же пару в один и тот же день несколько раз
                         if($lectFilterStatus == 1) {
                             global $sameLect;
                             //проверяем, нет ли такой же пары в этот день у этой же группы, в следующий или предыдущий день в этой же группы
@@ -457,6 +466,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                             }
                         }
 
+                        //нельзя ставить студентам лекции в один день с практикой
                         if($lectFilterStatus == 1) {
                             global $isPrectice;
                             //проверяем, если в этот день у группы практические занятия, если есть, то не ставим больше лекций в этот день
@@ -483,6 +493,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                             }
                         }
 
+                        //нельзя ставить предмет боьшее число раз в неделю, чем задано в настройках
                         if($lectFilterStatus == 1) {
                             global $inWeek;
                             global $maxInWeek;
@@ -509,6 +520,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                             }
                         }
 
+                        //нельзя ставить предмет большее число раз, чем его максимальное число, указанное в настройках
                         if($lectFilterStatus == 1) {
                             global $allCurrentSubj;
                             global $maxSubj;
@@ -535,8 +547,27 @@ class TimetableParts extends \yii\db\ActiveRecord
                             }
                         }
 
+                        //нельзя ставить преподавателю пары в разніх групах в одно время
+                        if($lectFilterStatus == 1) {
+                            $lectCount = 0;
+                            $lectInOtherGroup = Timetable::find()
+                                ->asArray()
+                                ->select(['COUNT(teacher_id) AS tId'])
+                                ->where(['=', 'teacher_id', $teacherID])
+                                ->andWhere(['=', 'x', $x])
+                                ->andWhere(['=', 'y', $y])
+                                ->one();
+                            $lectCount = $lectInOtherGroup['tId'];
+                            if($lectCount > 0) {
+                                //echo "нельзя ставить преподавателю пары в разніх групах в одно время<br/>";
+                                $lectFilterStatus = 0;
+                            }
+                        }
+
                         //узнаём lecture_id - id пары из lecture_table
-                        $lecture_id = 1; //пока не высчитываем, возможно стоит убрать эту колонку из таблицы
+                        //$lecture_id = 1; //пока не высчитываем, возможно стоит убрать эту колонку из таблицы
+                        $lecture_id = $this->getLectureId($y, $currentCorpsId); //вычисляем id лекции по её порядковому номеру
+                        //$lecture_id = $y; //берём не id пары, а номер
 
                         //состоялась ли лекция
                         $statusLect = 1; //по умолчанию ставим, что состоялась
@@ -580,5 +611,18 @@ class TimetableParts extends \yii\db\ActiveRecord
             } //цикл по дням
 
         }//цикл по группам
+    }
+
+    public function getLectureId($y, $corpsId) {
+        $lectures_values = LectureTable::find()->asArray()->select(['ID', 'time_start'])
+            ->where(['=', 'corps_id', $corpsId])
+            ->orderBy('time_start')
+            ->all();
+
+        $lectures_ids = ArrayHelper::getColumn($lectures_values, 'ID');
+
+        $lectureId = $lectures_ids[$y-1];
+
+        return $lectureId;
     }
 }

@@ -41,7 +41,7 @@ use kartik\date\DatePicker;
 
 	<?=  $form->field($model, 'date')->label('Оберіть дату')->widget(DatePicker::className(),[]); ?>
 
-	<?php echo $form->field($model, 'audience_id')->label('Оберіть пару')->dropDownList($model->getLectureTime(), $options);  ?>
+	<?php echo $form->field($model, 'lecture_id')->label('Оберіть пару')->dropDownList($model->getLectureTime($model->corps_id), $options);  ?>
 
 	<?php echo $form->field($model, 'audience_id')->label('Оберіть аудиторію')->dropDownList($model->getAudienceNames(), $options);  ?>
 

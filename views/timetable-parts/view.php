@@ -20,6 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     } else {
         echo "<p>Інформація відсутня</p>";
     }
+    print_r (\app\models\TimetableParts::getLectureId(1, 2));
     ?>
 
 </div>

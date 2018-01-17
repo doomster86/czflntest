@@ -325,11 +325,12 @@ class Timetable extends \yii\db\ActiveRecord
 
     }
 
-	public function getLectureTime() {
-		$lecturetime_values = LectureTable::find()->asArray()->select(["ID", "corps_id", "CONCAT( time_start, ' - ', time_stop) AS time"])
-			//->where(['role' => 2, 'status' => 1])
-			                       ->orderBy('ID')
-		                           ->all();
+	public function getLectureTime($corpsId) {
+		$lecturetime_values = LectureTable::find()->asArray()
+            ->select(["ID", "corps_id", "CONCAT( time_start, ' - ', time_stop) AS time"])
+            ->where(['=', 'corps_id', $corpsId])
+            ->orderBy('time_start')
+            ->all();
 		$lecturetime_names = ArrayHelper::getColumn($lecturetime_values, 'time');
 		$lecturetime_ids = ArrayHelper::getColumn($lecturetime_values, 'ID');
 
@@ -338,19 +339,21 @@ class Timetable extends \yii\db\ActiveRecord
 	}
 
 	public function getAudienceNames() {
-		$audience_values = Audience::find()->asArray()->select(["ID", "corps_id", "CONCAT('№ ', num, ' - ', name) AS full_name"])
+		$audience_values = Audience::find()->asArray()
+            ->select(["ID", "corps_id", "CONCAT('№ ', num, ' - ', name) AS full_name"])
 			//->where(['role' => 2, 'status' => 1])
-			                       ->orderBy('ID')
-		                           ->all();
+            ->orderBy('ID')
+            ->all();
 		$audience_names = ArrayHelper::getColumn($audience_values, 'full_name');
 		$audience_ids = ArrayHelper::getColumn($audience_values, 'ID');
 		$corps_ids = ArrayHelper::getColumn($audience_values, 'corps_id');
 
 		foreach ($corps_ids as $id) {
-			$corps_names[] = Corps::find()->asArray()->select(["corps_name"])
-			                      ->where(['ID' => $id])
-			                      ->orderBy('ID')
-			                      ->one();
+			$corps_names[] = Corps::find()->asArray()
+                ->select(["corps_name"])
+                ->where(['ID' => $id])
+                ->orderBy('ID')
+                ->one();
 		}
 
 		$corps_names = ArrayHelper::getColumn($corps_names, 'corps_name');
@@ -365,10 +368,11 @@ class Timetable extends \yii\db\ActiveRecord
 
 	public function getTeachersNames() {
 
-		$teacher_values = User::find()->asArray()->select(['id', "CONCAT(firstname, ' ', middlename, ' ',lastname) AS full_name"])
-		                      ->where(['role' => 2, 'status' => 1])
-		                      ->orderBy('id')
-		                      ->all();
+		$teacher_values = User::find()->asArray()
+            ->select(['id', "CONCAT(firstname, ' ', middlename, ' ',lastname) AS full_name"])
+            ->where(['role' => 2, 'status' => 1])
+            ->orderBy('id')
+            ->all();
 		$teacher_names = ArrayHelper::getColumn($teacher_values, 'full_name');
 		$teacher_ids = ArrayHelper::getColumn($teacher_values, 'id');
 
