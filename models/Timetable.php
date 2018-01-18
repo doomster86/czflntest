@@ -326,16 +326,28 @@ class Timetable extends \yii\db\ActiveRecord
     }
 
 	public function getLectureTime($corpsId) {
-		$lecturetime_values = LectureTable::find()->asArray()
-            ->select(["ID", "CONCAT( time_start, ' - ', time_stop) AS time"])
-            ->where(['=', 'corps_id', $corpsId])
-            ->orderBy('time_start')
-            ->all();
-		$lecturetime_names = ArrayHelper::getColumn($lecturetime_values, 'time');
-		$lecturetime_ids = ArrayHelper::getColumn($lecturetime_values, 'ID');
+        if($corpsId == 0) {
+            $lecturetime_values = LectureTable::find()->asArray()
+                ->select(["ID", "CONCAT( time_start, ' - ', time_stop) AS time"])
+                ->orderBy('time_start')
+                ->all();
+            $lecturetime_names = ArrayHelper::getColumn($lecturetime_values, 'time');
+            $lecturetime_ids = ArrayHelper::getColumn($lecturetime_values, 'ID');
 
-		$lecturetime = array_combine($lecturetime_ids, $lecturetime_names);
-		return $lecturetime;
+            $lecturetime = array_combine($lecturetime_ids, $lecturetime_names);
+            return $lecturetime;
+        } else {
+            $lecturetime_values = LectureTable::find()->asArray()
+                ->select(["ID", "CONCAT( time_start, ' - ', time_stop) AS time"])
+                ->where(['=', 'corps_id', $corpsId])
+                ->orderBy('time_start')
+                ->all();
+            $lecturetime_names = ArrayHelper::getColumn($lecturetime_values, 'time');
+            $lecturetime_ids = ArrayHelper::getColumn($lecturetime_values, 'ID');
+
+            $lecturetime = array_combine($lecturetime_ids, $lecturetime_names);
+            return $lecturetime;
+        }
 	}
 
 	public function getAudienceNames() {
@@ -406,5 +418,32 @@ class Timetable extends \yii\db\ActiveRecord
 
 		return $groups;
 	}
+
+    public function getCorpsNames() {
+
+        $corps_values = Corps::find()->asArray()->select(['ID', 'corps_name'])
+            ->orderBy('ID')
+            ->all();
+        $corps_names = ArrayHelper::getColumn($corps_values, 'corps_name');
+        $corps_ids = ArrayHelper::getColumn($corps_values, 'ID');
+
+        $corps = array_combine($corps_ids, $corps_names);
+
+        return $corps;
+    }
+
+    public function getAudienceList($corpsId) {
+        $audience_values = Audience::find()->asArray()->select(['ID', 'name'])
+            ->where(['=', 'corps_id', $corpsId])
+            ->orderBy('ID')
+            ->all();
+
+        $audience = [];
+        foreach ($audience_values as $value) {
+            $audience[] = array('id' => $value['ID'], 'name' => $value['name'] );
+        }
+
+        return $audience;
+    }
 
 }

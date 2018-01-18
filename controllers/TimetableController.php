@@ -9,6 +9,7 @@ use app\models\TimetableSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\Json;
 
 /**
  * TimetableController implements the CRUD actions for Timetable model.
@@ -110,5 +111,26 @@ class TimetableController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionSubcat() {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $corpsId = $parents[0];
+                $out = Timetable::getAudienceList($corpsId);
+                /*
+                $out = [
+                        ['id'=>'2', 'name'=>'<prod-name1>'],
+                        ['id'=>'3', 'name'=>'<prod-name2>'],
+                        ['id'=>'4', 'name'=>'<prod-name3>'],
+                ];
+                */
+                echo Json::encode(['output'=>$out, 'selected'=>'']);
+                return;
+            }
+        }
+        echo Json::encode(['output'=>'', 'selected'=>'']);
     }
 }

@@ -39,12 +39,24 @@ use kartik\date\DatePicker;
 	//['options' => [0 => ['disabled' => true]]]
 
     $formatter = new \yii\i18n\Formatter;
-    $model->date = $formatter->asDate($model->date, "dd.MM.yyyy");
+    if($model->isNewRecord) {
+        $request = Yii::$app->request;
+        $requestDate = $request->get('date');
+        $model->date = $formatter->asDate($requestDate, "dd.MM.yyyy");
+    } else {
+        $model->date = $formatter->asDate($model->date, "dd.MM.yyyy");
+    }
 	?>
 
 	<?=  $form->field($model, 'date')->label('Оберіть дату')->widget(DatePicker::className(),[]); ?>
 
-	<?php echo $form->field($model, 'lecture_id')->label('Оберіть пару')->dropDownList($model->getLectureTime($model->corps_id), $options);  ?>
+	<?php
+    if($model->isNewRecord) {
+        echo $form->field($model, 'lecture_id')->label('Оберіть пару')->dropDownList($model->getLectureTime(0), $options);
+    } else {
+        echo $form->field($model, 'lecture_id')->label('Оберіть пару')->dropDownList($model->getLectureTime($model->corps_id), $options);
+    }
+    ?>
 
 	<?php echo $form->field($model, 'audience_id')->label('Оберіть аудиторію')->dropDownList($model->getAudienceNames(), $options);  ?>
 
