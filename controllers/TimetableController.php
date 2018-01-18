@@ -154,14 +154,14 @@ class TimetableController extends Controller
         echo Json::encode(['output'=>'', 'selected'=>'']);
     }
 
-    public function actionSubcatgroup() {
+    public function actionSubcatsubjects() {
         $out = [];
         if (isset($_POST['depdrop_parents'])) {
             $parents = $_POST['depdrop_parents'];
             if ($parents != null) {
-                $corpsId = $parents[0];
+                $groupId = $parents[0];
 
-                $out = Timetable::getGroupList($corpsId);
+                $out = Timetable::getGroupList($groupId);
 
                 echo Json::encode(['output'=>$out, 'selected'=>'']);
 
