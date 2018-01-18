@@ -119,6 +119,7 @@ class TimetableController extends Controller
             $parents = $_POST['depdrop_parents'];
             if ($parents != null) {
                 $corpsId = $parents[0];
+
                 $out = Timetable::getAudienceList($corpsId);
                 /*
                 $out = [
@@ -127,7 +128,43 @@ class TimetableController extends Controller
                         ['id'=>'4', 'name'=>'<prod-name3>'],
                 ];
                 */
+
                 echo Json::encode(['output'=>$out, 'selected'=>'']);
+
+                return;
+            }
+        }
+        echo Json::encode(['output'=>'', 'selected'=>'']);
+    }
+
+    public function actionSubcatlecture() {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $corpsId = $parents[0];
+
+                $out = Timetable::getLectureList($corpsId);
+
+                echo Json::encode(['output'=>$out, 'selected'=>'']);
+
+                return;
+            }
+        }
+        echo Json::encode(['output'=>'', 'selected'=>'']);
+    }
+
+    public function actionSubcatgroup() {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $corpsId = $parents[0];
+
+                $out = Timetable::getGroupList($corpsId);
+
+                echo Json::encode(['output'=>$out, 'selected'=>'']);
+
                 return;
             }
         }

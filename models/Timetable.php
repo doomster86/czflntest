@@ -446,4 +446,52 @@ class Timetable extends \yii\db\ActiveRecord
         return $audience;
     }
 
+    public function getLectureList($corpsId) {
+        $course_ids[] = Corps::find()->asArray()
+            ->select(["corps_name"])
+            ->where(['ID' => $corpsId])
+            ->orderBy('ID')
+            ->one();
+
+        $lecture_values = LectureTable::find()->asArray()
+            ->select(["ID", "CONCAT( time_start, ' - ', time_stop) AS time"])
+            ->where(['=', 'corps_id', $corpsId])
+            ->orderBy('time_start')
+            ->all();
+
+        $lecture = [];
+        foreach ($lecture_values as $value) {
+            $lecture[] = array('id' => $value['ID'], 'name' => $value['time'] );
+        }
+
+        return $lecture;
+    }
+
+    public function getGroupList($groupId) {
+        $course_ids[] = Groups::find()->asArray()
+            ->select(["course"])
+            ->where(['ID' => $groupId])
+            ->one();
+
+        $courseId = $course_ids['course'];
+
+        $groupLessons = Lessons::find()
+            ->select('subject_id')
+            ->asArray()
+            ->where(['course_id' => $courseId])
+            ->all();
+
+        $lessons = [];
+        foreach ($groupLessons as $value) {
+            $subject_name[] = Subjects::find()->asArray()
+                ->select(["name"])
+                ->where(['ID' => $value['subject_id']])
+                ->one();
+
+            $lecture[] = array('id' => $value['subject_id'], 'name' => $subject_name['name'] );
+        }
+
+        return $lessons;
+    }
+
 }
