@@ -25,7 +25,15 @@ $this->title = 'Створити заняття';
     ]);
     ?>
 
-    <?=  $form->field($model, 'date')->label('Оберіть дату')->widget(DatePicker::className(),[]); ?>
+    <?
+    $request = Yii::$app->request;
+    $formatter = new \yii\i18n\Formatter;
+    $requestDate = $request->get('date');
+    $date = $formatter->asDate($requestDate, "dd.MM.yyyy");
+    $model->date = $date;
+
+    echo $form->field($model, 'date')->label('Оберіть дату')->widget(DatePicker::className(),[]);
+    ?>
 
     <?php
     // Parent
@@ -73,6 +81,10 @@ $this->title = 'Створити заняття';
     ]);
 
     ?>
+
+    <div class="form-group">
+        <?= Html::submitButton('Створити', ['class' => 'btn btn-success']) ?>
+    </div>
 
     <?php
     ActiveForm::end();

@@ -475,18 +475,19 @@ class Timetable extends \yii\db\ActiveRecord
         $course_id = ArrayHelper::getColumn($course_ids, 'course');
 
         $groupLessons = Lessons::find()
-            ->select('subject_id')
             ->asArray()
+            ->select('subject_id')
             ->where(['course_id' => $course_id])
             ->all();
 
         $subjects = [];
         foreach ($groupLessons as $value) {
-            $subject_name[] = Subjects::find()->asArray()
+            $subject_name = Subjects::find()
+                ->asArray()
                 ->select(["name"])
                 ->where(['ID' => $value['subject_id']])
                 ->one();
-            $subject_name = ArrayHelper::getColumn($subject_name, 'name');
+            $subject_name = $subject_name['name'];
 
             $subjects[] = array('id' => $value['subject_id'], 'name' => $subject_name );
         }
