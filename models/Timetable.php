@@ -308,7 +308,7 @@ class Timetable extends \yii\db\ActiveRecord
 		                    $curdate = (int)$curdate;
 		                    $curdate = $curdate + 86400*($td-1);
 		                    //$curdate = $formatter->asDate($curdate, "dd.MM.yyyy");
-		                    $output .= '<p><br/><a href="/timetable/create/?tp=96&x='.$td.'&y='.$tr.'&date='.$curdate.'">Додати заняття</a>';
+		                    $output .= '<p><br/><a href="/timetable/create/?tp='.$id.'&x='.$td.'&y='.$tr.'&date='.$curdate.'">Додати заняття</a>';
 	                    }
                         $output .= '</td>';
 

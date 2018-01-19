@@ -14,7 +14,21 @@ $this->title = 'Створити заняття';
 ?>
 <div class="timetable-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <?php
+    $request = Yii::$app->request;
+    $formatter = new \yii\i18n\Formatter;
+    $requestDate = $request->get('date');
+    $requestY = $request->get('y');
+    $date = $formatter->asDate($requestDate, "dd.MM.yyyy");
+    //$model->date = $date;
+    ?>
+
+    <h1>
+        <?php
+        echo Html::encode($this->title);
+        echo " ".$date." (".$requestY." пара)";
+        ?>
+    </h1>
 
     <?php
     $form = ActiveForm::begin([
@@ -26,13 +40,7 @@ $this->title = 'Створити заняття';
     ?>
 
     <?
-    $request = Yii::$app->request;
-    $formatter = new \yii\i18n\Formatter;
-    $requestDate = $request->get('date');
-    $date = $formatter->asDate($requestDate, "dd.MM.yyyy");
-    $model->date = $date;
-
-    echo $form->field($model, 'date')->label('Оберіть дату')->widget(DatePicker::className(),[]);
+    //echo $form->field($model, 'date')->label('Оберіть дату')->widget(DatePicker::className(),[]);
     ?>
 
     <?php
@@ -53,6 +61,7 @@ $this->title = 'Створити заняття';
     ]);
 
     // Child # 2
+    /*
     echo $form->field($model, 'lecture_id')->label('Оберіть пару')->widget(DepDrop::classname(), [
         'options'=>['id'=>'lecture_id'],
         'pluginOptions'=>[
@@ -61,6 +70,7 @@ $this->title = 'Створити заняття';
             'url'=>Url::to(['/timetable/subcatlecture'])
         ]
     ]);
+    */
     ?>
 
     <?php
