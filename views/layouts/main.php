@@ -86,6 +86,7 @@ if(!Yii::$app->user->isGuest) {
 				['label' => 'Викладачі: Звання', 'url' => ['/rank/index']],
 	            ['label' => 'Викладачі: Ступінь', 'url' => ['/degree/index']],
 	            ['label' => 'Викладачі: Кваліфікація', 'url' => ['/skill/index']],
+	            ['label' => 'Додати користувача', 'url' => ['/user/create']],
             ]],
             ['label' => 'Групи', 'url' => ['/groups/index'], 'items' => [
 	            ['label' => 'Всі групи', 'url' => ['/groups/index']],
