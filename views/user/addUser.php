@@ -22,7 +22,10 @@ endif;
 	<?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
 	<?php echo $form->field($model, 'username')->textInput(['autofocus' => true])->label('Логін'); ?>
 	<?php echo $form->field($model, 'email')->label('Email'); ?>
-	<?php //echo $form->field($model, 'password')->label('Пароль')->passwordInput(); ?>
+	<?php echo $form->field($model, 'password')->label('Пароль')->passwordInput([
+	        'placeholder' => 'Введіть пароль',
+	        'value' => ''
+		]); ?>
     <div class="form-group">
 		<?= Html::submitButton('Зареєструвати', ['class' => 'btn btn-success', 'name' => 'signup-button']) ?>
     </div>
