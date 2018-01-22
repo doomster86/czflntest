@@ -15,10 +15,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <hr />
-    <?= $this->render('form', [
+
+    <?php
+
+    echo $this->render('form', [
         'model' => $model,
         'current_action' => 'create',
         'status_form' => $status
-    ]) ?>
+    ])
+
+    ?>
 
 </div>
