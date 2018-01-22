@@ -92,6 +92,39 @@ $this->title = 'Створити заняття';
 
     ?>
 
+    <?php
+    /*
+     * [['corps_id', 'audience_id', 'subjects_id', 'teacher_id', 'group_id', 'lecture_id', 'status','part_id', 'x', 'y', 'date'], 'required']
+     * corps_id - передаём из формы
+     * audience_id - передаём из формы
+     * subjects_id - передаём из формы
+     * teacher_id - берём из базы через id предмета после отправки формы
+     * group_id - передаём из формы
+     * lecture_id - берём из базы через номер пары $y после отправки формы
+     * status - ставим 1
+     * part_id - получаем из GET tp
+     * x - получаем из GET x
+     * y - получаем из GET y
+     * date - получаем из GET date
+    */
+
+    $status = 1;
+    $partId = $request->get('tp');
+    $x = $request->get('x');
+    $y = $request->get('y');
+    $date = $request->get('date');
+    ?>
+
+	<? echo $form->field($model, 'status')->hiddenInput(['value' => '1'])->label(false); ?>
+
+	<? echo $form->field($model, 'part_id')->hiddenInput(['value' => $partId])->label(false); ?>
+
+	<? echo $form->field($model, 'x')->hiddenInput(['value' => $x])->label(false); ?>
+
+	<? echo $form->field($model, 'y')->hiddenInput(['value' => $y])->label(false); ?>
+
+	<? echo $form->field($model, 'date')->hiddenInput(['value' => $date])->label(false); ?>
+
     <div class="form-group">
         <?= Html::submitButton('Створити', ['class' => 'btn btn-success']) ?>
     </div>

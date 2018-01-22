@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     $tableID = $model->id;
     if($tableID != 0) {
-        echo \app\models\Timetable::renderTable($tableID);
+        echo \app\models\Timetable::renderTable($tableID, 0, 0);
     } else {
         echo "<p>Інформація відсутня</p>";
     }

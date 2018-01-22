@@ -2,10 +2,14 @@
 
 namespace app\controllers;
 
+use app\models\LectureTable;
+use app\models\Subjects;
+use app\models\TimetableViewer;
 use Yii;
 use app\models\Timetable;
 use app\models\TimetableCreator;
 use app\models\TimetableSearch;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -26,10 +30,14 @@ class TimetableController extends Controller
         $searchModel = new TimetableSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $model = new Timetable();
+
+	    $TTViewer = new TimetableViewer();
+
         return $this->render('index', [
             'model' => $model,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+	        'TTViewer' => $TTViewer,
         ]);
     }
 
@@ -55,7 +63,30 @@ class TimetableController extends Controller
         $model = new Timetable();
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+
+	        $teacherID = Subjects::find()
+	                             ->asArray()
+	                             ->select('teacher_id')
+	                             ->where(['ID' => $model->subjects_id])
+	                             ->one();
+	        $teacherID = $teacherID['teacher_id'];
+
+	        $model->teacher_id = $teacherID;
+
+	        $lectureIDs = LectureTable::find()
+	                                  ->asArray()
+	                                  ->select(["ID"])
+	                                  ->where(['=', 'corps_id', $model->corps_id])
+	                                  ->orderBy('time_start')
+	                                  ->all();
+	        $lectureIDs = ArrayHelper::getColumn($lectureIDs, 'ID');
+	        $lectureID = $lectureIDs[$model->y];
+
+	        $model->lecture_id = $lectureID;
+
+        	$model->save();
+
+            return $this->redirect(['/timetable-parts/view?id='.$model->part_id]);
         } else {
             return $this->render('create', [
                 'model' => $model,

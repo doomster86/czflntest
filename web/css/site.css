@@ -153,8 +153,9 @@ a.desc:after {
     text-align: center;
 }
 
-.courses-table .glyphicon {
-    padding: 0 5px;
+.courses-table .glyphicon,
+.timetable-parts-index span.glyphicon {
+	padding: 0 5px;
 }
 
 .grey-menu {
@@ -243,6 +244,7 @@ a.desc:after {
 
 #lectures div {
     width: 170px;
+    padding: 0 10px;
 }
 
 #lectures td {
@@ -268,5 +270,9 @@ a.desc:after {
 
 #lectures .lect-num {
     padding: 5px 10px;
+    text-align: center;
+}
+
+.align-center {
     text-align: center;
 }

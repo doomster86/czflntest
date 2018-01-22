@@ -46,7 +46,7 @@ class Timetable extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['corps_id', 'audience_id', 'subjects_id', 'teacher_id', 'group_id', 'lecture_id', 'status','part_id', 'x', 'y', 'date'], 'required'],
+            [['corps_id', 'audience_id', 'subjects_id', 'group_id', 'status','part_id', 'x', 'y', 'date'], 'required'],
             [['corps_id', 'audience_id', 'subjects_id', 'teacher_id', 'group_id', 'lecture_id', 'status','part_id', 'x', 'y', 'date'], 'integer'],
             [['corps_id'], 'exist', 'skipOnError' => true, 'targetClass' => Corps::className(), 'targetAttribute' => ['corps_id' => 'ID']],
             [['audience_id'], 'exist', 'skipOnError' => true, 'targetClass' => Audience::className(), 'targetAttribute' => ['audience_id' => 'ID']],
@@ -131,14 +131,37 @@ class Timetable extends \yii\db\ActiveRecord
         return $this->hasOne(LectureTable::className(), ['id' => 'part_id']);
     }
 
-    public function renderTable($id) {
+    public function renderTable($id, $teacherID, $groupID) {
         $output = '';
-        $input_array = Timetable::find()
-            ->asArray()
-            ->where(['=', 'part_id', $id])
-            ->all();
-        //v($input_array);
 
+	    if ( $teacherID && $groupID ) {
+		    $input_array = Timetable::find()
+		                            ->asArray()
+		                            ->where( [ '=', 'part_id', $id ] )
+		                            ->andWhere( [ '=', 'teacher_id', $teacherID ] )
+		                            ->andWhere( [ '=', 'group_id', $groupID ] )
+		                            ->all();
+	    }
+	    if( $teacherID && !$groupID) {
+		    $input_array = Timetable::find()
+		                            ->asArray()
+		                            ->where( [ '=', 'part_id', $id ] )
+		                            ->andWhere( [ '=', 'teacher_id', $teacherID ] )
+		                            ->all();
+	    }
+	    if( $groupID && !$teacherID) {
+		    $input_array = Timetable::find()
+		                            ->asArray()
+		                            ->where( [ '=', 'part_id', $id ] )
+		                            ->andWhere( [ '=', 'group_id', $groupID ] )
+		                            ->all();
+	    }
+	    if( !$teacherID && !$groupID ) {
+		    $input_array = Timetable::find()
+		                            ->asArray()
+		                            ->where( [ '=', 'part_id', $id ] )
+		                            ->all();
+	    }
         /*
         приходит массив вида
                array(9) {
@@ -287,8 +310,8 @@ class Timetable extends \yii\db\ActiveRecord
                                 $output .= '<p>Группа: '.$groupName.'</p>';
                                 $output .= '<p>Предмет: '.$subjName.'</p>';
 	                            if(Yii::$app->user->identity->role==1) {
-		                            $output .= '<p><br/><a href="/timetable/update/'.$cell["id"].'">Редагувати</a> | 
-														<a href="/timetable/delete/'.$cell["id"].'">Видалити</a></p>';
+		                            $output .= '<p class="align-center"><br/><!--<a href="/timetable/update/'.$cell["id"].'">Редагувати</a> | -->
+														<a href="/timetable/delete/'.$cell["id"].'?tp='.$id.'" class="align-center">Видалити</a></p>';
 	                            }
                                 $output .= '</div>';
                                 switch ($class_bg) {
@@ -308,7 +331,7 @@ class Timetable extends \yii\db\ActiveRecord
 		                    $curdate = (int)$curdate;
 		                    $curdate = $curdate + 86400*($td-1);
 		                    //$curdate = $formatter->asDate($curdate, "dd.MM.yyyy");
-		                    $output .= '<p><br/><a href="/timetable/create/?tp='.$id.'&x='.$td.'&y='.$tr.'&date='.$curdate.'">Додати заняття</a>';
+		                    $output .= '<div><p class="align-center"><br/><a href="/timetable/create/?tp='.$id.'&x='.$td.'&y='.$tr.'&date='.$curdate.'">Додати заняття</a></div>';
 	                    }
                         $output .= '</td>';
 
@@ -393,6 +416,18 @@ class Timetable extends \yii\db\ActiveRecord
 		return $teachers;
 	}
 
+	public function getTeacherName($id) {
+
+		$teacher_values = User::find()->asArray()
+		                      ->select(['id', "CONCAT(firstname, ' ', middlename, ' ',lastname) AS full_name"])
+		                      ->where(['=', 'id', $id])
+		                      ->one();
+
+		$teacher = $teacher_values['full_name'];
+
+		return $teacher;
+	}
+
 	public function getSubjectsNames() {
 
 		$subjects_values = Subjects::find()->asArray()->select(['ID', 'name'])
@@ -417,6 +452,17 @@ class Timetable extends \yii\db\ActiveRecord
 		$groups = array_combine($groups_ids, $groups_names);
 
 		return $groups;
+	}
+
+	public function getGroupName($id) {
+		$group_values = Groups::find()->asArray()
+		                      ->select(['ID', 'name'])
+		                      ->where(['=', 'ID', $id])
+		                      ->one();
+
+		$group = $group_values['name'];
+
+		return $group;
 	}
 
     public function getCorpsNames() {
