@@ -17,14 +17,14 @@ Pjax::begin([
 
     <?php if (Html::encode($status) == 'created') : ?>
         <div class="alert alert-success">
-            <p>Додано нову кваліфікацію. </p>
+            <p>Додано нову категороію. </p>
             <p>Назва: <strong><?= Html::encode($model->skill_name) ?></strong></p>
         </div>
     <?php endif; ?>
 
     <?php if (Html::encode($status) == 'updated') : ?>
         <div class="alert alert-success">
-            <p>Кваліфікацію оновлено.</p>
+            <p>Категорію оновлено.</p>
         </div>
     <?php endif; ?>
 

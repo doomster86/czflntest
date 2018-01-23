@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Skill */
 
-$this->title = 'Додати кваліфікацію';
+$this->title = 'Додати категорію';
 $this->params['breadcrumbs'][] = ['label' => 'Кваліфікація', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

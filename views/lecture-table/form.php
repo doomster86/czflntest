@@ -66,7 +66,7 @@ Pjax::begin([
     <?php
 
     echo $form->field($model, 'time_stop')->label('Час закінчення')
-        ->label('Час початку')
+        ->label('Час закінчення')
         ->widget(TimePicker::className(),[
         'pluginOptions' => [
 		    'showSeconds' => false,

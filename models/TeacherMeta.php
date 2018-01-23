@@ -98,7 +98,7 @@ class TeacherMeta extends \yii\db\ActiveRecord
     {
         return [
             [['teacher_type', 'rank_id', 'degree_id', 'skill_id'], 'required'],
-            [['user_id', 'teacher_type', 'rank_id', 'degree_id', 'skill_id', 'hours', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'], 'integer'],
+            [['user_id', 'teacher_type', 'rank_id', 'degree_id', 'skill_id', 'hours', 'montshours', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'], 'integer'],
         ];
     }
 

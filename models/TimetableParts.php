@@ -438,7 +438,46 @@ class TimetableParts extends \yii\db\ActiveRecord
 
                             //если больше нормы, то берём следующею лекцию из foreach ($groupLessons as $lesson)
                             if ($lectComplete >= $lectMax['hours']) {
-                                //echo "Преподаватель уже отработал норму<br/>";
+                                //echo "Преподаватель уже отработал норму в неделю<br/>";
+                                $lectFilterStatus = 0;
+                            }
+                        }
+
+                        //нельзя ставить преподавателю больше занятий в календарный месяц, чем позволяет норматив
+                        if($lectFilterStatus == 1) {
+                            global $lectComplete;
+                            global $lectMax;
+                            //считаем сколько преподаватель наработал часов на этой неделе,
+                            //если больше нормы, то берём следующею лекцию из foreach ($groupLessons as $lesson)
+                            //для начала, определяем дату первого и последнего дня месяца
+                            $firstDay = date('01.m.Y', $datestart);
+                            $lastDay = date('Y.m.t', $datestart);
+                            $firstDay = strtotime($firstDay);
+                            $lastDay = strtotime($lastDay);
+
+                            //начиная с первого дня месяца по последний день месяца, считаем количество пар, которые провёл преподаватель
+                            //!!! надо будет переписать эту часть для более точного учёта, т.к. сейчас все лекции в этой таблицебудут считаться как состоявшиеся
+                            $lectComplete = Timetable::find()
+                                ->asArray()
+                                ->select(['COUNT(teacher_id) AS lectCount'])
+                                ->where(['<=', 'date', $firstDay]) // $firstDay <= date
+                                ->andWhere(['>=', 'date', $lastDay])// $lastDay >= date
+                                ->groupBy(['teacher_id'])
+                                ->all();
+
+                            //кол-во часов, которое преподатель проработал уже, одна пара - два академических часа
+                            $lectComplete = $lectComplete['lectCount'] * 2;
+
+                            //максимальное кол-во часов в календарный месяц для преподавателя
+                            $lectMax = TeacherMeta::find()
+                                ->asArray()
+                                ->select('montshours')
+                                ->where(['user_id' => $teacherID])
+                                ->one();
+
+                            //если больше нормы, то берём следующею лекцию из foreach ($groupLessons as $lesson)
+                            if ($lectComplete >= $lectMax['montshours']) {
+                                //echo "Преподаватель уже отработал норму в месяц<br/>";
                                 $lectFilterStatus = 0;
                             }
                         }

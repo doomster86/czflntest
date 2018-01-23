@@ -14,7 +14,19 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="timetable-parts-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php
+
+    /*
+    $datestart = time();
+    $firstDay = date('01.m.Y', $datestart);
+    $lastDay = date('Y.m.t', $datestart);
+    $firstDay = strtotime($firstDay);
+    $formatter = new \yii\i18n\Formatter;
+    $firstDay = $formatter->asDate($firstDay, "dd.MM.yyyy");
+    echo $firstDay;
+    */
+
+    ?>
 
     <p>
         <?= Html::a('Створити новий розклад', ['create'], ['class' => 'btn btn-success']) ?>

@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\SkillSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Кваліфікації';
+$this->title = 'Категорії';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="skill-index">
@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'emptyText' => 'Нічого не знайдено',
         'layout'=>"{pager}\n{summary}\n{items}\n{summary}\n{pager}",
-        'summary' => "<div class=\"summary\">Показано {begin} - {end} з {totalCount} кваліфікацій</div>",
+        'summary' => "<div class=\"summary\">Показано {begin} - {end} з {totalCount} категорій</div>",
         'columns' => [
             //['class' => 'yii\grid\SerialColumn'],
 

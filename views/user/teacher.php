@@ -34,9 +34,12 @@ endif;
 
     <?php echo $form->field($model, 'degree_id')->label('Вчена ступінь')->dropDownList($model->getAllDegrees());  ?>
 
-    <?php echo $form->field($model, 'skill_id')->label('Кваліфікація')->dropDownList($model->getAllSkills());  ?>
+    <?php echo $form->field($model, 'skill_id')->label('Категорія')->dropDownList($model->getAllSkills());  ?>
 
-    <?= $form->field($model, 'hours')->label('Навантаження г./тиж.')->textInput() ?>
+    <?= $form->field($model, 'hours')->label('Навантаження г./тиж. (максимально допустиме)')->textInput() ?>
+
+    <?= $form->field($model, 'montshours')->label('Навантаження г./міс. (загальне навантаження)')->textInput() ?>
+
 
     <div id="workdays">
         <h3>Робочі дні</h3>
