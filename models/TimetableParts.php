@@ -586,7 +586,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                             }
                         }
 
-                        //нельзя ставить преподавателю пары в разніх групах в одно время
+                        //нельзя ставить преподавателю пары в разных групах в одно время
                         if($lectFilterStatus == 1) {
                             $lectCount = 0;
                             $lectInOtherGroup = Timetable::find()
@@ -663,5 +663,47 @@ class TimetableParts extends \yii\db\ActiveRecord
         $lectureId = $lectures_ids[$y-1];
 
         return $lectureId;
+    }
+
+    public function getTeacherName($id) {
+        echo Subjects::getTeacherNameById($id);
+    }
+
+    public function getTeacherType($id) {
+        echo TeacherMeta::getTeacherType($id);
+    }
+
+    public function getTeacherTime($id) {
+        $inMonth = TeacherMeta::find()->asArray()->select('montshours')->where(['=', 'user_id', $id])->one();
+        $inMonth = $inMonth['montshours'];
+
+        $date = strtotime(Date('now'));
+        //определяем дату первого и последнего дня месяца
+        $firstDay = date('01.m.Y', $date);
+        $lastDay = date('Y.m.t', $date);
+        $firstDay = strtotime($firstDay);
+        $lastDay = strtotime($lastDay);
+
+        //всего сгенерированных занятий
+        $lectComplete = Timetable::find()
+            ->asArray()
+            ->select(['COUNT(teacher_id) AS lectCount'])
+            ->where(['<=', 'date', $firstDay]) // $firstDay <= date
+            ->andWhere(['>=', 'date', $lastDay])// $lastDay >= date
+            ->andWhere(['=', 'teacher_id', $id])
+            ->groupBy(['teacher_id'])
+            ->all();
+
+        //кол-во часов, которое преподатель проработал уже, одна пара - два академических часа
+        $lectComplete = $lectComplete['lectCount'] * 2;
+
+        $freeHours = $inMonth - $lectComplete;
+
+        $hours = array();
+        $hours['month'] = $inMonth;
+        $hours['complete'] = $lectComplete;
+        $hours['free'] = $freeHours;
+
+        return $hours;
     }
 }

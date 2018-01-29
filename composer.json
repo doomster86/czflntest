@@ -22,7 +22,9 @@
         "kartik-v/yii2-widget-timepicker": "*",
         "kartik-v/yii2-widget-datepicker": "@dev",
 		"kartik-v/yii2-widget-depdrop": "@dev",
-        "bupy7/yii2-datetime-converter": "*"
+        "bupy7/yii2-datetime-converter": "*",
+        "phpoffice/phpspreadsheet": "^1.0",
+        "moonlandsoft/yii2-phpexcel": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

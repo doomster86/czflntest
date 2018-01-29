@@ -9,6 +9,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="generate-timetable">
+
     <?php
 
     $form = ActiveForm::begin([
