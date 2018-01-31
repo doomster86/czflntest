@@ -456,12 +456,13 @@ class TimetableParts extends \yii\db\ActiveRecord
                             $lastDay = strtotime($lastDay);
 
                             //начиная с первого дня месяца по последний день месяца, считаем количество пар, которые провёл преподаватель
-                            //!!! надо будет переписать эту часть для более точного учёта, т.к. сейчас все лекции в этой таблицебудут считаться как состоявшиеся
+                            //!!! надо будет переписать эту часть для более точного учёта, т.к. сейчас все лекции в этой таблице будут считаться как состоявшиеся
                             $lectComplete = Timetable::find()
                                 ->asArray()
                                 ->select(['COUNT(teacher_id) AS lectCount'])
                                 ->where(['<=', 'date', $firstDay]) // $firstDay <= date
                                 ->andWhere(['>=', 'date', $lastDay])// $lastDay >= date
+                                ->andWhere(['=', 'teacher_id', $teacherID])
                                 ->groupBy(['teacher_id'])
                                 ->all();
 
@@ -677,22 +678,27 @@ class TimetableParts extends \yii\db\ActiveRecord
         $inMonth = TeacherMeta::find()->asArray()->select('montshours')->where(['=', 'user_id', $id])->one();
         $inMonth = $inMonth['montshours'];
 
-        $date = strtotime(Date('now'));
+        $date = strtotime(Date('30.01.2018'));
         //определяем дату первого и последнего дня месяца
         $firstDay = date('01.m.Y', $date);
-        $lastDay = date('Y.m.t', $date);
+        $lastDay = date('t.m.Y', $date);
         $firstDay = strtotime($firstDay);
         $lastDay = strtotime($lastDay);
+
+        //firstDay 1514754000
+        //lastDay  1517346000
+
+        //date     1517259600
 
         //всего сгенерированных занятий
         $lectComplete = Timetable::find()
             ->asArray()
             ->select(['COUNT(teacher_id) AS lectCount'])
-            ->where(['<=', 'date', $firstDay]) // $firstDay <= date
-            ->andWhere(['>=', 'date', $lastDay])// $lastDay >= date
+            ->where(['>=', 'date', $firstDay]) // $firstDay <= date  перепроверить через отладчик все условия с подобнфым синтаксисом
+            ->andWhere(['<=', 'date', $lastDay])// $lastDay >= date
             ->andWhere(['=', 'teacher_id', $id])
             ->groupBy(['teacher_id'])
-            ->all();
+            ->one();
 
         //кол-во часов, которое преподатель проработал уже, одна пара - два академических часа
         $lectComplete = $lectComplete['lectCount'] * 2;
