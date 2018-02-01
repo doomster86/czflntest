@@ -421,8 +421,8 @@ class TimetableParts extends \yii\db\ActiveRecord
                             $lectComplete = Timetable::find()
                                 ->asArray()
                                 ->select(['COUNT(teacher_id) AS lectCount'])
-                                ->where(['<=', 'date', $firstMonday]) // $firstMonday <= date
-                                ->andWhere(['>=', 'date', $firstMonday + 518400])//понедельник+6 дней >= date
+                                ->where(['>=', 'date', $firstMonday]) // date >= $firstMonday
+                                ->andWhere(['<=', 'date', $firstMonday + 518400])//date <= понедельник+6 дней
                                 ->groupBy(['teacher_id'])
                                 ->all();
 
@@ -460,8 +460,8 @@ class TimetableParts extends \yii\db\ActiveRecord
                             $lectComplete = Timetable::find()
                                 ->asArray()
                                 ->select(['COUNT(teacher_id) AS lectCount'])
-                                ->where(['<=', 'date', $firstDay]) // $firstDay <= date
-                                ->andWhere(['>=', 'date', $lastDay])// $lastDay >= date
+                                ->where(['>=', 'date', $firstDay]) // date >= $firstDay
+                                ->andWhere(['<=', 'date', $lastDay])// date <= $lastDay
                                 ->andWhere(['=', 'teacher_id', $teacherID])
                                 ->groupBy(['teacher_id'])
                                 ->all();
@@ -694,8 +694,8 @@ class TimetableParts extends \yii\db\ActiveRecord
         $lectComplete = Timetable::find()
             ->asArray()
             ->select(['COUNT(teacher_id) AS lectCount'])
-            ->where(['>=', 'date', $firstDay]) // $firstDay <= date  перепроверить через отладчик все условия с подобнфым синтаксисом
-            ->andWhere(['<=', 'date', $lastDay])// $lastDay >= date
+            ->where(['>=', 'date', $firstDay]) // date >= $firstDay перепроверить через отладчик все условия с подобнфым синтаксисом
+            ->andWhere(['<=', 'date', $lastDay])// date <= $lastDay
             ->andWhere(['=', 'teacher_id', $id])
             ->groupBy(['teacher_id'])
             ->one();
