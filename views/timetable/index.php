@@ -231,12 +231,17 @@ $this->params['breadcrumbs'][] = $this->title;
     );
     $aSheet->getStyle('A7:E'.($i+5))->applyFromArray($style_price);
 
-    /*
-$objWriter = PHPExcel_IOFactory::createWriter($pExcel, 'Excel5');
-$objWriter->save('simple.xls');
-*/
-    $objWriter = PHPExcel_IOFactory::createWriter($pExcel, 'Excel2007');
-    $objWriter->save('simple.xlsx');
+
+    ob_end_clean();
+    date_default_timezone_set('europe/kiev');
+    //header('Content-Type:xlsx:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    //header('Content-Disposition:attachment;filename="simple.xlsx"');
+    //$objWriter = new PHPExcel_Writer_Excel2007($pExcel);
+
+    header('Content-Type:application/vnd.ms-excel');
+    header('Content-Disposition:attachment;filename="simple.xls"');
+    $objWriter = new PHPExcel_Writer_Excel5($pExcel);
+    $objWriter->save('php://output');
 
 
 
