@@ -311,7 +311,7 @@ class Timetable extends \yii\db\ActiveRecord
                                 $output .= '<p>Предмет: '.$subjName.'</p>';
 	                            if(Yii::$app->user->identity->role==1) {
 		                            $output .= '<p class="align-center"><br/><!--<a href="/timetable/update/'.$cell["id"].'">Редагувати</a> | -->
-														<a href="/timetable/delete/'.$cell["id"].'?tp='.$id.'" class="align-center">Видалити</a></p>';
+														<a href="/timetable/delete/'.$cell["id"].'?tp='.$id.'" class="btn btn-danger align-center">Видалити</a></p>';
 	                            }
                                 $output .= '</div>';
                                 switch ($class_bg) {
@@ -331,7 +331,7 @@ class Timetable extends \yii\db\ActiveRecord
 		                    $curdate = (int)$curdate;
 		                    $curdate = $curdate + 86400*($td-1);
 		                    //$curdate = $formatter->asDate($curdate, "dd.MM.yyyy");
-		                    $output .= '<div><p class="align-center"><br/><a href="/timetable/create/?tp='.$id.'&x='.$td.'&y='.$tr.'&date='.$curdate.'">Додати заняття</a></div>';
+		                    $output .= '<div><p class="align-center"><br/><a class="btn btn-primary" href="/timetable/create/?tp='.$id.'&x='.$td.'&y='.$tr.'&date='.$curdate.'">Додати заняття</a></div>';
 	                    }
                         $output .= '</td>';
 

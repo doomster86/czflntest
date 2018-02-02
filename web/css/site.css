@@ -243,16 +243,21 @@ a.desc:after {
 }
 
 #lectures div {
-    width: 170px;
     padding: 0 10px;
 }
 
-#lectures td {
+#lectures td:first-child, .sticky-thead th:first-child {
+    width: 70px !important;
+    vertical-align: middle;
+}
+
+#lectures td, .sticky-thead th {
+    width: 150px !important;
     margin: 0;
     padding: 0;
 }
 
-#lectures th {
+#lectures th, .sticky-thead th {
     text-align: center;
 }
 
@@ -275,4 +280,45 @@ a.desc:after {
 
 .align-center {
     text-align: center;
+}
+
+.sticky-wrap {
+    overflow-x: auto;
+    position: relative;
+    margin-bottom: 1.5em;
+    width: 100%;
+}
+.sticky-wrap .sticky-thead,
+.sticky-wrap .sticky-col,
+.sticky-wrap .sticky-intersect {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: all .125s ease-in-out;
+    z-index: 50;
+    width: auto;
+}
+.sticky-wrap .sticky-thead {
+    box-shadow: 0 0.25em 0.1em -0.1em rgba(0,0,0,.125);
+    z-index: 100;
+    width: 100%;
+}
+.sticky-wrap .sticky-intersect {
+    opacity: 1;
+    z-index: 150;
+}
+.sticky-wrap .sticky-intersect th {
+    background-color: #666;
+    color: #eee;
+}
+.sticky-wrap td,
+.sticky-wrap th {
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+}
+
+.sticky-thead {
+    background: #fff;
+    border-collapse: separate;
 }

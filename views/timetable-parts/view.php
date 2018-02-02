@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use app\models\LectureTable;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\TimetableParts */
@@ -28,17 +29,28 @@ $this->params['breadcrumbs'][] = $this->title;
                     <th>Заплановані години</th>
                     <th>Годин на місяць</th>
                 </tr>
-                <tr>
-                    <td><?php echo $model->getTeacherName(5) ?></td>
-                    <td><?php echo $model->getTeacherType(5) ?></td>
-                    <?php
-                        $masHours = $model->getTeacherTime(5);
+                <?php
+                $teacher_values = \app\models\User::find()->asArray()->select(['id'])
+                    ->where(['role' => 2, 'status' => 1])
+                    ->orderBy('id')
+                    ->all();
+                $teacher_ids = ArrayHelper::getColumn($teacher_values, 'id');
+                foreach ($teacher_ids as $id) {
                     ?>
-                    <td><?php echo $masHours['complete']; ?></td>
-                    <td><?php echo $masHours['free']; ?></td>
-                    <td><?php echo $masHours['month']; ?></td>
-                    <td><?php echo $masHours['month']; ?></td>
-                </tr>
+                    <tr>
+                        <td><?php echo $model->getTeacherName($id) ?></td>
+                        <td><?php echo $model->getTeacherType($id) ?></td>
+                        <?php
+                        $masHours = $model->getTeacherTime($id);
+                        ?>
+                        <td><?php echo $masHours['complete']; ?></td>
+                        <td><?php echo $masHours['free']; ?></td>
+                        <td><?php echo $masHours['month']; ?></td>
+                        <td><?php echo $masHours['month']; ?></td>
+                    </tr>
+                    <?php
+                }
+                ?>
             </table>
         </div>
     </div>
@@ -49,6 +61,20 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     $tableID = $model->id;
     if($tableID != 0) {
+        $this->registerJsFile('http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js');
+        $this->registerJsFile($baseUrl.'/js/jquery.stickyheader.js');
+
+        echo "
+        	<script>
+                (function ( $ ) {
+                jQuery(document).ready(function () {
+                    
+                    (function(b,c){var $=b.jQuery||b.Cowboy||(b.Cowboy={}),a;$.throttle=a=function(e,f,j,i){var h,d=0;if(typeof f!==\"boolean\"){i=j;j=f;f=c}function g(){var o=this,m=+new Date()-d,n=arguments;function l(){d=+new Date();j.apply(o,n)}function k(){h=c}if(i&&!h){l()}h&&clearTimeout(h);if(i===c&&m>e){l()}else{if(f!==true){h=setTimeout(i?k:l,i===c?e-m:e)}}}if($.guid){g.guid=j.guid=j.guid||$.guid++}return g};$.debounce=function(d,e,f){return f===c?a(d,e,false):a(d,f,e!==false)}})(this);
+                    
+                });
+                })(jQuery);
+	        </script>
+        ";
         echo \app\models\Timetable::renderTable($tableID, 0, 0);
     } else {
         echo "<p>Інформація відсутня</p>";
