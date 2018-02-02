@@ -246,15 +246,21 @@ a.desc:after {
     padding: 0 10px;
 }
 
-#lectures td:first-child, .sticky-thead th:first-child {
-    width: 70px !important;
+#lectures th, .sticky-thead th {
+    font-size: 14px !important;
+    line-height: 20px !important;
+    font-family: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial, sans-serif !important;
+}
+
+#lectures td:first-child, #lectures th:first-child, .sticky-thead th:first-child, .sticky-wrap th {
+    width: 50px !important;
     vertical-align: middle;
 }
 
-#lectures td, .sticky-thead th {
+#lectures td, #lectures th, .sticky-thead th {
     width: 150px !important;
-    margin: 0;
-    padding: 0;
+    margin: 0 !important;
+    padding: 5px !important;
 }
 
 #lectures th, .sticky-thead th {
@@ -300,7 +306,6 @@ a.desc:after {
     width: auto;
 }
 .sticky-wrap .sticky-thead {
-    box-shadow: 0 0.25em 0.1em -0.1em rgba(0,0,0,.125);
     z-index: 100;
     width: 100%;
 }
@@ -315,10 +320,10 @@ a.desc:after {
 .sticky-wrap td,
 .sticky-wrap th {
     box-sizing: border-box;
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
 }
 
 .sticky-thead {
     background: #fff;
-    border-collapse: separate;
+    border-collapse: collapse;
 }

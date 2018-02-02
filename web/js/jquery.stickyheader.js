@@ -45,11 +45,11 @@ $(function(){
 			var setWidths = function () {
 					$t
 					.find('thead th').each(function (i) {
-						$stickyHead.find('th').eq(i).width($(this).width());
+						$stickyHead.find('th').eq(i);
 					})
 					.end()
 					.find('tr').each(function (i) {
-						$stickyCol.find('tr').eq(i).height($(this).height());
+						$stickyCol.find('tr').eq(i);
 					});
 
 					// Set width of sticky table head
