@@ -424,7 +424,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                                 ->where(['>=', 'date', $firstMonday]) // date >= $firstMonday
                                 ->andWhere(['<=', 'date', $firstMonday + 518400])//date <= понедельник+6 дней
                                 ->groupBy(['teacher_id'])
-                                ->all();
+                                ->one();
 
                             //кол-во часов, которое преподатель проработал уже, одна пара - два академических часа
                             $lectComplete = $lectComplete['lectCount'] * 2;
@@ -464,7 +464,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                                 ->andWhere(['<=', 'date', $lastDay])// date <= $lastDay
                                 ->andWhere(['=', 'teacher_id', $teacherID])
                                 ->groupBy(['teacher_id'])
-                                ->all();
+                                ->one();
 
                             //кол-во часов, которое преподатель проработал уже, одна пара - два академических часа
                             $lectComplete = $lectComplete['lectCount'] * 2;
