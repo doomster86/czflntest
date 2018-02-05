@@ -253,12 +253,10 @@ a.desc:after {
 }
 
 #lectures td:first-child, #lectures th:first-child, .sticky-thead th:first-child, .sticky-wrap th {
-    width: 50px !important;
     vertical-align: middle;
 }
 
 #lectures td, #lectures th, .sticky-thead th {
-    width: 150px !important;
     margin: 0 !important;
     padding: 5px !important;
 }
@@ -282,6 +280,13 @@ a.desc:after {
 #lectures .lect-num {
     padding: 5px 10px;
     text-align: center;
+    width: 50px;
+}
+
+#lectures div {
+    border-radius: 5px;
+    margin-bottom: 5px;
+    width: 180px;
 }
 
 .align-center {
@@ -326,4 +331,18 @@ a.desc:after {
 .sticky-thead {
     background: #fff;
     border-collapse: collapse;
+}
+
+.sticky-thead th:first-child {
+    width: 60px;
+}
+
+.sticky-thead th {
+    padding: 5px 10px;
+    width: 180px;
+}
+
+.timetable-parts-view .btn-danger, .timetable-parts-view .btn-primary {
+    font-size: 12px;
+    line-height: 12px;
 }

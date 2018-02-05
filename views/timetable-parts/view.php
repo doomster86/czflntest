@@ -24,9 +24,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 <tr>
                     <th>Викладач</th>
                     <th>Тип викладача</th>
-                    <th>Відпрацьовані години</th>
-                    <th>Вільні години</th>
+                    <!--<th>Відпрацьовані години</th>-->
                     <th>Заплановані години</th>
+                    <th>Вільні години</th>
                     <th>Годин на місяць</th>
                 </tr>
                 <?php
@@ -41,11 +41,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         <td><?php echo $model->getTeacherName($id) ?></td>
                         <td><?php echo $model->getTeacherType($id) ?></td>
                         <?php
-                        $masHours = $model->getTeacherTime($id);
+                        $masHours = $model->getTeacherTime($id, $model->id);
                         ?>
-                        <td><?php echo $masHours['complete']; ?></td>
+                        <!--<td><?php //echo $masHours['work']; ?></td>-->
+                        <td><?php echo $masHours['gen']; ?></td>
                         <td><?php echo $masHours['free']; ?></td>
-                        <td><?php echo $masHours['month']; ?></td>
                         <td><?php echo $masHours['month']; ?></td>
                     </tr>
                     <?php

@@ -674,7 +674,8 @@ class TimetableParts extends \yii\db\ActiveRecord
         echo TeacherMeta::getTeacherType($id);
     }
 
-    public function getTeacherTime($id) {
+    public function getTeacherTime($id, $part_id) {
+        //максимум часов занятий в месяц
         $inMonth = TeacherMeta::find()->asArray()->select('montshours')->where(['=', 'user_id', $id])->one();
         $inMonth = $inMonth['montshours'];
 
@@ -685,30 +686,53 @@ class TimetableParts extends \yii\db\ActiveRecord
         $firstDay = strtotime($firstDay);
         $lastDay = strtotime($lastDay);
 
-        //firstDay 1514754000
-        //lastDay  1517346000
-
-        //date     1517259600
+        //echo $firstDay;
+        //echo "<br/>";
+        //echo $date;
+        //echo "<br/>";
+        //echo $lastDay;
+        //echo "<br/><br/><br/>";
 
         //всего сгенерированных занятий
         $lectComplete = Timetable::find()
             ->asArray()
             ->select(['COUNT(teacher_id) AS lectCount'])
-            ->where(['>=', 'date', $firstDay]) // date >= $firstDay перепроверить через отладчик все условия с подобнфым синтаксисом
-            ->andWhere(['<=', 'date', $lastDay])// date <= $lastDay
+            //->where(['>=', 'date', $firstDay]) // date >= $firstDay перепроверить через отладчик все условия с подобнфым синтаксисом
+            //->andWhere(['<=', 'date', $lastDay])// date <= $lastDay
+            ->where(['=', 'part_id', $part_id])
             ->andWhere(['=', 'teacher_id', $id])
-            ->groupBy(['teacher_id'])
             ->one();
-
-        //кол-во часов, которое преподатель проработал уже, одна пара - два академических часа
+        //всего сгенерированных часов занятий
         $lectComplete = $lectComplete['lectCount'] * 2;
 
-        $freeHours = $inMonth - $lectComplete;
+        /*
+        //всего отработанных занятий (кол-во всех занятий с начала месяца по текущею дату)
+        $lectWorked = Timetable::find()
+            ->asArray()
+            ->select(['COUNT(teacher_id) AS lectCount'])
+            ->where(['>=', 'date', $firstDay]) // date >= $firstDay
+            ->andWhere(['<=', 'date', $date])// date <= $date
+            ->andWhere(['=', 'teacher_id', $id])
+            ->one();
+
+        print_r($lectWorked);
+        echo "<br/>-<br/>";
+        */
+
+        //всего отработанных часов занятий
+        $lectWorked = $lectWorked['lectCount']*2;
+
+        //$lectGen = $lectComplete - $lectWorked;
+
+        //$lectFree = $inMonth - $lectWorked - $lectGen;
+
+        $lectFree = $inMonth - $lectComplete;
 
         $hours = array();
-        $hours['month'] = $inMonth;
-        $hours['complete'] = $lectComplete;
-        $hours['free'] = $freeHours;
+        $hours['month'] = $inMonth; //возможно в месяц всего
+        $hours['gen'] = $lectComplete; //сгенерированные запланированные занятия
+        $hours['free'] = $lectFree; //свободные часы
+        //$hours['work'] = $lectWorked; //отработанные занятия
 
         return $hours;
     }

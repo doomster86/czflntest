@@ -217,7 +217,7 @@ class Timetable extends \yii\db\ActiveRecord
         $formatter = new \yii\i18n\Formatter;
 
         $output .= '<h2>Розклад з ' . $formatter->asDate($datestart, "dd.MM.yyyy") . ' по ' . $formatter->asDate($dateend, "dd.MM.yyyy") . '</h2>';
-        $output .= '<div class="table-responsive"><table class="table table-striped table-bordered" id="lectures">';
+        $output .= '<table class="table table-striped table-bordered" id="lectures">';
         for ($tr = 0; $tr <= $rows_num; $tr++) {
             if (!$tr) {
                 $output .= '<thead><tr>';
@@ -331,7 +331,7 @@ class Timetable extends \yii\db\ActiveRecord
 		                    $curdate = (int)$curdate;
 		                    $curdate = $curdate + 86400*($td-1);
 		                    //$curdate = $formatter->asDate($curdate, "dd.MM.yyyy");
-		                    $output .= '<div><p class="align-center"><br/><a class="btn btn-primary" href="/timetable/create/?tp='.$id.'&x='.$td.'&y='.$tr.'&date='.$curdate.'">Додати заняття</a></div>';
+		                    $output .= '<div><p class="align-center"><br/><a class="btn btn-primary" href="/timetable/create/?tp='.$id.'&x='.$td.'&y='.$tr.'&date='.$curdate.'">Додати заняття ('.$tr.' пара)</a></div>';
 	                    }
                         $output .= '</td>';
 
@@ -341,7 +341,7 @@ class Timetable extends \yii\db\ActiveRecord
                 $output .= '</tr>';
             }
         }
-        $output .= "</table></div>";
+        $output .= "</table>";
 
         return $output;
 
