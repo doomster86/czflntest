@@ -346,3 +346,13 @@ a.desc:after {
     font-size: 12px;
     line-height: 12px;
 }
+
+.timetable-parts-view h2 {
+    float: left;
+    width: 70%;
+}
+
+.timetable-parts-view .btn-right {
+    float: right;
+    margin-top: 16px;
+}

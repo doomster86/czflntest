@@ -109,7 +109,6 @@ if(!Yii::$app->user->isGuest) {
                 ['label' => 'Всі аудиторії', 'url' => ['/audience/index']],
                 ['label' => 'Cтворити нову', 'url' => ['/audience/create']],
             ]],
-            ['label' => 'Заняття', 'url' => ['#']],
             ['label' => 'Управління розкладом', 'url' => ['#'], 'items' => [
                 ['label' => 'Розклад', 'url' => ['/timetable-parts/index']],
                 ['label' => 'Cтворити новый', 'url' => ['/timetable-parts/create']],

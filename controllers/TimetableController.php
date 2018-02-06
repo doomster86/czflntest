@@ -201,4 +201,13 @@ class TimetableController extends Controller
         }
         echo Json::encode(['output'=>'', 'selected'=>'']);
     }
+
+    public function actionPrint()
+    {
+        $model = new Timetable();
+
+        return $this->render('print', [
+            'model' => $model,
+        ]);
+    }
 }
