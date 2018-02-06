@@ -217,7 +217,7 @@ class Timetable extends \yii\db\ActiveRecord
         $formatter = new \yii\i18n\Formatter;
 
         $output .= '<h2>Розклад з ' . $formatter->asDate($datestart, "dd.MM.yyyy") . ' по ' . $formatter->asDate($dateend, "dd.MM.yyyy") . '</h2>';
-        $output .= Html::a('Роздрукувати', ['timetable/print'], ['class' => 'btn btn-success btn-right']);
+        $output .= Html::a('Роздрукувати', ['timetable/print', 'table_id' => $id], ['class' => 'btn btn-success btn-right']);
         $output .= '<table class="table table-striped table-bordered" id="lectures">';
         for ($tr = 0; $tr <= $rows_num; $tr++) {
             if (!$tr) {

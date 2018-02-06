@@ -736,4 +736,9 @@ class TimetableParts extends \yii\db\ActiveRecord
 
         return $hours;
     }
+
+    public function getListsCount($id) {
+        $count = 4;
+        return $count;
+    }
 }

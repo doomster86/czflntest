@@ -202,12 +202,10 @@ class TimetableController extends Controller
         echo Json::encode(['output'=>'', 'selected'=>'']);
     }
 
-    public function actionPrint()
+    public function actionPrint($table_id)
     {
-        $model = new Timetable();
-
         return $this->render('print', [
-            'model' => $model,
+            'table_id' => $table_id,
         ]);
     }
 }

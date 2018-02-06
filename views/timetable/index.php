@@ -66,6 +66,6 @@ $this->params['breadcrumbs'][] = $this->title;
     } else {
         echo "<p>Інформація відсутня</p>";
     }
-    //\app\models\TimetableParts::generateLectures('1514149200', '1514667600','7', '5');
+
 	?>
 </div>
