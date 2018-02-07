@@ -737,8 +737,60 @@ class TimetableParts extends \yii\db\ActiveRecord
         return $hours;
     }
 
-    public function getListsCount($id) {
-        $count = 4;
-        return $count;
+    public function getListsCount($id)
+    {
+        $timetableParts = TimetableParts::find()->asArray()->select(['datestart', 'dateend', 'cols'])->where(['=', 'id', $id])->one();
+
+        $days = $timetableParts['cols'];
+        $firstDay = $timetableParts['datestart'];
+        $lastDay = $timetableParts['dateend'];
+
+        $formatter = new \yii\i18n\Formatter;
+        $day = $formatter->asDate($firstDay, "l");
+        $firstDay = $formatter->asDate($firstDay, "dd.MM.yyyy");
+        $lastDay = $formatter->asDate($lastDay, "dd.MM.yyyy");
+
+        switch ($day) {
+            case 'Monday':
+                $count = 0;
+                break;
+            case 'Tuesday':
+                $count = 1;
+                $days = $days - 6;
+                break;
+            case 'Wednesday':
+                $count = 1;
+                $days = $days - 5;
+                break;
+            case 'Thursday':
+                $count = 1;
+                $days = $days - 4;
+                break;
+            case 'Friday':
+                $count = 1;
+                $days = $days - 3;
+                break;
+            case 'Saturday':
+                $count = 1;
+                $days = $days - 2;
+                break;
+            case 'Sunday':
+                $count = 1;
+                $days = $days - 1;
+                break;
+        }
+
+        if ( ($days/7) - intval(($days/7) ) == 0) {
+            $count = ($days/7) + $count;
+        } else {
+            $count = ($days/7) + $count + 1;
+        }
+
+        $timetable = array();
+        $timetable['count'] = $count;
+        $timetable['start'] = $firstDay;
+        $timetable['end'] = $lastDay;
+
+        return $timetable;
     }
 }

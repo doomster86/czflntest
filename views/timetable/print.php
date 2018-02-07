@@ -3,7 +3,10 @@
 require_once $baseUrl.'/Classes/PHPExcel.php';
 $pExcel = new PHPExcel();
 
-$weeks = \app\models\TimetableParts::getListsCount($table_id);
+$timetable = \app\models\TimetableParts::getListsCount($table_id);
+$weeks = $timetable['count'];
+$start = $timetable['start'];
+$end = $timetable['end'];
 
     $pExcel->setActiveSheetIndex(0);
     $aSheet = $pExcel->getActiveSheet();
@@ -38,7 +41,7 @@ $weeks = \app\models\TimetableParts::getListsCount($table_id);
     $aSheet->getRowDimension('1')->setRowHeight(20);
     $aSheet->setCellValue('A1','Розклад занять для групи '.$table_id);
     $aSheet->mergeCells('A2:G2');
-    $aSheet->setCellValue('A2','01.02.18 - 28.02.18 '.$weeks);
+    $aSheet->setCellValue('A2',$start.' - '.$end);
 
 // Создаем шапку таблички данных
     $aSheet->mergeCells('A3:G3');
@@ -53,6 +56,7 @@ $weeks = \app\models\TimetableParts::getListsCount($table_id);
     $aSheet->setCellValue('G4','Неділя');
 
 
+    $weeks = $weeks- 1; //т.к. отсчёт листов с нуля
     for($i = 1; $i < $weeks; $i++) {
         $objClonedWorksheet = clone $pExcel->getSheetByName('Розклад');
         $objClonedWorksheet->setTitle('Розклад, сторінка '.($i+1));
@@ -68,6 +72,6 @@ $weeks = \app\models\TimetableParts::getListsCount($table_id);
 //$objWriter = new PHPExcel_Writer_Excel2007($pExcel);
 
     header('Content-Type:application/vnd.ms-excel');
-    header('Content-Disposition:attachment;filename="simple.xls"');
+    header('Content-Disposition:attachment;filename="розклад.xls"');
     $objWriter = new PHPExcel_Writer_Excel5($pExcel);
     $objWriter->save('php://output');
