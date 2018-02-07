@@ -747,8 +747,8 @@ class TimetableParts extends \yii\db\ActiveRecord
 
         $formatter = new \yii\i18n\Formatter;
         $day = $formatter->asDate($firstDay, "l");
-        $firstDay = $formatter->asDate($firstDay, "dd.MM.yyyy");
-        $lastDay = $formatter->asDate($lastDay, "dd.MM.yyyy");
+        //$firstDay = $formatter->asDate($firstDay, "dd.MM.yyyy");
+        //$lastDay = $formatter->asDate($lastDay, "dd.MM.yyyy");
 
         switch ($day) {
             case 'Monday':
