@@ -5,6 +5,7 @@ $pExcel = new PHPExcel();
 
 $table_id = $_GET["table_id"];
 $grId = $_GET["group_id"];
+$teacher_id = $_GET["teacher_id"];
 
 $timetable = \app\models\TimetableParts::getListsCount($table_id);
 $formatter = new \yii\i18n\Formatter;
@@ -79,12 +80,18 @@ for($i = 0; $i< $weeks; $i++) {
                 case 'Monday':
                     $aSheet->setCellValue('A4',$formatter->asDate($start, "dd.MM.yyyy"));
 
-                    $input_array = \app\models\Timetable::find()
-                        ->asArray()
-                        ->where( [ '=', 'part_id', $table_id ] )
-                        ->andWhere(['=', 'date', $start])
-                        ->andWhere(['=', 'group_id', $grId])
-                        ->all();
+                    if($teacher_id) {
+
+                    }
+
+                    if($grId) {
+                        $input_array = \app\models\Timetable::find()
+                            ->asArray()
+                            ->where( [ '=', 'part_id', $table_id ] )
+                            ->andWhere(['=', 'date', $start])
+                            ->andWhere(['=', 'group_id', $grId])
+                            ->all();
+                    }
 
                     foreach ($input_array as $cell) {
                         $y = $cell['y'];
@@ -134,6 +141,8 @@ for($i = 0; $i< $weeks; $i++) {
                             ."\n\n".'Предмет: ' . $subjName
                         );
                         $pExcel->getActiveSheet()->getStyle('A'.$cellNum)->getAlignment()->setWrapText(true);
+
+                        $cellNum = 6;
                     }
 
                     $start = $start + 86400;
@@ -197,6 +206,8 @@ for($i = 0; $i< $weeks; $i++) {
                             ."\n\n".'Предмет: ' . $subjName
                         );
                         $pExcel->getActiveSheet()->getStyle('B'.$cellNum)->getAlignment()->setWrapText(true);
+
+                        $cellNum = 6;
                     }
 
                     $start = $start + 86400;
@@ -260,6 +271,8 @@ for($i = 0; $i< $weeks; $i++) {
                             ."\n\n".'Предмет: ' . $subjName
                         );
                         $pExcel->getActiveSheet()->getStyle('C'.$cellNum)->getAlignment()->setWrapText(true);
+
+                        $cellNum = 6;
                     }
 
                     $start = $start + 86400;
@@ -323,6 +336,8 @@ for($i = 0; $i< $weeks; $i++) {
                             ."\n\n".'Предмет: ' . $subjName
                         );
                         $pExcel->getActiveSheet()->getStyle('D'.$cellNum)->getAlignment()->setWrapText(true);
+
+                        $cellNum = 6;
                     }
 
                     $start = $start + 86400;
@@ -386,6 +401,8 @@ for($i = 0; $i< $weeks; $i++) {
                             ."\n\n".'Предмет: ' . $subjName
                         );
                         $pExcel->getActiveSheet()->getStyle('E'.$cellNum)->getAlignment()->setWrapText(true);
+
+                        $cellNum = 6;
                     }
 
                     $start = $start + 86400;
@@ -449,6 +466,8 @@ for($i = 0; $i< $weeks; $i++) {
                             ."\n\n".'Предмет: ' . $subjName
                         );
                         $pExcel->getActiveSheet()->getStyle('F'.$cellNum)->getAlignment()->setWrapText(true);
+
+                        $cellNum = 6;
                     }
 
                     $start = $start + 86400;
@@ -512,6 +531,8 @@ for($i = 0; $i< $weeks; $i++) {
                             ."\n\n".'Предмет: ' . $subjName
                         );
                         $pExcel->getActiveSheet()->getStyle('G'.$cellNum)->getAlignment()->setWrapText(true);
+
+                        $cellNum = 6;
                     }
 
                     $start = $start + 86400;

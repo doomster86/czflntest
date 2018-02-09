@@ -218,8 +218,13 @@ class Timetable extends \yii\db\ActiveRecord
 
         $output .= '<h2>Розклад з ' . $formatter->asDate($datestart, "dd.MM.yyyy") . ' по ' . $formatter->asDate($dateend, "dd.MM.yyyy") . '</h2>';
 
-        $grId = 2;
-        $output .= Html::a('Роздрукувати', ['timetable/print', 'table_id' => $id, 'group_id' => $grId], ['class' => 'btn btn-success btn-right']);
+        if($groupID) {
+            $output .= Html::a('Роздрукувати розклад групи', ['timetable/print', 'table_id' => $id, 'group_id' => $groupID], ['class' => 'btn btn-success btn-right']);
+        }
+
+        if($teacherID) {
+            $output .= Html::a('Роздрукувати розклад викладача', ['timetable/print', 'table_id' => $id, 'teacher_id' => $teacherID], ['class' => 'btn btn-success btn-right']);
+        }
 
         $output .= '<table class="table table-striped table-bordered" id="lectures">';
         for ($tr = 0; $tr <= $rows_num; $tr++) {
