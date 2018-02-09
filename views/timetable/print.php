@@ -72,41 +72,94 @@ for($i = 0; $i< $weeks; $i++) {
     $pExcel->setActiveSheetIndex($i);
     $aSheet = $pExcel->getActiveSheet();
 
-    $day = $formatter->asDate($start, "l"); //текущий день недели
-    for($j=0; $j<7; $j++) {
+    for($j = 0; $j<7; $j++) {
         if($start <= $end) {
+            $day = $formatter->asDate($start, "l"); //текущий день недели
             switch ($day) {
                 case 'Monday':
                     $aSheet->setCellValue('A4',$formatter->asDate($start, "dd.MM.yyyy"));
                     $start = $start + 86400;
+                    $j=0;
                     break;
                 case 'Tuesday':
                     $aSheet->setCellValue('B4',$formatter->asDate($start, "dd.MM.yyyy"));
                     $start = $start + 86400;
+                    $j=1;
                     break;
                 case 'Wednesday':
                     $aSheet->setCellValue('C4',$formatter->asDate($start, "dd.MM.yyyy"));
                     $start = $start + 86400;
+                    $j=2;
                     break;
                 case 'Thursday':
                     $aSheet->setCellValue('D4',$formatter->asDate($start, "dd.MM.yyyy"));
                     $start = $start + 86400;
+                    $j=3;
                     break;
                 case 'Friday':
                     $aSheet->setCellValue('E4',$formatter->asDate($start, "dd.MM.yyyy"));
                     $start = $start + 86400;
+                    $j=4;
                     break;
                 case 'Saturday':
                     $aSheet->setCellValue('F4',$formatter->asDate($start, "dd.MM.yyyy"));
                     $start = $start + 86400;
+                    $j=5;
                     break;
                 case 'Sunday':
                     $aSheet->setCellValue('G4',$formatter->asDate($start, "dd.MM.yyyy"));
                     $start = $start + 86400;
+                    $j=6;
                     break;
             }
         }
     }
+
+    /*
+    $j = 0;
+    while($j<7) {
+        if($start <= $end) {
+            $day = $formatter->asDate($start, "l"); //текущий день недели
+            switch ($day) {
+                case 'Monday':
+                    $aSheet->setCellValue('A4',$formatter->asDate($start, "dd.MM.yyyy"));
+                    $start = $start + 86400;
+                    $j=1;
+                    break;
+                case 'Tuesday':
+                    $aSheet->setCellValue('B4',$formatter->asDate($start, "dd.MM.yyyy"));
+                    $start = $start + 86400;
+                    $j=2;
+                    break;
+                case 'Wednesday':
+                    $aSheet->setCellValue('C4',$formatter->asDate($start, "dd.MM.yyyy"));
+                    $start = $start + 86400;
+                    $j=3;
+                    break;
+                case 'Thursday':
+                    $aSheet->setCellValue('D4',$formatter->asDate($start, "dd.MM.yyyy"));
+                    $start = $start + 86400;
+                    $j=4;
+                    break;
+                case 'Friday':
+                    $aSheet->setCellValue('E4',$formatter->asDate($start, "dd.MM.yyyy"));
+                    $start = $start + 86400;
+                    $j=5;
+                    break;
+                case 'Saturday':
+                    $aSheet->setCellValue('F4',$formatter->asDate($start, "dd.MM.yyyy"));
+                    $start = $start + 86400;
+                    $j=6;
+                    break;
+                case 'Sunday':
+                    $aSheet->setCellValue('G4',$formatter->asDate($start, "dd.MM.yyyy"));
+                    $start = $start + 86400;
+                    $j=7;
+                    break;
+            }
+        }
+    }
+    */
 }
 
 ob_end_clean();
