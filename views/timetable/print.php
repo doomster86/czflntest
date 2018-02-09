@@ -4,6 +4,7 @@ require_once $baseUrl.'/Classes/PHPExcel.php';
 $pExcel = new PHPExcel();
 
 $timetable = \app\models\TimetableParts::getListsCount($table_id);
+$formatter = new \yii\i18n\Formatter;
 $weeks = $timetable['count'];
 $start = $timetable['start'];
 $end = $timetable['end'];
@@ -41,7 +42,7 @@ $aSheet->mergeCells('A1:G1');
 $aSheet->getRowDimension('1')->setRowHeight(20);
 $aSheet->setCellValue('A1','Розклад занять для групи '.$table_id);
 $aSheet->mergeCells('A2:G2');
-$aSheet->setCellValue('A2',$start.' - '.$end);
+$aSheet->setCellValue('A2',$formatter->asDate($start, "dd.MM.yyyy").' - '.$formatter->asDate($end, "dd.MM.yyyy"));
 
 // Создаем шапку таблички данных
 $aSheet->mergeCells('A3:G3');
@@ -63,8 +64,6 @@ for($i = 1; $i < $weeks; $i++) {
     $pExcel->addSheet($objClonedWorksheet, $i);
 }
 
-$formatter = new \yii\i18n\Formatter;
-$day = $start;
 /*
  * даты необходимо выводить для всех дней
  * а занятия, только для дней этого месяца
@@ -73,13 +72,41 @@ for($i = 0; $i< $weeks; $i++) {
     $pExcel->setActiveSheetIndex($i);
     $aSheet = $pExcel->getActiveSheet();
 
-    $aSheet->setCellValue('A4','Понеділок'.$i);
-    $aSheet->setCellValue('B4','Вівторок'.$i);
-    $aSheet->setCellValue('C4','Середа'.$i);
-    $aSheet->setCellValue('D4','Четвер'.$i);
-    $aSheet->setCellValue('E4','П\'ятниця'.$i);
-    $aSheet->setCellValue('F4','Субота'.$i);
-    $aSheet->setCellValue('G4','Неділя'.$i);
+    $day = $formatter->asDate($start, "l"); //текущий день недели
+    for($j=0; $j<7; $j++) {
+        if($start <= $end) {
+            switch ($day) {
+                case 'Monday':
+                    $aSheet->setCellValue('A4',$formatter->asDate($start, "dd.MM.yyyy"));
+                    $start = $start + 86400;
+                    break;
+                case 'Tuesday':
+                    $aSheet->setCellValue('B4',$formatter->asDate($start, "dd.MM.yyyy"));
+                    $start = $start + 86400;
+                    break;
+                case 'Wednesday':
+                    $aSheet->setCellValue('C4',$formatter->asDate($start, "dd.MM.yyyy"));
+                    $start = $start + 86400;
+                    break;
+                case 'Thursday':
+                    $aSheet->setCellValue('D4',$formatter->asDate($start, "dd.MM.yyyy"));
+                    $start = $start + 86400;
+                    break;
+                case 'Friday':
+                    $aSheet->setCellValue('E4',$formatter->asDate($start, "dd.MM.yyyy"));
+                    $start = $start + 86400;
+                    break;
+                case 'Saturday':
+                    $aSheet->setCellValue('F4',$formatter->asDate($start, "dd.MM.yyyy"));
+                    $start = $start + 86400;
+                    break;
+                case 'Sunday':
+                    $aSheet->setCellValue('G4',$formatter->asDate($start, "dd.MM.yyyy"));
+                    $start = $start + 86400;
+                    break;
+            }
+        }
+    }
 }
 
 ob_end_clean();
