@@ -167,6 +167,7 @@ for($i = 0; $i< $weeks; $i++) {
                             ."\n\n".'Группа: ' . $groupName
                             ."\n\n".'Предмет: ' . $subjName
                         );
+
                         $pExcel->getActiveSheet()->getStyle('A'.$cellNum)->getAlignment()->setWrapText(true);
 
                         $cellNum = 6;
@@ -643,6 +644,28 @@ date_default_timezone_set('europe/kiev');
 //$objWriter = new PHPExcel_Writer_Excel2007($pExcel);
 
 header('Content-Type:application/vnd.ms-excel');
-header('Content-Disposition:attachment;filename="розклад.xls"');
+
+if($grId){
+    $groupName = \app\models\Groups::find()
+        ->asArray()
+        ->select('name')
+        ->where(['=', 'id', $grId])
+        ->one();
+    $groupName = $groupName['name'];
+
+    header('Content-Disposition:attachment;filename="Розклад '.$groupName.'.xls"');
+}
+
+if($teacher_id){
+    $teacherName = \app\models\User::find()
+        ->asArray()
+        ->select('firstname, middlename, lastname')
+        ->where(['=', 'id', $teacher_id])
+        ->one();
+    $teacherName = $teacherName['firstname'] . " " . $teacherName['lastname'];
+
+    header('Content-Disposition:attachment;filename="Розклад '.$teacherName.'.xls"');
+}
+
 $objWriter = new PHPExcel_Writer_Excel5($pExcel);
 $objWriter->save('php://output');
