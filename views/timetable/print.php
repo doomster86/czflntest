@@ -3,6 +3,9 @@
 require_once $baseUrl.'/Classes/PHPExcel.php';
 $pExcel = new PHPExcel();
 
+$table_id = $_GET["table_id"];
+$grId = $_GET["group_id"];
+
 $timetable = \app\models\TimetableParts::getListsCount($table_id);
 $formatter = new \yii\i18n\Formatter;
 $weeks = $timetable['count'];
@@ -64,10 +67,6 @@ for($i = 1; $i < $weeks; $i++) {
     $pExcel->addSheet($objClonedWorksheet, $i);
 }
 
-/*
- * даты необходимо выводить для всех дней
- * а занятия, только для дней этого месяца
- */
 for($i = 0; $i< $weeks; $i++) {
     $pExcel->setActiveSheetIndex($i);
     $aSheet = $pExcel->getActiveSheet();
@@ -75,91 +74,452 @@ for($i = 0; $i< $weeks; $i++) {
     for($j = 0; $j<7; $j++) {
         if($start <= $end) {
             $day = $formatter->asDate($start, "l"); //текущий день недели
+            $cellNum = 6;
             switch ($day) {
                 case 'Monday':
                     $aSheet->setCellValue('A4',$formatter->asDate($start, "dd.MM.yyyy"));
+
+                    $input_array = \app\models\Timetable::find()
+                        ->asArray()
+                        ->where( [ '=', 'part_id', $table_id ] )
+                        ->andWhere(['=', 'date', $start])
+                        ->andWhere(['=', 'group_id', $grId])
+                        ->all();
+
+                    foreach ($input_array as $cell) {
+                        $y = $cell['y'];
+                        $cellNum = $cellNum +$y;
+
+                        $aSheet->getRowDimension($cellNum)->setRowHeight(160);
+
+                        $corpsName = \app\models\Corps::find()
+                            ->asArray()
+                            ->select('corps_name')
+                            ->where(['=', 'ID', $cell['corps_id']])
+                            ->one();
+                        $corpsName = $corpsName['corps_name'];
+
+                        $audienceName = \app\models\Audience::find()
+                            ->asArray()
+                            ->select('name')
+                            ->where(['=', 'ID', $cell['audience_id']])
+                            ->one();
+                        $audienceName = $audienceName['name'];
+
+                        $teacherName = \app\models\User::find()
+                            ->asArray()
+                            ->select('firstname, middlename, lastname')
+                            ->where(['=', 'id', $cell['teacher_id']])
+                            ->one();
+                        $teacherName = $teacherName['firstname'] . " " . $teacherName['lastname'];
+
+                        $groupName = \app\models\Groups::find()
+                            ->asArray()
+                            ->select('name')
+                            ->where(['=', 'id', $cell['group_id']])
+                            ->one();
+                        $groupName = $groupName['name'];
+
+                        $subjName = \app\models\Subjects::find()
+                            ->asArray()
+                            ->select('name')
+                            ->where(['=', 'id', $cell['subjects_id']])
+                            ->one();
+                        $subjName = $subjName['name'];
+
+                        $aSheet->setCellValue('A'.$cellNum, 'Корпус: ' . $corpsName
+                            ."\n\n".'Аудиторія: ' . $audienceName
+                            ."\n\n".'Викладач: ' . $teacherName
+                            ."\n\n".'Группа: ' . $groupName
+                            ."\n\n".'Предмет: ' . $subjName
+                        );
+                        $pExcel->getActiveSheet()->getStyle('A'.$cellNum)->getAlignment()->setWrapText(true);
+                    }
+
                     $start = $start + 86400;
                     $j=0;
                     break;
                 case 'Tuesday':
                     $aSheet->setCellValue('B4',$formatter->asDate($start, "dd.MM.yyyy"));
-                    $start = $start + 86400;
-                    $j=1;
-                    break;
-                case 'Wednesday':
-                    $aSheet->setCellValue('C4',$formatter->asDate($start, "dd.MM.yyyy"));
-                    $start = $start + 86400;
-                    $j=2;
-                    break;
-                case 'Thursday':
-                    $aSheet->setCellValue('D4',$formatter->asDate($start, "dd.MM.yyyy"));
-                    $start = $start + 86400;
-                    $j=3;
-                    break;
-                case 'Friday':
-                    $aSheet->setCellValue('E4',$formatter->asDate($start, "dd.MM.yyyy"));
-                    $start = $start + 86400;
-                    $j=4;
-                    break;
-                case 'Saturday':
-                    $aSheet->setCellValue('F4',$formatter->asDate($start, "dd.MM.yyyy"));
-                    $start = $start + 86400;
-                    $j=5;
-                    break;
-                case 'Sunday':
-                    $aSheet->setCellValue('G4',$formatter->asDate($start, "dd.MM.yyyy"));
-                    $start = $start + 86400;
-                    $j=6;
-                    break;
-            }
-        }
-    }
 
-    /*
-    $j = 0;
-    while($j<7) {
-        if($start <= $end) {
-            $day = $formatter->asDate($start, "l"); //текущий день недели
-            switch ($day) {
-                case 'Monday':
-                    $aSheet->setCellValue('A4',$formatter->asDate($start, "dd.MM.yyyy"));
+                    $input_array = \app\models\Timetable::find()
+                        ->asArray()
+                        ->where( [ '=', 'part_id', $table_id ] )
+                        ->andWhere(['=', 'date', $start])
+                        ->andWhere(['=', 'group_id', $grId])
+                        ->all();
+
+                    foreach ($input_array as $cell) {
+                        $y = $cell['y'];
+                        $cellNum = $cellNum +$y;
+
+                        $aSheet->getRowDimension($cellNum)->setRowHeight(160);
+
+                        $corpsName = \app\models\Corps::find()
+                            ->asArray()
+                            ->select('corps_name')
+                            ->where(['=', 'ID', $cell['corps_id']])
+                            ->one();
+                        $corpsName = $corpsName['corps_name'];
+
+                        $audienceName = \app\models\Audience::find()
+                            ->asArray()
+                            ->select('name')
+                            ->where(['=', 'ID', $cell['audience_id']])
+                            ->one();
+                        $audienceName = $audienceName['name'];
+
+                        $teacherName = \app\models\User::find()
+                            ->asArray()
+                            ->select('firstname, middlename, lastname')
+                            ->where(['=', 'id', $cell['teacher_id']])
+                            ->one();
+                        $teacherName = $teacherName['firstname'] . " " . $teacherName['lastname'];
+
+                        $groupName = \app\models\Groups::find()
+                            ->asArray()
+                            ->select('name')
+                            ->where(['=', 'id', $cell['group_id']])
+                            ->one();
+                        $groupName = $groupName['name'];
+
+                        $subjName = \app\models\Subjects::find()
+                            ->asArray()
+                            ->select('name')
+                            ->where(['=', 'id', $cell['subjects_id']])
+                            ->one();
+                        $subjName = $subjName['name'];
+
+                        $aSheet->setCellValue('B'.$cellNum, 'Корпус: ' . $corpsName
+                            ."\n\n".'Аудиторія: ' . $audienceName
+                            ."\n\n".'Викладач: ' . $teacherName
+                            ."\n\n".'Группа: ' . $groupName
+                            ."\n\n".'Предмет: ' . $subjName
+                        );
+                        $pExcel->getActiveSheet()->getStyle('B'.$cellNum)->getAlignment()->setWrapText(true);
+                    }
+
                     $start = $start + 86400;
                     $j=1;
                     break;
-                case 'Tuesday':
-                    $aSheet->setCellValue('B4',$formatter->asDate($start, "dd.MM.yyyy"));
+                case 'Wednesday':
+                    $aSheet->setCellValue('C4',$formatter->asDate($start, "dd.MM.yyyy"));
+
+                    $input_array = \app\models\Timetable::find()
+                        ->asArray()
+                        ->where( [ '=', 'part_id', $table_id ] )
+                        ->andWhere(['=', 'date', $start])
+                        ->andWhere(['=', 'group_id', $grId])
+                        ->all();
+
+                    foreach ($input_array as $cell) {
+                        $y = $cell['y'];
+                        $cellNum = $cellNum +$y;
+
+                        $aSheet->getRowDimension($cellNum)->setRowHeight(160);
+
+                        $corpsName = \app\models\Corps::find()
+                            ->asArray()
+                            ->select('corps_name')
+                            ->where(['=', 'ID', $cell['corps_id']])
+                            ->one();
+                        $corpsName = $corpsName['corps_name'];
+
+                        $audienceName = \app\models\Audience::find()
+                            ->asArray()
+                            ->select('name')
+                            ->where(['=', 'ID', $cell['audience_id']])
+                            ->one();
+                        $audienceName = $audienceName['name'];
+
+                        $teacherName = \app\models\User::find()
+                            ->asArray()
+                            ->select('firstname, middlename, lastname')
+                            ->where(['=', 'id', $cell['teacher_id']])
+                            ->one();
+                        $teacherName = $teacherName['firstname'] . " " . $teacherName['lastname'];
+
+                        $groupName = \app\models\Groups::find()
+                            ->asArray()
+                            ->select('name')
+                            ->where(['=', 'id', $cell['group_id']])
+                            ->one();
+                        $groupName = $groupName['name'];
+
+                        $subjName = \app\models\Subjects::find()
+                            ->asArray()
+                            ->select('name')
+                            ->where(['=', 'id', $cell['subjects_id']])
+                            ->one();
+                        $subjName = $subjName['name'];
+
+                        $aSheet->setCellValue('C'.$cellNum, 'Корпус: ' . $corpsName
+                            ."\n\n".'Аудиторія: ' . $audienceName
+                            ."\n\n".'Викладач: ' . $teacherName
+                            ."\n\n".'Группа: ' . $groupName
+                            ."\n\n".'Предмет: ' . $subjName
+                        );
+                        $pExcel->getActiveSheet()->getStyle('C'.$cellNum)->getAlignment()->setWrapText(true);
+                    }
+
                     $start = $start + 86400;
                     $j=2;
                     break;
-                case 'Wednesday':
-                    $aSheet->setCellValue('C4',$formatter->asDate($start, "dd.MM.yyyy"));
+                case 'Thursday':
+                    $aSheet->setCellValue('D4',$formatter->asDate($start, "dd.MM.yyyy"));
+
+                    $input_array = \app\models\Timetable::find()
+                        ->asArray()
+                        ->where( [ '=', 'part_id', $table_id ] )
+                        ->andWhere(['=', 'date', $start])
+                        ->andWhere(['=', 'group_id', $grId])
+                        ->all();
+
+                    foreach ($input_array as $cell) {
+                        $y = $cell['y'];
+                        $cellNum = $cellNum +$y;
+
+                        $aSheet->getRowDimension($cellNum)->setRowHeight(160);
+
+                        $corpsName = \app\models\Corps::find()
+                            ->asArray()
+                            ->select('corps_name')
+                            ->where(['=', 'ID', $cell['corps_id']])
+                            ->one();
+                        $corpsName = $corpsName['corps_name'];
+
+                        $audienceName = \app\models\Audience::find()
+                            ->asArray()
+                            ->select('name')
+                            ->where(['=', 'ID', $cell['audience_id']])
+                            ->one();
+                        $audienceName = $audienceName['name'];
+
+                        $teacherName = \app\models\User::find()
+                            ->asArray()
+                            ->select('firstname, middlename, lastname')
+                            ->where(['=', 'id', $cell['teacher_id']])
+                            ->one();
+                        $teacherName = $teacherName['firstname'] . " " . $teacherName['lastname'];
+
+                        $groupName = \app\models\Groups::find()
+                            ->asArray()
+                            ->select('name')
+                            ->where(['=', 'id', $cell['group_id']])
+                            ->one();
+                        $groupName = $groupName['name'];
+
+                        $subjName = \app\models\Subjects::find()
+                            ->asArray()
+                            ->select('name')
+                            ->where(['=', 'id', $cell['subjects_id']])
+                            ->one();
+                        $subjName = $subjName['name'];
+
+                        $aSheet->setCellValue('D'.$cellNum, 'Корпус: ' . $corpsName
+                            ."\n\n".'Аудиторія: ' . $audienceName
+                            ."\n\n".'Викладач: ' . $teacherName
+                            ."\n\n".'Группа: ' . $groupName
+                            ."\n\n".'Предмет: ' . $subjName
+                        );
+                        $pExcel->getActiveSheet()->getStyle('D'.$cellNum)->getAlignment()->setWrapText(true);
+                    }
+
                     $start = $start + 86400;
                     $j=3;
                     break;
-                case 'Thursday':
-                    $aSheet->setCellValue('D4',$formatter->asDate($start, "dd.MM.yyyy"));
+                case 'Friday':
+                    $aSheet->setCellValue('E4',$formatter->asDate($start, "dd.MM.yyyy"));
+
+                    $input_array = \app\models\Timetable::find()
+                        ->asArray()
+                        ->where( [ '=', 'part_id', $table_id ] )
+                        ->andWhere(['=', 'date', $start])
+                        ->andWhere(['=', 'group_id', $grId])
+                        ->all();
+
+                    foreach ($input_array as $cell) {
+                        $y = $cell['y'];
+                        $cellNum = $cellNum +$y;
+
+                        $aSheet->getRowDimension($cellNum)->setRowHeight(160);
+
+                        $corpsName = \app\models\Corps::find()
+                            ->asArray()
+                            ->select('corps_name')
+                            ->where(['=', 'ID', $cell['corps_id']])
+                            ->one();
+                        $corpsName = $corpsName['corps_name'];
+
+                        $audienceName = \app\models\Audience::find()
+                            ->asArray()
+                            ->select('name')
+                            ->where(['=', 'ID', $cell['audience_id']])
+                            ->one();
+                        $audienceName = $audienceName['name'];
+
+                        $teacherName = \app\models\User::find()
+                            ->asArray()
+                            ->select('firstname, middlename, lastname')
+                            ->where(['=', 'id', $cell['teacher_id']])
+                            ->one();
+                        $teacherName = $teacherName['firstname'] . " " . $teacherName['lastname'];
+
+                        $groupName = \app\models\Groups::find()
+                            ->asArray()
+                            ->select('name')
+                            ->where(['=', 'id', $cell['group_id']])
+                            ->one();
+                        $groupName = $groupName['name'];
+
+                        $subjName = \app\models\Subjects::find()
+                            ->asArray()
+                            ->select('name')
+                            ->where(['=', 'id', $cell['subjects_id']])
+                            ->one();
+                        $subjName = $subjName['name'];
+
+                        $aSheet->setCellValue('E'.$cellNum, 'Корпус: ' . $corpsName
+                            ."\n\n".'Аудиторія: ' . $audienceName
+                            ."\n\n".'Викладач: ' . $teacherName
+                            ."\n\n".'Группа: ' . $groupName
+                            ."\n\n".'Предмет: ' . $subjName
+                        );
+                        $pExcel->getActiveSheet()->getStyle('E'.$cellNum)->getAlignment()->setWrapText(true);
+                    }
+
                     $start = $start + 86400;
                     $j=4;
                     break;
-                case 'Friday':
-                    $aSheet->setCellValue('E4',$formatter->asDate($start, "dd.MM.yyyy"));
+                case 'Saturday':
+                    $aSheet->setCellValue('F4',$formatter->asDate($start, "dd.MM.yyyy"));
+
+                    $input_array = \app\models\Timetable::find()
+                        ->asArray()
+                        ->where( [ '=', 'part_id', $table_id ] )
+                        ->andWhere(['=', 'date', $start])
+                        ->andWhere(['=', 'group_id', $grId])
+                        ->all();
+
+                    foreach ($input_array as $cell) {
+                        $y = $cell['y'];
+                        $cellNum = $cellNum +$y;
+
+                        $aSheet->getRowDimension($cellNum)->setRowHeight(160);
+
+                        $corpsName = \app\models\Corps::find()
+                            ->asArray()
+                            ->select('corps_name')
+                            ->where(['=', 'ID', $cell['corps_id']])
+                            ->one();
+                        $corpsName = $corpsName['corps_name'];
+
+                        $audienceName = \app\models\Audience::find()
+                            ->asArray()
+                            ->select('name')
+                            ->where(['=', 'ID', $cell['audience_id']])
+                            ->one();
+                        $audienceName = $audienceName['name'];
+
+                        $teacherName = \app\models\User::find()
+                            ->asArray()
+                            ->select('firstname, middlename, lastname')
+                            ->where(['=', 'id', $cell['teacher_id']])
+                            ->one();
+                        $teacherName = $teacherName['firstname'] . " " . $teacherName['lastname'];
+
+                        $groupName = \app\models\Groups::find()
+                            ->asArray()
+                            ->select('name')
+                            ->where(['=', 'id', $cell['group_id']])
+                            ->one();
+                        $groupName = $groupName['name'];
+
+                        $subjName = \app\models\Subjects::find()
+                            ->asArray()
+                            ->select('name')
+                            ->where(['=', 'id', $cell['subjects_id']])
+                            ->one();
+                        $subjName = $subjName['name'];
+
+                        $aSheet->setCellValue('F'.$cellNum, 'Корпус: ' . $corpsName
+                            ."\n\n".'Аудиторія: ' . $audienceName
+                            ."\n\n".'Викладач: ' . $teacherName
+                            ."\n\n".'Группа: ' . $groupName
+                            ."\n\n".'Предмет: ' . $subjName
+                        );
+                        $pExcel->getActiveSheet()->getStyle('F'.$cellNum)->getAlignment()->setWrapText(true);
+                    }
+
                     $start = $start + 86400;
                     $j=5;
                     break;
-                case 'Saturday':
-                    $aSheet->setCellValue('F4',$formatter->asDate($start, "dd.MM.yyyy"));
-                    $start = $start + 86400;
-                    $j=6;
-                    break;
                 case 'Sunday':
                     $aSheet->setCellValue('G4',$formatter->asDate($start, "dd.MM.yyyy"));
+
+                    $input_array = \app\models\Timetable::find()
+                        ->asArray()
+                        ->where( [ '=', 'part_id', $table_id ] )
+                        ->andWhere(['=', 'date', $start])
+                        ->andWhere(['=', 'group_id', $grId])
+                        ->all();
+
+                    foreach ($input_array as $cell) {
+                        $y = $cell['y'];
+                        $cellNum = $cellNum +$y;
+
+                        $aSheet->getRowDimension($cellNum)->setRowHeight(160);
+
+                        $corpsName = \app\models\Corps::find()
+                            ->asArray()
+                            ->select('corps_name')
+                            ->where(['=', 'ID', $cell['corps_id']])
+                            ->one();
+                        $corpsName = $corpsName['corps_name'];
+
+                        $audienceName = \app\models\Audience::find()
+                            ->asArray()
+                            ->select('name')
+                            ->where(['=', 'ID', $cell['audience_id']])
+                            ->one();
+                        $audienceName = $audienceName['name'];
+
+                        $teacherName = \app\models\User::find()
+                            ->asArray()
+                            ->select('firstname, middlename, lastname')
+                            ->where(['=', 'id', $cell['teacher_id']])
+                            ->one();
+                        $teacherName = $teacherName['firstname'] . " " . $teacherName['lastname'];
+
+                        $groupName = \app\models\Groups::find()
+                            ->asArray()
+                            ->select('name')
+                            ->where(['=', 'id', $cell['group_id']])
+                            ->one();
+                        $groupName = $groupName['name'];
+
+                        $subjName = \app\models\Subjects::find()
+                            ->asArray()
+                            ->select('name')
+                            ->where(['=', 'id', $cell['subjects_id']])
+                            ->one();
+                        $subjName = $subjName['name'];
+
+                        $aSheet->setCellValue('G'.$cellNum, 'Корпус: ' . $corpsName
+                            ."\n\n".'Аудиторія: ' . $audienceName
+                            ."\n\n".'Викладач: ' . $teacherName
+                            ."\n\n".'Группа: ' . $groupName
+                            ."\n\n".'Предмет: ' . $subjName
+                        );
+                        $pExcel->getActiveSheet()->getStyle('G'.$cellNum)->getAlignment()->setWrapText(true);
+                    }
+
                     $start = $start + 86400;
-                    $j=7;
+                    $j=6;
                     break;
             }
         }
     }
-    */
 }
 
 ob_end_clean();
