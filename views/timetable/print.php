@@ -81,7 +81,12 @@ for($i = 0; $i< $weeks; $i++) {
                     $aSheet->setCellValue('A4',$formatter->asDate($start, "dd.MM.yyyy"));
 
                     if($teacher_id) {
-
+                        $input_array = \app\models\Timetable::find()
+                            ->asArray()
+                            ->where( [ '=', 'part_id', $table_id ] )
+                            ->andWhere(['=', 'date', $start])
+                            ->andWhere(['=', 'teacher_id', $teacher_id])
+                            ->all();
                     }
 
                     if($grId) {
@@ -151,12 +156,23 @@ for($i = 0; $i< $weeks; $i++) {
                 case 'Tuesday':
                     $aSheet->setCellValue('B4',$formatter->asDate($start, "dd.MM.yyyy"));
 
-                    $input_array = \app\models\Timetable::find()
-                        ->asArray()
-                        ->where( [ '=', 'part_id', $table_id ] )
-                        ->andWhere(['=', 'date', $start])
-                        ->andWhere(['=', 'group_id', $grId])
-                        ->all();
+                    if($teacher_id) {
+                        $input_array = \app\models\Timetable::find()
+                            ->asArray()
+                            ->where( [ '=', 'part_id', $table_id ] )
+                            ->andWhere(['=', 'date', $start])
+                            ->andWhere(['=', 'teacher_id', $teacher_id])
+                            ->all();
+                    }
+
+                    if($grId) {
+                        $input_array = \app\models\Timetable::find()
+                            ->asArray()
+                            ->where( [ '=', 'part_id', $table_id ] )
+                            ->andWhere(['=', 'date', $start])
+                            ->andWhere(['=', 'group_id', $grId])
+                            ->all();
+                    }
 
                     foreach ($input_array as $cell) {
                         $y = $cell['y'];
@@ -216,12 +232,23 @@ for($i = 0; $i< $weeks; $i++) {
                 case 'Wednesday':
                     $aSheet->setCellValue('C4',$formatter->asDate($start, "dd.MM.yyyy"));
 
-                    $input_array = \app\models\Timetable::find()
-                        ->asArray()
-                        ->where( [ '=', 'part_id', $table_id ] )
-                        ->andWhere(['=', 'date', $start])
-                        ->andWhere(['=', 'group_id', $grId])
-                        ->all();
+                    if($teacher_id) {
+                        $input_array = \app\models\Timetable::find()
+                            ->asArray()
+                            ->where( [ '=', 'part_id', $table_id ] )
+                            ->andWhere(['=', 'date', $start])
+                            ->andWhere(['=', 'teacher_id', $teacher_id])
+                            ->all();
+                    }
+
+                    if($grId) {
+                        $input_array = \app\models\Timetable::find()
+                            ->asArray()
+                            ->where( [ '=', 'part_id', $table_id ] )
+                            ->andWhere(['=', 'date', $start])
+                            ->andWhere(['=', 'group_id', $grId])
+                            ->all();
+                    }
 
                     foreach ($input_array as $cell) {
                         $y = $cell['y'];
@@ -281,12 +308,23 @@ for($i = 0; $i< $weeks; $i++) {
                 case 'Thursday':
                     $aSheet->setCellValue('D4',$formatter->asDate($start, "dd.MM.yyyy"));
 
-                    $input_array = \app\models\Timetable::find()
-                        ->asArray()
-                        ->where( [ '=', 'part_id', $table_id ] )
-                        ->andWhere(['=', 'date', $start])
-                        ->andWhere(['=', 'group_id', $grId])
-                        ->all();
+                    if($teacher_id) {
+                        $input_array = \app\models\Timetable::find()
+                            ->asArray()
+                            ->where( [ '=', 'part_id', $table_id ] )
+                            ->andWhere(['=', 'date', $start])
+                            ->andWhere(['=', 'teacher_id', $teacher_id])
+                            ->all();
+                    }
+
+                    if($grId) {
+                        $input_array = \app\models\Timetable::find()
+                            ->asArray()
+                            ->where( [ '=', 'part_id', $table_id ] )
+                            ->andWhere(['=', 'date', $start])
+                            ->andWhere(['=', 'group_id', $grId])
+                            ->all();
+                    }
 
                     foreach ($input_array as $cell) {
                         $y = $cell['y'];
@@ -346,12 +384,23 @@ for($i = 0; $i< $weeks; $i++) {
                 case 'Friday':
                     $aSheet->setCellValue('E4',$formatter->asDate($start, "dd.MM.yyyy"));
 
-                    $input_array = \app\models\Timetable::find()
-                        ->asArray()
-                        ->where( [ '=', 'part_id', $table_id ] )
-                        ->andWhere(['=', 'date', $start])
-                        ->andWhere(['=', 'group_id', $grId])
-                        ->all();
+                    if($teacher_id) {
+                        $input_array = \app\models\Timetable::find()
+                            ->asArray()
+                            ->where( [ '=', 'part_id', $table_id ] )
+                            ->andWhere(['=', 'date', $start])
+                            ->andWhere(['=', 'teacher_id', $teacher_id])
+                            ->all();
+                    }
+
+                    if($grId) {
+                        $input_array = \app\models\Timetable::find()
+                            ->asArray()
+                            ->where( [ '=', 'part_id', $table_id ] )
+                            ->andWhere(['=', 'date', $start])
+                            ->andWhere(['=', 'group_id', $grId])
+                            ->all();
+                    }
 
                     foreach ($input_array as $cell) {
                         $y = $cell['y'];
@@ -411,12 +460,23 @@ for($i = 0; $i< $weeks; $i++) {
                 case 'Saturday':
                     $aSheet->setCellValue('F4',$formatter->asDate($start, "dd.MM.yyyy"));
 
-                    $input_array = \app\models\Timetable::find()
-                        ->asArray()
-                        ->where( [ '=', 'part_id', $table_id ] )
-                        ->andWhere(['=', 'date', $start])
-                        ->andWhere(['=', 'group_id', $grId])
-                        ->all();
+                    if($teacher_id) {
+                        $input_array = \app\models\Timetable::find()
+                            ->asArray()
+                            ->where( [ '=', 'part_id', $table_id ] )
+                            ->andWhere(['=', 'date', $start])
+                            ->andWhere(['=', 'teacher_id', $teacher_id])
+                            ->all();
+                    }
+
+                    if($grId) {
+                        $input_array = \app\models\Timetable::find()
+                            ->asArray()
+                            ->where( [ '=', 'part_id', $table_id ] )
+                            ->andWhere(['=', 'date', $start])
+                            ->andWhere(['=', 'group_id', $grId])
+                            ->all();
+                    }
 
                     foreach ($input_array as $cell) {
                         $y = $cell['y'];
@@ -476,12 +536,23 @@ for($i = 0; $i< $weeks; $i++) {
                 case 'Sunday':
                     $aSheet->setCellValue('G4',$formatter->asDate($start, "dd.MM.yyyy"));
 
-                    $input_array = \app\models\Timetable::find()
-                        ->asArray()
-                        ->where( [ '=', 'part_id', $table_id ] )
-                        ->andWhere(['=', 'date', $start])
-                        ->andWhere(['=', 'group_id', $grId])
-                        ->all();
+                    if($teacher_id) {
+                        $input_array = \app\models\Timetable::find()
+                            ->asArray()
+                            ->where( [ '=', 'part_id', $table_id ] )
+                            ->andWhere(['=', 'date', $start])
+                            ->andWhere(['=', 'teacher_id', $teacher_id])
+                            ->all();
+                    }
+
+                    if($grId) {
+                        $input_array = \app\models\Timetable::find()
+                            ->asArray()
+                            ->where( [ '=', 'part_id', $table_id ] )
+                            ->andWhere(['=', 'date', $start])
+                            ->andWhere(['=', 'group_id', $grId])
+                            ->all();
+                    }
 
                     foreach ($input_array as $cell) {
                         $y = $cell['y'];
