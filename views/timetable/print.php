@@ -44,7 +44,29 @@ $aSheet->getColumnDimension('G')->setWidth(25);
 
 $aSheet->mergeCells('A1:G1');
 $aSheet->getRowDimension('1')->setRowHeight(20);
-$aSheet->setCellValue('A1','Розклад занять для групи '.$table_id);
+
+if($grId){
+    $groupName = \app\models\Groups::find()
+        ->asArray()
+        ->select('name')
+        ->where(['=', 'id', $grId])
+        ->one();
+    $groupName = $groupName['name'];
+
+    $aSheet->setCellValue('A1','Розклад занять для групи '.$groupName);
+}
+
+if($teacher_id){
+    $teacherName = \app\models\User::find()
+        ->asArray()
+        ->select('firstname, middlename, lastname')
+        ->where(['=', 'id', $teacher_id])
+        ->one();
+    $teacherName = $teacherName['firstname'] . " " . $teacherName['lastname'];
+
+    $aSheet->setCellValue('A1','Розклад занять для викладача '.$teacherName);
+}
+
 $aSheet->mergeCells('A2:G2');
 $aSheet->setCellValue('A2',$formatter->asDate($start, "dd.MM.yyyy").' - '.$formatter->asDate($end, "dd.MM.yyyy"));
 
