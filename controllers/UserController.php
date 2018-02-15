@@ -10,6 +10,7 @@ use app\models\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\data\ActiveDataProvider;
+use app\models\SignupForm;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -58,22 +59,21 @@ class UserController extends Controller
     }
 */
 	public function actionCreate() {
-        $model = new User();
+        $model = new SignupForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            //return $this->redirect(['view', 'id' => $model->id]);
-            $model->generateAuthKey();
-	        $model->save();
-	        return $this->render('create', [
-		        'model' => $model,
-		        'status' => 'added'
-	        ]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-	            'status' => 'create'
-            ]);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($user = $model->signup()) {
+                return $this->render('create', [
+                    'model' => $model,
+                    'status' => 'added'
+                ]);
+            }
         }
+
+        return $this->render('create', [
+            'model' => $model,
+            'status' => 'create'
+        ]);
     }
 
     public function actionCreateTeacherMeta()
