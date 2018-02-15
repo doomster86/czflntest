@@ -612,6 +612,23 @@ class TimetableParts extends \yii\db\ActiveRecord
                             }
                         }
 
+                        //нельзя ставить группе пары у разных преподавателей в одно время
+                        if($lectFilterStatus == 1) {
+                            $lectCount = 0;
+                            $lectInOtherTeacher = Timetable::find()
+                                ->asArray()
+                                ->select(['COUNT(group_id) AS gId'])
+                                ->where(['=', 'group_id', $groupID])
+                                ->andWhere(['=', 'x', $x])
+                                ->andWhere(['=', 'y', $y])
+                                ->one();
+                            $lectCount = $lectInOtherTeacher['gId'];
+                            if($lectCount > 0) {
+                                //echo "нельзя ставить преподавателю пары в разніх групах в одно время<br/>";
+                                $lectFilterStatus = 0;
+                            }
+                        }
+
                         //узнаём lecture_id - id пары из lecture_table
                         $lecture_id = 1; //пока не высчитываем, возможно стоит убрать эту колонку из таблицы
                         //$lecture_id = $this->getLectureId($y, $currentCorpsId); //вычисляем id лекции по её порядковому номеру
