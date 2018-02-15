@@ -1,5 +1,7 @@
 <?php
 
+use yii\helpers\Html;
+use yii\helpers\Url;
 /* @var $this yii\web\View */
 
 $this->title = 'Главная';
@@ -17,35 +19,30 @@ $this->title = 'Главная';
     <div class="body-content">
 
         <div class="row">
-            <div class="col-lg-4">
-                <h2>Розклад занять</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="#">Дивитись розклад</a></p>
+            <div class="col-lg-6">
+                <?php echo Html::img(Url::to('/web/img/note.png')); ?>
             </div>
-            <div class="col-lg-4">
-                <h2>Про Центр</h2>
+            <div class="col-lg-6">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vel consectetur quam, eget dictum odio.
+                Fusce eu ultrices est. Maecenas eget bibendum felis, id venenatis nulla. Nunc lobortis rutrum lorem et consequat.
+                Vivamus bibendum vel sem quis ullamcorper. Pellentesque aliquam tellus a neque tempus, non scelerisque nisl aliquet.
+                Ut aliquam viverra mi et interdum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;
+                Donec maximus feugiat consequat. Integer placerat neque vel metus lobortis molestie. Nunc congue pellentesque mi eu placerat.
+                    Pellentesque sit amet nisl nulla.</p>
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
+                <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+                Proin malesuada lacinia aliquam. Integer dignissim tellus ac porttitor congue.
+                Mauris mattis, sapien volutpat imperdiet elementum, libero nunc dignissim dolor, ac faucibus enim orci ac velit.
+                Donec sollicitudin a nunc sed tincidunt. Nam vitae lacus a mauris ornare porttitor eget eget nibh.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin finibus commodo tortor, ut molestie magna ornare sed.</p>
 
-                <p><a class="btn btn-default" href="#">Детальна інформація</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Контакти</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="#">Звязатись з нами</a></p>
+                <p>Aliquam dictum eget ipsum at tincidunt. Pellentesque eleifend posuere vestibulum.
+                Donec tempor, nisl eu tincidunt blandit, ligula purus lobortis metus, ut venenatis diam libero at ligula.
+                Nam ultricies quis nibh ut egestas. Quisque non diam ac dolor accumsan commodo.
+                Sed egestas consequat ipsum, quis cursus tellus consectetur at.
+                Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+                Aenean ullamcorper mollis sapien, quis fermentum ligula fermentum non. Integer scelerisque auctor lectus at scelerisque.
+                    Donec et finibus neque.</p>
             </div>
         </div>
 
