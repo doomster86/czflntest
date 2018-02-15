@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = 'Оновити';
 
     <?= $this->render('form', [
         'model' => $model,
-        'teachers' => $teachers,
+        //'teachers' => $teachers,
         'current_action' => 'update',
         'status_form' => $status
         /*

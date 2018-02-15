@@ -61,8 +61,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     $tableID = $model->id;
     if($tableID != 0) {
-        $this->registerJsFile('http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js');
-        $this->registerJsFile($baseUrl.'/js/jquery.stickyheader.js');
+        //$this->registerJsFile('http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js');
+        //$this->registerJsFile($baseUrl.'/js/jquery.stickyheader.js');
 
         echo "
         	<script>

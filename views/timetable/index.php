@@ -53,16 +53,21 @@ $this->params['breadcrumbs'][] = $this->title;
     if($tableID != 0) {
 	    $request = Yii::$app->request;
 	    $request = $request->get();
-	    $teacher_id = $request['TimetableViewer']['teacher_id'];
-	    $group_id = $request['TimetableViewer']['group_id'];
+	    if($request){
+            $teacher_id = $request['TimetableViewer']['teacher_id'];
+            $group_id = $request['TimetableViewer']['group_id'];
 
-	    if($teacher_id) {
-	        echo "<h2>Викладач: ".$model->getTeacherName($teacher_id)."</h2>";
+            if($teacher_id) {
+                echo "<h2>Викладач: ".$model->getTeacherName($teacher_id)."</h2>";
+            }
+            if($group_id) {
+                echo "<h2>Група: ".$model->getGroupName($group_id)."</h2>";
+            }
+
+            echo $model->renderTable($tableID, $teacher_id, $group_id);
+        } else {
+            echo $model->renderTable($tableID, '', '');
         }
-	    if($group_id) {
-		    echo "<h2>Група: ".$model->getGroupName($group_id)."</h2>";
-	    }
-        echo $model->renderTable($tableID, $teacher_id, $group_id);
     } else {
         echo "<p>Інформація відсутня</p>";
     }

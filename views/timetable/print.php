@@ -1,11 +1,19 @@
 <?php
 
-require_once $baseUrl.'/Classes/PHPExcel.php';
+require_once dirname(__FILE__).'/PHPExcel.php';
 $pExcel = new PHPExcel();
 
-$table_id = $_GET["table_id"];
-$grId = $_GET["group_id"];
-$teacher_id = $_GET["teacher_id"];
+if(isset($_GET["table_id"])) {
+    $table_id = $_GET["table_id"];
+}
+
+if(isset($_GET["group_id"])) {
+    $grId = $_GET["group_id"];
+}
+
+if(isset($_GET["teacher_id"])) {
+    $teacher_id = $_GET["teacher_id"];
+}
 
 $timetable = \app\models\TimetableParts::getListsCount($table_id);
 $formatter = new \yii\i18n\Formatter;
@@ -45,7 +53,7 @@ $aSheet->getColumnDimension('G')->setWidth(25);
 $aSheet->mergeCells('A1:G1');
 $aSheet->getRowDimension('1')->setRowHeight(20);
 
-if($grId){
+if(isset($grId)){
     $groupName = \app\models\Groups::find()
         ->asArray()
         ->select('name')
@@ -56,7 +64,7 @@ if($grId){
     $aSheet->setCellValue('A1','Розклад занять для групи '.$groupName);
 }
 
-if($teacher_id){
+if(isset($teacher_id)){
     $teacherName = \app\models\User::find()
         ->asArray()
         ->select('firstname, middlename, lastname')
@@ -102,7 +110,7 @@ for($i = 0; $i< $weeks; $i++) {
                 case 'Monday':
                     $aSheet->setCellValue('A4',$formatter->asDate($start, "dd.MM.yyyy"));
 
-                    if($teacher_id) {
+                    if(isset($teacher_id)) {
                         $input_array = \app\models\Timetable::find()
                             ->asArray()
                             ->where( [ '=', 'part_id', $table_id ] )
@@ -111,7 +119,7 @@ for($i = 0; $i< $weeks; $i++) {
                             ->all();
                     }
 
-                    if($grId) {
+                    if(isset($grId)) {
                         $input_array = \app\models\Timetable::find()
                             ->asArray()
                             ->where( [ '=', 'part_id', $table_id ] )
@@ -179,7 +187,7 @@ for($i = 0; $i< $weeks; $i++) {
                 case 'Tuesday':
                     $aSheet->setCellValue('B4',$formatter->asDate($start, "dd.MM.yyyy"));
 
-                    if($teacher_id) {
+                    if(isset($teacher_id)) {
                         $input_array = \app\models\Timetable::find()
                             ->asArray()
                             ->where( [ '=', 'part_id', $table_id ] )
@@ -188,7 +196,7 @@ for($i = 0; $i< $weeks; $i++) {
                             ->all();
                     }
 
-                    if($grId) {
+                    if(isset($grId)) {
                         $input_array = \app\models\Timetable::find()
                             ->asArray()
                             ->where( [ '=', 'part_id', $table_id ] )
@@ -255,7 +263,7 @@ for($i = 0; $i< $weeks; $i++) {
                 case 'Wednesday':
                     $aSheet->setCellValue('C4',$formatter->asDate($start, "dd.MM.yyyy"));
 
-                    if($teacher_id) {
+                    if(isset($teacher_id)) {
                         $input_array = \app\models\Timetable::find()
                             ->asArray()
                             ->where( [ '=', 'part_id', $table_id ] )
@@ -264,7 +272,7 @@ for($i = 0; $i< $weeks; $i++) {
                             ->all();
                     }
 
-                    if($grId) {
+                    if(isset($grId)) {
                         $input_array = \app\models\Timetable::find()
                             ->asArray()
                             ->where( [ '=', 'part_id', $table_id ] )
@@ -331,7 +339,7 @@ for($i = 0; $i< $weeks; $i++) {
                 case 'Thursday':
                     $aSheet->setCellValue('D4',$formatter->asDate($start, "dd.MM.yyyy"));
 
-                    if($teacher_id) {
+                    if(isset($teacher_id)) {
                         $input_array = \app\models\Timetable::find()
                             ->asArray()
                             ->where( [ '=', 'part_id', $table_id ] )
@@ -340,7 +348,7 @@ for($i = 0; $i< $weeks; $i++) {
                             ->all();
                     }
 
-                    if($grId) {
+                    if(isset($grId)) {
                         $input_array = \app\models\Timetable::find()
                             ->asArray()
                             ->where( [ '=', 'part_id', $table_id ] )
@@ -407,7 +415,7 @@ for($i = 0; $i< $weeks; $i++) {
                 case 'Friday':
                     $aSheet->setCellValue('E4',$formatter->asDate($start, "dd.MM.yyyy"));
 
-                    if($teacher_id) {
+                    if(isset($teacher_id)) {
                         $input_array = \app\models\Timetable::find()
                             ->asArray()
                             ->where( [ '=', 'part_id', $table_id ] )
@@ -416,7 +424,7 @@ for($i = 0; $i< $weeks; $i++) {
                             ->all();
                     }
 
-                    if($grId) {
+                    if(isset($grId)) {
                         $input_array = \app\models\Timetable::find()
                             ->asArray()
                             ->where( [ '=', 'part_id', $table_id ] )
@@ -483,7 +491,7 @@ for($i = 0; $i< $weeks; $i++) {
                 case 'Saturday':
                     $aSheet->setCellValue('F4',$formatter->asDate($start, "dd.MM.yyyy"));
 
-                    if($teacher_id) {
+                    if(isset($teacher_id)) {
                         $input_array = \app\models\Timetable::find()
                             ->asArray()
                             ->where( [ '=', 'part_id', $table_id ] )
@@ -492,7 +500,7 @@ for($i = 0; $i< $weeks; $i++) {
                             ->all();
                     }
 
-                    if($grId) {
+                    if(isset($grId)) {
                         $input_array = \app\models\Timetable::find()
                             ->asArray()
                             ->where( [ '=', 'part_id', $table_id ] )
@@ -559,7 +567,7 @@ for($i = 0; $i< $weeks; $i++) {
                 case 'Sunday':
                     $aSheet->setCellValue('G4',$formatter->asDate($start, "dd.MM.yyyy"));
 
-                    if($teacher_id) {
+                    if(isset($teacher_id)) {
                         $input_array = \app\models\Timetable::find()
                             ->asArray()
                             ->where( [ '=', 'part_id', $table_id ] )
@@ -568,7 +576,7 @@ for($i = 0; $i< $weeks; $i++) {
                             ->all();
                     }
 
-                    if($grId) {
+                    if(isset($grId)) {
                         $input_array = \app\models\Timetable::find()
                             ->asArray()
                             ->where( [ '=', 'part_id', $table_id ] )
@@ -645,7 +653,7 @@ date_default_timezone_set('europe/kiev');
 
 header('Content-Type:application/vnd.ms-excel');
 
-if($grId){
+if(isset($grId)){
     $groupName = \app\models\Groups::find()
         ->asArray()
         ->select('name')
@@ -656,7 +664,7 @@ if($grId){
     header('Content-Disposition:attachment;filename="Розклад '.$groupName.'.xls"');
 }
 
-if($teacher_id){
+if(isset($teacher_id)){
     $teacherName = \app\models\User::find()
         ->asArray()
         ->select('firstname, middlename, lastname')
@@ -669,3 +677,5 @@ if($teacher_id){
 
 $objWriter = new PHPExcel_Writer_Excel5($pExcel);
 $objWriter->save('php://output');
+
+exit;

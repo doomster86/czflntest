@@ -11,14 +11,14 @@ Pjax::begin([
 
 <div class="courses-form">
 
-    <?php if( Html::encode($operation) == 'created') : ?>
+    <?php if( isset($operation) && Html::encode($operation) == 'created') : ?>
         <div class="alert alert-success">
             <p>Нова професія створена!</p>
             <p>Назва професії: <strong> <?php echo Html::encode($model->name); ?></strong></p>
         </div>
     <?php endif; ?>
 
-    <?php if( Html::encode($operation) == 'updated'): ?>
+    <?php if( isset($operation) && Html::encode($operation) == 'updated'): ?>
         <div class="alert alert-success">
             <p>Професія оновлена!</p>
         </div>
@@ -38,7 +38,7 @@ Pjax::begin([
     <div class="col-xs-12 col-md-12">
 
         <?php
-        if ($current_action == 'create') {
+        if (isset($current_action) && $current_action == 'create') {
             $nameValue = '';
         } else {
             $nameValue = $model->name;
@@ -100,7 +100,7 @@ Pjax::begin([
     ?>
 
         <div class="form-group col-md-12">
-            <?php if($current_action == 'create') {
+            <?php if(isset($current_action) && $current_action == 'create') {
                 echo Html::submitButton('Створити', ['class' => 'btn btn-success']);
             } else {
                 echo Html::submitButton('Оновити', ['class' => 'btn btn-primary']);
