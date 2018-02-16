@@ -75,10 +75,10 @@ Pjax::begin([
     echo $form->field($model, 'audience_id')->label('Оберіть аудиторію')->dropDownList($model->getAudienceNames(), $options);
 
     //Макс. в неделю
-    echo $form->field($model, 'max_week')->label('Макс. у тиждень')->textInput([
+    echo $form->field($model, 'max_week')->label('Макс. занять у тиждень')->textInput([
         'type' => 'number',
         'min' => '0',
-        'placeholder' => 'Макс. у тиждень',
+        'placeholder' => 'Макс. занять у тиждень',
         'value' =>$max_weekValue]);
 
     echo $form->field($model, 'required')->checkbox(['label' => 'Обов\'язкова аудиторія']);

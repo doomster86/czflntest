@@ -65,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'required',
             [
                 'attribute'=>'max_week',
-                'label'=>'Макс. на тиждень',
+                'label'=>'Макс. занять на тиждень',
                 'contentOptions' =>function ($model, $key, $index, $column){
                     return ['class' => 'col-xs-2'];
                 }
