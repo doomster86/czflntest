@@ -125,6 +125,15 @@ $this->title = 'Створити заняття';
 
 	<? echo $form->field($model, 'date')->hiddenInput(['value' => $date])->label(false); ?>
 
+    <?php
+
+    echo $form->field($model, 'half')->label('Тривалість заняття (академ. год.)')->dropDownList($model->getLength(), [
+        'id'=>'half',
+        'prompt'=>'Оберіть тривалість'
+    ]);
+
+    ?>
+
     <div class="form-group">
         <?= Html::submitButton('Створити', ['class' => 'btn btn-success']) ?>
     </div>

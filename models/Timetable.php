@@ -31,6 +31,7 @@ class Timetable extends \yii\db\ActiveRecord
 
     public $datestart;
     public $dateend;
+    public $length = 2; //максимальная длительность занятия
 
     /**
      * @inheritdoc
@@ -46,8 +47,8 @@ class Timetable extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['corps_id', 'audience_id', 'subjects_id', 'group_id', 'status','part_id', 'x', 'y', 'date'], 'required'],
-            [['corps_id', 'audience_id', 'subjects_id', 'teacher_id', 'group_id', 'lecture_id', 'status','part_id', 'x', 'y', 'date'], 'integer'],
+            [['corps_id', 'audience_id', 'subjects_id', 'group_id', 'status','part_id', 'x', 'y', 'date', 'half'], 'required'],
+            [['corps_id', 'audience_id', 'subjects_id', 'teacher_id', 'group_id', 'lecture_id', 'status', 'half', 'part_id', 'x', 'y', 'date'], 'integer'],
             [['corps_id'], 'exist', 'skipOnError' => true, 'targetClass' => Corps::className(), 'targetAttribute' => ['corps_id' => 'ID']],
             [['audience_id'], 'exist', 'skipOnError' => true, 'targetClass' => Audience::className(), 'targetAttribute' => ['audience_id' => 'ID']],
             [['subjects_id'], 'exist', 'skipOnError' => true, 'targetClass' => Subjects::className(), 'targetAttribute' => ['subjects_id' => 'ID']],
@@ -86,41 +87,34 @@ class Timetable extends \yii\db\ActiveRecord
         return $this->hasOne(Corps::className(), ['ID' => 'corps_id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getAudience()
     {
         return $this->hasOne(Audience::className(), ['ID' => 'audience_id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getSubjects()
     {
         return $this->hasOne(Subjects::className(), ['ID' => 'subjects_id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getTeacher()
     {
         return $this->hasOne(User::className(), ['id' => 'teacher_id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
     public function getGroup()
     {
         return $this->hasOne(Groups::className(), ['ID' => 'group_id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
+    public function getLength() {
+        for($i = 1; $i <= $this->length; $i++) {
+            $length[$i] = $i;
+        }
+
+        return $length;
+    }
+
     public function getLecture()
     {
         return $this->hasOne(LectureTable::className(), ['ID' => 'lecture_id']);
