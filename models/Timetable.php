@@ -306,7 +306,21 @@ class Timetable extends \yii\db\ActiveRecord
                                     ->one();
                                 $subjName = $subjName['name'];
 
-                                $output .= '<div class="'.$class_bg.'">';
+                                $half = Timetable::find()
+                                    ->asArray()
+                                    ->select('half')
+                                    ->where(['=', 'x', $td])
+                                    ->andWhere(['=', 'y', $tr])
+                                    ->andWhere(['=', 'subjects_id', $cell['subjects_id']])
+                                    ->one();
+                                $half = $half['half'];
+
+                                $half_class = "full";
+                                if($half == 1) {
+                                    $half_class = "half";
+                                }
+
+                                $output .= '<div class="'.$class_bg.' '.$half_class.'">';
                                 $output .= '<p> Корпус: '.$corpsName.'<br />';
                                 $output .= 'Аудиторія: '.$audienceName.'</p>';
                                 $output .= '<p>Викладач: '.$teacherName.'</p>';
@@ -325,8 +339,6 @@ class Timetable extends \yii\db\ActiveRecord
                                         $class_bg = 'dark';
                                         break;
                                 }
-                            } else {
-                                $output .= '<div></div>';
                             }
                         }
 	                    if(Yii::$app->user->identity->role==1) {

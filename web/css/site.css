@@ -267,6 +267,7 @@ a.desc:after {
 
 #lectures .light, #lectures .dark {
     padding: 5px 10px;
+    border: 1px solid #e0e0e0;
 }
 
 #lectures .light {
@@ -355,4 +356,8 @@ a.desc:after {
 .timetable-parts-view .btn-right {
     float: right;
     margin-top: 16px;
+}
+
+.half {
+    background: linear-gradient(126deg, transparent 50%, #ffffff 0);
 }
