@@ -1,8 +1,5 @@
 <?php
 
-use yii\helpers\Html;
-use yii\widgets\DetailView;
-use app\models\LectureTable;
 use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */

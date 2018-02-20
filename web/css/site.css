@@ -295,7 +295,8 @@ a.desc:after {
 }
 
 .sticky-wrap {
-    overflow-x: auto;
+    overflow: auto;
+    height: 600px;
     position: relative;
     margin-bottom: 1.5em;
     width: 100%;
