@@ -233,6 +233,8 @@ class TimetableParts extends \yii\db\ActiveRecord
                         //echo "Номер пары";
                         //v($y);
 
+                        $half = 2; //по-умолчанию ставим целую пару
+
                         //далее идёт проверка по группе правил, которые запрещают ставить лекцию в ячейку
 
                         //нельзя ставить пару, если у корпуса их может быть только $lecturesCounterCorps
@@ -433,11 +435,24 @@ class TimetableParts extends \yii\db\ActiveRecord
                                 ->select(['COUNT(teacher_id) AS lectLeft'])
                                 ->where(['>=', 'date', $firstMonday]) // date >= $firstMonday
                                 ->andWhere(['<=', 'date', $firstMonday + 518400])//date <= понедельник+6 дней
+                                ->andWhere(['=', 'half', 2])
                                 //->groupBy(['teacher_id'])
                                 ->one();
 
                             //кол-во часов, которое преподатель проработал уже, одна пара - два академических часа
                             $lectComplete = $lectComplete['lectLeft'] * 2;
+
+                            $lectCompleteHalf = Timetable::find()
+                                ->asArray()
+                                ->select(['COUNT(teacher_id) AS lectLeft'])
+                                ->where(['>=', 'date', $firstMonday]) // date >= $firstMonday
+                                ->andWhere(['<=', 'date', $firstMonday + 518400])//date <= понедельник+6 дней
+                                ->andWhere(['=', 'half', 1])
+                                //->groupBy(['teacher_id'])
+                                ->one();
+                            $lectCompleteHalf = $lectCompleteHalf['lectLeft'];
+
+                            $lectComplete = $lectComplete + $lectCompleteHalf;
 
                             //максимальное кол-во часов в неделю для преподавателя
                             $lectMax = TeacherMeta::find()
@@ -450,6 +465,11 @@ class TimetableParts extends \yii\db\ActiveRecord
                             if ($lectComplete >= $lectMax['hours']) {
                                 //echo "Преподаватель уже отработал норму в неделю<br/>";
                                 $lectFilterStatus = 0;
+                            } else {
+                                $dif = $lectMax['hours'] - $lectComplete;
+                                if($dif == 1) {
+                                    $half = $dif;
+                                }
                             }
                         }
 
@@ -472,11 +492,26 @@ class TimetableParts extends \yii\db\ActiveRecord
                                 //->where(['>=', 'date', $firstDay]) // date >= $firstDay
                                 //->andWhere(['<=', 'date', $lastDay])// date <= $lastDay
                                 ->andWhere(['=', 'teacher_id', $teacherID])
+                                ->andWhere(['=', 'half', 2])
                                 //->groupBy(['teacher_id'])
                                 ->one();
 
                             //кол-во часов, которое преподатель проработал уже, одна пара - два академических часа
                             $lectComplete = $lectComplete['lectCount'] * 2;
+
+                            $lectCompleteHalf = Timetable::find()
+                                ->asArray()
+                                ->select(['COUNT(teacher_id) AS lectCount'])
+                                ->where(['=', 'part_id', $id])
+                                //->where(['>=', 'date', $firstDay]) // date >= $firstDay
+                                //->andWhere(['<=', 'date', $lastDay])// date <= $lastDay
+                                ->andWhere(['=', 'teacher_id', $teacherID])
+                                ->andWhere(['=', 'half', 1])
+                                //->groupBy(['teacher_id'])
+                                ->one();
+                            $lectCompleteHalf = $lectCompleteHalf['lectCount'];
+
+                            $lectComplete = $lectComplete + $lectCompleteHalf;
 
                             //максимальное кол-во часов в календарный месяц для преподавателя
                             $lectMax = TeacherMeta::find()
@@ -489,6 +524,11 @@ class TimetableParts extends \yii\db\ActiveRecord
                             if ($lectComplete >= $lectMax['montshours']) {
                                 //echo "Преподаватель уже отработал норму в месяц<br/>";
                                 $lectFilterStatus = 0;
+                            } else {
+                                $dif = $lectMax['montshours'] - $lectComplete;
+                                if($dif == 1) {
+                                    $half = $dif;
+                                }
                             }
                         }
 
@@ -662,6 +702,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                             $timetable->lecture_id = $lecture_id;
                             $timetable->date = $date;
                             $timetable->status = $statusLect;
+                            $timetable->half = $half;
                             $timetable->part_id = $id;
                             $timetable->x = $x;
                             $timetable->y = $y;
@@ -729,9 +770,23 @@ class TimetableParts extends \yii\db\ActiveRecord
             //->andWhere(['<=', 'date', $lastDay])// date <= $lastDay
             ->where(['=', 'part_id', $part_id])
             ->andWhere(['=', 'teacher_id', $id])
+            ->andWhere(['=', 'half', 2])
             ->one();
         //всего сгенерированных часов занятий
         $lectComplete = $lectComplete['lectCount'] * 2;
+
+        $lectCompleteHalf = Timetable::find()
+            ->asArray()
+            ->select(['COUNT(teacher_id) AS lectCount'])
+            //->where(['>=', 'date', $firstDay]) // date >= $firstDay перепроверить через отладчик все условия с подобнфым синтаксисом
+            //->andWhere(['<=', 'date', $lastDay])// date <= $lastDay
+            ->where(['=', 'part_id', $part_id])
+            ->andWhere(['=', 'teacher_id', $id])
+            ->andWhere(['=', 'half', 1])
+            ->one();
+        $lectCompleteHalf = $lectCompleteHalf['lectCount'];
+
+        $lectComplete = $lectComplete + $lectCompleteHalf;
 
         /*
         //всего отработанных занятий (кол-во всех занятий с начала месяца по текущею дату)
