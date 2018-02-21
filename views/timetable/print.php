@@ -132,7 +132,7 @@ for($i = 0; $i< $weeks; $i++) {
                         $y = $cell['y'];
                         $cellNum = $cellNum +$y;
 
-                        $aSheet->getRowDimension($cellNum)->setRowHeight(160);
+                        $aSheet->getRowDimension($cellNum)->setRowHeight(166);
 
                         $corpsName = \app\models\Corps::find()
                             ->asArray()
@@ -169,11 +169,20 @@ for($i = 0; $i< $weeks; $i++) {
                             ->one();
                         $subjName = $subjName['name'];
 
+                        $half = $cell['half'];
+                        if($half == 1) {
+                            $half = "1 година";
+                        }
+                        if($half == 2) {
+                            $half = "2 години";
+                        }
+
                         $aSheet->setCellValue('A'.$cellNum, 'Корпус: ' . $corpsName
-                            ."\n\n".'Аудиторія: ' . $audienceName
+                            ."\n".'Аудиторія: ' . $audienceName
                             ."\n\n".'Викладач: ' . $teacherName
-                            ."\n\n".'Группа: ' . $groupName
+                            ."\n".'Группа: ' . $groupName
                             ."\n\n".'Предмет: ' . $subjName
+                            ."\n\n".'Тривалість: ' . $half
                         );
 
                         $pExcel->getActiveSheet()->getStyle('A'.$cellNum)->getAlignment()->setWrapText(true);
@@ -209,7 +218,7 @@ for($i = 0; $i< $weeks; $i++) {
                         $y = $cell['y'];
                         $cellNum = $cellNum +$y;
 
-                        $aSheet->getRowDimension($cellNum)->setRowHeight(160);
+                        $aSheet->getRowDimension($cellNum)->setRowHeight(166);
 
                         $corpsName = \app\models\Corps::find()
                             ->asArray()
@@ -246,12 +255,22 @@ for($i = 0; $i< $weeks; $i++) {
                             ->one();
                         $subjName = $subjName['name'];
 
+                        $half = $cell['half'];
+                        if($half == 1) {
+                            $half = "1 година";
+                        }
+                        if($half == 2) {
+                            $half = "2 години";
+                        }
+
                         $aSheet->setCellValue('B'.$cellNum, 'Корпус: ' . $corpsName
-                            ."\n\n".'Аудиторія: ' . $audienceName
+                            ."\n".'Аудиторія: ' . $audienceName
                             ."\n\n".'Викладач: ' . $teacherName
-                            ."\n\n".'Группа: ' . $groupName
+                            ."\n".'Группа: ' . $groupName
                             ."\n\n".'Предмет: ' . $subjName
+                            ."\n\n".'Тривалість: ' . $half
                         );
+
                         $pExcel->getActiveSheet()->getStyle('B'.$cellNum)->getAlignment()->setWrapText(true);
 
                         $cellNum = 6;
@@ -285,7 +304,7 @@ for($i = 0; $i< $weeks; $i++) {
                         $y = $cell['y'];
                         $cellNum = $cellNum +$y;
 
-                        $aSheet->getRowDimension($cellNum)->setRowHeight(160);
+                        $aSheet->getRowDimension($cellNum)->setRowHeight(166);
 
                         $corpsName = \app\models\Corps::find()
                             ->asArray()
@@ -322,11 +341,20 @@ for($i = 0; $i< $weeks; $i++) {
                             ->one();
                         $subjName = $subjName['name'];
 
+                        $half = $cell['half'];
+                        if($half == 1) {
+                            $half = "1 година";
+                        }
+                        if($half == 2) {
+                            $half = "2 години";
+                        }
+
                         $aSheet->setCellValue('C'.$cellNum, 'Корпус: ' . $corpsName
-                            ."\n\n".'Аудиторія: ' . $audienceName
+                            ."\n".'Аудиторія: ' . $audienceName
                             ."\n\n".'Викладач: ' . $teacherName
-                            ."\n\n".'Группа: ' . $groupName
+                            ."\n".'Группа: ' . $groupName
                             ."\n\n".'Предмет: ' . $subjName
+                            ."\n\n".'Тривалість: ' . $half
                         );
                         $pExcel->getActiveSheet()->getStyle('C'.$cellNum)->getAlignment()->setWrapText(true);
 
@@ -361,7 +389,7 @@ for($i = 0; $i< $weeks; $i++) {
                         $y = $cell['y'];
                         $cellNum = $cellNum +$y;
 
-                        $aSheet->getRowDimension($cellNum)->setRowHeight(160);
+                        $aSheet->getRowDimension($cellNum)->setRowHeight(166);
 
                         $corpsName = \app\models\Corps::find()
                             ->asArray()
@@ -398,12 +426,22 @@ for($i = 0; $i< $weeks; $i++) {
                             ->one();
                         $subjName = $subjName['name'];
 
+                        $half = $cell['half'];
+                        if($half == 1) {
+                            $half = "1 година";
+                        }
+                        if($half == 2) {
+                            $half = "2 години";
+                        }
+
                         $aSheet->setCellValue('D'.$cellNum, 'Корпус: ' . $corpsName
-                            ."\n\n".'Аудиторія: ' . $audienceName
+                            ."\n".'Аудиторія: ' . $audienceName
                             ."\n\n".'Викладач: ' . $teacherName
-                            ."\n\n".'Группа: ' . $groupName
+                            ."\n".'Группа: ' . $groupName
                             ."\n\n".'Предмет: ' . $subjName
+                            ."\n\n".'Тривалість: ' . $half
                         );
+
                         $pExcel->getActiveSheet()->getStyle('D'.$cellNum)->getAlignment()->setWrapText(true);
 
                         $cellNum = 6;
@@ -437,7 +475,7 @@ for($i = 0; $i< $weeks; $i++) {
                         $y = $cell['y'];
                         $cellNum = $cellNum +$y;
 
-                        $aSheet->getRowDimension($cellNum)->setRowHeight(160);
+                        $aSheet->getRowDimension($cellNum)->setRowHeight(166);
 
                         $corpsName = \app\models\Corps::find()
                             ->asArray()
@@ -474,12 +512,22 @@ for($i = 0; $i< $weeks; $i++) {
                             ->one();
                         $subjName = $subjName['name'];
 
+                        $half = $cell['half'];
+                        if($half == 1) {
+                            $half = "1 година";
+                        }
+                        if($half == 2) {
+                            $half = "2 години";
+                        }
+
                         $aSheet->setCellValue('E'.$cellNum, 'Корпус: ' . $corpsName
-                            ."\n\n".'Аудиторія: ' . $audienceName
+                            ."\n".'Аудиторія: ' . $audienceName
                             ."\n\n".'Викладач: ' . $teacherName
-                            ."\n\n".'Группа: ' . $groupName
+                            ."\n".'Группа: ' . $groupName
                             ."\n\n".'Предмет: ' . $subjName
+                            ."\n\n".'Тривалість: ' . $half
                         );
+
                         $pExcel->getActiveSheet()->getStyle('E'.$cellNum)->getAlignment()->setWrapText(true);
 
                         $cellNum = 6;
@@ -513,7 +561,7 @@ for($i = 0; $i< $weeks; $i++) {
                         $y = $cell['y'];
                         $cellNum = $cellNum +$y;
 
-                        $aSheet->getRowDimension($cellNum)->setRowHeight(160);
+                        $aSheet->getRowDimension($cellNum)->setRowHeight(166);
 
                         $corpsName = \app\models\Corps::find()
                             ->asArray()
@@ -550,12 +598,22 @@ for($i = 0; $i< $weeks; $i++) {
                             ->one();
                         $subjName = $subjName['name'];
 
+                        $half = $cell['half'];
+                        if($half == 1) {
+                            $half = "1 година";
+                        }
+                        if($half == 2) {
+                            $half = "2 години";
+                        }
+
                         $aSheet->setCellValue('F'.$cellNum, 'Корпус: ' . $corpsName
-                            ."\n\n".'Аудиторія: ' . $audienceName
+                            ."\n".'Аудиторія: ' . $audienceName
                             ."\n\n".'Викладач: ' . $teacherName
-                            ."\n\n".'Группа: ' . $groupName
+                            ."\n".'Группа: ' . $groupName
                             ."\n\n".'Предмет: ' . $subjName
+                            ."\n\n".'Тривалість: ' . $half
                         );
+
                         $pExcel->getActiveSheet()->getStyle('F'.$cellNum)->getAlignment()->setWrapText(true);
 
                         $cellNum = 6;
@@ -589,7 +647,7 @@ for($i = 0; $i< $weeks; $i++) {
                         $y = $cell['y'];
                         $cellNum = $cellNum +$y;
 
-                        $aSheet->getRowDimension($cellNum)->setRowHeight(160);
+                        $aSheet->getRowDimension($cellNum)->setRowHeight(166);
 
                         $corpsName = \app\models\Corps::find()
                             ->asArray()
@@ -626,12 +684,22 @@ for($i = 0; $i< $weeks; $i++) {
                             ->one();
                         $subjName = $subjName['name'];
 
+                        $half = $cell['half'];
+                        if($half == 1) {
+                            $half = "1 година";
+                        }
+                        if($half == 2) {
+                            $half = "2 години";
+                        }
+
                         $aSheet->setCellValue('G'.$cellNum, 'Корпус: ' . $corpsName
-                            ."\n\n".'Аудиторія: ' . $audienceName
+                            ."\n".'Аудиторія: ' . $audienceName
                             ."\n\n".'Викладач: ' . $teacherName
-                            ."\n\n".'Группа: ' . $groupName
+                            ."\n".'Группа: ' . $groupName
                             ."\n\n".'Предмет: ' . $subjName
+                            ."\n\n".'Тривалість: ' . $half
                         );
+
                         $pExcel->getActiveSheet()->getStyle('G'.$cellNum)->getAlignment()->setWrapText(true);
 
                         $cellNum = 6;
