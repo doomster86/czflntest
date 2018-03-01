@@ -109,15 +109,16 @@ class TimetableParts extends \yii\db\ActiveRecord
 
         $rows = $lecturesCounter;
         $this->rows = $rows;
-        $this->id = $part;
+        $this->mont = $part;
         $this->save();
 
-        $this->generateLectures($datestart, $dateend, $cols, $rows);
+        $this->generateLectures($datestart, $dateend, $cols, $rows, $mont);
     }
 
-    public function generateLectures($datestart, $dateend, $cols, $rows) {
+    public function generateLectures($datestart, $dateend, $cols, $rows, $mont) {
         $datestart = (int)$datestart;
         $dateend = (int)$dateend;
+        $mont = (int)$mont;
 
         $id = TimetableParts::find()
             ->asArray()
@@ -439,7 +440,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                                 ->where(['>=', 'date', $firstMonday]) // date >= $firstMonday
                                 ->andWhere(['<=', 'date', $firstMonday + 518400])//date <= понедельник+6 дней
                                 ->andWhere(['=', 'half', 2])
-                                ->andWhere(['=', 'part_id', $id])
+                                ->andWhere(['=', 'mont', $mont])
                                 //->groupBy(['teacher_id'])
                                 ->one();
 
@@ -452,7 +453,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                                 ->where(['>=', 'date', $firstMonday]) // date >= $firstMonday
                                 ->andWhere(['<=', 'date', $firstMonday + 518400])//date <= понедельник+6 дней
                                 ->andWhere(['=', 'half', 1])
-                                ->andWhere(['=', 'part_id', $id])
+                                ->andWhere(['=', 'mont', $mont])
                                 //->groupBy(['teacher_id'])
                                 ->one();
                             $lectCompleteHalf = $lectCompleteHalf['lectLeft'];
@@ -493,7 +494,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                             $lectComplete = Timetable::find()
                                 ->asArray()
                                 ->select(['COUNT(teacher_id) AS lectCount'])
-                                ->where(['=', 'part_id', $id])
+                                ->where(['=', 'mont', $mont])
                                 //->where(['>=', 'date', $firstDay]) // date >= $firstDay
                                 //->andWhere(['<=', 'date', $lastDay])// date <= $lastDay
                                 ->andWhere(['=', 'teacher_id', $teacherID])
@@ -507,7 +508,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                             $lectCompleteHalf = Timetable::find()
                                 ->asArray()
                                 ->select(['COUNT(teacher_id) AS lectCount'])
-                                ->where(['=', 'part_id', $id])
+                                ->where(['=', 'mont', $mont])
                                 //->where(['>=', 'date', $firstDay]) // date >= $firstDay
                                 //->andWhere(['<=', 'date', $lastDay])// date <= $lastDay
                                 ->andWhere(['=', 'teacher_id', $teacherID])
@@ -599,7 +600,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                                 ->andWhere(['<=', 'date', $firstMonday + 518400])//понедельник + 6 дней
                                 ->andWhere(['=', 'group_id', $groupID])
                                 ->andWhere(['=', 'subjects_id', $subjId])
-                                ->andWhere(['=', 'part_id', $id])
+                                ->andWhere(['=', 'mont', $mont])
                                 ->one();
                             $inWeek = $inWeek['subjInWeek'];
 
@@ -625,7 +626,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                                 ->asArray()
                                 ->select(['COUNT(subjects_id) AS subj'])
                                 ->where(['=', 'group_id', $groupID])
-                                ->andWhere(['=', 'part_id', $id])
+                                ->andWhere(['=', 'mont', $mont])
                                 ->one();
                             $allCurrentSubj = $allCurrentSubj['subj'];
 
@@ -715,6 +716,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                             $timetable->status = $statusLect;
                             $timetable->half = $half;
                             $timetable->part_id = $id;
+                            $timetable->mont = $mont;
                             $timetable->x = $x;
                             $timetable->y = $y;
 
@@ -769,19 +771,10 @@ class TimetableParts extends \yii\db\ActiveRecord
         $inMonth = TeacherMeta::find()->asArray()->select('montshours')->where(['=', 'user_id', $id])->one();
         $inMonth = $inMonth['montshours'];
 
-        $date = strtotime(Date('30.01.2018'));
-        //определяем дату первого и последнего дня месяца
-        $firstDay = date('01.m.Y', $date);
-        $lastDay = date('t.m.Y', $date);
-        $firstDay = strtotime($firstDay);
-        $lastDay = strtotime($lastDay);
-
-        //echo $firstDay;
-        //echo "<br/>";
-        //echo $date;
-        //echo "<br/>";
-        //echo $lastDay;
-        //echo "<br/><br/><br/>";
+        $mont = Timetable::find()->asArray()->select(['mont'])
+            ->where(['=', 'part_id', $part_id])
+            ->one();
+        $mont = $mont['mont'];
 
         //всего сгенерированных занятий
         $lectComplete = Timetable::find()
@@ -789,7 +782,7 @@ class TimetableParts extends \yii\db\ActiveRecord
             ->select(['COUNT(teacher_id) AS lectCount'])
             //->where(['>=', 'date', $firstDay]) // date >= $firstDay перепроверить через отладчик все условия с подобнфым синтаксисом
             //->andWhere(['<=', 'date', $lastDay])// date <= $lastDay
-            ->where(['=', 'part_id', $part_id])
+            ->where(['=', 'mont', $mont])
             ->andWhere(['=', 'teacher_id', $id])
             ->andWhere(['=', 'half', 2])
             ->one();
@@ -801,7 +794,7 @@ class TimetableParts extends \yii\db\ActiveRecord
             ->select(['COUNT(teacher_id) AS lectCount'])
             //->where(['>=', 'date', $firstDay]) // date >= $firstDay перепроверить через отладчик все условия с подобнфым синтаксисом
             //->andWhere(['<=', 'date', $lastDay])// date <= $lastDay
-            ->where(['=', 'part_id', $part_id])
+            ->where(['=', 'mont', $mont])
             ->andWhere(['=', 'teacher_id', $id])
             ->andWhere(['=', 'half', 1])
             ->one();

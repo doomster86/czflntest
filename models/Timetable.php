@@ -363,6 +363,213 @@ class Timetable extends \yii\db\ActiveRecord
 
     }
 
+    public function renderTableForMont($id, $teacherID, $groupID) {
+        $output = '';
+
+        if ( $teacherID && $groupID ) {
+            $input_array = Timetable::find()
+                ->asArray()
+                ->where( [ '=', 'mont', $id ] )
+                ->andWhere( [ '=', 'teacher_id', $teacherID ] )
+                ->andWhere( [ '=', 'group_id', $groupID ] )
+                ->all();
+        }
+        if( $teacherID && !$groupID) {
+            $input_array = Timetable::find()
+                ->asArray()
+                ->where( [ '=', 'mont', $id ] )
+                ->andWhere( [ '=', 'teacher_id', $teacherID ] )
+                ->all();
+        }
+        if( $groupID && !$teacherID) {
+            $input_array = Timetable::find()
+                ->asArray()
+                ->where( [ '=', 'mont', $id ] )
+                ->andWhere( [ '=', 'group_id', $groupID ] )
+                ->all();
+        }
+        if( !$teacherID && !$groupID ) {
+            $input_array = Timetable::find()
+                ->asArray()
+                ->where( [ '=', 'mont', $id ] )
+                ->all();
+        }
+
+        $timetable = new TimetableParts();
+
+        $date_array = $timetable
+            ->find()
+            ->asArray()
+            ->where(['mont' => $id])
+            ->all();
+
+        $date_array = $date_array[0];
+        $datestart = $date_array['datestart'];
+        $datestart = (int)$datestart;
+        $dateend = $date_array['dateend'];
+        $dateend = (int)$dateend;
+        $cols_num = $date_array['cols']; //кол-во дней
+        $rows_num = $date_array['rows'];
+
+        foreach ($input_array as &$value) {
+            $value['date'] = (strtotime( $value['date']) - $datestart) / 86400 + 1;
+        }
+
+        $formatter = new \yii\i18n\Formatter;
+
+        $output .= '<h2>Розклад з ' . $formatter->asDate($datestart, "dd.MM.yyyy") . ' по ' . $formatter->asDate($dateend, "dd.MM.yyyy") . '</h2>';
+
+        if($groupID) {
+            $output .= Html::a('Роздрукувати розклад групи', ['timetable/print', 'table_id' => $id, 'group_id' => $groupID], ['class' => 'btn btn-success btn-right']);
+        }
+
+        if($teacherID) {
+            $output .= Html::a('Роздрукувати розклад викладача', ['timetable/print', 'table_id' => $id, 'teacher_id' => $teacherID], ['class' => 'btn btn-success btn-right']);
+        }
+
+        $output .= '<table class="table table-striped table-bordered" id="lectures">';
+        for ($tr = 0; $tr <= $rows_num; $tr++) {
+            if (!$tr) {
+                $output .= '<thead><tr>';
+                for ($td = 0; $td <= $cols_num; $td++) {
+                    if (!$td) {
+                        $output .= '<th>Пара</th>';
+                    } else {
+                        $days = array ("Понеділок", "Вівторок", "Середа", "Четвер", "П'ятниця", "Субота", "Неділя");
+                        $day = $formatter->asDate($datestart, "l");
+                        switch ($day) {
+                            case 'Monday':
+                                $day = $days[0];
+                                break;
+                            case 'Tuesday':
+                                $day = $days[1];
+                                break;
+                            case 'Wednesday':
+                                $day = $days[2];
+                                break;
+                            case 'Thursday':
+                                $day = $days[3];
+                                break;
+                            case 'Friday':
+                                $day = $days[4];
+                                break;
+                            case 'Saturday':
+                                $day = $days[5];
+                                break;
+                            case 'Sunday':
+                                $day = $days[6];
+                                break;
+                        }
+                        $date = $formatter->asDate($datestart, "dd.MM.yyyy");
+                        $output .= '<th>'. $date . '<br/>' . $day . '</th>';
+                        $datestart = $datestart + 86400;
+                    }
+                }
+                $output .= '</tr></thead>';
+            } else {
+                $output .= '<tr>';
+                $i = 1;
+                for ($td = 0; $td <= $cols_num; $td++) {
+                    if ($td == 0) {
+                        $output .= '<td><div class="lect-num">' . $tr . '</div></td>';
+                    } else {
+                        //$output .= '<td> '.$tr.$td.' </td>';
+                        $output .= '<td>';
+                        $class_bg = 'light';
+                        foreach ($input_array as $cell) {
+                            if(($cell['x'] == $td) && ($cell['y'] == $tr) ) {
+                                $corpsName = Corps::find()
+                                    ->asArray()
+                                    ->select('corps_name')
+                                    ->where(['=', 'ID', $cell['corps_id']])
+                                    ->one();
+                                $corpsName = $corpsName['corps_name'];
+
+                                $audienceName = Audience::find()
+                                    ->asArray()
+                                    ->select('name')
+                                    ->where(['=', 'ID', $cell['audience_id']])
+                                    ->one();
+                                $audienceName = $audienceName['name'];
+
+                                $teacherName = User::find()
+                                    ->asArray()
+                                    ->select('firstname, middlename, lastname')
+                                    ->where(['=', 'id', $cell['teacher_id']])
+                                    ->one();
+                                $teacherName = $teacherName['firstname']." ".$teacherName['lastname'];
+
+                                $groupName = Groups::find()
+                                    ->asArray()
+                                    ->select('name')
+                                    ->where(['=', 'id', $cell['group_id']])
+                                    ->one();
+                                $groupName = $groupName['name'];
+
+                                $subjName = Subjects::find()
+                                    ->asArray()
+                                    ->select('name')
+                                    ->where(['=', 'id', $cell['subjects_id']])
+                                    ->one();
+                                $subjName = $subjName['name'];
+
+                                $half = Timetable::find()
+                                    ->asArray()
+                                    ->select('half')
+                                    ->where(['=', 'x', $td])
+                                    ->andWhere(['=', 'y', $tr])
+                                    ->andWhere(['=', 'subjects_id', $cell['subjects_id']])
+                                    ->one();
+                                $half = $half['half'];
+
+                                $half_class = "full";
+                                if($half == 1) {
+                                    $half_class = "half";
+                                }
+
+                                $output .= '<div class="'.$class_bg.' '.$half_class.'">';
+                                $output .= '<p> Корпус: '.$corpsName.'<br />';
+                                $output .= 'Аудиторія: '.$audienceName.'</p>';
+                                $output .= '<p>Викладач: '.$teacherName.'</p>';
+                                $output .= '<p>Группа: '.$groupName.'</p>';
+                                $output .= '<p>Предмет: '.$subjName.'</p>';
+                                if(Yii::$app->user->identity->role==1) {
+                                    $output .= '<p class="align-center"><br/><!--<a href="/timetable/update/'.$cell["id"].'">Редагувати</a> | -->
+														<a href="/timetable/delete/'.$cell["id"].'?tp='.$id.'" class="btn btn-danger align-center">Видалити</a></p>';
+                                }
+                                $output .= '</div>';
+                                switch ($class_bg) {
+                                    case 'dark':
+                                        $class_bg = 'light';
+                                        break;
+                                    case 'light':
+                                        $class_bg = 'dark';
+                                        break;
+                                }
+                            }
+                        }
+                        if(Yii::$app->user->identity->role==1) {
+                            $curdate = $date_array['datestart'];
+                            $curdate = (int)$curdate;
+                            $curdate = $curdate + 86400*($td-1);
+                            //$curdate = $formatter->asDate($curdate, "dd.MM.yyyy");
+                            $output .= '<div><p class="align-center"><br/><a class="btn btn-primary" href="/timetable/create/?tp='.$id.'&x='.$td.'&y='.$tr.'&date='.$curdate.'">Додати заняття ('.$tr.' пара)</a></div>';
+                        }
+                        $output .= '</td>';
+
+                    }
+
+                }
+                $output .= '</tr>';
+            }
+        }
+        $output .= "</table>";
+
+        return $output;
+
+
+    }
+
 	public function getLectureTime($corpsId) {
         if($corpsId == 0) {
             $lecturetime_values = LectureTable::find()->asArray()
