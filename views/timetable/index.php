@@ -50,6 +50,8 @@ $this->params['breadcrumbs'][] = $this->title;
         ->one();
     $tableID = $tableID['mont'];
 
+    //echo $tableID;
+
     if($tableID != 0) {
 	    $request = Yii::$app->request;
 	    $request = $request->get();

@@ -112,7 +112,7 @@ class TimetableParts extends \yii\db\ActiveRecord
         $this->mont = $part;
         $this->save();
 
-        $this->generateLectures($datestart, $dateend, $cols, $rows, $mont);
+        $this->generateLectures($datestart, $dateend, $cols, $rows, $part);
     }
 
     public function generateLectures($datestart, $dateend, $cols, $rows, $mont) {

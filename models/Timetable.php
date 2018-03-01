@@ -366,6 +366,8 @@ class Timetable extends \yii\db\ActiveRecord
     public function renderTableForMont($id, $teacherID, $groupID) {
         $output = '';
 
+        //echo "$id";
+
         if ( $teacherID && $groupID ) {
             $input_array = Timetable::find()
                 ->asArray()
@@ -403,16 +405,25 @@ class Timetable extends \yii\db\ActiveRecord
             ->where(['mont' => $id])
             ->all();
 
+        //print_r($date_array);
+
         $date_array = $date_array[0];
+
+        //print_r($date_array);
+
         $datestart = $date_array['datestart'];
         $datestart = (int)$datestart;
         $dateend = $date_array['dateend'];
         $dateend = (int)$dateend;
         $cols_num = $date_array['cols']; //кол-во дней
         $rows_num = $date_array['rows'];
+        $mont = $date_array['mont'];
+
+        //print_r($input_array);
 
         foreach ($input_array as &$value) {
             $value['date'] = (strtotime( $value['date']) - $datestart) / 86400 + 1;
+
         }
 
         $formatter = new \yii\i18n\Formatter;
