@@ -42,6 +42,16 @@ $this->params['breadcrumbs'][] = $this->title;
     //$currentDate >= datestart
     //$currentDate <= dateend
     $tableID = new TimetableParts();
+
+    $tableID = $tableID->find()
+        ->asArray()
+        ->select(['id'])
+        ->where(['<=', 'datestart', $currentDate]) // datestart <= $currentDate
+        ->andWhere(['>=', 'dateend', $currentDate])// dateend >= $currentDate
+        ->one();
+    $tableID = $tableID['id'];
+
+    /*
     $tableID = $tableID->find()
         ->asArray()
         ->select(['mont'])
@@ -49,6 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ->andWhere(['>=', 'dateend', $currentDate])// dateend >= $currentDate
         ->one();
     $tableID = $tableID['mont'];
+    */
 
     //echo $tableID;
 
@@ -66,11 +77,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 echo "<h2>Група: ".$model->getGroupName($group_id)."</h2>";
             }
 
-            //echo $model->renderTable($tableID, $teacher_id, $group_id);
-            echo $model->renderTableForMont($tableID, $teacher_id, $group_id);
+            echo $model->renderTable($tableID, $teacher_id, $group_id);
+            //echo $model->renderTableForMont($tableID, $teacher_id, $group_id);
         } else {
-            //echo $model->renderTable($tableID, '', '');
-            $model->renderTableForMont($tableID, '', '');
+            echo $model->renderTable($tableID, '', '');
+           //$model->renderTableForMont($tableID, '', '');
         }
     } else {
         echo "<p>Інформація відсутня</p>";

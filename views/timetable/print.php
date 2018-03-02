@@ -91,16 +91,26 @@ $aSheet->setCellValue('F5','Субота');
 $aSheet->setCellValue('G5','Неділя');
 
 
-$weeks = $weeks- 1; //т.к. отсчёт листов с нуля
+//$weeks = $weeks- 1; //т.к. отсчёт листов с нуля
 for($i = 1; $i < $weeks; $i++) {
     $objClonedWorksheet = clone $pExcel->getSheetByName('Розклад');
     $objClonedWorksheet->setTitle('Розклад, сторінка '.($i+1));
     $pExcel->addSheet($objClonedWorksheet, $i);
 }
 
+
+//echo $table_id;
+//echo "<br/>";
+//echo $grId;
+//echo "<br/>";
+//echo $weeks;
+//echo "<br/>";
+
 for($i = 0; $i< $weeks; $i++) {
     $pExcel->setActiveSheetIndex($i);
     $aSheet = $pExcel->getActiveSheet();
+
+    //echo $i;
 
     for($j = 0; $j<7; $j++) {
         if($start <= $end) {
@@ -713,6 +723,8 @@ for($i = 0; $i< $weeks; $i++) {
     }
 }
 
+
+
 ob_end_clean();
 date_default_timezone_set('europe/kiev');
 //header('Content-Type:xlsx:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -747,3 +759,4 @@ $objWriter = new PHPExcel_Writer_Excel5($pExcel);
 $objWriter->save('php://output');
 
 exit;
+

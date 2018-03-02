@@ -366,7 +366,7 @@ class Timetable extends \yii\db\ActiveRecord
     public function renderTableForMont($id, $teacherID, $groupID) {
         $output = '';
 
-        //echo "$id";
+        //zecho "$id";
 
         if ( $teacherID && $groupID ) {
             $input_array = Timetable::find()
