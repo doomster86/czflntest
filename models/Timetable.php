@@ -270,7 +270,7 @@ class Timetable extends \yii\db\ActiveRecord
                         $output .= '<td>';
                         $class_bg = 'light';
                         foreach ($input_array as $cell) {
-                            if(($cell['x'] == $td) && ($cell['y'] == $tr) ) {
+                            if (($cell['x'] == $td) && ($cell['y'] == $tr)) {
                                 $corpsName = Corps::find()
                                     ->asArray()
                                     ->select('corps_name')
@@ -290,7 +290,7 @@ class Timetable extends \yii\db\ActiveRecord
                                     ->select('firstname, middlename, lastname')
                                     ->where(['=', 'id', $cell['teacher_id']])
                                     ->one();
-                                $teacherName = $teacherName['firstname']." ".$teacherName['lastname'];
+                                $teacherName = $teacherName['firstname'] . " " . $teacherName['lastname'];
 
                                 $groupName = Groups::find()
                                     ->asArray()
@@ -316,20 +316,22 @@ class Timetable extends \yii\db\ActiveRecord
                                 $half = $half['half'];
 
                                 $half_class = "full";
-                                if($half == 1) {
+                                if ($half == 1) {
                                     $half_class = "half";
                                 }
 
-                                $output .= '<div class="'.$class_bg.' '.$half_class.'">';
-                                $output .= '<p> Корпус: '.$corpsName.'<br />';
-                                $output .= 'Аудиторія: '.$audienceName.'</p>';
-                                $output .= '<p>Викладач: '.$teacherName.'</p>';
-                                $output .= '<p>Группа: '.$groupName.'</p>';
-                                $output .= '<p>Предмет: '.$subjName.'</p>';
-	                            if(Yii::$app->user->identity->role==1) {
-		                            $output .= '<p class="align-center"><br/><!--<a href="/timetable/update/'.$cell["id"].'">Редагувати</a> | -->
-														<a href="/timetable/delete/'.$cell["id"].'?tp='.$id.'" class="btn btn-danger align-center">Видалити</a></p>';
-	                            }
+                                $output .= '<div class="' . $class_bg . ' ' . $half_class . '">';
+                                $output .= '<p> Корпус: ' . $corpsName . '<br />';
+                                $output .= 'Аудиторія: ' . $audienceName . '</p>';
+                                $output .= '<p>Викладач: ' . $teacherName . '</p>';
+                                $output .= '<p>Группа: ' . $groupName . '</p>';
+                                $output .= '<p>Предмет: ' . $subjName . '</p>';
+                                if (isset(Yii::$app->user->identity->role)) {
+                                    if (Yii::$app->user->identity->role == 1) {
+                                        $output .= '<p class="align-center"><br/><!--<a href="/timetable/update/' . $cell["id"] . '">Редагувати</a> | -->
+                                                            <a href="/timetable/delete/' . $cell["id"] . '?tp=' . $id . '" class="btn btn-danger align-center">Видалити</a></p>';
+                                    }
+                                }
                                 $output .= '</div>';
                                 switch ($class_bg) {
                                     case 'dark':
@@ -341,13 +343,18 @@ class Timetable extends \yii\db\ActiveRecord
                                 }
                             }
                         }
-	                    if(Yii::$app->user->identity->role==1) {
-                        	$curdate = $date_array['datestart'];
-		                    $curdate = (int)$curdate;
-		                    $curdate = $curdate + 86400*($td-1);
-		                    //$curdate = $formatter->asDate($curdate, "dd.MM.yyyy");
-		                    $output .= '<div><p class="align-center"><br/><a class="btn btn-primary" href="/timetable/create/?tp='.$id.'&x='.$td.'&y='.$tr.'&date='.$curdate.'">Додати заняття ('.$tr.' пара)</a></div>';
-	                    }
+                        if (isset(Yii::$app->user->identity->role)) {
+                            if (Yii::$app->user->identity->role == 1) {
+                                $curdate = $date_array['datestart'];
+                                $curdate = (int)$curdate;
+                                $curdate = $curdate + 86400 * ($td - 1);
+                                //$curdate = $formatter->asDate($curdate, "dd.MM.yyyy");
+                                $output .= '<div><p class="align-center"><br/><a class="btn btn-primary" href="/timetable/create/?tp=' . $id . '&x=' . $td . '&y=' . $tr . '&date=' . $curdate . '">Додати заняття (' . $tr . ' пара)</a></div>';
+                            }
+                        } else {
+                            $output .=  '<div></div>';
+                        }
+
                         $output .= '</td>';
 
                     }
