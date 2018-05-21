@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use Yii;
+use yii\bootstrap\Modal;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use app\models\Courses;
@@ -256,12 +257,22 @@ class CoursesController extends Controller {
     public function actionDelete($id) {
 
         if(Yii::$app->user->identity->role==1) {
-            $this->findModel($id)->delete();
-            return $this->redirect(['index']);
+            //$this->findModel($id)->delete();
+            //return $this->redirect(['index']);
+            $model = $this->findModel($id);
+            return $this->render('delate', [
+                'model' => $model,
+                'id' =>$id,
+            ]);
         } else {
             return $this->render('/site/access_denied');
         }
 
+    }
+
+    public function actionCdelate($id) {
+        $this->findModel($id)->delete();
+        return $this->redirect(['index']);
     }
 
 

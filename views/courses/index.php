@@ -2,8 +2,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
-use \app\models\Subjects;
-use yii\helpers\ArrayHelper;
+use yii\bootstrap\Modal;
 $this->title = 'Всі професії';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -15,6 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Створити нову', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+
     <?php Pjax::begin(); ?>
 
     <?= GridView::widget([
