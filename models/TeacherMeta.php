@@ -115,18 +115,22 @@ class TeacherMeta extends \yii\db\ActiveRecord
     public function getTeacherWorkDays($user_id)
     {
         $days_array = TeacherMeta::find()->asArray()->select(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'])->where(['user_id' => $user_id])->all();
-        $days_array = $days_array[0];
-        $days_array = array_values($days_array);
-        $arr_length = count($days_array);
+        if(!empty($days_array)) {
+          $days_array = $days_array[0];
+          $days_array = array_values($days_array);
+          $arr_length = count($days_array);
 
-        $day_names = array(0 => 'Пн', 1 => 'Вт', 2 => 'Ср', 3 => 'Чт', 4 => 'Пт', 5 => 'Сб', 6 => 'Нд');
-        $result = array();
-        for ($i = 0; $i < $arr_length; $i++) {
-            if ($days_array[$i]) {
-                $result[] = $day_names[$i];
-            }
+          $day_names = array(0 => 'Пн', 1 => 'Вт', 2 => 'Ср', 3 => 'Чт', 4 => 'Пт', 5 => 'Сб', 6 => 'Нд');
+          $result = array();
+          for ($i = 0; $i < $arr_length; $i++) {
+              if ($days_array[$i]) {
+                  $result[] = $day_names[$i];
+              }
+          }
+          return implode('. ', $result);
+        } else {
+          return;
         }
-        return implode('. ', $result);
     }
 
 }
