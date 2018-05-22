@@ -49,9 +49,4 @@ class Courses extends \yii\db\ActiveRecord {
             return NULL;
         }
     }
-
-    public function getCourseName($id) {
-
-    }
-    
 }

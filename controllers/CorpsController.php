@@ -106,21 +106,18 @@ class CorpsController extends Controller {
      */
     public function actionDelete($id) {
         if(Yii::$app->user->identity->role==1) {
-
-            try {
-                $this->findModel($id)->delete();
-                return $this->redirect(['index']);
-            } catch (IntegrityException $e) {
-                return $this->redirect(['index', 'status' => 'cannotdelete']);
-            }
-
-            /*
-            if ('если можно удалить') {
+            $model = $this->findModel($id);
+            $audience = Corps::getAudience($id);
+            $lecture = Corps::getLecture($id);
+            if($audience == NULL && $lecture == NULL) {
                 $this->findModel($id)->delete();
                 return $this->redirect(['index']);
             } else {
-            */
-
+                return $this->render('delate', [
+                    'model' => $model,
+                    'id' =>$id,
+                ]);
+            }
         } else {
             return $this->render('/site/access_denied');
         }

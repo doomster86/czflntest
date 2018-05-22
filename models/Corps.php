@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use app\models\LectureTable;
+use app\models\Audience;
 
 /**
  * This is the model class for table "corps".
@@ -47,5 +49,23 @@ class Corps extends \yii\db\ActiveRecord
     public function getLectureTable()
     {
         return $this->hasMany(LectureTable::className(), ['corps_id' => 'ID']);
+    }
+
+    public function getLecture($id) {
+        $lectureArray = LectureTable::find()->asArray()->select(['ID', 'time_start', 'time_stop'])->where(['corps_id' => $id])->all();
+        if(!empty($lectureArray)) {
+            return $lectureArray;
+        } else {
+            return NULL;
+        }
+    }
+
+    public function getAudience($id) {
+        $audienceArray = Audience::find()->asArray()->select(['ID', 'name'])->where(['corps_id' => $id])->all();
+        if(!empty($audienceArray)) {
+            return $audienceArray;
+        } else {
+            return NULL;
+        }
     }
 }
