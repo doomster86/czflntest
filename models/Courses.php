@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use app\models\Groups;
 
 /**
  * This is the model class for table "courses".
@@ -38,6 +39,19 @@ class Courses extends \yii\db\ActiveRecord {
             'name' => 'Name',
 
         ];
+    }
+
+    public function getGroups($id) {
+        $groupsArray = Groups::find()->asArray()->select(['ID', 'name'])->where(['course' => $id])->all();
+        if(!empty($groupsArray)) {
+            return $groupsArray;
+        } else {
+            return NULL;
+        }
+    }
+
+    public function getCourseName($id) {
+
     }
     
 }

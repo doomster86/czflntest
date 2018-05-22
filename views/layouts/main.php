@@ -41,7 +41,7 @@ AppAsset::register($this);
         ['label' => 'Головна', 'url' => ['/site/index']],
         ['label' => 'Про центр', 'url' => ['/site/about']],
         ['label' => 'Розклад', 'url' => ['/timetable/index'], /*'visible' => !Yii::$app->user->isGuest*/],
-        ['label' => 'Графік відвідування', 'url' => ['#'], /*'visible' => Yii::$app->user->identity->role=='admin'*/],
+        //['label' => 'Графік відвідування', 'url' => ['#'], /*'visible' => Yii::$app->user->identity->role=='admin'*/],
         ['label' => 'Контакти', 'url' => ['/site/contact']],
     ];
 
