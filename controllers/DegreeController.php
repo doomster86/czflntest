@@ -7,7 +7,6 @@ use app\models\Degree;
 use app\models\DegreeSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * DegreeController implements the CRUD actions for Degree model.
@@ -90,8 +89,17 @@ class DegreeController extends Controller {
      */
     public function actionDelete($id){
         if(Yii::$app->user->identity->role==1) {
-            $this->findModel($id)->delete();
-            return $this->redirect(['index']);
+            $model = $this->findModel($id);
+            $teachers = Degree::getTeachers($id);
+            if($teachers != NULL) {
+                return $this->render('delate', [
+                    'model' => $model,
+                    'id' =>$id,
+                ]);
+            } else {
+                $this->findModel($id)->delete();
+                return $this->redirect(['index']);
+            }
         } else {
             return $this->render('/site/access_denied');
         }

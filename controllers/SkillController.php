@@ -7,7 +7,6 @@ use app\models\Skill;
 use app\models\SkillSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * SkillController implements the CRUD actions for Skill model.
@@ -91,8 +90,17 @@ class SkillController extends Controller {
      */
     public function actionDelete($id) {
         if(Yii::$app->user->identity->role==1) {
-            $this->findModel($id)->delete();
-            return $this->redirect(['index']);
+            $model = $this->findModel($id);
+            $teachers = Skill::getTeachers($id);
+            if($teachers != NULL) {
+                return $this->render('delate', [
+                    'model' => $model,
+                    'id' =>$id,
+                ]);
+            } else {
+                $this->findModel($id)->delete();
+                return $this->redirect(['index']);
+            }
         } else {
             return $this->render('/site/access_denied');
         }

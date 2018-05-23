@@ -47,4 +47,17 @@ class Degree extends \yii\db\ActiveRecord {
     public function getTeacherMetas() {
         return $this->hasMany(TeacherMeta::className(), ['degree_id' => 'ID']);
     }
+
+    public function getTeachers($id) {
+        $teachersArray = TeacherMeta::find()->asArray()
+            ->leftJoin('user', 'teacher_meta.user_id = user.id')
+            ->where(['teacher_meta.degree_id' => $id])
+            ->select(['user_id', 'firstname', 'middlename', 'lastname', 'teacher_type'])
+            ->all();
+        if(!empty($teachersArray)) {
+            return $teachersArray;
+        } else {
+            return NULL;
+        }
+    }
 }
