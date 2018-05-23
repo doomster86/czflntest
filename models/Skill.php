@@ -51,7 +51,7 @@ class Skill extends \yii\db\ActiveRecord {
         $teachersArray = TeacherMeta::find()->asArray()
             ->leftJoin('user', 'teacher_meta.user_id = user.id')
             ->where(['teacher_meta.skill_id' => $id])
-            ->select(['user_id', 'firstname', 'middlename', 'lastname', 'teacher_type'])
+            ->select(['user_id', 'firstname', 'middlename', 'lastname', 'teacher_type', 'role'])
             ->all();
         if(!empty($teachersArray)) {
             return $teachersArray;

@@ -17,7 +17,7 @@ $teachers = Rank::getTeachers($id);
         <ul>
             <?php
             foreach ($teachers as $teacher) {
-                if($teacher['teacher_type'] == 0) {
+                if($teacher['role'] == 0) {
                     echo "<li>".Html::a($teacher['firstname'].' '
                             .$teacher['middlename'].' '
                             .$teacher['lastname'], ['/user/update/', 'id' => $teacher['user_id']], ['class' => 'link'])
