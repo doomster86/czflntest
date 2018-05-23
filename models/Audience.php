@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use yii\helpers\ArrayHelper;
 use app\models\Corps;
+use app\models\Subjects;
 /**
  * This is the model class for table "audience".
  *
@@ -79,6 +80,15 @@ class Audience extends \yii\db\ActiveRecord {
         $corps_name = Corps::find()->asArray()->select('corps_name')->where(['ID' => $corps_id])->one();
         $corps_name = $corps_name['corps_name'];
        return $corps_name;
+    }
+
+    public function getSubjects($id) {
+        $subjectsArray = Subjects::find()->asArray()->select(['ID', 'name'])->where(['audience_id' => $id])->all();
+        if(!empty($subjectsArray)) {
+            return $subjectsArray;
+        } else {
+            return NULL;
+        }
     }
 
 }

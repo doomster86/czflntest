@@ -90,8 +90,17 @@ class RankController extends Controller {
      */
     public function actionDelete($id) {
         if(Yii::$app->user->identity->role==1) {
-            $this->findModel($id)->delete();
-            return $this->redirect(['index']);
+            $model = $this->findModel($id);
+            $teachers = Rank::getTeachers($id);
+            if($teachers != NULL) {
+                return $this->render('delate', [
+                    'model' => $model,
+                    'id' =>$id,
+                ]);
+            } else {
+                $this->findModel($id)->delete();
+                return $this->redirect(['index']);
+            }
         } else {
             return $this->render('/site/access_denied');
         }

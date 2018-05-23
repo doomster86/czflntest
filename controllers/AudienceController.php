@@ -7,9 +7,6 @@ use app\models\Audience;
 use app\models\AudienceSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use \app\models\Corps;
-use yii\helpers\ArrayHelper;
 /**
  * AudienceController implements the CRUD actions for Audience model.
  */
@@ -72,8 +69,6 @@ class AudienceController extends Controller {
         if(Yii::$app->user->identity->role==1) {
             $model = $this->findModel($id);
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                //return $this->redirect(['view', 'id' => $model->ID]);
-                //$model->update();
                 return $this->render('update', [
                     'model' => $model,
                     'status' => 'updated'
@@ -98,13 +93,23 @@ class AudienceController extends Controller {
      * @return mixed
      */
     public function actionDelete($id) {
-        if(Yii::$app->user->identity->role==1) {
-            $this->findModel($id)->delete();
 
-            return $this->redirect(['index']);
+        if(Yii::$app->user->identity->role==1) {
+            $model = $this->findModel($id);
+            $subjects = Audience::getSubjects($id);
+            if($subjects != NULL) {
+                return $this->render('delate', [
+                    'model' => $model,
+                    'id' =>$id,
+                ]);
+            } else {
+                $this->findModel($id)->delete();
+                return $this->redirect(['index']);
+            }
         } else {
             return $this->render('/site/access_denied');
         }
+
     }
 
     /**

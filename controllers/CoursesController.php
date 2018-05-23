@@ -273,12 +273,6 @@ class CoursesController extends Controller {
 
     }
 
-    public function actionCdelate($id) {
-        $this->findModel($id)->delete();
-        return $this->redirect(['index']);
-    }
-
-
     /**
      * Updates an existing Courses model.
      * If update is successful, the browser will be redirected to the 'view' page.
