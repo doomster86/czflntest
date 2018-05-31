@@ -23,26 +23,80 @@ $this->title = 'Главная';
                 <?php echo Html::img(Url::to('/web/img/note.png')); ?>
             </div>
             <div class="col-lg-6">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vel consectetur quam, eget dictum odio.
-                Fusce eu ultrices est. Maecenas eget bibendum felis, id venenatis nulla. Nunc lobortis rutrum lorem et consequat.
-                Vivamus bibendum vel sem quis ullamcorper. Pellentesque aliquam tellus a neque tempus, non scelerisque nisl aliquet.
-                Ut aliquam viverra mi et interdum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;
-                Donec maximus feugiat consequat. Integer placerat neque vel metus lobortis molestie. Nunc congue pellentesque mi eu placerat.
-                    Pellentesque sit amet nisl nulla.</p>
-
-                <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
-                Proin malesuada lacinia aliquam. Integer dignissim tellus ac porttitor congue.
-                Mauris mattis, sapien volutpat imperdiet elementum, libero nunc dignissim dolor, ac faucibus enim orci ac velit.
-                Donec sollicitudin a nunc sed tincidunt. Nam vitae lacus a mauris ornare porttitor eget eget nibh.
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin finibus commodo tortor, ut molestie magna ornare sed.</p>
-
-                <p>Aliquam dictum eget ipsum at tincidunt. Pellentesque eleifend posuere vestibulum.
-                Donec tempor, nisl eu tincidunt blandit, ligula purus lobortis metus, ut venenatis diam libero at ligula.
-                Nam ultricies quis nibh ut egestas. Quisque non diam ac dolor accumsan commodo.
-                Sed egestas consequat ipsum, quis cursus tellus consectetur at.
-                Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-                Aenean ullamcorper mollis sapien, quis fermentum ligula fermentum non. Integer scelerisque auctor lectus at scelerisque.
-                    Donec et finibus neque.</p>
+                <p>Харківський центр професійно-технічної освіти державної служби зайнятості здійснює:</p>
+                <ul>
+                    <li>
+                        професійну підготовку, перепідготовку та підвищення кваліфікації дорослого населення з повним
+                        діапазоном кваліфікаційних розрядів та виданням свідоцтва з додатком державного зразка під
+                        замовлення за 26-ма ліцензованими професіями;
+                    </li>
+                    <li>
+                        підготовку, перепідготовку та підвищення кваліфікації кадрів;
+                    </li>
+                    <li>
+                        короткотермінові курси з вивчення новітніх технологій та найсучаснішого обладнання, навчання
+                        окремим видам робіт;
+                    </li>
+                    <li>
+                        підвищення кваліфікації за напрямами:
+                        <ul>
+                            <li>
+                               основи комп’ютерної грамотності;
+                            </li>
+                            <li>
+                                організація малого бізнесу;
+                            </li>
+                            <li>
+                                основи охорони праці на виробництві тощо.
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <p>Слухачами Харківського центру професійно-технічної освіти державної служби зайнятості можуть бути
+                    громадяни, зараховані на навчання за направленням служби зайнятості; особи, які направлені на
+                    навчання за рахунок підприємств, установ, організацій, а також фізичні особи (громадяни України) за
+                    власні кошти. Навчатися у Харківському центрі професійно-технічної освіти державної служби
+                    зайнятості можуть особи різної вікової категорії.</p>
+                <p>Стратегічними завданнями Харківського центру професійно-технічної освіти державної служби зайнятості є:</p>
+                <ul>
+                    <li>
+                        якісне професійне навчання населення;
+                    </li>
+                    <li>
+                        забезпечення соціально-побутових умов проживання та навчання;
+                    </li>
+                    <li>
+                        організація виробничої практики на провідних підприємствах регіону;
+                    </li>
+                    <li>
+                        сприяння працевлаштуванню та подальшому закріпленню випускників на робочих місцях.
+                    </li>
+                </ul>
+                <p>Переваги навчання в Харківському центрі професійно-технічної освіти державної служби зайнятості:</p>
+                <ul>
+                    <li>
+                        навчання груп проводиться по мірі їх формування протягом усього (без перерви на канікули) календарного року;
+                    </li>
+                    <li>
+                        стислі терміни навчання, розраховані на різні вікові категорії населення
+                        (за відносно короткий термін (кілька місяців) можна опанувати нову професію або підвищити кваліфікацію);
+                    </li>
+                    <li>
+                        навчання першочергово орієнтоване на отримання слухачами практичних вмінь та навичок;
+                    </li>
+                    <li>
+                        сучасна матеріально-технічна база та новітні освітні технології у навчанні;
+                    </li>
+                    <li>
+                        гнучкі навчальні плани та програми;
+                    </li>
+                    <li>
+                        групова та індивідуальна форми навчання;
+                    </li>
+                    <li>
+                        можливість навчання на базі підприємства без відриву від виробництва.
+                    </li>
+                </ul>
             </div>
         </div>
 
