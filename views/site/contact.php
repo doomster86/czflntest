@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-contact">
     <h1><?= Html::encode($this->title) ?></h1>
-    <table>
+    <table class="table">
         <tr>
             <td><strong>Адреса:</strong></td>
             <td>62300 Харківська обл., Дергачівський район, м. Дергачі, вул. Наукова, 1.<br/>

@@ -362,3 +362,7 @@ a.desc:after {
 .half {
     background: linear-gradient(126deg, transparent 50%, #ffffff 0);
 }
+
+.grey-menu .icon-bar {
+    background-color: #000;
+}
