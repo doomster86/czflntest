@@ -27,6 +27,7 @@ class Courses extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             ['name', 'required', 'message'=>'Обов\'язкове поле'],
+            ['name', 'unique', 'message'=>'Така професія вже існує'],
         ];
     }
 

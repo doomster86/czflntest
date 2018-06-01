@@ -83,6 +83,7 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             [['username','firstname', 'middlename', 'lastname', 'phone'], 'safe'],
             [['email'], 'required'],
+            [['firstname', 'middlename', 'lastname'], 'unique', 'targetAttribute' => ['firstname', 'middlename', 'lastname'], 'message'=>'Такий користувач вже існує'],
             ['status', 'default', 'value' => self::STATUS['1']['status'] ],
             ['status', 'in', 'range' => [ self::STATUS['1']['status'], self::STATUS['0']['status'] ]],
             ['role', 'default', 'value' => self::ROLES['0']['roles'] ],
