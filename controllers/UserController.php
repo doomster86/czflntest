@@ -28,7 +28,7 @@ class UserController extends Controller
         $searchModel = new UserSearch();
         //$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider = new ActiveDataProvider([
-            'query' => User::find()->orderBy('username ASC'),
+            'query' => User::find()->orderBy('lastname ASC'),
             'pagination' => [
                 'pageSize' => 10,
             ],

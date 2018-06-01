@@ -7,7 +7,7 @@ use app\models\TeacherMeta;
 ?>
 
 <div class="user-item">
-    <h2><?= Html::encode($model->firstname) ?> <?= Html::encode($model->lastname) ?></h2>
+    <h2><?= Html::encode($model->lastname) ?> <?= Html::encode($model->firstname) ?></h2>
 
     <?php
 
