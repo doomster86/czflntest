@@ -167,6 +167,7 @@ a.desc:after {
 #userlist-wrapper .summary {
     padding: 10px 0;
     clear: both;
+    width: 100%;
 }
 
 #userlist-wrapper .user-item {
