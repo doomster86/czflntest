@@ -20,6 +20,12 @@ class AudienceController extends Controller {
         if(Yii::$app->user->identity->role==1) {
             $searchModel = new AudienceSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->sort = [
+                'defaultOrder' => [
+                    'corps_id' => SORT_ASC,
+                    'name' => SORT_ASC,
+                ]
+            ];
             //$modelCorps = new Corps();
             return $this->render('index', [
                 'searchModel' => $searchModel,

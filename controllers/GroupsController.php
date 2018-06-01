@@ -73,18 +73,18 @@ class GroupsController extends Controller
 	    if(Yii::$app->user->identity->role==1) {
 	        $model = new Groups();
 
-            $curators_ids = User::find()->asArray()->select('id')->orderBy('id')->where(['role' => 2])->all();
+            $curators_ids = User::find()->asArray()->select('id')->orderBy('lastname')->where(['role' => 2])->all();
             $curators_ids = ArrayHelper::getColumn($curators_ids, 'id');
 
-            $curators_firstnames = User::find()->asArray()->select('firstname')->orderBy('id')->where(['role' => 2])->all();
+            $curators_firstnames = User::find()->asArray()->select('firstname')->orderBy('lastname')->where(['role' => 2])->all();
             $curators_firstnames = ArrayHelper::getColumn($curators_firstnames, 'firstname');
 
-            $curators_lastnames = User::find()->asArray()->select('lastname')->orderBy('id')->where(['role' => 2])->all();
+            $curators_lastnames = User::find()->asArray()->select('lastname')->orderBy('lastname')->where(['role' => 2])->all();
             $curators_lastnames = ArrayHelper::getColumn($curators_lastnames, 'lastname');
 
             $curators_values = array();
             for ($i=0; $i  < count($curators_firstnames); $i++) {
-                $curators_values[] = $curators_firstnames[$i].' '.$curators_lastnames[$i];
+                $curators_values[] = $curators_lastnames[$i].' '.$curators_firstnames[$i];
             }
 
             $curators = array_combine($curators_ids, $curators_values);
@@ -93,10 +93,10 @@ class GroupsController extends Controller
 		    $curators_add = array(0 => 'Оберіть куратора');
 		    $curators = ArrayHelper::merge($curators_add, $curators);
 
-		    $courses_ids = Courses::find()->asArray()->select('ID')->orderBy('ID')->all();
+		    $courses_ids = Courses::find()->asArray()->select('ID')->orderBy('name')->all();
 		    $courses_ids = ArrayHelper::getColumn($courses_ids, 'ID');
 
-		    $courses_values = Courses::find()->asArray()->select('name')->orderBy('ID')->all();
+		    $courses_values = Courses::find()->asArray()->select('name')->orderBy('name')->all();
 		    $courses_values = ArrayHelper::getColumn($courses_values, 'name');
 
 		    $courses = array_combine($courses_ids, $courses_values);

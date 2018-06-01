@@ -28,6 +28,11 @@ class CoursesController extends Controller {
             $searchModel = new CoursesSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $dataProvider->pagination = ['pageSize' => 15];
+            $dataProvider->sort = [
+                'defaultOrder' => [
+                    'name' => SORT_ASC,
+                ]
+            ];
 
             return $this->render('index', [
                 'searchModel' => $searchModel,

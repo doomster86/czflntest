@@ -24,6 +24,11 @@ class CorpsController extends Controller {
         if(Yii::$app->user->identity->role==1) {
             $searchModel = new CorpsSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->sort = [
+                'defaultOrder' => [
+                    'corps_name' => SORT_ASC,
+                ]
+            ];
 
             return $this->render('index', [
                 'searchModel' => $searchModel,
