@@ -36,6 +36,12 @@ class LectureTableController extends Controller
     public function actionIndex() {
         $searchModel = new LectureTableSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->sort = [
+            'defaultOrder' => [
+                'corps_id' => SORT_ASC,
+                'time_start' => SORT_ASC,
+            ]
+        ];
 
         return $this->render('index', [
             'searchModel' => $searchModel,
