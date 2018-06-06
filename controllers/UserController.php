@@ -27,12 +27,24 @@ class UserController extends Controller
     {
         $searchModel = new UserSearch();
         //$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider = new ActiveDataProvider([
-            'query' => User::find()->orderBy('lastname ASC'),
-            'pagination' => [
-                'pageSize' => 10,
-            ],
-        ]);
+
+        $request = Yii::$app->request;
+        $status = $request->get('status');
+        if ($status == 'all') {
+            $dataProvider = new ActiveDataProvider([
+                'query' => User::find()->orderBy('lastname ASC'),
+                'pagination' => [
+                    'pageSize' => 10,
+                ],
+            ]);
+        } else {
+            $dataProvider = new ActiveDataProvider([
+                'query' => User::find()->where(['status' => 1])->orderBy('lastname ASC'),
+                'pagination' => [
+                    'pageSize' => 10,
+                ],
+            ]);
+        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,

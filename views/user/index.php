@@ -156,4 +156,16 @@ Relevator::register($this);
     ]);
     ?>
 
+    <p>
+        <?php
+        $request = Yii::$app->request;
+        $status = $request->get('status');
+        if ($status == 'all') {
+            echo Html::a('Не показувати заблокованих', ['index'], ['class' => 'btn btn-primary']);
+        } else {
+            echo Html::a('Показати заблокованих', ['index', 'status' => 'all'], ['class' => 'btn btn-success']);
+        }
+        ?>
+    </p>
+
 </div>
