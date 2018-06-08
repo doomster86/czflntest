@@ -2,6 +2,10 @@
 
 namespace app\controllers;
 
+use app\models\Groups;
+use app\models\Lessons;
+use app\models\Subjects;
+use app\models\User;
 use Yii;
 use app\models\TimetableParts;
 use app\models\TimetablePartsSearch;
@@ -40,6 +44,35 @@ class TimetablePartsController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
+    }
+
+    public function actionFreetime()
+    {
+        $request = Yii::$app->request;
+        $group = $request->get('group');
+        $subject = $request->get('subject');
+        $teacher = $request->get('teacher');
+        if(!empty($group) && !empty($subject) && !empty($teacher)) {
+
+            $group_name = $this->getGroupName($group);
+            $subject_name = $this->getSubjectName($subject);
+            $teacher_name = $this->getTeacherName($teacher);
+            $course_id = $this->getCourseId($group);
+            $lessons_all = $this->getAllLessons($course_id, $subject);
+            $lessons_in_table = $this->getLessonsInTable($subject, $group);
+            $lessons_more = $lessons_all - $lessons_in_table;
+
+            return $this->render('freetime', [
+                'group' => $group_name,
+                'subject' => $subject_name,
+                'teacher' => $teacher_name,
+                'lessons' => $lessons_all,
+                'intable' => $lessons_in_table,
+                'more' => $lessons_more,
+            ]);
+        } else {
+            return $this->redirect(['index']);
+        }
     }
 
     /**
@@ -131,5 +164,78 @@ class TimetablePartsController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function getGroupName($id) {
+        $group_values = Groups::find()->asArray()
+            ->select(['ID', 'name'])
+            ->where(['=', 'ID', $id])
+            ->one();
+
+        $group = $group_values['name'];
+
+        return $group;
+    }
+
+    public function getCourseId($id) {
+        $course_values = Groups::find()->asArray()
+            ->select(['ID', 'course'])
+            ->where(['=', 'ID', $id])
+            ->one();
+
+        $course = $course_values['course'];
+
+        return $course;
+    }
+
+    public function getSubjectName($id) {
+        $subject_values = Subjects::find()->asArray()
+            ->select(['ID', 'name'])
+            ->where(['=', 'ID', $id])
+            ->one();
+
+        $subject = $subject_values['name'];
+
+        return $subject;
+    }
+
+    public function getTeacherName($id) {
+        $teacherName = User::find()
+            ->asArray()
+            ->select('firstname, middlename, lastname')
+            ->where(['=', 'id', $id])
+            ->one();
+        $teacherName = $teacherName['firstname'] . " " . $teacherName['lastname'];
+
+        return $teacherName;
+    }
+
+    public function getAllLessons($course_id, $subject_id) {
+        $quantity = Lessons::find()
+            ->asArray()
+            ->select('quantity')
+            ->where(['=', 'course_id', $course_id])
+            ->andWhere(['=', 'subject_id', $subject_id])
+            ->one();
+        $allLessons = $quantity['quantity'];
+
+        return $allLessons;
+    }
+
+    public function getLessonsInTable($subject_id, $group_id) {
+        $lessonsInTable = Timetable::find()
+            ->asArray()
+            ->select('half')
+            ->where(['=', 'subjects_id', $subject_id])
+            ->andWhere(['=', 'group_id', $group_id])
+            ->all();
+
+        $sum = 0;
+
+        foreach ($lessonsInTable as $lesson) {
+            $sum = $sum + $lesson['half'];
+        }
+
+        return $sum;
     }
 }

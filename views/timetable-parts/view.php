@@ -1,6 +1,8 @@
 <?php
 
 use yii\helpers\ArrayHelper;
+use yii\widgets\ActiveForm;
+use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\TimetableParts */
@@ -58,24 +60,22 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     $tableID = $model->id;
     if($tableID != 0) {
-        //$this->registerJsFile('http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js');
-        //$this->registerJsFile($baseUrl.'/js/jquery.stickyheader.js');
-
-        echo "
-        	<script>
-                (function ( $ ) {
-                jQuery(document).ready(function () {
-                    
-                    (function(b,c){var $=b.jQuery||b.Cowboy||(b.Cowboy={}),a;$.throttle=a=function(e,f,j,i){var h,d=0;if(typeof f!==\"boolean\"){i=j;j=f;f=c}function g(){var o=this,m=+new Date()-d,n=arguments;function l(){d=+new Date();j.apply(o,n)}function k(){h=c}if(i&&!h){l()}h&&clearTimeout(h);if(i===c&&m>e){l()}else{if(f!==true){h=setTimeout(i?k:l,i===c?e-m:e)}}}if($.guid){g.guid=j.guid=j.guid||$.guid++}return g};$.debounce=function(d,e,f){return f===c?a(d,e,false):a(d,f,e!==false)}})(this);
-                    
-                });
-                })(jQuery);
-	        </script>
-        ";
         echo \app\models\Timetable::renderTable($tableID, 0, 0);
     } else {
         echo "<p>Інформація відсутня</p>";
     }
     ?>
+
+</div>
+
+<div class="timetable-parts-form">
+
+    <?php $form = ActiveForm::begin(); ?>
+
+    <div class="form-group">
+        <?//= Html::submitButton( 'Створити розклад для групи', ['class' => 'btn btn-success']) ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
 
 </div>
