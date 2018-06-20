@@ -130,7 +130,7 @@ class TimetableParts extends \yii\db\ActiveRecord
         //все группы
         $groups = new Groups();
         $allGroups = $groups->find()
-            ->where(['ID' => 9])
+            //->where(['ID' => 9])
             ->asArray()
             ->all();
 
