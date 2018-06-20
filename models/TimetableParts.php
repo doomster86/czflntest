@@ -130,6 +130,7 @@ class TimetableParts extends \yii\db\ActiveRecord
         //все группы
         $groups = new Groups();
         $allGroups = $groups->find()
+            ->where(['ID' => 9])
             ->asArray()
             ->all();
 
@@ -139,15 +140,14 @@ class TimetableParts extends \yii\db\ActiveRecord
             $groupName = $group['name'];
             $courseID = $group['course'];
 
-            //echo "группа";
-            //v($groupID);
+            echo "группа";
+            v($groupID);
 
             //получаем все предметы текущей группы
             $groupLessons = Lessons::find()
                 ->asArray()
                 ->where(['course_id' => $courseID])
                 ->all();
-
 
             //обход по дням
             for ($i = 0; $i < $cols; $i++ ) {
@@ -157,9 +157,9 @@ class TimetableParts extends \yii\db\ActiveRecord
                 //определяем текущею дату
                 $date = $datestart + 86400 * $i;
 
-                //echo "день";
+                echo "день";
                 $formatter = new \yii\i18n\Formatter;
-                //v($formatter->asDate($date, "dd.MM.yyyy"));
+                v($formatter->asDate($date, "dd.MM.yyyy"));
 
                 //определяем дату первого понедельника в этой неделе генерируемого расписания
                 $firstMonday = $date;
@@ -169,7 +169,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                     $day = $formatter->asDate($firstMonday, "l");
                 }
 
-                //echo "Первый понедельник ".$firstMonday."<br/>";
+                echo "Первый понедельник ".$firstMonday."<br/>";
 
                 //обход по парам
                 for($j = 0; $j < $rows; $j++) {
@@ -182,8 +182,8 @@ class TimetableParts extends \yii\db\ActiveRecord
 
                         $subjId = $lesson['subject_id'];
 
-                        //echo "предмет";
-                        //v($subjId);
+                        echo "предмет";
+                        v($subjId);
 
                         //узнаём преподавателя этой лекции
                         $teacherID = Subjects::find()
@@ -192,8 +192,8 @@ class TimetableParts extends \yii\db\ActiveRecord
                             ->where(['ID' => $subjId])
                             ->one();
                         $teacherID = $teacherID['teacher_id'];
-                        //echo "Преподаватель";
-                        //v($teacherID);
+                        echo "Преподаватель";
+                        v($teacherID);
 
                         //узнаём аудиторию лекции
                         $audienceID = Subjects::find()
@@ -202,8 +202,8 @@ class TimetableParts extends \yii\db\ActiveRecord
                             ->where(['ID' => $subjId])
                             ->one();
                         $audienceID = $audienceID['audience_id'];
-                        //echo "Аудитория";
-                        //v($audienceID);
+                        echo "Аудитория";
+                        v($audienceID);
 
                         //узнаём корпус аудитории
                         $currentCorpsId = Audience::find()
@@ -212,8 +212,8 @@ class TimetableParts extends \yii\db\ActiveRecord
                             ->where(['ID' => $audienceID])
                             ->one();
                         $currentCorpsId = $currentCorpsId['corps_id'];
-                        //echo "Корпус";
-                        //v($currentCorpsId);
+                        echo "Корпус";
+                        v($currentCorpsId);
 
                         //узнаём тип занятия (практика\не практика)
                         $type = Subjects::find()
@@ -222,8 +222,8 @@ class TimetableParts extends \yii\db\ActiveRecord
                             ->where(['ID' => $subjId])
                             ->one();
                         $type = $type['practice'];
-                        //echo "Тип занятия";
-                        //v($type);
+                        echo "Тип занятия";
+                        v($type);
 
                         //координата номера пары узнаётся через кол-во пар в этот день в этой аудитории
                         $lecturesCounterCorps = Timetable::find()
@@ -234,8 +234,8 @@ class TimetableParts extends \yii\db\ActiveRecord
                             ->one();
                         $y = $lecturesCounterCorps['counter'];
                         $y = $y+1; //т.е. предполагаем что пара занимает следующею свободную ячейку
-                        //echo "Номер пары";
-                        //v($y);
+                        echo "Номер пары";
+                        v($y);
 
                         $half = 2; //по-умолчанию ставим целую пару
 
@@ -682,9 +682,15 @@ class TimetableParts extends \yii\db\ActiveRecord
                         }
 
                         //узнаём lecture_id - id пары из lecture_table
-                        $lecture_id = 1; //пока не высчитываем, возможно стоит убрать эту колонку из таблицы
-                        //$lecture_id = $this->getLectureId($y, $currentCorpsId); //вычисляем id лекции по её порядковому номеру
-                        //$lecture_id = $y; //берём не id пары, а номер
+                        $lectureIDs = LectureTable::find()
+                            ->asArray()
+                            ->select(["ID"])
+                            ->where(['=', 'corps_id', $currentCorpsId])
+                            ->orderBy('time_start')
+                            ->all();
+                        $lectureIDs = ArrayHelper::getColumn($lectureIDs, 'ID');
+                        $lecture_id = $lectureIDs[$y];
+
 
                         //состоялась ли лекция
                         $statusLect = 1; //по умолчанию ставим, что состоялась
@@ -705,25 +711,29 @@ class TimetableParts extends \yii\db\ActiveRecord
 
                         //если предмет прошёл фильтры, то записываем его в базу
                         if($lectFilterStatus == 1) {
-                            $timetable = new Timetable();
-                            $timetable->corps_id = $currentCorpsId;
-                            $timetable->audience_id = $audienceID;
-                            $timetable->subjects_id = $subjId;
-                            $timetable->teacher_id = $teacherID;
-                            $timetable->group_id = $groupID;
-                            $timetable->lecture_id = $lecture_id;
-                            $timetable->date = $date;
-                            $timetable->status = $statusLect;
-                            $timetable->half = $half;
-                            $timetable->part_id = $id;
-                            $timetable->mont = $mont;
-                            $timetable->x = $x;
-                            $timetable->y = $y;
+                            if($currentCorpsId != NULL && $audienceID != NULL && $subjId != NULL &&
+                                $teacherID != NULL && $groupID != NULL && $lecture_id != NULL && $date != NULL &&
+                                $statusLect != NULL && $half != NULL && $id != NULL && $x != NULL && $y != NULL) {
 
-                            //чтобы снова начать перебор с начала всех пар
-                            $j = 0;
-                            $timetable->save();
-                            //echo "Добавили пару<br/>";
+                                $timetable = new Timetable();
+                                $timetable->corps_id = $currentCorpsId;
+                                $timetable->audience_id = $audienceID;
+                                $timetable->subjects_id = $subjId;
+                                $timetable->teacher_id = $teacherID;
+                                $timetable->group_id = $groupID;
+                                $timetable->lecture_id = $lecture_id;
+                                $timetable->date = $date;
+                                $timetable->status = $statusLect;
+                                $timetable->half = $half;
+                                $timetable->part_id = $id;
+                                $timetable->x = $x;
+                                $timetable->y = $y;
+
+                                //чтобы снова начать перебор с начала всех пар
+                                $j = 0;
+                                $timetable->save();
+                                echo "Добавили пару<br/>";
+                            }
                             break;
                         } else {
                             $errLog =  "<br/>Корпус: ".$currentCorpsId;
@@ -734,7 +744,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                             $errLog .= "<br/> x: ".$x;
                             $errLog .= "<br/> y: ".$y;
                             $errLog .= "<br/>".$err;
-                            //echo $errLog;
+                            echo $errLog;
                         }
 
                     } //цикл по лекциям

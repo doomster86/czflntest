@@ -11,7 +11,6 @@ use app\models\TimetableParts;
 use app\models\TimetablePartsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use app\models\Timetable;
 
 /**
