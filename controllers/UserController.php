@@ -41,7 +41,7 @@ class UserController extends Controller
             $dataProvider = new ActiveDataProvider([
                 'query' => User::find()->where(['status' => 1])->orderBy('lastname ASC'),
                 'pagination' => [
-                    'pageSize' => 10,
+                    'pageSize' => 9,
                 ],
             ]);
         }
