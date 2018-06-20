@@ -157,9 +157,9 @@ class TimetableParts extends \yii\db\ActiveRecord
                 //определяем текущею дату
                 $date = $datestart + 86400 * $i;
 
-                echo "день";
+                //echo "день";
                 $formatter = new \yii\i18n\Formatter;
-                v($formatter->asDate($date, "dd.MM.yyyy"));
+                //v($formatter->asDate($date, "dd.MM.yyyy"));
 
                 //определяем дату первого понедельника в этой неделе генерируемого расписания
                 $firstMonday = $date;
@@ -182,8 +182,8 @@ class TimetableParts extends \yii\db\ActiveRecord
 
                         $subjId = $lesson['subject_id'];
 
-                        echo "предмет";
-                        v($subjId);
+                        //echo "предмет";
+                        //v($subjId);
 
                         //узнаём преподавателя этой лекции
                         $teacherID = Subjects::find()
@@ -192,8 +192,8 @@ class TimetableParts extends \yii\db\ActiveRecord
                             ->where(['ID' => $subjId])
                             ->one();
                         $teacherID = $teacherID['teacher_id'];
-                        echo "Преподаватель";
-                        v($teacherID);
+                        //echo "Преподаватель";
+                        //v($teacherID);
 
                         //узнаём аудиторию лекции
                         $audienceID = Subjects::find()
@@ -202,8 +202,8 @@ class TimetableParts extends \yii\db\ActiveRecord
                             ->where(['ID' => $subjId])
                             ->one();
                         $audienceID = $audienceID['audience_id'];
-                        echo "Аудитория";
-                        v($audienceID);
+                        //echo "Аудитория";
+                        //v($audienceID);
 
                         //узнаём корпус аудитории
                         $currentCorpsId = Audience::find()
@@ -212,8 +212,8 @@ class TimetableParts extends \yii\db\ActiveRecord
                             ->where(['ID' => $audienceID])
                             ->one();
                         $currentCorpsId = $currentCorpsId['corps_id'];
-                        echo "Корпус";
-                        v($currentCorpsId);
+                        //echo "Корпус";
+                        //v($currentCorpsId);
 
                         //узнаём тип занятия (практика\не практика)
                         $type = Subjects::find()
@@ -222,8 +222,8 @@ class TimetableParts extends \yii\db\ActiveRecord
                             ->where(['ID' => $subjId])
                             ->one();
                         $type = $type['practice'];
-                        echo "Тип занятия";
-                        v($type);
+                        //echo "Тип занятия";
+                        //v($type);
 
                         //координата номера пары узнаётся через кол-во пар в этот день в этой аудитории
                         $lecturesCounterCorps = Timetable::find()
@@ -234,8 +234,8 @@ class TimetableParts extends \yii\db\ActiveRecord
                             ->one();
                         $y = $lecturesCounterCorps['counter'];
                         $y = $y+1; //т.е. предполагаем что пара занимает следующею свободную ячейку
-                        echo "Номер пары";
-                        v($y);
+                        //echo "Номер пары";
+                        //v($y);
 
                         $half = 2; //по-умолчанию ставим целую пару
 
