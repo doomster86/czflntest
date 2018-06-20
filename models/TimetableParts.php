@@ -140,8 +140,8 @@ class TimetableParts extends \yii\db\ActiveRecord
             $groupName = $group['name'];
             $courseID = $group['course'];
 
-            echo "группа";
-            v($groupID);
+            //echo "группа";
+            //v($groupID);
 
             //получаем все предметы текущей группы
             $groupLessons = Lessons::find()
@@ -169,7 +169,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                     $day = $formatter->asDate($firstMonday, "l");
                 }
 
-                echo "Первый понедельник ".$firstMonday."<br/>";
+                //echo "Первый понедельник ".$firstMonday."<br/>";
 
                 //обход по парам
                 for($j = 0; $j < $rows; $j++) {
@@ -732,7 +732,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                                 //чтобы снова начать перебор с начала всех пар
                                 $j = 0;
                                 $timetable->save();
-                                echo "Добавили пару<br/>";
+                                //echo "Добавили пару<br/>";
                             }
                             break;
                         } else {
@@ -744,7 +744,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                             $errLog .= "<br/> x: ".$x;
                             $errLog .= "<br/> y: ".$y;
                             $errLog .= "<br/>".$err;
-                            echo $errLog;
+                            //echo $errLog;
                         }
 
                     } //цикл по лекциям
