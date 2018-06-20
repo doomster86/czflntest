@@ -27,7 +27,7 @@ class CoursesController extends Controller {
         if(Yii::$app->user->identity->role==1) {
             $searchModel = new CoursesSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-            $dataProvider->pagination = ['pageSize' => 15];
+            $dataProvider->pagination = ['pageSize' => 20];
             $dataProvider->sort = [
                 'defaultOrder' => [
                     'name' => SORT_ASC,
