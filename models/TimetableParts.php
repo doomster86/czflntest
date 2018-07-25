@@ -689,7 +689,8 @@ class TimetableParts extends \yii\db\ActiveRecord
                             ->orderBy('time_start')
                             ->all();
                         $lectureIDs = ArrayHelper::getColumn($lectureIDs, 'ID');
-                        $lecture_id = $lectureIDs[$y];
+                        //$lecture_id = $lectureIDs[$y];
+                        $lecture_id = 13;
 
 
                         //состоялась ли лекция
