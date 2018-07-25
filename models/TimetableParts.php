@@ -112,10 +112,10 @@ class TimetableParts extends \yii\db\ActiveRecord
         $this->mont = $part;
         $this->save();
 
-        $this->generateLectures($datestart, $dateend, $cols, $rows, $part);
+        //$this->generateLectures($datestart, $dateend, $cols, $rows, $part);
     }
 
-    public function generateLectures($datestart, $dateend, $cols, $rows, $mont) {
+    public function generateLectures($datestart, $dateend, $cols, $rows, $mont, $gid) {
         $datestart = (int)$datestart;
         $dateend = (int)$dateend;
         $mont = (int)$mont;
@@ -130,7 +130,7 @@ class TimetableParts extends \yii\db\ActiveRecord
         //все группы
         $groups = new Groups();
         $allGroups = $groups->find()
-            //->where(['ID' => 9])
+            ->where(['ID' => $gid])
             ->asArray()
             ->all();
 
@@ -900,5 +900,18 @@ class TimetableParts extends \yii\db\ActiveRecord
         $timetable['end'] = $lastDay;
 
         return $timetable;
+    }
+
+    public function getGroupNames() {
+
+        $group_values = Groups::find()->asArray()->select(['ID', "name"])
+            ->orderBy('name')
+            ->all();
+        $group_names = ArrayHelper::getColumn($group_values, 'name');
+        $group_ids = ArrayHelper::getColumn($group_values, 'ID');
+
+        $groups = array_combine($group_ids, $group_names);
+
+        return $groups;
     }
 }

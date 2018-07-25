@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\AddGroupToTable;
 use app\models\Groups;
 use app\models\Lessons;
 use app\models\Subjects;
@@ -147,6 +148,22 @@ class TimetablePartsController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionAddgroup($id, $gid) {
+
+        $model = TimetableParts::findOne($id);
+        $datestart = $model->datestart;
+        $dateend = $model->dateend;
+        $cols = $model->cols;
+        $rows = $model->rows;
+        $mont = (int)date('mY', $datestart);
+
+        TimetableParts::generateLectures($datestart, $dateend, $cols, $rows, $mont, $gid);
+
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
     }
 
     /**

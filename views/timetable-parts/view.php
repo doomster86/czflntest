@@ -70,10 +70,34 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="timetable-parts-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+        'method' => 'get',
+        'action' => ['addgroup'],
+    ]); ?>
 
     <div class="form-group">
-        <?//= Html::submitButton( 'Створити розклад для групи', ['class' => 'btn btn-success']) ?>
+        <?php
+        $request = Yii::$app->request;
+        $id = $request->get('id');
+        $fmodel = new \app\models\AddGroupToTable();
+        $options = array(
+            'options' =>  [
+                0 => [
+                    'disabled' => true,
+                    'selected' => 'selected',
+                    //'' => '',
+                ],
+                //1 => ...
+            ]
+        );
+        echo $form->field($model, 'id')
+            ->hiddenInput(['name'=>'id','value'=>$id])
+            ->label(false, ['style'=>'display:none']);
+        echo $form->field($fmodel, 'gid')
+            ->dropDownList($model->getGroupNames(), ['name'=>'gid','prompt'=>'--- Оберіть групу ---'])
+            ->label(false, ['style'=>'display:none']);
+        ?>
+        <?= Html::submitButton( 'Створити розклад для групи', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
