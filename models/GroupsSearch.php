@@ -68,6 +68,16 @@ class GroupsSearch extends Groups {
                     'desc' => ['user.firstname' => SORT_DESC],
                     'label' => 'Ім\'я куратора'
                 ],
+                'date_start' => [
+                    'asc' => ['date_start' => SORT_ASC],
+                    'desc' => ['date_start' => SORT_DESC],
+                    'label' => 'Дата посадки'
+                ],
+                'date_end' => [
+                    'asc' => ['date_end' => SORT_ASC],
+                    'desc' => ['date_end' => SORT_DESC],
+                    'label' => 'Дата закінчення навчання'
+                ],
 
             ]
         ]);

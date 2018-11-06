@@ -11,6 +11,8 @@ use Yii;
  * @property string $name
  * @property integer $course
  * @property integer $curator
+ * @property integer $date_start
+ * @property integer $date_end
  */
 class Groups extends \yii\db\ActiveRecord {
 
@@ -42,7 +44,7 @@ class Groups extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['name', 'course', 'curator'], 'required'],
+            [['name', 'course', 'curator', 'date_start', 'date_end'], 'required'],
             [['course', 'curator'], 'integer'],
             [['name'], 'string', 'max' => 255],
         ];
@@ -59,6 +61,8 @@ class Groups extends \yii\db\ActiveRecord {
             'coursesName' => 'Професія',
 	        'curator' => 'Куратор',
             'userName' => 'Ім\'я куратора',
+            'date_start' => 'Дата посадки',
+            'date_end' => 'Дата закінчення навчання',
         ];
     }
 

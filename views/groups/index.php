@@ -62,6 +62,32 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             [
+                'attribute' => 'date_start',
+                'format' => 'text',
+                'label' => 'Дата посадки',
+                'content' => function ($model, $key, $index, $column){
+                    $formatter = new \yii\i18n\Formatter;
+                    return $formatter->asDate($model->date_start, 'dd.MM.yyyy');
+                },
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-3'];
+                }
+            ],
+
+            [
+                'attribute' => 'date_end',
+                'format' => 'text',
+                'label' => 'Дата закінчення навчання',
+                'content' => function ($model, $key, $index, $column){
+                    $formatter = new \yii\i18n\Formatter;
+                    return $formatter->asDate($model->date_end, 'dd.MM.yyyy');
+                },
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-3'];
+                }
+            ],
+
+            [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{update} {delete}',
 	            'buttons' => [

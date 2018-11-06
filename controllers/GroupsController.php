@@ -105,16 +105,19 @@ class GroupsController extends Controller
 		    $courses = ArrayHelper::merge($courses_add, $courses);
 
 
-	        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-
-	            return $this->render('create', [
-	            	'id' => $model->ID,
-		            'model' => $model,
-		            'courses' => $courses,
-		            'curators' => $curators,
-		            'status' => 'created',
-	            ]);
-	        } else {
+            if ($model->load(Yii::$app->request->post())) {
+                $model->date_start = strtotime($model->date_start);
+                $model->date_end = strtotime($model->date_end);
+                if ($model->save()) {
+                    return $this->render('create', [
+                        'id' => $model->ID,
+                        'model' => $model,
+                        'courses' => $courses,
+                        'curators' => $curators,
+                        'status' => 'created',
+                    ]);
+                }
+            } else {
 	            return $this->render('create', [
 	                'model' => $model,
 		            'courses' => $courses,
@@ -167,15 +170,17 @@ class GroupsController extends Controller
 		    $courses_add = array('Оберіть професію');
 		    $courses = ArrayHelper::merge($courses_add, $courses);
 
-	        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-
-		        return $this->render('update', [
-			        'model' => $model,
-			        'courses' => $courses,
-			        'curators' => $curators,
-			        'status' => 'updated',
-		        ]);
-
+            if ($model->load(Yii::$app->request->post())) {
+                $model->date_start = strtotime($model->date_start);
+                $model->date_end = strtotime($model->date_end);
+                if ($model->save()) {
+                    return $this->render('update', [
+                        'model' => $model,
+                        'courses' => $courses,
+                        'curators' => $curators,
+                        'status' => 'updated',
+                    ]);
+                }
 	        } else {
 
 	            return $this->render('update', [
