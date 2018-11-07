@@ -9,8 +9,17 @@ $this->title = 'Редагувати групу: ' . $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Всі групи', 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'Оновити';
 $formatter = new \yii\i18n\Formatter;
-$model->date_start = $formatter->asDate($model->date_start, 'dd.MM.yyyy');
-$model->date_end = $formatter->asDate($model->date_end, 'dd.MM.yyyy');
+if ($model->date_start) {
+    $model->date_start = $formatter->asDate($model->date_start, 'dd.MM.yyyy');
+} else {
+    $model->date_start = '';
+}
+if ($model->date_end) {
+    $model->date_end = $formatter->asDate($model->date_end, 'dd.MM.yyyy');
+} else {
+    $model->date_end = '';
+}
+
 ?>
 
 <div class="groups-update">
