@@ -11,6 +11,10 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\data\ActiveDataProvider;
 use app\models\SignupForm;
+use app\models\Timetable;
+use app\models\Subjects;
+use app\models\Groups;
+use app\models\Courses;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -256,6 +260,82 @@ class UserController extends Controller
         } else {
             $model = new StudentMeta();
             return $model;
+        }
+    }
+
+    public function actionGodyny($id)
+    {
+        if (Yii::$app->user->identity->role/*==1*/) {
+            $user = User::findOne($id);
+            if (Yii::$app->request->post('date')) {
+                $datestart = date(1 . '-' . Yii::$app->request->post('date'));
+                $dateend = Yii::$app->request->post('date');
+                $dateend = date("t", strtotime($datestart)) . '-' . $dateend;
+            } else {
+                $datestart = date('Y-m-' . 1);
+                $dateend = date('Y-m-d');
+            }
+            $timetables = Timetable::find()
+                ->select(['group_id', 'subjects_id'])
+                ->where(['teacher_id' => $id])
+                ->andWhere(['>=', 'date', strtotime($datestart)])
+                ->andWhere(['<=', 'date', strtotime($dateend)])
+                ->asArray()
+                ->distinct()
+                ->all();
+            $i = 0;
+            $table = array();
+            foreach ($timetables as $timetable) {
+                $group = Groups::find()->where(['ID' => $timetable['group_id']])->asArray()->one();
+                $course = Courses::find()->where(['ID' => $group['course']])->asArray()->one();
+                $subject = Subjects::find()->where(['ID' => $timetable['subjects_id']])->asArray()->one();
+                if (!empty($group)) {
+                    $table[$i] = $timetable;
+                    $table[$i]['subject'] = $subject;
+                    $table[$i]['group'] = $group;
+                    $table[$i]['course'] = $course;
+                    $day_count = 1;
+                    $lectCompleteAll = 0;
+                    for ($j = $day_count; $j <= date('j', strtotime($dateend)); $j++) {
+                        $table[$i]['timetable'][$j]['date'] = strtotime(date('Y-m-' . $j, strtotime($dateend)));
+                        $lectComplete = Timetable::find()
+                            ->asArray()
+                            ->select(['COUNT(teacher_id) AS lectCount'])
+                            //->where(['>=', 'date', $firstDay]) // date >= $firstDay перепроверить через отладчик все условия с подобнфым синтаксисом
+                            //->andWhere(['<=', 'date', $lastDay])// date <= $lastDay
+                            ->where(['=', 'date', $table[$i]['timetable'][$j]['date']])
+                            ->andWhere(['=', 'teacher_id', $user->id])
+                            ->andWhere(['=', 'group_id', $group['ID']])
+                            ->andWhere(['=', 'half', 2])
+                            ->one();
+                        $lectComplete = $lectComplete['lectCount'] * 2;
+                        $lectCompleteHalf = Timetable::find()
+                            ->asArray()
+                            ->select(['COUNT(teacher_id) AS lectCount'])
+                            //->where(['>=', 'date', $firstDay]) // date >= $firstDay перепроверить через отладчик все условия с подобнфым синтаксисом
+                            //->andWhere(['<=', 'date', $lastDay])// date <= $lastDay
+                            ->where(['=', 'date', $table[$i]['timetable'][$j]['date']])
+                            ->andWhere(['=', 'teacher_id', $user->id])
+                            ->andWhere(['=', 'group_id', $group['ID']])
+                            ->andWhere(['=', 'half', 1])
+                            ->one();
+                        $lectCompleteHalf = $lectCompleteHalf['lectCount'];
+
+                        $lectComplete = $lectComplete + $lectCompleteHalf;
+                        $table[$i]['timetable'][$j]['lectComplete'] = $lectComplete;
+                        $lectCompleteAll += $lectComplete;
+                    }
+                    $table[$i]['lectComplete'] = $lectCompleteAll;
+                    $i++;
+                }
+            }
+            return $this->render('godyny', [
+                'user' => $user,
+                'table' => $table,
+                'request' => $dateend,
+            ]);
+        } else {
+            return $this->render('/site/access_denied');
         }
     }
 }

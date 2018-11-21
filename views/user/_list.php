@@ -75,4 +75,7 @@ use app\models\TeacherMeta;
 
     <p class="center">Зареєстровано <?php echo $model->getRegisterDate(); ?></p>
     <p class="center <?= Html::encode($status[$model->status]['cssClass']) ?>"><?= Html::encode($status[$model->status]['name']) ?></p>
+    <?php if ($roles[$model->role]['roles'] == 2) : ?>
+        <p class="center"><?= Html::a('Фактичне педнавантаження', ['godyny', 'id' => $model->id], ['class' => 'btn btn-primary']) ?></p>
+    <?php endif; ?>
 </div>

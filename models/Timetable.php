@@ -220,7 +220,7 @@ class Timetable extends \yii\db\ActiveRecord
             $output .= Html::a('Роздрукувати розклад викладача', ['timetable/print', 'table_id' => $id, 'teacher_id' => $teacherID], ['class' => 'btn btn-success btn-right']);
         }
 
-        $output .= '<table class="table table-striped table-bordered" id="lectures">';
+        $output .= '<table class="table table-striped table-bordered tablest" id="lectures">';
         for ($tr = 0; $tr <= $rows_num; $tr++) {
             if (!$tr) {
                 $output .= '<thead><tr>';
