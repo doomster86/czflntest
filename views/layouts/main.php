@@ -112,6 +112,7 @@ if(!Yii::$app->user->isGuest) {
             ['label' => 'Управління розкладом', 'url' => ['#'], 'items' => [
                 ['label' => 'Розклад', 'url' => ['/timetable-parts/index']],
                 ['label' => 'Cтворити новый', 'url' => ['/timetable-parts/create']],
+                ['label' => 'Фактичне педнавантаження', 'url' => ['/timetable-parts/godyny']],
             ]],
         ];
 

@@ -297,13 +297,13 @@ class UserController extends Controller
                     $day_count = 1;
                     $lectCompleteAll = 0;
                     for ($j = $day_count; $j <= date('j', strtotime($dateend)); $j++) {
-                        $table[$i]['timetable'][$j]['date'] = strtotime(date('Y-m-' . $j, strtotime($dateend)));
+                        $date = strtotime(date('Y-m-' . $j, strtotime($dateend)));
                         $lectComplete = Timetable::find()
                             ->asArray()
                             ->select(['COUNT(teacher_id) AS lectCount'])
                             //->where(['>=', 'date', $firstDay]) // date >= $firstDay перепроверить через отладчик все условия с подобнфым синтаксисом
                             //->andWhere(['<=', 'date', $lastDay])// date <= $lastDay
-                            ->where(['=', 'date', $table[$i]['timetable'][$j]['date']])
+                            ->where(['=', 'date', $date])
                             ->andWhere(['=', 'teacher_id', $user->id])
                             ->andWhere(['=', 'group_id', $group['ID']])
                             ->andWhere(['=', 'half', 2])
@@ -314,7 +314,7 @@ class UserController extends Controller
                             ->select(['COUNT(teacher_id) AS lectCount'])
                             //->where(['>=', 'date', $firstDay]) // date >= $firstDay перепроверить через отладчик все условия с подобнфым синтаксисом
                             //->andWhere(['<=', 'date', $lastDay])// date <= $lastDay
-                            ->where(['=', 'date', $table[$i]['timetable'][$j]['date']])
+                            ->where(['=', 'date', $date])
                             ->andWhere(['=', 'teacher_id', $user->id])
                             ->andWhere(['=', 'group_id', $group['ID']])
                             ->andWhere(['=', 'half', 1])
@@ -322,6 +322,10 @@ class UserController extends Controller
                         $lectCompleteHalf = $lectCompleteHalf['lectCount'];
 
                         $lectComplete = $lectComplete + $lectCompleteHalf;
+                        if ((date('w', $date) == 0 || date('w', $date) == 6) && $lectComplete == 0) {
+                            continue;
+                        }
+                        $table[$i]['timetable'][$j]['date'] = $date;
                         $table[$i]['timetable'][$j]['lectComplete'] = $lectComplete;
                         $lectCompleteAll += $lectComplete;
                     }
@@ -332,7 +336,6 @@ class UserController extends Controller
             return $this->render('godyny', [
                 'user' => $user,
                 'table' => $table,
-                'request' => $dateend,
             ]);
         } else {
             return $this->render('/site/access_denied');

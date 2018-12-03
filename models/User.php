@@ -217,4 +217,11 @@ class User extends ActiveRecord implements IdentityInterface
         return date('d.m.Y', $this->created_at);
     }
 
+    /*
+     * Get teacher names format Фамилия И.О.
+     */
+    public function getFullName()
+    {
+        return $this->lastname . ' ' . mb_substr($this->firstname, 0, 1) . '.' . mb_substr($this->middlename, 0, 1) .'.';
+    }
 }

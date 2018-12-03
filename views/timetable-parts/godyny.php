@@ -1,31 +1,70 @@
 <?php
 
-use yii\helpers\Html;
-use app\models\User;
-use kartik\date\DatePicker;
 use yii\bootstrap\ActiveForm;
+use kartik\date\DatePicker;
+use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
+use app\models\Groups;
+use yii\helpers\Url;
+use app\models\User;
 
 $this->title = 'Фактичне педнавантаження';
-$this->params['breadcrumbs'][] = ['label' => 'Користувачі', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Розклади', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-$roles = User::ROLES;
 $formatter = new \yii\i18n\Formatter;
+$roles = User::ROLES;
 ?>
 <div class="form-group row">
     <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
-        <?php $form = ActiveForm::begin(['layout' => 'horizontal']); ?>
+        <?php $form = ActiveForm::begin(); ?>
         <?= DatePicker::widget(['name' => 'date',
             'value' => Yii::$app->request->post('date'),
             'pluginOptions' => [
                 'autoclose' => true,
                 'startView' => 'year',
                 'minViewMode' => 'months',
-                'format' => 'mm-yyyy'
+                'format' => 'mm-yyyy',
             ]]) ?>
+    </div>
+    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+        <?php
+        $user = User::find()->all();
+        $userMap = ArrayHelper::map(
+            $user,
+            'id',
+            function ($person) {
+                return $person->getFullName();
+            }
+        );
+        $teacher_id = Yii::$app->request->post('User');
+        $teacher_id = $teacher_id['ID'];
+        ?>
+        <?= $form->field(new User(), 'ID')->dropDownList($userMap,
+            [
+                'prompt' => 'Всі викладачі',
+                'options' => [
+                    $teacher_id => ['selected' => 'selected']
+                ],
+            ])->label(false)
+        ?>
+    </div>
+    <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
+        <?php
+        $group_id = Yii::$app->request->post('Groups');
+        $group_id = $group_id['ID'];
+        ?>
+        <?= $form->field(new Groups(), 'ID')->dropDownList(ArrayHelper::map(Groups::find()->asArray()->all(), 'ID', 'name'),
+            [
+                'prompt' => 'Всі групи',
+                'options' => [
+                    $group_id => ['selected' => 'selected']
+                ],
+            ])->label(false)
+        ?>
     </div>
     <?= Html::submitButton('Переглянути', ['class' => 'btn btn-primary']) ?>
     <?php ActiveForm::end(); ?>
-    <?= Html::button('Роздрукувати', [ 'class' => 'btn btn-primary', 'onclick' => 'javascript:tableToExcel(\'tableGodyny\', \'outputdata\', \'outputdata\');' ]); ?>
+    <?= Html::button('Роздрукувати', ['class' => 'btn btn-primary', 'onclick' => 'javascript:tableToExcel(\'tableGodyny\', \'outputdata\', \'outputdata\');']); ?>
 </div>
 <div class="table-responsive">
     <table class="table table-bordered" id="tableGodyny">
@@ -67,6 +106,7 @@ $formatter = new \yii\i18n\Formatter;
         <?php if (!empty($table)) {
             $num = 1;
             foreach ($table as $row) {
+                $user = User::find()->where(['id' => $row['teacher']['id']])->one();
                 ?>
                 <tr>
                     <th><?= $num; ?></th>
@@ -90,3 +130,5 @@ $formatter = new \yii\i18n\Formatter;
         </tbody>
     </table>
 </div>
+<pre>
+</pre>
