@@ -19,6 +19,16 @@ if ($model->date_end) {
 } else {
     $model->date_end = '';
 }
+if ($model->date_dka_1) {
+    $model->date_dka_1 = $formatter->asDate($model->date_dka_1, 'dd.MM.yyyy');
+} else {
+    $model->date_dka_1 = '';
+}
+if ($model->date_dka_2) {
+    $model->date_dka_2 = $formatter->asDate($model->date_dka_2, 'dd.MM.yyyy');
+} else {
+    $model->date_dka_2 = '';
+}
 
 ?>
 

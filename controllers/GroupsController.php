@@ -108,6 +108,8 @@ class GroupsController extends Controller
             if ($model->load(Yii::$app->request->post())) {
                 $model->date_start = strtotime($model->date_start);
                 $model->date_end = strtotime($model->date_end);
+                $model->date_dka_1 = strtotime($model->date_dka_1);
+                $model->date_dka_2 = strtotime($model->date_dka_2);
                 if ($model->save()) {
                     return $this->render('create', [
                         'id' => $model->ID,
@@ -173,6 +175,8 @@ class GroupsController extends Controller
             if ($model->load(Yii::$app->request->post())) {
                 $model->date_start = strtotime($model->date_start);
                 $model->date_end = strtotime($model->date_end);
+                $model->date_dka_1 = strtotime($model->date_dka_1);
+                $model->date_dka_2 = strtotime($model->date_dka_2);
                 if ($model->save()) {
                     return $this->render('update', [
                         'model' => $model,

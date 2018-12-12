@@ -133,6 +133,27 @@ $formatter = new \yii\i18n\Formatter;
                 ]
             ]); ?>
         </div>
+        <div class="col-xs-4">
+            <?=  $form->field($model, 'date_dka_1')
+                ->label('Дата ДКА (обов\'язково)')
+                ->widget(DatePicker::className(),[
+                    'pluginOptions' => [
+                        'format' => 'dd.mm.yyyy',
+                    ]
+                ]); ?>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-4">
+            <?=  $form->field($model, 'date_dka_2')
+                ->label('Дата ДКА (у разі потреби)')
+                ->widget(DatePicker::className(),[
+                    'pluginOptions' => [
+                        'format' => 'dd.mm.yyyy',
+                    ]
+                ]); ?>
+        </div>
     </div>
 
     <div class="row">
