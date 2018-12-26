@@ -14,6 +14,7 @@ use app\models\Lessons;
 use app\models\LessonsSearch;
 use app\models\PracticeLessons;
 use app\models\PracticeLessonsSearch;
+use app\models\Rnps;
 
 use yii\web\NotFoundHttpException;
 
@@ -160,6 +161,8 @@ class CoursesController extends Controller {
 
             $modelPracticeLessons = new PracticeLessons();
 
+            $RnpsArray = Rnps::find()->asArray()->select(['ID', 'course_id', 'module_id'])->where(['course_id' => $id])->all();
+
             //end practice
 
             if ($modelLessons->load(Yii::$app->request->post()) && $modelLessons->validate()) { //если нажата зеленая кнопка
@@ -229,6 +232,11 @@ class CoursesController extends Controller {
                     'test' => $selected_practice,
                     'status' => 'PAdded',
                 ]);
+            } else if (Yii::$app->request->post()) {
+                return $this->render('_form_rnp', [
+                    'request' => Yii::$app->request->post(),
+                    'RnpsArray' => $RnpsArray
+                ]);
             } else { //если зашли первый раз
                 return $this->render('view', [
                     'searchModel' => $searchModel,
@@ -242,7 +250,8 @@ class CoursesController extends Controller {
                     'practice' => $practice,
                     'test' => $selected_subjects,
                     'operation' => '',
-                    'status' => ''
+                    'status' => '',
+                    'RnpsArray' => $RnpsArray
                 ]);
             }
         } else {

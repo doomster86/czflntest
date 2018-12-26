@@ -24,6 +24,7 @@ class AppAsset extends AssetBundle
         'js/jquery.stickyheader.js',
         'js/jquery.ba-throttle-debounce.min.js',
         'js/xporttoexel.js',
+        'js/custom.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
