@@ -15,6 +15,7 @@ use app\models\LessonsSearch;
 use app\models\PracticeLessons;
 use app\models\PracticeLessonsSearch;
 use app\models\Rnps;
+use app\models\User;
 
 use yii\web\NotFoundHttpException;
 
@@ -162,6 +163,7 @@ class CoursesController extends Controller {
             $modelPracticeLessons = new PracticeLessons();
 
             $RnpsArray = Rnps::find()->asArray()->select(['ID', 'course_id', 'module_id'])->where(['course_id' => $id])->all();
+            $UsersArray = User::find()->asArray()->all();
 
             //end practice
 
@@ -235,7 +237,8 @@ class CoursesController extends Controller {
             } else if (Yii::$app->request->post()) {
                 return $this->render('_form_rnp', [
                     'request' => Yii::$app->request->post(),
-                    'RnpsArray' => $RnpsArray
+                    'RnpsArray' => $RnpsArray,
+                    'UsersArray' => $UsersArray,
                 ]);
             } else { //если зашли первый раз
                 return $this->render('view', [

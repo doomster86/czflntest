@@ -10,6 +10,7 @@ if (empty($request['modules'])) {
 } else {
     $modules = $request['modules'];
 }
+
 ?>
 <form action="" method="post">
     <input type="hidden" name="_csrf" value="<?= Yii::$app->request->getCsrfToken() ?>"/>
@@ -23,6 +24,8 @@ if (empty($request['modules'])) {
                 <th rowspan="2">Кількість годин (заплановано)</th>
                 <th colspan="<?php echo $modules; ?>" id="weeks">Кількість тижнів</th>
                 <th rowspan="2">Всього за категорію (фактично)</th>
+                <th rowspan="2" class="nakaz"><textarea rows="3" name="text">Наказ про педнавантаження №***-Н від **.**.**</textarea>
+                </th>
             </tr>
             <tr>
                 <?php
@@ -46,6 +49,15 @@ if (empty($request['modules'])) {
                     <?php
                 }
                 ?>
+                <td>?</td>
+                <td class="teacher"><select class="form-control">
+                        <option value="">Оберіть викладача</option>
+                        <?php
+                        foreach ($UsersArray as $user) {
+                            echo '<option value="' . $user['id'] . '">' . $user['lastname'] . ' ' . mb_substr($user['firstname'], 0, 1) . '.' . mb_substr($user['middlename'], 0, 1) . '.' . '</option>';
+                        }
+                        ?>
+                    </select></td>
             </tr>
             </tbody>
         </table>
@@ -58,6 +70,11 @@ if (empty($request['modules'])) {
     <div class="form-group">
         <button class="btn btn-success add-more-module" type="button"><i class="glyphicon glyphicon-plus"></i> Додати
             тиждень
+        </button>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-success add-more-nakaz" type="button"><i class="glyphicon glyphicon-plus"></i> Додати
+            наказ
         </button>
     </div>
     <div class="form-group">
@@ -82,6 +99,15 @@ if (empty($request['modules'])) {
                 <?php
             }
             ?>
+            <td>?</td>
+            <td class="teacher"><select class="form-control">
+                    <option value="">Оберіть викладача</option>
+                    <?php
+                    foreach ($UsersArray as $user) {
+                        echo '<option value="' . $user['id'] . '">' . $user['lastname'] . ' ' . mb_substr($user['firstname'], 0, 1) . '.' . mb_substr($user['middlename'], 0, 1) . '.' . '</option>';
+                    }
+                    ?>
+                </select></td>
         </tr>
         </tbody>
     </table>
@@ -89,6 +115,26 @@ if (empty($request['modules'])) {
         <tbody class="copy-fields-module hide">
         <tr>
             <td class="module"><input type="number" class="form-control" style="min-width: 70px;"></td>
+        </tr>
+        </tbody>
+    </table>
+    <table>
+        <thead class="copy-fields-nakaz hide">
+        <tr>
+            <th rowspan="2" class="nakaz"><textarea rows="3" name="text">Зміни 1 №***-Н від **.**.**  до наказу №***-Н від **.**.**</textarea>
+            </th>
+        </tr>
+        </thead>
+        <tbody class="copy-fields-teacher hide">
+        <tr>
+            <td class="teacher"><select class="form-control">
+                    <option value="">Оберіть викладача</option>
+                    <?php
+                    foreach ($UsersArray as $user) {
+                        echo '<option value="' . $user['id'] . '">' . $user['lastname'] . ' ' . mb_substr($user['firstname'], 0, 1) . '.' . mb_substr($user['middlename'], 0, 1) . '.' . '</option>';
+                    }
+                    ?>
+                </select></td>
         </tr>
         </tbody>
     </table>
