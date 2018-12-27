@@ -5,16 +5,25 @@
  * Date: 21.12.2018
  * Time: 12:37
  */
-if (empty($request['modules'])) {
-    $modules = $_POST['modules'];
+if (empty($request['modules_count'])) {
+    $modules = $_POST['modules_count'];
 } else {
-    $modules = $request['modules'];
+    $modules = $request['modules_count'];
 }
-
+if (empty($request['courses_count'])) {
+    $courses = $_POST['courses_count'];
+} else {
+    $courses = $request['courses_count'];
+}
+echo '<pre>';
+print_r($request);
+echo '</pre>';
 ?>
+<div class="form-group">
 <form action="" method="post">
     <input type="hidden" name="_csrf" value="<?= Yii::$app->request->getCsrfToken() ?>"/>
-    <input type="hidden" name="modules" value="<?php echo $request['modules']; ?>"/>
+    <input type="hidden" name="modules_count" class="modules" value="<?php echo $request['modules_count']; ?>"/>
+    <input type="hidden" name="courses_count" class="courses" value="<?php echo $request['courses_count']; ?>"/>
     <div style="overflow-x:auto;">
         <table class="table table-bordered" id="rnp_table">
             <thead>
@@ -31,34 +40,63 @@ if (empty($request['modules'])) {
                 <?php
                 for ($i = 0; $i < $modules; $i++) {
                     ?>
-                    <th class="week"><input type="number" class="form-control" min="1"></th>
+                    <th class="week"><input type="number" name="weeks[]" class="form-control" min="1"></th>
                     <?php
                 }
                 ?>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td style="vertical-align: middle;font-weight: bold;text-align: center;">1</td>
-                <td><input type="text" class="form-control"></td>
-                <td><input type="number" class="form-control"></td>
-                <?php
-                for ($i = 0; $i < $modules; $i++) {
-                    ?>
-                    <td class="module"><input type="number" class="form-control" min="0" style="min-width: 70px;"></td>
+            <?php if (!$courses) { ?>
+                <tr>
+                    <td style="vertical-align: middle;font-weight: bold;text-align: center;"><?php echo $k + 1; ?></td>
+                    <td><input type="text" name="courses[]" class="form-control"></td>
+                    <td><input type="number" name="zaplan[]" class="form-control"></td>
                     <?php
-                }
-                ?>
-                <td>?</td>
-                <td class="teacher"><select class="form-control">
-                        <option value="">Оберіть викладача</option>
-                        <?php
-                        foreach ($UsersArray as $user) {
-                            echo '<option value="' . $user['id'] . '">' . $user['lastname'] . ' ' . mb_substr($user['firstname'], 0, 1) . '.' . mb_substr($user['middlename'], 0, 1) . '.' . '</option>';
-                        }
+                    for ($j = 0; $j < $modules; $j++) {
                         ?>
-                    </select></td>
-            </tr>
+                        <td class="module"><input type="number" name="modules[0][<?php echo $j ?>]" class="form-control" min="0" style="min-width: 70px;">
+                        </td>
+                        <?php
+                    }
+                    ?>
+                    <td>?</td>
+                    <td class="teacher"><select class="form-control">
+                            <option value="">Оберіть викладача</option>
+                            <?php
+                            foreach ($UsersArray as $user) {
+                                echo '<option value="' . $user['id'] . '">' . $user['lastname'] . ' ' . mb_substr($user['firstname'], 0, 1) . '.' . mb_substr($user['middlename'], 0, 1) . '.' . '</option>';
+                            }
+                            ?>
+                        </select></td>
+                </tr>
+            <?php } ?>
+            <?php
+            for ($k = 0; $k < $courses; $k++) {
+                ?>
+                <tr>
+                    <td style="vertical-align: middle;font-weight: bold;text-align: center;"><?php echo $k + 1; ?></td>
+                    <td><input type="text" name="courses[]" class="form-control"></td>
+                    <td><input type="number" name="zaplan[]" class="form-control"></td>
+                    <?php
+                    for ($j = 0; $j < $modules; $j++) {
+                        ?>
+                        <td class="module"><input type="number" name="modules[<?php echo $k ?>][<?php echo $j ?>]" class="form-control" min="0" style="min-width: 70px;">
+                        </td>
+                        <?php
+                    }
+                    ?>
+                    <td>?</td>
+                    <td class="teacher"><select class="form-control">
+                            <option value="">Оберіть викладача</option>
+                            <?php
+                            foreach ($UsersArray as $user) {
+                                echo '<option value="' . $user['id'] . '">' . $user['lastname'] . ' ' . mb_substr($user['firstname'], 0, 1) . '.' . mb_substr($user['middlename'], 0, 1) . '.' . '</option>';
+                            }
+                            ?>
+                        </select></td>
+                </tr>
+            <?php } ?>
             </tbody>
         </table>
     </div>
@@ -80,62 +118,62 @@ if (empty($request['modules'])) {
     <div class="form-group">
         <button type="submit" class="btn btn-info">Обновити</button>
     </div>
-
-    <table>
-        <thead class="copy-fields-week hide">
-        <tr>
-            <th class="week"><input type="number" class="form-control" min="1"></th>
-        </tr>
-        </thead>
-        <tbody class="copy-fields-course hide">
-        <tr>
-            <td class="index" style="vertical-align: middle;font-weight: bold;text-align: center;"></td>
-            <td><input type="text" class="form-control"></td>
-            <td><input type="number" class="form-control"></td>
-            <?php
-            for ($i = 0; $i < $modules; $i++) {
-                ?>
-                <td class="module"><input type="number" class="form-control" style="min-width: 70px;"></td>
-                <?php
-            }
-            ?>
-            <td>?</td>
-            <td class="teacher"><select class="form-control">
-                    <option value="">Оберіть викладача</option>
-                    <?php
-                    foreach ($UsersArray as $user) {
-                        echo '<option value="' . $user['id'] . '">' . $user['lastname'] . ' ' . mb_substr($user['firstname'], 0, 1) . '.' . mb_substr($user['middlename'], 0, 1) . '.' . '</option>';
-                    }
-                    ?>
-                </select></td>
-        </tr>
-        </tbody>
-    </table>
-    <table>
-        <tbody class="copy-fields-module hide">
-        <tr>
-            <td class="module"><input type="number" class="form-control" style="min-width: 70px;"></td>
-        </tr>
-        </tbody>
-    </table>
-    <table>
-        <thead class="copy-fields-nakaz hide">
-        <tr>
-            <th rowspan="2" class="nakaz"><textarea rows="3" name="text">Зміни 1 №***-Н від **.**.**  до наказу №***-Н від **.**.**</textarea>
-            </th>
-        </tr>
-        </thead>
-        <tbody class="copy-fields-teacher hide">
-        <tr>
-            <td class="teacher"><select class="form-control">
-                    <option value="">Оберіть викладача</option>
-                    <?php
-                    foreach ($UsersArray as $user) {
-                        echo '<option value="' . $user['id'] . '">' . $user['lastname'] . ' ' . mb_substr($user['firstname'], 0, 1) . '.' . mb_substr($user['middlename'], 0, 1) . '.' . '</option>';
-                    }
-                    ?>
-                </select></td>
-        </tr>
-        </tbody>
-    </table>
 </form>
+<table>
+    <thead class="copy-fields-week hide">
+    <tr>
+        <th class="week"><input type="number" name="weeks[]" class="form-control" min="1"></th>
+    </tr>
+    </thead>
+    <tbody class="copy-fields-course hide">
+    <tr>
+        <td class="index" style="vertical-align: middle;font-weight: bold;text-align: center;"></td>
+        <td><input type="text" name="courses[]" class="form-control"></td>
+        <td><input type="number" name="zaplan[]" class="form-control"></td>
+        <?php
+        for ($i = 0; $i < $modules; $i++) {
+            ?>
+            <td class="module"><input type="number" name="modules[][<?php echo $i ?>]" class="form-control" style="min-width: 70px;"></td>
+            <?php
+        }
+        ?>
+        <td>?</td>
+        <td class="teacher"><select class="form-control">
+                <option value="">Оберіть викладача</option>
+                <?php
+                foreach ($UsersArray as $user) {
+                    echo '<option value="' . $user['id'] . '">' . $user['lastname'] . ' ' . mb_substr($user['firstname'], 0, 1) . '.' . mb_substr($user['middlename'], 0, 1) . '.' . '</option>';
+                }
+                ?>
+            </select></td>
+    </tr>
+    </tbody>
+</table>
+<table>
+    <tbody class="copy-fields-module hide">
+    <tr>
+        <td class="module"><input type="number" name="modules[]" class="form-control" style="min-width: 70px;"></td>
+    </tr>
+    </tbody>
+</table>
+<table>
+    <thead class="copy-fields-nakaz hide">
+    <tr>
+        <th rowspan="2" class="nakaz"><textarea rows="3" name="text">Зміни 1 №***-Н від **.**.**  до наказу №***-Н від **.**.**</textarea>
+        </th>
+    </tr>
+    </thead>
+    <tbody class="copy-fields-teacher hide">
+    <tr>
+        <td class="teacher"><select class="form-control">
+                <option value="">Оберіть викладача</option>
+                <?php
+                foreach ($UsersArray as $user) {
+                    echo '<option value="' . $user['id'] . '">' . $user['lastname'] . ' ' . mb_substr($user['firstname'], 0, 1) . '.' . mb_substr($user['middlename'], 0, 1) . '.' . '</option>';
+                }
+                ?>
+            </select></td>
+    </tr>
+    </tbody>
+</table>
+</div>
