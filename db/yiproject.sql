@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Дек 18 2018 г., 16:48
+-- Время создания: Дек 28 2018 г., 18:44
 -- Версия сервера: 5.6.38
--- Версия PHP: 5.6.32
+-- Версия PHP: 7.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -659,6 +659,43 @@ CREATE TABLE `migration` (
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `modules`
+--
+
+CREATE TABLE `modules` (
+  `ID` int(11) NOT NULL,
+  `rnp_id` int(11) NOT NULL,
+  `module` int(11) NOT NULL,
+  `hours` int(11) NOT NULL,
+  `count` int(11) NOT NULL,
+  `subject_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `modules_count`
+--
+
+CREATE TABLE `modules_count` (
+  `ID` int(11) NOT NULL,
+  `rnp_id` int(11) NOT NULL,
+  `module` int(11) NOT NULL,
+  `count` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `modules_count`
+--
+
+INSERT INTO `modules_count` (`ID`, `rnp_id`, `module`, `count`) VALUES
+(1, 3, 0, 5),
+(2, 3, 1, 6),
+(3, 3, 2, 7);
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `practice`
 --
 
@@ -704,6 +741,26 @@ INSERT INTO `rank` (`ID`, `rank_name`) VALUES
 (11, 'викладач-методист'),
 (12, 'старший викладач'),
 (13, 'без звання');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `rnps`
+--
+
+CREATE TABLE `rnps` (
+  `ID` int(11) NOT NULL,
+  `course_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `rnps`
+--
+
+INSERT INTO `rnps` (`ID`, `course_id`) VALUES
+(1, 191),
+(2, 197),
+(3, 198);
 
 -- --------------------------------------------------------
 
@@ -1526,6 +1583,18 @@ ALTER TABLE `migration`
   ADD PRIMARY KEY (`version`);
 
 --
+-- Индексы таблицы `modules`
+--
+ALTER TABLE `modules`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Индексы таблицы `modules_count`
+--
+ALTER TABLE `modules_count`
+  ADD PRIMARY KEY (`ID`);
+
+--
 -- Индексы таблицы `practice`
 --
 ALTER TABLE `practice`
@@ -1544,6 +1613,12 @@ ALTER TABLE `practice_lessons`
 --
 ALTER TABLE `rank`
   ADD PRIMARY KEY (`ID`);
+
+--
+-- Индексы таблицы `rnps`
+--
+ALTER TABLE `rnps`
+  ADD PRIMARY KEY (`ID`) USING BTREE;
 
 --
 -- Индексы таблицы `skill`
@@ -1661,6 +1736,18 @@ ALTER TABLE `lessons`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=437;
 
 --
+-- AUTO_INCREMENT для таблицы `modules`
+--
+ALTER TABLE `modules`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `modules_count`
+--
+ALTER TABLE `modules_count`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT для таблицы `practice`
 --
 ALTER TABLE `practice`
@@ -1677,6 +1764,12 @@ ALTER TABLE `practice_lessons`
 --
 ALTER TABLE `rank`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT для таблицы `rnps`
+--
+ALTER TABLE `rnps`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT для таблицы `skill`
