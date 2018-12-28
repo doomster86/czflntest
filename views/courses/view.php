@@ -26,6 +26,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php
 
         echo $this->render('_form');
+    } else {
+        echo $this->render('_form_rnp', [
+            'UsersArray' => $UsersArray,
+        ]);
     }
     ?>
     <hr/>

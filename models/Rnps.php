@@ -9,7 +9,6 @@ use Yii;
  *
  * @property int $ID
  * @property int $course_id
- * @property int $module_id
  */
 class Rnps extends \yii\db\ActiveRecord
 {
@@ -27,8 +26,8 @@ class Rnps extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['course_id', 'module_id'], 'required'],
-            [['course_id', 'module_id'], 'integer'],
+            [['course_id'], 'required'],
+            [['course_id'], 'integer'],
         ];
     }
 
@@ -40,7 +39,6 @@ class Rnps extends \yii\db\ActiveRecord
         return [
             'ID' => 'ID',
             'course_id' => 'Course ID',
-            'module_id' => 'Module ID',
         ];
     }
 }

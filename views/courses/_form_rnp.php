@@ -5,6 +5,7 @@
  * Date: 21.12.2018
  * Time: 12:37
  */
+
 if (empty($request['modules_count'])) {
     $modules = $_POST['modules_count'];
 } else {
@@ -15,6 +16,7 @@ if (empty($request['courses_count'])) {
 } else {
     $courses = $request['courses_count'];
 }
+
 echo '<pre>';
 print_r($request);
 echo '</pre>';
@@ -22,8 +24,9 @@ echo '</pre>';
 <div class="form-group">
 <form action="" method="post">
     <input type="hidden" name="_csrf" value="<?= Yii::$app->request->getCsrfToken() ?>"/>
-    <input type="hidden" name="modules_count" class="modules" value="<?php echo $request['modules_count']; ?>"/>
-    <input type="hidden" name="courses_count" class="courses" value="<?php echo $request['courses_count']; ?>"/>
+    <input type="hidden" name="modules_count" class="modules" value="<?php echo $modules; ?>"/>
+    <input type="hidden" name="courses_count" class="courses" value="<?php echo $courses; ?>"/>
+    <input type="hidden" name="course_id" value="<?php echo $course_id; ?>"/>
     <div style="overflow-x:auto;">
         <table class="table table-bordered" id="rnp_table">
             <thead>
@@ -40,7 +43,7 @@ echo '</pre>';
                 <?php
                 for ($i = 0; $i < $modules; $i++) {
                     ?>
-                    <th class="week"><input type="number" name="weeks[]" class="form-control" min="1"></th>
+                    <th class="week"><input type="number" name="weeks[]" class="form-control" min="1" required></th>
                     <?php
                 }
                 ?>
@@ -50,12 +53,12 @@ echo '</pre>';
             <?php if (!$courses) { ?>
                 <tr>
                     <td style="vertical-align: middle;font-weight: bold;text-align: center;"><?php echo $k + 1; ?></td>
-                    <td><input type="text" name="courses[]" class="form-control"></td>
-                    <td><input type="number" name="zaplan[]" class="form-control"></td>
+                    <td><input type="text" name="courses[]" class="form-control" required></td>
+                    <td><input type="number" name="zaplan[]" class="form-control" min="0" required></td>
                     <?php
                     for ($j = 0; $j < $modules; $j++) {
                         ?>
-                        <td class="module"><input type="number" name="modules[0][<?php echo $j ?>]" class="form-control" min="0" style="min-width: 70px;">
+                        <td class="module"><input type="number" name="modules[0][<?php echo $j ?>]" class="form-control" min="0" style="min-width: 70px;" required>
                         </td>
                         <?php
                     }
@@ -76,12 +79,12 @@ echo '</pre>';
                 ?>
                 <tr>
                     <td style="vertical-align: middle;font-weight: bold;text-align: center;"><?php echo $k + 1; ?></td>
-                    <td><input type="text" name="courses[]" class="form-control"></td>
-                    <td><input type="number" name="zaplan[]" class="form-control"></td>
+                    <td><input type="text" name="courses[]" class="form-control" required></td>
+                    <td><input type="number" name="zaplan[]" class="form-control" min="0" required></td>
                     <?php
                     for ($j = 0; $j < $modules; $j++) {
                         ?>
-                        <td class="module"><input type="number" name="modules[<?php echo $k ?>][<?php echo $j ?>]" class="form-control" min="0" style="min-width: 70px;">
+                        <td class="module"><input type="number" name="modules[<?php echo $k ?>][<?php echo $j ?>]" class="form-control" min="0" style="min-width: 70px;" required>
                         </td>
                         <?php
                     }
@@ -122,18 +125,18 @@ echo '</pre>';
 <table>
     <thead class="copy-fields-week hide">
     <tr>
-        <th class="week"><input type="number" name="weeks[]" class="form-control" min="1"></th>
+        <th class="week"><input type="number" name="weeks[]" class="form-control" min="1" required></th>
     </tr>
     </thead>
     <tbody class="copy-fields-course hide">
     <tr>
         <td class="index" style="vertical-align: middle;font-weight: bold;text-align: center;"></td>
-        <td><input type="text" name="courses[]" class="form-control"></td>
-        <td><input type="number" name="zaplan[]" class="form-control"></td>
+        <td><input type="text" name="courses[]" class="form-control" required></td>
+        <td><input type="number" name="zaplan[]" class="form-control" min="0" required></td>
         <?php
         for ($i = 0; $i < $modules; $i++) {
             ?>
-            <td class="module"><input type="number" name="modules[][<?php echo $i ?>]" class="form-control" style="min-width: 70px;"></td>
+            <td class="module"><input type="number" name="modules[][<?php echo $i ?>]" class="form-control" style="min-width: 70px;" min="0" required></td>
             <?php
         }
         ?>
@@ -152,7 +155,7 @@ echo '</pre>';
 <table>
     <tbody class="copy-fields-module hide">
     <tr>
-        <td class="module"><input type="number" name="modules[]" class="form-control" style="min-width: 70px;"></td>
+        <td class="module"><input type="number" name="modules[]" class="form-control" style="min-width: 70px;" min="0" required></td>
     </tr>
     </tbody>
 </table>

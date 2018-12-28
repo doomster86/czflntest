@@ -16,6 +16,8 @@ use app\models\PracticeLessons;
 use app\models\PracticeLessonsSearch;
 use app\models\Rnps;
 use app\models\User;
+use app\models\Modules;
+use app\models\ModulesCount;
 
 use yii\web\NotFoundHttpException;
 
@@ -161,8 +163,10 @@ class CoursesController extends Controller {
             $practice = array_diff_key($practice, $selected_practice);
 
             $modelPracticeLessons = new PracticeLessons();
+            $modelRnps = new Rnps();
+            $modelModules = new Modules();
 
-            $RnpsArray = Rnps::find()->asArray()->select(['ID', 'course_id', 'module_id'])->where(['course_id' => $id])->all();
+            $RnpsArray = Rnps::find()->asArray()->select(['ID', 'course_id'])->where(['course_id' => $id])->one();
             $UsersArray = User::find()->asArray()->all();
 
             //end practice
@@ -234,11 +238,43 @@ class CoursesController extends Controller {
                     'test' => $selected_practice,
                     'status' => 'PAdded',
                 ]);
-            } else if (Yii::$app->request->post()) {
+            } else if ($modelRnps->load(Yii::$app->request->post(), '') && $modelRnps->validate()) {
+                $request = Yii::$app->request->post();
+                print_r($request);
+                if (!$RnpsArray) {
+                    $modelRnps->save();
+                    $rnp_id = $modelRnps->ID;
+                } else {
+                    $rnp_id = $RnpsArray['ID'];
+                }
+                for ($i = 0; $i < count($request['weeks']); $i++) {
+                    $modelModulesCount = new ModulesCount();
+                    $exist = $modelModulesCount::find()->asArray()->select(['ID', 'module'])->where(['module' => $i])->andWhere(['rnp_id' => $rnp_id])->one();
+                    if ($modelModulesCount->load(array(
+                        'rnp_id' => $rnp_id,
+                        'module' => $i,
+                        'count' => $request['weeks'][$i]
+                    ), '') && $modelModulesCount->validate()) {
+                        if ($exist) {
+                            Yii::$app->db->createCommand()
+                                ->update('modules_count', ['count' => $request['weeks'][$i]], 'ID = '. $exist['ID'])
+                                ->execute();
+                        } else
+                            $modelModulesCount->save();
+                    }
+                    unset($modelModulesCount);
+                }
+                for ($i = 0; $i < count($request['courses']); $i++) {
+                    //print_r(Modules::find()->asArray()->select(['ID', 'module'])->where(['rnp_id' => $rnp_id])->one());
+                }
+            }
+            else if (Yii::$app->request->post()) {
                 return $this->render('_form_rnp', [
                     'request' => Yii::$app->request->post(),
                     'RnpsArray' => $RnpsArray,
                     'UsersArray' => $UsersArray,
+                    'modelRnps' => $modelRnps,
+                    'course_id' => $id
                 ]);
             } else { //если зашли первый раз
                 return $this->render('view', [
@@ -254,7 +290,8 @@ class CoursesController extends Controller {
                     'test' => $selected_subjects,
                     'operation' => '',
                     'status' => '',
-                    'RnpsArray' => $RnpsArray
+                    'RnpsArray' => $RnpsArray,
+                    'UsersArray' => $UsersArray,
                 ]);
             }
         } else {

@@ -9,7 +9,7 @@ use Yii;
  *
  * @property int $ID
  * @property int $rnp_id
- * @property int $module_id
+ * @property int $module
  * @property int $count
  */
 class ModulesCount extends \yii\db\ActiveRecord
@@ -28,8 +28,8 @@ class ModulesCount extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['rnp_id', 'module_id', 'count'], 'required'],
-            [['rnp_id', 'module_id', 'count'], 'integer'],
+            [['rnp_id', 'module', 'count'], 'required'],
+            [['rnp_id', 'module', 'count'], 'integer'],
         ];
     }
 
@@ -41,7 +41,7 @@ class ModulesCount extends \yii\db\ActiveRecord
         return [
             'ID' => 'ID',
             'rnp_id' => 'Rnp ID',
-            'module_id' => 'Module ID',
+            'module' => 'Module',
             'count' => 'Count',
         ];
     }
