@@ -26,7 +26,7 @@ echo '</pre>';
     <input type="hidden" name="_csrf" value="<?= Yii::$app->request->getCsrfToken() ?>"/>
     <input type="hidden" name="modules_count" class="modules" value="<?php echo $modules; ?>"/>
     <input type="hidden" name="courses_count" class="courses" value="<?php echo $courses; ?>"/>
-    <input type="hidden" name="course_id" value="<?php echo $course_id; ?>"/>
+    <input type="hidden" name="prof_id" value="<?php echo $prof_id; ?>"/>
     <div style="overflow-x:auto;">
         <table class="table table-bordered" id="rnp_table">
             <thead>

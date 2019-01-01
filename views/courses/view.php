@@ -27,8 +27,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
         echo $this->render('_form');
     } else {
-        echo $this->render('_form_rnp', [
+        echo $this->render('_view_rnp', [
             'UsersArray' => $UsersArray,
+            'RnpsArray' => $RnpsArray,
+            'RnpSubjectsArray' => $RnpSubjectsArray
         ]);
     }
     ?>

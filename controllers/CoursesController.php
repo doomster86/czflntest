@@ -18,6 +18,7 @@ use app\models\Rnps;
 use app\models\User;
 use app\models\Modules;
 use app\models\ModulesCount;
+use app\models\RnpSubjects;
 
 use yii\web\NotFoundHttpException;
 
@@ -165,9 +166,11 @@ class CoursesController extends Controller {
             $modelPracticeLessons = new PracticeLessons();
             $modelRnps = new Rnps();
             $modelModules = new Modules();
+            $modelRnpSubjects = new RnpSubjects();
 
-            $RnpsArray = Rnps::find()->asArray()->select(['ID', 'course_id'])->where(['course_id' => $id])->one();
+            $RnpsArray = Rnps::find()->asArray()->select(['ID', 'prof_id'])->where(['prof_id' => $id])->one();
             $UsersArray = User::find()->asArray()->all();
+            $RnpSubjectsArray = RnpSubjects::find()->asArray()->where(['rnp_id' => $RnpsArray['ID']])->all();
 
             //end practice
 
@@ -240,7 +243,6 @@ class CoursesController extends Controller {
                 ]);
             } else if ($modelRnps->load(Yii::$app->request->post(), '') && $modelRnps->validate()) {
                 $request = Yii::$app->request->post();
-                print_r($request);
                 if (!$RnpsArray) {
                     $modelRnps->save();
                     $rnp_id = $modelRnps->ID;
@@ -267,6 +269,23 @@ class CoursesController extends Controller {
                 for ($i = 0; $i < count($request['courses']); $i++) {
                     //print_r(Modules::find()->asArray()->select(['ID', 'module'])->where(['rnp_id' => $rnp_id])->one());
                 }
+                echo $this->render('view', [
+                    'searchModel' => $searchModel,
+                    'searchModelPractice' => $searchModelPractice,
+                    'dataProvider' => $dataProvider,
+                    'dataProviderPractice' => $dataProviderPractice,
+                    'model' => $model,
+                    'modelLessons' => $modelLessons,
+                    'modelPracticeLessons' => $modelPracticeLessons,
+                    'subjects' => $subjects,
+                    'practice' => $practice,
+                    'test' => $selected_subjects,
+                    'operation' => '',
+                    'status' => '',
+                    'RnpsArray' => $RnpsArray,
+                    'UsersArray' => $UsersArray,
+                    'RnpSubjectsArray' => $RnpSubjectsArray
+                ]);
             }
             else if (Yii::$app->request->post()) {
                 return $this->render('_form_rnp', [
@@ -274,7 +293,7 @@ class CoursesController extends Controller {
                     'RnpsArray' => $RnpsArray,
                     'UsersArray' => $UsersArray,
                     'modelRnps' => $modelRnps,
-                    'course_id' => $id
+                    'prof_id' => $id
                 ]);
             } else { //если зашли первый раз
                 return $this->render('view', [
@@ -292,6 +311,7 @@ class CoursesController extends Controller {
                     'status' => '',
                     'RnpsArray' => $RnpsArray,
                     'UsersArray' => $UsersArray,
+                    'RnpSubjectsArray' => $RnpSubjectsArray
                 ]);
             }
         } else {

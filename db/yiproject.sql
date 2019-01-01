@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.7
+-- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Дек 28 2018 г., 18:44
--- Версия сервера: 5.6.38
--- Версия PHP: 7.2.0
+-- Время создания: Янв 01 2019 г., 21:07
+-- Версия сервера: 5.6.41
+-- Версия PHP: 7.2.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -689,9 +689,10 @@ CREATE TABLE `modules_count` (
 --
 
 INSERT INTO `modules_count` (`ID`, `rnp_id`, `module`, `count`) VALUES
-(1, 3, 0, 5),
-(2, 3, 1, 6),
-(3, 3, 2, 7);
+(1, 1, 0, 1),
+(2, 1, 1, 1),
+(3, 2, 0, 1),
+(4, 2, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -750,17 +751,36 @@ INSERT INTO `rank` (`ID`, `rank_name`) VALUES
 
 CREATE TABLE `rnps` (
   `ID` int(11) NOT NULL,
-  `course_id` int(11) NOT NULL
+  `prof_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `rnps`
 --
 
-INSERT INTO `rnps` (`ID`, `course_id`) VALUES
-(1, 191),
-(2, 197),
-(3, 198);
+INSERT INTO `rnps` (`ID`, `prof_id`) VALUES
+(1, 197);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `rnp_subjects`
+--
+
+CREATE TABLE `rnp_subjects` (
+  `ID` int(11) NOT NULL,
+  `rnp_id` int(11) NOT NULL,
+  `plan_all` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `rnp_subjects`
+--
+
+INSERT INTO `rnp_subjects` (`ID`, `rnp_id`, `plan_all`, `title`) VALUES
+(1, 1, 55, 'titel'),
+(2, 1, 2, 'suka');
 
 -- --------------------------------------------------------
 
@@ -1621,6 +1641,12 @@ ALTER TABLE `rnps`
   ADD PRIMARY KEY (`ID`) USING BTREE;
 
 --
+-- Индексы таблицы `rnp_subjects`
+--
+ALTER TABLE `rnp_subjects`
+  ADD PRIMARY KEY (`ID`);
+
+--
 -- Индексы таблицы `skill`
 --
 ALTER TABLE `skill`
@@ -1745,7 +1771,7 @@ ALTER TABLE `modules`
 -- AUTO_INCREMENT для таблицы `modules_count`
 --
 ALTER TABLE `modules_count`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT для таблицы `practice`
@@ -1769,7 +1795,13 @@ ALTER TABLE `rank`
 -- AUTO_INCREMENT для таблицы `rnps`
 --
 ALTER TABLE `rnps`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT для таблицы `rnp_subjects`
+--
+ALTER TABLE `rnp_subjects`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT для таблицы `skill`
