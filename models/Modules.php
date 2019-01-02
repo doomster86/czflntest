@@ -9,10 +9,10 @@ use Yii;
  *
  * @property int $ID
  * @property int $rnp_id
- * @property int $module
- * @property int $hours
- * @property int $count
  * @property int $subject_id
+ * @property int $column_num
+ * @property int $column_plan
+ * @property int $column_rep
  */
 class Modules extends \yii\db\ActiveRecord
 {
@@ -30,8 +30,8 @@ class Modules extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['rnp_id', 'module', 'hours', 'count', 'subject_id'], 'required'],
-            [['rnp_id', 'module', 'hours', 'count', 'subject_id'], 'integer'],
+            [['rnp_id', 'subject_id', 'column_num', 'column_plan', 'column_rep'], 'required'],
+            [['rnp_id', 'subject_id', 'column_num', 'column_plan', 'column_rep'], 'integer'],
         ];
     }
 
@@ -43,10 +43,10 @@ class Modules extends \yii\db\ActiveRecord
         return [
             'ID' => 'ID',
             'rnp_id' => 'Rnp ID',
-            'module' => 'Module',
-            'hours' => 'Hours',
-            'count' => 'Count',
             'subject_id' => 'Subject ID',
+            'column_num' => 'Column Num',
+            'column_plan' => 'Column Plan',
+            'column_rep' => 'Column Rep',
         ];
     }
 }

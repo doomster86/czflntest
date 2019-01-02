@@ -7,7 +7,8 @@
  */
 $prof_id = $RnpsArray['prof_id'];
 $courses = count($RnpSubjectsArray);
-$modules = count($RnpSubjectsArray);
+$modules = count($weeksArray);
+print_r($weeksArray);
 ?>
 <div class="form-group">
     <form action="" method="post">
@@ -31,7 +32,7 @@ $modules = count($RnpSubjectsArray);
                     <?php
                     for ($i = 0; $i < $modules; $i++) {
                         ?>
-                        <th class="week"><input type="number" name="weeks[]" class="form-control" min="1" required></th>
+                        <th class="week"><input type="number" name="weeks[]" value="<?php echo $weeksArray[$i]['column_rep'];?>" class="form-control" min="1" required></th>
                         <?php
                     }
                     ?>
@@ -43,7 +44,9 @@ $modules = count($RnpSubjectsArray);
                     ?>
                     <tr>
                         <td style="vertical-align: middle;font-weight: bold;text-align: center;"><?php echo $k + 1; ?></td>
-                        <td><input type="text" name="courses[]" value="<?php echo $RnpSubjectsArray[$k]['title']; ?>" class="form-control" required></td>
+                        <td><input type="text" name="courses[]" value="<?php echo $RnpSubjectsArray[$k]['title']; ?>" class="form-control" required>
+                            <input type="hidden" name="ids[]" value="<?php echo $RnpSubjectsArray[$k]['ID']; ?>" class="form-control" required>
+                        </td>
                         <td><input type="number" name="zaplan[]" value="<?php echo $RnpSubjectsArray[$k]['plan_all']; ?>" class="form-control" min="0" required></td>
                         <?php
                         for ($j = 0; $j < $modules; $j++) {

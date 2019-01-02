@@ -30,7 +30,8 @@ $this->params['breadcrumbs'][] = $this->title;
         echo $this->render('_view_rnp', [
             'UsersArray' => $UsersArray,
             'RnpsArray' => $RnpsArray,
-            'RnpSubjectsArray' => $RnpSubjectsArray
+            'RnpSubjectsArray' => $RnpSubjectsArray,
+            'weeksArray' => $weeksArray
         ]);
     }
     ?>

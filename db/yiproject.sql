@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Янв 01 2019 г., 21:07
+-- Время создания: Янв 02 2019 г., 19:05
 -- Версия сервера: 5.6.41
 -- Версия PHP: 7.2.10
 
@@ -665,34 +665,29 @@ CREATE TABLE `migration` (
 CREATE TABLE `modules` (
   `ID` int(11) NOT NULL,
   `rnp_id` int(11) NOT NULL,
-  `module` int(11) NOT NULL,
-  `hours` int(11) NOT NULL,
-  `count` int(11) NOT NULL,
-  `subject_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `modules_count`
---
-
-CREATE TABLE `modules_count` (
-  `ID` int(11) NOT NULL,
-  `rnp_id` int(11) NOT NULL,
-  `module` int(11) NOT NULL,
-  `count` int(11) NOT NULL
+  `subject_id` int(11) NOT NULL,
+  `column_num` int(11) NOT NULL,
+  `column_plan` int(11) NOT NULL,
+  `column_rep` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `modules_count`
+-- Дамп данных таблицы `modules`
 --
 
-INSERT INTO `modules_count` (`ID`, `rnp_id`, `module`, `count`) VALUES
-(1, 1, 0, 1),
-(2, 1, 1, 1),
-(3, 2, 0, 1),
-(4, 2, 1, 1);
+INSERT INTO `modules` (`ID`, `rnp_id`, `subject_id`, `column_num`, `column_plan`, `column_rep`) VALUES
+(1, 2, 2, 0, 1, 5),
+(2, 2, 2, 1, 2, 10),
+(3, 2, 2, 2, 3, 15),
+(4, 2, 2, 3, 4, 20),
+(5, 2, 2, 0, 37, 5),
+(6, 2, 2, 1, 6537, 10),
+(7, 2, 2, 2, 657, 15),
+(8, 2, 2, 3, 67, 20),
+(9, 2, 3, 0, 656, 5),
+(10, 2, 3, 1, 356, 10),
+(11, 2, 3, 2, 567, 15),
+(12, 2, 3, 3, 356, 20);
 
 -- --------------------------------------------------------
 
@@ -759,7 +754,8 @@ CREATE TABLE `rnps` (
 --
 
 INSERT INTO `rnps` (`ID`, `prof_id`) VALUES
-(1, 197);
+(1, 197),
+(2, 196);
 
 -- --------------------------------------------------------
 
@@ -779,8 +775,9 @@ CREATE TABLE `rnp_subjects` (
 --
 
 INSERT INTO `rnp_subjects` (`ID`, `rnp_id`, `plan_all`, `title`) VALUES
-(1, 1, 55, 'titel'),
-(2, 1, 2, 'suka');
+(1, 1, 55, 'tygndhn'),
+(2, 2, 20, 'fhjfghm'),
+(3, 2, 66, 'fgdnfgnsdfgn');
 
 -- --------------------------------------------------------
 
@@ -1609,12 +1606,6 @@ ALTER TABLE `modules`
   ADD PRIMARY KEY (`ID`);
 
 --
--- Индексы таблицы `modules_count`
---
-ALTER TABLE `modules_count`
-  ADD PRIMARY KEY (`ID`);
-
---
 -- Индексы таблицы `practice`
 --
 ALTER TABLE `practice`
@@ -1765,13 +1756,7 @@ ALTER TABLE `lessons`
 -- AUTO_INCREMENT для таблицы `modules`
 --
 ALTER TABLE `modules`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT для таблицы `modules_count`
---
-ALTER TABLE `modules_count`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT для таблицы `practice`
@@ -1795,13 +1780,13 @@ ALTER TABLE `rank`
 -- AUTO_INCREMENT для таблицы `rnps`
 --
 ALTER TABLE `rnps`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT для таблицы `rnp_subjects`
 --
 ALTER TABLE `rnp_subjects`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT для таблицы `skill`
