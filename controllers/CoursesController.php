@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Nakaz;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
@@ -172,7 +173,9 @@ class CoursesController extends Controller {
             $RnpSubjectsArray = RnpSubjects::find()->asArray()->where(['rnp_id' => $RnpsArray['ID']])->all();
             $oneSubjectsArray = RnpSubjects::find()->asArray()->where(['rnp_id' => $RnpsArray['ID']])->one();
             $weeksArray = Modules::find()->asArray()->where(['subject_id' => $oneSubjectsArray['ID']])->all();
+            $nakazArray = Nakaz::find()->asArray()->where(['subject_id' => $oneSubjectsArray['ID']])->all();
             $modulesArray = Modules::find()->asArray()->where(['rnp_id' => $RnpsArray['ID']])->all();
+            $teachersArray = Nakaz::find()->asArray()->where(['rnp_id' => $RnpsArray['ID']])->all();
             //end practice
 
             if ($modelLessons->load(Yii::$app->request->post()) && $modelLessons->validate()) { //если нажата зеленая кнопка
@@ -292,13 +295,35 @@ class CoursesController extends Controller {
                         }
                         unset($modelModules);
                     }
+                    for ($g = 0; $g < count($request['nakaz']); $g++) {
+                        $modelNakaz = new Nakaz();
+                        $exist = $modelNakaz::find()->asArray()->select(['ID'])->where(['column_num' => $g])->andWhere(['subject_id' => $subject_id])->one();
+                        if ($modelNakaz->load(array(
+                                'teacher_id' => $request['teacher'][$i][$g],
+                                'subject_id' => $subject_id,
+                                'rnp_id' => $rnp_id,
+                                'column_num' => $g,
+                                'type' => ($g?2:1),
+                                'title' => $request['nakaz'][$g]
+                            ), '') && $modelNakaz->validate()) {
+                            if ($exist) {
+                                Yii::$app->db->createCommand()
+                                    ->update('nakaz', ['teacher_id' => $request['teacher'][$i][$g], 'title' => $request['nakaz'][$g]], 'ID = ' . $exist['ID'])
+                                    ->execute();
+                            } else {
+                                $modelNakaz->save();
+                            }
+                        }
+                        unset($modelNakaz);
+                    }
                     unset($modelRnpSubjects);
                 }
-
+                //return $this->redirect('/courses/'. $id);
                 $RnpsArray = Rnps::find()->asArray()->select(['ID', 'prof_id'])->where(['prof_id' => $id])->one();
                 $RnpSubjectsArray = RnpSubjects::find()->asArray()->where(['rnp_id' => $RnpsArray['ID']])->all();
                 $oneSubjectsArray = RnpSubjects::find()->asArray()->where(['rnp_id' => $RnpsArray['ID']])->one();
                 $weeksArray = Modules::find()->asArray()->where(['subject_id' => $oneSubjectsArray['ID']])->all();
+                $nakazArray = Nakaz::find()->asArray()->where(['subject_id' => $oneSubjectsArray['ID']])->all();
                 $modulesArray = Modules::find()->asArray()->where(['rnp_id' => $RnpsArray['ID']])->all();
                 echo $this->render('view', [
                     'searchModel' => $searchModel,
@@ -317,7 +342,9 @@ class CoursesController extends Controller {
                     'UsersArray' => $UsersArray,
                     'RnpSubjectsArray' => $RnpSubjectsArray,
                     'weeksArray' => $weeksArray,
-                    'modulesArray' => $modulesArray
+                    'modulesArray' => $modulesArray,
+                    'nakazArray' => $nakazArray,
+                    'teachersArray' => $teachersArray
                 ]);
             }
             else if (Yii::$app->request->post()) {
@@ -346,7 +373,9 @@ class CoursesController extends Controller {
                     'UsersArray' => $UsersArray,
                     'RnpSubjectsArray' => $RnpSubjectsArray,
                     'weeksArray' => $weeksArray,
-                    'modulesArray' => $modulesArray
+                    'modulesArray' => $modulesArray,
+                    'nakazArray' => $nakazArray,
+                    'teachersArray' => $teachersArray
                 ]);
             }
         } else {

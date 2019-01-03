@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.7.7
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Янв 02 2019 г., 19:05
--- Версия сервера: 5.6.41
--- Версия PHP: 7.2.10
+-- Время создания: Янв 03 2019 г., 18:39
+-- Версия сервера: 5.6.38
+-- Версия PHP: 7.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -676,18 +676,36 @@ CREATE TABLE `modules` (
 --
 
 INSERT INTO `modules` (`ID`, `rnp_id`, `subject_id`, `column_num`, `column_plan`, `column_rep`) VALUES
-(1, 2, 2, 0, 1, 5),
-(2, 2, 2, 1, 2, 10),
-(3, 2, 2, 2, 3, 15),
-(4, 2, 2, 3, 4, 20),
-(5, 2, 2, 0, 37, 5),
-(6, 2, 2, 1, 6537, 10),
-(7, 2, 2, 2, 657, 15),
-(8, 2, 2, 3, 67, 20),
-(9, 2, 3, 0, 656, 5),
-(10, 2, 3, 1, 356, 10),
-(11, 2, 3, 2, 567, 15),
-(12, 2, 3, 3, 356, 20);
+(1, 1, 1, 0, 2, 5),
+(2, 1, 1, 1, 2, 5),
+(3, 1, 2, 0, 4, 5),
+(4, 1, 2, 1, 4, 5);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `nakaz`
+--
+
+CREATE TABLE `nakaz` (
+  `ID` int(11) NOT NULL,
+  `teacher_id` int(11) NOT NULL,
+  `subject_id` int(11) NOT NULL,
+  `rnp_id` int(11) NOT NULL,
+  `column_num` int(11) NOT NULL,
+  `type` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `nakaz`
+--
+
+INSERT INTO `nakaz` (`ID`, `teacher_id`, `subject_id`, `rnp_id`, `column_num`, `type`, `title`) VALUES
+(1, 11, 1, 1, 0, 1, 'Наказ про педнавантаження №***-Н від **.**.**'),
+(2, 13, 1, 1, 1, 2, 'Зміни 1 №***-Н від **.**.**  до наказу №***-Н від **.**.**'),
+(3, 11, 2, 1, 0, 1, 'Наказ про педнавантаження №***-Н від **.**.**'),
+(4, 28, 2, 1, 1, 2, 'Зміни 1 №***-Н від **.**.**  до наказу №***-Н від **.**.**');
 
 -- --------------------------------------------------------
 
@@ -754,8 +772,7 @@ CREATE TABLE `rnps` (
 --
 
 INSERT INTO `rnps` (`ID`, `prof_id`) VALUES
-(1, 197),
-(2, 196);
+(1, 197);
 
 -- --------------------------------------------------------
 
@@ -775,9 +792,8 @@ CREATE TABLE `rnp_subjects` (
 --
 
 INSERT INTO `rnp_subjects` (`ID`, `rnp_id`, `plan_all`, `title`) VALUES
-(1, 1, 55, 'tygndhn'),
-(2, 2, 20, 'fhjfghm'),
-(3, 2, 66, 'fgdnfgnsdfgn');
+(1, 1, 20, 'test1'),
+(2, 1, 40, 'test2');
 
 -- --------------------------------------------------------
 
@@ -1606,6 +1622,12 @@ ALTER TABLE `modules`
   ADD PRIMARY KEY (`ID`);
 
 --
+-- Индексы таблицы `nakaz`
+--
+ALTER TABLE `nakaz`
+  ADD PRIMARY KEY (`ID`);
+
+--
 -- Индексы таблицы `practice`
 --
 ALTER TABLE `practice`
@@ -1756,7 +1778,13 @@ ALTER TABLE `lessons`
 -- AUTO_INCREMENT для таблицы `modules`
 --
 ALTER TABLE `modules`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT для таблицы `nakaz`
+--
+ALTER TABLE `nakaz`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT для таблицы `practice`
@@ -1780,13 +1808,13 @@ ALTER TABLE `rank`
 -- AUTO_INCREMENT для таблицы `rnps`
 --
 ALTER TABLE `rnps`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT для таблицы `rnp_subjects`
 --
 ALTER TABLE `rnp_subjects`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT для таблицы `skill`

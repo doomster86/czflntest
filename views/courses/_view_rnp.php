@@ -8,6 +8,8 @@
 $prof_id = $RnpsArray['prof_id'];
 $courses = count($RnpSubjectsArray);
 $modules = count($weeksArray);
+$nakazy = count($nakazArray);
+print_r($teachersArray);
 ?>
 <div class="form-group">
     <form action="" method="post">
@@ -24,7 +26,13 @@ $modules = count($weeksArray);
                     <th rowspan="2">Кількість годин (заплановано)</th>
                     <th colspan="<?php echo $modules; ?>" id="weeks">Кількість тижнів</th>
                     <th rowspan="2">Всього за категорію (фактично)</th>
-                    <th rowspan="2" class="nakaz"><textarea rows="3" name="text">Наказ про педнавантаження №***-Н від **.**.**</textarea>
+                    <?php
+                    for ($i=0; $i < $nakazy; $i++) {
+                       ?>
+                    <th rowspan="2" class="nakaz"><textarea rows="3" name="nakaz[]"><?php echo $nakazArray[$i]['title'];?></textarea>
+                    <?php
+                    }
+                    ?>
                     </th>
                 </tr>
                 <tr>
@@ -40,6 +48,7 @@ $modules = count($weeksArray);
                 <tbody>
                 <?php
                 for ($k = 0; $k < $courses; $k++) {
+                    $fact = 0;
                     ?>
                     <tr>
                         <td style="vertical-align: middle;font-weight: bold;text-align: center;"><?php echo $k + 1; ?></td>
@@ -52,6 +61,7 @@ $modules = count($weeksArray);
                             foreach ($modulesArray as $module) {
                                 if ($module['subject_id'] == $RnpSubjectsArray[$k]['ID'] && $module['column_num'] == $j) {
                                     $value = $module['column_plan'];
+                                    $fact += $module['column_plan'] * $module['column_rep'];
                                 }
                             }
                             ?>
@@ -60,15 +70,21 @@ $modules = count($weeksArray);
                             <?php
                         }
                         ?>
-                        <td>?</td>
-                        <td class="teacher"><select class="form-control">
-                                <option value="">Оберіть викладача</option>
-                                <?php
-                                foreach ($UsersArray as $user) {
-                                    echo '<option value="' . $user['id'] . '">' . $user['lastname'] . ' ' . mb_substr($user['firstname'], 0, 1) . '.' . mb_substr($user['middlename'], 0, 1) . '.' . '</option>';
-                                }
-                                ?>
-                            </select></td>
+                        <td><input type="number" value="<?php echo $fact; ?>" class="form-control" disabled></td>
+                        <?php
+                        for ($p=0; $p < $nakazy; $p++) {
+                        ?>
+                            <td class="teacher"><select class="form-control" name="teacher[<?php echo $k ?>][<?php echo $p ?>]" required>
+                                    <option value="">Оберіть викладача</option>
+                                    <?php
+                                    foreach ($UsersArray as $user) {
+                                        echo '<option value="' . $user['id'] . '"'.($teachersArray[$p + $k]['teacher_id']==$user['id']?' selected':'').'>' . $user['lastname'] . ' ' . mb_substr($user['firstname'], 0, 1) . '.' . mb_substr($user['middlename'], 0, 1) . '.' . '</option>';
+                                    }
+                                    ?>
+                                </select></td>
+                            <?php
+                            }
+                            ?>
                     </tr>
                 <?php } ?>
                 </tbody>
@@ -112,14 +128,20 @@ $modules = count($weeksArray);
             }
             ?>
             <td>?</td>
-            <td class="teacher"><select class="form-control">
-                    <option value="">Оберіть викладача</option>
-                    <?php
-                    foreach ($UsersArray as $user) {
-                        echo '<option value="' . $user['id'] . '">' . $user['lastname'] . ' ' . mb_substr($user['firstname'], 0, 1) . '.' . mb_substr($user['middlename'], 0, 1) . '.' . '</option>';
-                    }
-                    ?>
-                </select></td>
+            <?php
+            for ($p=0; $p < $nakazy; $p++) {
+                ?>
+                <td class="teacher"><select class="form-control" name="teacher[][<?php echo $p ?>]" required>
+                        <option value="">Оберіть викладача</option>
+                        <?php
+                        foreach ($UsersArray as $user) {
+                            echo '<option value="' . $user['id'] . '">' . $user['lastname'] . ' ' . mb_substr($user['firstname'], 0, 1) . '.' . mb_substr($user['middlename'], 0, 1) . '.' . '</option>';
+                        }
+                        ?>
+                    </select></td>
+                <?php
+            }
+            ?>
         </tr>
         </tbody>
     </table>
@@ -133,13 +155,13 @@ $modules = count($weeksArray);
     <table>
         <thead class="copy-fields-nakaz hide">
         <tr>
-            <th rowspan="2" class="nakaz"><textarea rows="3" name="text">Зміни 1 №***-Н від **.**.**  до наказу №***-Н від **.**.**</textarea>
+            <th rowspan="2" class="nakaz"><textarea rows="3" name="nakaz[]">Зміни 1 №***-Н від **.**.**  до наказу №***-Н від **.**.**</textarea>
             </th>
         </tr>
         </thead>
         <tbody class="copy-fields-teacher hide">
         <tr>
-            <td class="teacher"><select class="form-control">
+            <td class="teacher"><select class="form-control" name="teacher[][]" required>
                     <option value="">Оберіть викладача</option>
                     <?php
                     foreach ($UsersArray as $user) {

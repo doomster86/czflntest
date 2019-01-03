@@ -33,7 +33,7 @@ if (empty($request['courses_count'])) {
                 <th rowspan="2">Кількість годин (заплановано)</th>
                 <th colspan="<?php echo $modules; ?>" id="weeks">Кількість тижнів</th>
                 <th rowspan="2">Всього за категорію (фактично)</th>
-                <th rowspan="2" class="nakaz"><textarea rows="3" name="text">Наказ про педнавантаження №***-Н від **.**.**</textarea>
+                <th rowspan="2" class="nakaz"><textarea rows="3" name="nakaz[]">Наказ про педнавантаження №***-Н від **.**.**</textarea>
                 </th>
             </tr>
             <tr>
@@ -61,7 +61,7 @@ if (empty($request['courses_count'])) {
                     }
                     ?>
                     <td>?</td>
-                    <td class="teacher"><select class="form-control">
+                    <td class="teacher"><select class="form-control" name="teacher[0][0]" required>
                             <option value="">Оберіть викладача</option>
                             <?php
                             foreach ($UsersArray as $user) {
@@ -87,7 +87,7 @@ if (empty($request['courses_count'])) {
                     }
                     ?>
                     <td>?</td>
-                    <td class="teacher"><select class="form-control">
+                    <td class="teacher"><select class="form-control" required>
                             <option value="">Оберіть викладача</option>
                             <?php
                             foreach ($UsersArray as $user) {
@@ -138,7 +138,7 @@ if (empty($request['courses_count'])) {
         }
         ?>
         <td>?</td>
-        <td class="teacher"><select class="form-control">
+        <td class="teacher"><select class="form-control" required>
                 <option value="">Оберіть викладача</option>
                 <?php
                 foreach ($UsersArray as $user) {
@@ -159,13 +159,13 @@ if (empty($request['courses_count'])) {
 <table>
     <thead class="copy-fields-nakaz hide">
     <tr>
-        <th rowspan="2" class="nakaz"><textarea rows="3" name="text">Зміни 1 №***-Н від **.**.**  до наказу №***-Н від **.**.**</textarea>
+        <th rowspan="2" class="nakaz"><textarea rows="3" name="nakaz[]">Зміни 1 №***-Н від **.**.**  до наказу №***-Н від **.**.**</textarea>
         </th>
     </tr>
     </thead>
     <tbody class="copy-fields-teacher hide">
     <tr>
-        <td class="teacher"><select class="form-control">
+        <td class="teacher"><select class="form-control" name="modules[]" required>
                 <option value="">Оберіть викладача</option>
                 <?php
                 foreach ($UsersArray as $user) {
