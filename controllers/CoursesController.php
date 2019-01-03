@@ -172,6 +172,7 @@ class CoursesController extends Controller {
             $RnpSubjectsArray = RnpSubjects::find()->asArray()->where(['rnp_id' => $RnpsArray['ID']])->all();
             $oneSubjectsArray = RnpSubjects::find()->asArray()->where(['rnp_id' => $RnpsArray['ID']])->one();
             $weeksArray = Modules::find()->asArray()->where(['subject_id' => $oneSubjectsArray['ID']])->all();
+            $modulesArray = Modules::find()->asArray()->where(['rnp_id' => $RnpsArray['ID']])->all();
             //end practice
 
             if ($modelLessons->load(Yii::$app->request->post()) && $modelLessons->validate()) { //если нажата зеленая кнопка
@@ -273,6 +274,7 @@ class CoursesController extends Controller {
                     for ($h = 0; $h < count($request['weeks']); $h++) {
                         //print_r($request['weeks'][$h]);
                         $modelModules = new Modules();
+                        $exist = $modelModules::find()->asArray()->select(['ID', 'rnp_id'])->where(['rnp_id' => $rnp_id])->andWhere(['column_num' => $h])->andWhere(['subject_id' => $subject_id])->one();
                         if ($modelModules->load(array(
                                 'rnp_id' => $rnp_id,
                                 'subject_id' => $subject_id,
@@ -280,18 +282,24 @@ class CoursesController extends Controller {
                                 'column_plan' => $request['modules'][$i][$h],
                                 'column_rep' => $request['weeks'][$h]
                             ), '') && $modelModules->validate()) {
-                            $modelModules->save();
+                            if ($exist) {
+                                Yii::$app->db->createCommand()
+                                    ->update('modules', ['column_plan' => $request['modules'][$i][$h], 'column_rep' => $request['weeks'][$h]], 'ID = ' . $exist['ID'])
+                                    ->execute();
+                            } else {
+                                $modelModules->save();
+                            }
                         }
                         unset($modelModules);
                     }
                     unset($modelRnpSubjects);
-                    print_r($request);
                 }
 
                 $RnpsArray = Rnps::find()->asArray()->select(['ID', 'prof_id'])->where(['prof_id' => $id])->one();
                 $RnpSubjectsArray = RnpSubjects::find()->asArray()->where(['rnp_id' => $RnpsArray['ID']])->all();
                 $oneSubjectsArray = RnpSubjects::find()->asArray()->where(['rnp_id' => $RnpsArray['ID']])->one();
                 $weeksArray = Modules::find()->asArray()->where(['subject_id' => $oneSubjectsArray['ID']])->all();
+                $modulesArray = Modules::find()->asArray()->where(['rnp_id' => $RnpsArray['ID']])->all();
                 echo $this->render('view', [
                     'searchModel' => $searchModel,
                     'searchModelPractice' => $searchModelPractice,
@@ -308,7 +316,8 @@ class CoursesController extends Controller {
                     'RnpsArray' => $RnpsArray,
                     'UsersArray' => $UsersArray,
                     'RnpSubjectsArray' => $RnpSubjectsArray,
-                    'weeksArray' => $weeksArray
+                    'weeksArray' => $weeksArray,
+                    'modulesArray' => $modulesArray
                 ]);
             }
             else if (Yii::$app->request->post()) {
@@ -336,7 +345,8 @@ class CoursesController extends Controller {
                     'RnpsArray' => $RnpsArray,
                     'UsersArray' => $UsersArray,
                     'RnpSubjectsArray' => $RnpSubjectsArray,
-                    'weeksArray' => $weeksArray
+                    'weeksArray' => $weeksArray,
+                    'modulesArray' => $modulesArray
                 ]);
             }
         } else {

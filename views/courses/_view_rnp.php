@@ -8,7 +8,6 @@
 $prof_id = $RnpsArray['prof_id'];
 $courses = count($RnpSubjectsArray);
 $modules = count($weeksArray);
-print_r($weeksArray);
 ?>
 <div class="form-group">
     <form action="" method="post">
@@ -50,8 +49,13 @@ print_r($weeksArray);
                         <td><input type="number" name="zaplan[]" value="<?php echo $RnpSubjectsArray[$k]['plan_all']; ?>" class="form-control" min="0" required></td>
                         <?php
                         for ($j = 0; $j < $modules; $j++) {
+                            foreach ($modulesArray as $module) {
+                                if ($module['subject_id'] == $RnpSubjectsArray[$k]['ID'] && $module['column_num'] == $j) {
+                                    $value = $module['column_plan'];
+                                }
+                            }
                             ?>
-                            <td class="module"><input type="number" name="modules[<?php echo $k ?>][<?php echo $j ?>]" class="form-control" min="0" style="min-width: 70px;" required>
+                            <td class="module"><input type="number" name="modules[<?php echo $k ?>][<?php echo $j ?>]" value="<?php echo $value; ?>" class="form-control" min="0" style="min-width: 70px;" required>
                             </td>
                             <?php
                         }

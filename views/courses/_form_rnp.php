@@ -17,9 +17,6 @@ if (empty($request['courses_count'])) {
     $courses = $request['courses_count'];
 }
 
-echo '<pre>';
-print_r($request);
-echo '</pre>';
 ?>
 <div class="form-group">
 <form action="" method="post">

@@ -31,7 +31,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'UsersArray' => $UsersArray,
             'RnpsArray' => $RnpsArray,
             'RnpSubjectsArray' => $RnpSubjectsArray,
-            'weeksArray' => $weeksArray
+            'weeksArray' => $weeksArray,
+            'modulesArray' => $modulesArray,
         ]);
     }
     ?>
