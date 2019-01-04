@@ -9,7 +9,6 @@ $prof_id = $RnpsArray['prof_id'];
 $courses = count($RnpSubjectsArray);
 $modules = count($weeksArray);
 $nakazy = count($nakazArray);
-print_r($teachersArray);
 ?>
 <div class="form-group">
     <form action="" method="post">
@@ -47,6 +46,7 @@ print_r($teachersArray);
                 </thead>
                 <tbody>
                 <?php
+                $teacher = 0;
                 for ($k = 0; $k < $courses; $k++) {
                     $fact = 0;
                     ?>
@@ -73,16 +73,22 @@ print_r($teachersArray);
                         <td><input type="number" value="<?php echo $fact; ?>" class="form-control" disabled></td>
                         <?php
                         for ($p=0; $p < $nakazy; $p++) {
+                            foreach ($teachersArray as $teacher) {
+                                if ($teacher['subject_id'] == $RnpSubjectsArray[$k]['ID'] && $teacher['column_num'] == $p) {
+                                    $value = $teacher['teacher_id'];
+                                }
+                            }
                         ?>
                             <td class="teacher"><select class="form-control" name="teacher[<?php echo $k ?>][<?php echo $p ?>]" required>
                                     <option value="">Оберіть викладача</option>
                                     <?php
                                     foreach ($UsersArray as $user) {
-                                        echo '<option value="' . $user['id'] . '"'.($teachersArray[$p + $k]['teacher_id']==$user['id']?' selected':'').'>' . $user['lastname'] . ' ' . mb_substr($user['firstname'], 0, 1) . '.' . mb_substr($user['middlename'], 0, 1) . '.' . '</option>';
+                                        echo '<option value="' . $user['id'] . '"'.($value==$user['id']?' selected':'').'>' . $user['lastname'] . ' ' . mb_substr($user['firstname'], 0, 1) . '.' . mb_substr($user['middlename'], 0, 1) . '.' . '</option>';
                                     }
                                     ?>
                                 </select></td>
                             <?php
+                            $teacher++;
                             }
                             ?>
                     </tr>

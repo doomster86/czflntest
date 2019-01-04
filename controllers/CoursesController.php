@@ -297,7 +297,7 @@ class CoursesController extends Controller {
                     }
                     for ($g = 0; $g < count($request['nakaz']); $g++) {
                         $modelNakaz = new Nakaz();
-                        $exist = $modelNakaz::find()->asArray()->select(['ID'])->where(['column_num' => $g])->andWhere(['subject_id' => $subject_id])->one();
+                        $exist = $modelNakaz::find()->asArray()->select(['ID'])->where(['rnp_id' => $rnp_id])->where(['column_num' => $g])->andWhere(['subject_id' => $subject_id])->one();
                         if ($modelNakaz->load(array(
                                 'teacher_id' => $request['teacher'][$i][$g],
                                 'subject_id' => $subject_id,
@@ -318,34 +318,7 @@ class CoursesController extends Controller {
                     }
                     unset($modelRnpSubjects);
                 }
-                //return $this->redirect('/courses/'. $id);
-                $RnpsArray = Rnps::find()->asArray()->select(['ID', 'prof_id'])->where(['prof_id' => $id])->one();
-                $RnpSubjectsArray = RnpSubjects::find()->asArray()->where(['rnp_id' => $RnpsArray['ID']])->all();
-                $oneSubjectsArray = RnpSubjects::find()->asArray()->where(['rnp_id' => $RnpsArray['ID']])->one();
-                $weeksArray = Modules::find()->asArray()->where(['subject_id' => $oneSubjectsArray['ID']])->all();
-                $nakazArray = Nakaz::find()->asArray()->where(['subject_id' => $oneSubjectsArray['ID']])->all();
-                $modulesArray = Modules::find()->asArray()->where(['rnp_id' => $RnpsArray['ID']])->all();
-                echo $this->render('view', [
-                    'searchModel' => $searchModel,
-                    'searchModelPractice' => $searchModelPractice,
-                    'dataProvider' => $dataProvider,
-                    'dataProviderPractice' => $dataProviderPractice,
-                    'model' => $model,
-                    'modelLessons' => $modelLessons,
-                    'modelPracticeLessons' => $modelPracticeLessons,
-                    'subjects' => $subjects,
-                    'practice' => $practice,
-                    'test' => $selected_subjects,
-                    'operation' => '',
-                    'status' => '',
-                    'RnpsArray' => $RnpsArray,
-                    'UsersArray' => $UsersArray,
-                    'RnpSubjectsArray' => $RnpSubjectsArray,
-                    'weeksArray' => $weeksArray,
-                    'modulesArray' => $modulesArray,
-                    'nakazArray' => $nakazArray,
-                    'teachersArray' => $teachersArray
-                ]);
+                return $this->redirect('/courses/'. $id);
             }
             else if (Yii::$app->request->post()) {
                 return $this->render('_form_rnp', [
