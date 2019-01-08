@@ -255,7 +255,10 @@ class CoursesController extends Controller {
                 }
                 for ($i = 0; $i < count($request['courses']); $i++) {
                     $modelRnpSubjects = new RnpSubjects();
-                    $exist = $modelRnpSubjects::find()->asArray()->select(['ID', 'rnp_id'])->where(['rnp_id' => $rnp_id])->andWhere(['ID' => $request['ids'][$i]])->one();
+                    $exist = false;
+                    if (!empty($request['ids'][$i])){
+                        $exist = $modelRnpSubjects::find()->asArray()->select(['ID', 'rnp_id'])->where(['rnp_id' => $rnp_id])->andWhere(['ID' => $request['ids'][$i]])->one();
+                    }
                     if ($modelRnpSubjects->load(array(
                             'rnp_id' => $rnp_id,
                             'plan_all' => $request['zaplan'][$i],

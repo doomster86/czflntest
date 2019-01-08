@@ -6,6 +6,7 @@
  * Time: 12:37
  */
 
+$courses = 1;
 if (!empty($request['modules_count'])) {
     $modules = $request['modules_count'];
 }
@@ -44,7 +45,7 @@ if (!empty($request['courses_count'])) {
             <tbody>
             <?php if (!$courses) { ?>
                 <tr>
-                    <td style="vertical-align: middle;font-weight: bold;text-align: center;"><?php echo $k + 1; ?></td>
+                    <td style="vertical-align: middle;font-weight: bold;text-align: center;">1</td>
                     <td><input type="text" name="courses[]" class="form-control" required></td>
                     <td><input type="number" name="zaplan[]" class="form-control" min="0" required></td>
                     <?php
@@ -82,7 +83,7 @@ if (!empty($request['courses_count'])) {
                     }
                     ?>
                     <td>?</td>
-                    <td class="teacher"><select class="form-control" required>
+                    <td class="teacher"><select class="form-control" name="teacher[0][0]" required>
                             <option value="">Оберіть викладача</option>
                             <?php
                             foreach ($UsersArray as $user) {
