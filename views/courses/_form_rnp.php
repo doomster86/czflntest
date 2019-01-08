@@ -6,17 +6,12 @@
  * Time: 12:37
  */
 
-if (empty($request['modules_count'])) {
-    $modules = $_POST['modules_count'];
-} else {
+if (!empty($request['modules_count'])) {
     $modules = $request['modules_count'];
 }
-if (empty($request['courses_count'])) {
-    $courses = $_POST['courses_count'];
-} else {
+if (!empty($request['courses_count'])) {
     $courses = $request['courses_count'];
 }
-
 ?>
 <div class="form-group">
 <form action="" method="post">
