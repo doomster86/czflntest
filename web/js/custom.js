@@ -50,4 +50,12 @@ $(document).ready(function () {
             cnt++;
         });
     });
+    $("body").on("click", ".remove-module", function () {
+        var coolspan = $('#weeks').prop("colSpan");
+        $('#weeks').prop("colSpan", coolspan - 1);
+        $('#rnp_table .week').eq( $(this).index('.remove-module') + 1).remove();
+        $("#rnp_table tbody tr, .copy-fields-course").each(function () {
+            $(this).find('.module').eq( $(this).index('.remove-module') + 1).remove();
+            });
+    });
 });

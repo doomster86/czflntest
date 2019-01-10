@@ -96,7 +96,12 @@ if (!empty($request['courses_count'])) {
 <table>
     <thead class="copy-fields-week hide">
     <tr>
-        <th class="week"><input type="number" name="weeks[]" class="form-control" min="1" required></th>
+        <th class="week">
+            <button class="btn btn-danger form-control remove-module" style="margin-bottom: 9px;" type="button"><i
+                        class="glyphicon glyphicon-remove"></i> Видалити
+            </button>
+            <input type="number" name="weeks[]" class="form-control" min="1" required>
+        </th>
     </tr>
     </thead>
     <tbody class="copy-fields-course hide">
