@@ -33,12 +33,20 @@ $nakazy = count($nakazArray);
                     }
                     ?>
                     </th>
+                    <th rowspan="2"></th>
                 </tr>
                 <tr>
                     <?php
                     for ($i = 0; $i < $modules; $i++) {
                         ?>
-                        <th class="week"><input type="number" name="weeks[]" value="<?php echo $weeksArray[$i]['column_rep'];?>" class="form-control" min="1" required></th>
+                        <th class="week">
+                            <?php if ($i) { ?>
+                                <button class="btn btn-danger form-control" style="margin-bottom: 9px;" type="button" data-toggle="modal" data-target="#module_del_<?php echo $i; ?>"><i
+                                            class="glyphicon glyphicon-remove"></i> Видалити
+                                </button>
+                            <?php } ?>
+                            <input type="number" name="weeks[]" value="<?php echo $weeksArray[$i]['column_rep'];?>" class="form-control" min="1" required>
+                        </th>
                         <?php
                     }
                     ?>
@@ -91,11 +99,66 @@ $nakazy = count($nakazArray);
                             $teacher++;
                             }
                             ?>
+                        <td>
+                            <?php if ($k) { ?>
+                            <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#course_del_<?php echo $RnpSubjectsArray[$k]['ID']; ?>"><i
+                                        class="glyphicon glyphicon-remove"></i> Видалити
+                            </button>
+                            <?php } ?>
+                        </td>
                     </tr>
+                    <!-- Modal -->
+                    <div class="modal fade" id="course_del_<?php echo $RnpSubjectsArray[$k]['ID']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <h4 class="modal-title" id="exampleModalLongTitle">Видалення предмету</h4>
+                                </div>
+                                <div class="modal-body">
+                                    Ви дійсно хочете видалити предмет?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
+                                    <button type="submit" name="deletesubject" value="<?php echo $RnpSubjectsArray[$k]['ID']; ?>" class="btn btn-primary">Видалити</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 <?php } ?>
                 </tbody>
             </table>
         </div>
+        <?php
+        for ($i = 0; $i < $modules; $i++) {
+            ?>
+            <!-- Modal -->
+            <div class="modal fade" id="module_del_<?php echo $i; ?>" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title" id="exampleModalLongTitle">Видалення тижня</h4>
+                        </div>
+                        <div class="modal-body">
+                            Ви дійсно хочете видалити тиждень?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
+                            <button type="submit" name="deletemodule" value="<?php echo $i; ?>" class="btn btn-primary">
+                                Видалити
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>                <?php
+        }
+        ?>
         <div class="form-group">
             <button class="btn btn-success add-more-course" type="button"><i class="glyphicon glyphicon-plus"></i> Додати
                 предмет
@@ -148,6 +211,11 @@ $nakazy = count($nakazArray);
                 <?php
             }
             ?>
+            <td>
+                <button class="btn btn-danger remove-course" type="button"><i
+                            class="glyphicon glyphicon-remove"></i> Видалити
+                </button>
+            </td>
         </tr>
         </tbody>
     </table>

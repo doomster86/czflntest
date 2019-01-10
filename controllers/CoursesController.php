@@ -247,6 +247,15 @@ class CoursesController extends Controller {
                 ]);
             } else if ($modelRnps->load(Yii::$app->request->post(), '') && $modelRnps->validate()) {
                 $request = Yii::$app->request->post();
+                if (!empty($request['deletesubject'])) {
+                    $model = RnpSubjects::find()->where(['ID' => $request['deletesubject']])->one();
+                    if ($model) {
+                        Nakaz::deleteAll(['rnp_id' => $RnpsArray['ID'], 'subject_id' => $request['deletesubject']]);
+                        Modules::deleteAll(['rnp_id' => $RnpsArray['ID'], 'subject_id' => $request['deletesubject']]);
+                        $model->delete();
+                    }
+                    return $this->redirect('/courses/'. $id);
+                }
                 if (!$RnpsArray) {
                     $modelRnps->save();
                     $rnp_id = $modelRnps->ID;

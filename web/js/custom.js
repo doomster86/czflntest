@@ -1,5 +1,6 @@
 $(document).ready(function () {
     var counter = $('tr:last-child td').html();
+    var num = counter;
     $(".add-more-course").click(function () {
         counter++;
         $('.courses').val(counter);
@@ -26,7 +27,7 @@ $(document).ready(function () {
     });
     $(".add-more-nakaz").click(function () {
         var html = $(".copy-fields-nakaz tr").html();
-        $("#rnp_table tr th.nakaz:last-child").after(html);
+        $("#rnp_table tr th.nakaz:last").after(html);
         var html = $(".copy-fields-teacher tr").html();
         $("#rnp_table tr").each(function () {
             $(this).find('td.teacher:last').after(html);
@@ -36,6 +37,17 @@ $(document).ready(function () {
         });
         $(".copy-fields-course tr").each(function () {
             $(this).find('td.teacher:last').after(html);
+        });
+    });
+    $("body").on("click", ".remove-course", function () {
+        $(this).parents("tr").remove();
+        counter--;
+        var cnt = 0;
+        $("tr td.index").each(function () {
+            $(this).html(parseInt(num) + cnt + 1);
+            $('#rnp_table tr:last-child td.module').find('input').attr('name', 'modules[' + (cnt) + '][]');
+            $('#rnp_table tr:last-child td.teacher').find('select').attr('name', 'teacher[' + (cnt) + '][]');
+            cnt++;
         });
     });
 });

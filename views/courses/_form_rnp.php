@@ -31,6 +31,7 @@ if (!empty($request['courses_count'])) {
                 <th rowspan="2">Всього за категорію (фактично)</th>
                 <th rowspan="2" class="nakaz"><textarea rows="3" name="nakaz[]">Наказ про педнавантаження №***-Н від **.**.**</textarea>
                 </th>
+                <th rowspan="2"></th>
             </tr>
             <tr>
                 <?php
@@ -43,30 +44,6 @@ if (!empty($request['courses_count'])) {
             </tr>
             </thead>
             <tbody>
-            <?php if (!$courses) { ?>
-                <tr>
-                    <td style="vertical-align: middle;font-weight: bold;text-align: center;">1</td>
-                    <td><input type="text" name="courses[]" class="form-control" required></td>
-                    <td><input type="number" name="zaplan[]" class="form-control" min="0" required></td>
-                    <?php
-                    for ($j = 0; $j < $modules; $j++) {
-                        ?>
-                        <td class="module"><input type="number" name="modules[0][<?php echo $j ?>]" class="form-control" min="0" style="min-width: 70px;" required>
-                        </td>
-                        <?php
-                    }
-                    ?>
-                    <td>?</td>
-                    <td class="teacher"><select class="form-control" name="teacher[0][0]" required>
-                            <option value="">Оберіть викладача</option>
-                            <?php
-                            foreach ($UsersArray as $user) {
-                                echo '<option value="' . $user['id'] . '">' . $user['lastname'] . ' ' . mb_substr($user['firstname'], 0, 1) . '.' . mb_substr($user['middlename'], 0, 1) . '.' . '</option>';
-                            }
-                            ?>
-                        </select></td>
-                </tr>
-            <?php } ?>
             <?php
             for ($k = 0; $k < $courses; $k++) {
                 ?>
@@ -91,6 +68,7 @@ if (!empty($request['courses_count'])) {
                             }
                             ?>
                         </select></td>
+                    <td></td>
                 </tr>
             <?php } ?>
             </tbody>
@@ -142,6 +120,11 @@ if (!empty($request['courses_count'])) {
                 }
                 ?>
             </select></td>
+        <td>
+            <button class="btn btn-danger remove-course" type="button"><i
+                        class="glyphicon glyphicon-remove"></i> Видалити
+            </button>
+        </td>
     </tr>
     </tbody>
 </table>
