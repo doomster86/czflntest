@@ -260,7 +260,11 @@ $nakazy = count($nakazArray);
     <table>
         <thead class="copy-fields-nakaz hide">
         <tr>
-            <th rowspan="2" class="nakaz"><textarea rows="3" name="nakaz[]">Зміни 1 №***-Н від **.**.**  до наказу №***-Н від **.**.**</textarea>
+            <th rowspan="2" class="nakaz">
+                <button class="btn btn-danger form-control remove-nakaz" style="margin-bottom: 9px;" type="button"><i
+                            class="glyphicon glyphicon-remove"></i> Видалити
+                </button>
+                <textarea rows="3" name="nakaz[]">Зміни 1 №***-Н від **.**.**  до наказу №***-Н від **.**.**</textarea>
             </th>
         </tr>
         </thead>
