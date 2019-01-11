@@ -269,6 +269,15 @@ class CoursesController extends Controller {
                         }
                     }
                     return $this->redirect('/courses/' . $id);
+                } else if (!empty($request['deletetable'])) {
+                    $model = Rnps::find()->where(['ID' => $RnpsArray['ID']])->one();
+                    if ($model) {
+                        Nakaz::deleteAll(['rnp_id' => $RnpsArray['ID']]);
+                        Modules::deleteAll(['rnp_id' => $RnpsArray['ID']]);
+                        RnpSubjects::deleteAll(['rnp_id' => $RnpsArray['ID']]);
+                        $model->delete();
+                    }
+                    return $this->redirect('/courses/' . $id);
                 }
                 if (!$RnpsArray) {
                     $modelRnps->save();

@@ -177,6 +177,32 @@ $nakazy = count($nakazArray);
         <div class="form-group">
             <button type="submit" class="btn btn-info">Обновити</button>
         </div>
+        <div class="form-group">
+            <button class="btn btn-danger" type="button" data-toggle="modal"
+                    data-target="#deletetable"><i
+                        class="glyphicon glyphicon-remove"></i> Видалити таблицю
+            </button>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="deletetable" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="exampleModalLongTitle">Видалення таблиці</h4>
+                    </div>
+                    <div class="modal-body">
+                        Ви збираетесь видалити таблицю РНП. Підтвердити?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
+                        <button type="submit" name="deletetable" value="deletetable" class="btn btn-primary">Видалити</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
     <table>
         <thead class="copy-fields-week hide">
