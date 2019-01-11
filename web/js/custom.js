@@ -62,9 +62,10 @@ $(document).ready(function () {
     });
     $("body").on("click", ".remove-nakaz", function () {
         var index = $(this).closest('th').index();
+        var coolspan = $('#weeks').prop("colSpan");
         $('#rnp_table th').eq( index).remove();
         $("#rnp_table tbody tr, .copy-fields-course").each(function () {
-            $(this).find('td').eq(index+2).remove();
+            $(this).find('td').eq(index+coolspan-1).remove();
         });
     });
 });
