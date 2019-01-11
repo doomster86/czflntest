@@ -54,19 +54,17 @@ $(document).ready(function () {
     $("body").on("click", ".remove-module", function () {
         var coolspan = $('#weeks').prop("colSpan");
         $('#weeks').prop("colSpan", coolspan - 1);
-        $('#rnp_table .week').eq( coolspan - 1).remove();
+        var index = $(this).closest('th').index();
+        $('#rnp_table .week').eq(index).remove();
         $("#rnp_table tbody tr, .copy-fields-course").each(function () {
-            $(this).find('.module').eq( coolspan - 1).remove();
+            $(this).find('.module').eq( index).remove();
             });
     });
     $("body").on("click", ".remove-nakaz", function () {
-        var cols = 0;
-        $('#rnp_table .nakaz').each(function () {
-            cols++;
-        });
-        $('#rnp_table .nakaz').eq( cols - 1).remove();
+        var index = $(this).closest('th').index();
+        $('#rnp_table th').eq( index).remove();
         $("#rnp_table tbody tr, .copy-fields-course").each(function () {
-            $(this).find('.teacher').eq( cols -1).remove();
+            $(this).find('td').eq(index+2).remove();
         });
     });
 });
