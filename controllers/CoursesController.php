@@ -278,6 +278,20 @@ class CoursesController extends Controller {
                         $model->delete();
                     }
                     return $this->redirect('/courses/' . $id);
+                } else if (!empty($request['deletenakaz'])) {
+                    Nakaz::deleteAll(['rnp_id' => $RnpsArray['ID'], 'column_num' => $request['deletenakaz']]);
+                    $rows = Nakaz::find()->asArray()->where(['rnp_id' => $RnpsArray['ID']])->groupBy('subject_id')->all();
+                    foreach ($rows as $row) {
+                        $modules = Nakaz::find()->asArray()->where(['rnp_id' => $RnpsArray['ID']])->andWhere(['subject_id' => $row['subject_id']])->orderBy('column_num')->all();
+                        $cnt = 0;
+                        foreach ($modules as $module) {
+                            Yii::$app->db->createCommand()
+                                ->update('nakaz', ['column_num' => $cnt], 'ID = ' . $module['ID'])
+                                ->execute();
+                            $cnt++;
+                        }
+                    }
+                    return $this->redirect('/courses/' . $id);
                 }
                 if (!$RnpsArray) {
                     $modelRnps->save();

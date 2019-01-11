@@ -1,6 +1,7 @@
 $(document).ready(function () {
     var counter = $('tr:last-child td').html();
     var num = counter;
+    var dataindex = 0
     $(".add-more-course").click(function () {
         counter++;
         $('.courses').val(counter);
@@ -59,10 +60,13 @@ $(document).ready(function () {
             });
     });
     $("body").on("click", ".remove-nakaz", function () {
-        var cols = $('#rnp_table .nakaz').length;
+        var cols = 0;
+        $('#rnp_table .nakaz').each(function () {
+            cols++;
+        });
         $('#rnp_table .nakaz').eq( cols - 1).remove();
         $("#rnp_table tbody tr, .copy-fields-course").each(function () {
-            $(this).find('.teacher').eq( cols - 1 ).remove();
+            $(this).find('.teacher').eq( cols -1).remove();
         });
     });
 });

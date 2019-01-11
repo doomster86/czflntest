@@ -28,11 +28,17 @@ $nakazy = count($nakazArray);
                     <?php
                     for ($i=0; $i < $nakazy; $i++) {
                        ?>
-                    <th rowspan="2" class="nakaz"><textarea rows="3" name="nakaz[]"><?php echo $nakazArray[$i]['title'];?></textarea>
+                    <th rowspan="2" class="nakaz">
+                        <?php if ($i) { ?>
+                            <button class="btn btn-danger form-control" style="margin-bottom: 9px;" type="button" data-toggle="modal" data-target="#nakaz_del_<?php echo $i; ?>"><i
+                                        class="glyphicon glyphicon-remove"></i> Видалити
+                            </button>
+                        <?php } ?>
+                        <textarea rows="3" name="nakaz[]"><?php echo $nakazArray[$i]['title'];?></textarea>
+                    </th>
                     <?php
                     }
                     ?>
-                    </th>
                     <th rowspan="2"></th>
                 </tr>
                 <tr>
@@ -156,7 +162,37 @@ $nakazy = count($nakazArray);
                         </div>
                     </div>
                 </div>
-            </div>                <?php
+            </div>
+            <?php
+        }
+        ?>
+        <?php
+        for ($i=0; $i < $nakazy; $i++) {
+            ?>
+            <!-- Modal -->
+            <div class="modal fade" id="nakaz_del_<?php echo $i; ?>" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title" id="exampleModalLongTitle">Видалення наказу</h4>
+                        </div>
+                        <div class="modal-body">
+                            Ви дійсно хочете видалити наказ?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
+                            <button type="submit" name="deletenakaz" value="<?php echo $i; ?>" class="btn btn-primary">
+                                Видалити
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php
         }
         ?>
         <div class="form-group">
