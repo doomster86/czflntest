@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             //'ID',
             [
-                'attribute'=>'name',
+                'attribute'=>'title',
                 'label'=>'Предмет',
                 'contentOptions' =>function ($model, $key, $index, $column){
                     return ['class' => 'col-xs-2'];
@@ -45,28 +45,28 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' =>function ($model, $key, $index, $column){
                     return ['class' => 'col-xs-3'];
                 }
-            ],
+          ],
 
-            [
-                'attribute' => 'audienceName',
-                'label' => 'Аудиторія',
-                /*
-                'content' => function ($model, $key, $index, $column) {
-                   return 'Номер '.$model->getAudienceName();
-                },*/
-                'contentOptions' =>function ($model, $key, $index, $column){
-                    return ['class' => 'col-xs-3'];
-                }
-            ],
+//            [
+//                'attribute' => 'audienceName',
+ //               'label' => 'Аудиторія',
+//                /*
+//                'content' => function ($model, $key, $index, $column) {
+ //                  return 'Номер '.$model->getAudienceName();
+ //               },*/
+ //               'contentOptions' =>function ($model, $key, $index, $column){
+ //                   return ['class' => 'col-xs-3'];
+ //               }
+//            ],
             //'audience_id',
             //'required',
-            [
-                'attribute'=>'max_week',
-                'label'=>'Макс. занять на тиждень',
-                'contentOptions' =>function ($model, $key, $index, $column){
-                    return ['class' => 'col-xs-2'];
-                }
-            ],
+//            [
+ //               'attribute'=>'max_week',
+ //               'label'=>'Макс. занять на тиждень',
+ //               'contentOptions' =>function ($model, $key, $index, $column){
+//                    return ['class' => 'col-xs-2'];
+//                }
+//            ],
 
 
             /*
@@ -101,7 +101,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update} {delete}',
+                'template' => '{update}',
                 'buttons' => [
 
                     'update' => function ($url,$model) {
@@ -110,16 +110,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             $url,
                             [
                                 'title' => 'Редагувати',
-                                'data-pjax' => '0',
-                            ]
-                        );
-                    },
-                    'delete' => function ($url,$model) {
-                        return Html::a(
-                            '<span class="glyphicon glyphicon-trash right"></span>',
-                            $url,
-                            [
-                                'title' => 'Видалити',
                                 'data-pjax' => '0',
                             ]
                         );

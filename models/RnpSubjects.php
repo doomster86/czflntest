@@ -46,4 +46,16 @@ class RnpSubjects extends \yii\db\ActiveRecord
             'title' => 'Title',
         ];
     }
+
+    public function getNakaz() {
+        return $this->hasOne(Nakaz::className(), ['subject_id' => 'ID']);
+    }
+
+    public function getUser() {
+        return $this->hasOne(User::className(), ['id' => 'teacher_id'])->viaTable('nakaz', ['subject_id' => 'ID']);
+    }
+
+    public function getTeacherName() {
+        return $this->user->firstname . ' ' . $this->user->middlename . ' ' . $this->user->lastname;
+    }
 }

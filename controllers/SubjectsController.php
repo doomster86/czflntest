@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Subjects;
-use app\models\SubjectsSearch;
+use app\models\RnpSubjectsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -22,11 +22,11 @@ class SubjectsController extends Controller {
 
         if(Yii::$app->user->identity->role==1) {
 
-            $searchModel = new SubjectsSearch();
+            $searchModel = new RnpSubjectsSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $dataProvider->sort = [
                 'defaultOrder' => [
-                    'name' => SORT_ASC,
+                    'title' => SORT_ASC,
                 ]
             ];
             return $this->render('index', [
