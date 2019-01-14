@@ -1,7 +1,6 @@
 $(document).ready(function () {
     var counter = $('tr:last-child td').html();
     var num = counter;
-    var dataindex = 0
     $(".add-more-course").click(function () {
         counter++;
         $('.courses').val(counter);
@@ -23,13 +22,13 @@ $(document).ready(function () {
         $(".copy-fields-course tr").each(function () {
             $(this).find('td.module:last').after(html);
         });
-        var html = $(".copy-fields-week tr").html();
+        html = $(".copy-fields-week tr").html();
         $("#rnp_table tr th.week:last-child").after(html);
     });
     $(".add-more-nakaz").click(function () {
         var html = $(".copy-fields-nakaz tr").html();
         $("#rnp_table tr th.nakaz:last").after(html);
-        var html = $(".copy-fields-teacher tr").html();
+        html = $(".copy-fields-teacher tr").html();
         $("#rnp_table tr").each(function () {
             $(this).find('td.teacher:last').after(html);
         });
