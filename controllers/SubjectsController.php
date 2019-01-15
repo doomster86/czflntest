@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\RnpSubjects;
 use Yii;
 use app\models\Subjects;
 use app\models\RnpSubjectsSearch;
@@ -123,7 +124,7 @@ class SubjectsController extends Controller {
      */
     protected function findModel($id) {
         if(Yii::$app->user->identity->role==1) {
-            if (($model = Subjects::findOne($id)) !== null) {
+            if (($model = RnpSubjects::findOne($id)) !== null) {
                 return $model;
             } else {
                 throw new NotFoundHttpException('Сторінку не знайдено.');

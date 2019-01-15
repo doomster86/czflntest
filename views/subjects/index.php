@@ -46,18 +46,25 @@ $this->params['breadcrumbs'][] = $this->title;
                     return ['class' => 'col-xs-3'];
                 }
           ],
+            [
+                'attribute' => 'professionName',
+                'label' => 'Професія',
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-3'];
+                }
+            ],
 
-//            [
-//                'attribute' => 'audienceName',
- //               'label' => 'Аудиторія',
-//                /*
-//                'content' => function ($model, $key, $index, $column) {
- //                  return 'Номер '.$model->getAudienceName();
- //               },*/
- //               'contentOptions' =>function ($model, $key, $index, $column){
- //                   return ['class' => 'col-xs-3'];
- //               }
-//            ],
+            [
+                'attribute' => 'audienceName',
+                'label' => 'Аудиторія',
+                /*
+                'content' => function ($model, $key, $index, $column) {
+                   return 'Номер '.$model->getAudienceName();
+                },*/
+                'contentOptions' =>function ($model, $key, $index, $column){
+                    return ['class' => 'col-xs-3'];
+                }
+            ],
             //'audience_id',
             //'required',
 //            [

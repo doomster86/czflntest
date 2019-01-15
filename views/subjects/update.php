@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Audience */
 
-$this->title = 'Оновити: ' . $model->name;
+$this->title = 'Оновити: ' . $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Предмети', 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'Оновити';
 
