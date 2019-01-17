@@ -115,7 +115,128 @@ class TimetableParts extends \yii\db\ActiveRecord
         //$this->generateLectures($datestart, $dateend, $cols, $rows, $part);
     }
 
-    public function generateLectures($datestart, $dateend, $cols, $rows, $mont, $gid) {
+    public function generateLecturesRnps($datestart, $dateend, $cols, $rows, $gid) {
+        $datestart = (int)$datestart;
+        $id = TimetableParts::find()
+            ->asArray()
+            ->select('id')
+            ->where(['=', 'datestart', $datestart])
+            ->one();
+        $id = $id['id'];
+        //группа
+        $groups = new Groups();
+        $Group = $groups->find()
+            ->where(['ID' => $gid])
+            ->asArray()
+            ->one();
+        $Rnp = Rnps::find()
+            ->where(['prof_id' => $Group['course']])
+            ->asArray()
+            ->one();
+        $rnpSubjects = RnpSubjects::find()
+            ->where(['rnp_id' => $Rnp['ID']])
+            ->asArray()
+            ->all();
+
+        //обход по дням
+        for ($i = 0; $i < $cols; $i++ ) {
+            //координата номера дня
+            $x = $i + 1;
+
+            //определяем текущею дату
+            $date = $datestart + 86400 * $i;
+
+            if ($date < $Group['date_start'] || $Group['date_end'] < $date) {
+                continue;
+            }
+
+            $date_diff = $date - $Group['date_start'];
+
+
+            $num_week =  ceil(date('d', $date_diff)/7);
+
+            //echo "день";
+            $formatter = new \yii\i18n\Formatter;
+            //v($formatter->asDate($date, "dd.MM.yyyy"));
+
+            //определяем дату первого понедельника в этой неделе генерируемого расписания
+            $firstMonday = $date;
+            $day = $formatter->asDate($firstMonday, "l");
+            while ($day != 'Monday') {
+                $firstMonday = $firstMonday - 86400;
+                $day = $formatter->asDate($firstMonday, "l");
+            }
+
+            //echo "Первый понедельник ".$firstMonday."<br/>";
+
+            //обход по парам
+            for ($j = 0; $j < $rows; $j++) {
+                //пробуем поставить предмет в ячейку, если не подходит, пробуем следующий и т.д.
+                //если не можем поставить без окна, то заканчиваем день
+                //перебираем субьекты РНП
+                foreach ($rnpSubjects as $lesson) {
+                    global $lectFilterStatus;
+                    $lectFilterStatus = 1; //по умолчанию, считаем что можем поставить лекцию
+                    $rnpModules = Modules::find()
+                        ->where(['subject_id' => $lesson['ID']])
+                        ->asArray()
+                        ->all();
+                    $column_num = 0; // номер столбца, может прогодится
+                    $column_plan = 0; // часов в неделю
+                    $column_rep = 0; // число недель
+                    foreach ($rnpModules as $module) { // перебираем модули РНП
+                        $column_rep += $module['column_rep'];
+                        if ($num_week <= $column_rep) { // если неделя попадает в РНП, присваиваем часы
+                            $column_num = $module['column_num'];
+                            $column_plan = $module['column_plan'];
+                            break;
+                        }
+                    }
+                    if (!$column_plan){ // если уже нет запланированных часов, больше не заполняем
+                        $lectFilterStatus = 0;
+                    }
+
+                    //echo $lectFilterStatus . '<br />';
+                    $teacher = Nakaz::find()->where(['subject_id' => $lesson['ID']])
+                        ->asArray()
+                        ->orderBy(['column_num' => SORT_DESC])
+                        ->one();
+                    $teacher_id = $teacher['ID'];
+
+                    //узнаём аудиторию лекции
+                    $audienceID = RnpSubjects::find()
+                        ->asArray()
+                        ->select('audience_id')
+                        ->where(['ID' => $lesson['ID']])
+                        ->one();
+                    $audienceID = $audienceID['audience_id'];
+                    if (empty($audienceID)) { // если аудитория не задана, нужно поставить в любую другую свободную
+                                              // с соблюдением правил (тот же корпус, аудитория свободна)
+                        //повременим с этим
+                        /*
+                            $findCorps = Timetable::find()
+                                ->asArray()
+                                ->where(['=', 'date', $date])
+                                ->andWhere(['=', 'group_id', $Group['ID']])
+                                ->one();
+                        print_r($findCorps);
+                        */
+
+                    }
+                    //узнаём тип занятия (теоретичне навчання/виробниче навчання/виробнича практика)
+                    $type = RnpSubjects::find()
+                        ->asArray()
+                        ->select('practice')
+                        ->where(['ID' => $lesson['ID']])
+                        ->one();
+                    $type = $type['practice'];
+                    echo $type;
+                } //цикл по лекциям
+            } //цикл по парам
+        } //цикл по дням
+    }
+
+        public function generateLectures($datestart, $dateend, $cols, $rows, $mont, $gid) {
         $datestart = (int)$datestart;
         $dateend = (int)$dateend;
         $mont = (int)$mont;
@@ -151,6 +272,9 @@ class TimetableParts extends \yii\db\ActiveRecord
 
             //обход по дням
             for ($i = 0; $i < $cols; $i++ ) {
+                /// будем считать. в какой модуль попадаем в rnp
+
+
                 //координата номера дня
                 $x = $i + 1;
 

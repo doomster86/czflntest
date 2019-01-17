@@ -160,7 +160,8 @@ class TimetablePartsController extends Controller
         $rows = $model->rows;
         $mont = (int)date('mY', $datestart);
 
-        TimetableParts::generateLectures($datestart, $dateend, $cols, $rows, $mont, $gid);
+        //TimetableParts::generateLectures($datestart, $dateend, $cols, $rows, $mont, $gid);
+        TimetableParts::generateLecturesRnps($datestart, $dateend, $cols, $rows, $gid);
 
         return $this->render('view', [
             'model' => $this->findModel($id),
