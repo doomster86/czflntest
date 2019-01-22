@@ -48,9 +48,9 @@ Pjax::begin([
 */
     echo $form->field($model, 'required')->checkbox(['label' => 'Обов\'язкова аудиторія']);
 
-    echo $form->field($model, 'practice')->checkbox(['label' => 'Виробниче навчання']);
+    echo $form->field($model, 'practice')->label('Оберіть тип заняття')->dropDownList($model->getPracticeNames());
 
-    ?>
+        ?>
 
     <div class="form-group">
         <?= Html::submitButton($current_action == 'create' ? 'Створити' : 'Оновити', ['class' => $current_action == 'create' ? 'btn btn-success' : 'btn btn-primary']) ?>

@@ -145,5 +145,12 @@ class RnpSubjects extends \yii\db\ActiveRecord
 
         return $profs;
     }
+    public function getPracticeNames() {
+        $practice = array();
+        $practice[] = 'Теоретичне навчання';
+        $practice[] = 'Практичне навчання';
+        $practice[] = 'Виробнича практика';
+        return $practice;
+    }
 }
 
