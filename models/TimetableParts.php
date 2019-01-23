@@ -620,6 +620,34 @@ class TimetableParts extends \yii\db\ActiveRecord
                         }
                     }
 
+                    //нельзя ставить студентам лекции в один день с практикой
+                    if($lectFilterStatus == 1) {
+                        global $isPrectice;
+                        //проверяем, если в этот день у группы практические занятия, если есть, то не ставим больше лекций в этот день
+                        $lectionsToday = Timetable::find()
+                            ->asArray()
+                            ->select('subjects_id')
+                            ->where(['=', 'date', $date])
+                            ->andWhere(['=', 'group_id', $groupID])
+                            ->andWhere(['=', 'part_id', $id])
+                            ->all();
+
+                        foreach ($lectionsToday as $lection) {
+                            $isPrectice = RnpSubjects::find()
+                                ->asArray()
+                                ->select('practice')
+                                ->where(['=', 'ID', $lection['subjects_id']])
+                                ->one();
+                            $isPrectice = $isPrectice['practice'];
+                            //если уже есть практика в этот день, то берём следующею лекцию из foreach ($groupLessons as $lesson)
+                            //? можно оптимизировать, чтобы сразу переходить на следующий день
+                            if ($isPrectice != 0) {
+                                $err = "Нельзя ставить никакие лекции в один день с практикой<br/>";
+                                $lectFilterStatus = 0;
+                            }
+                        }
+                    }
+
                     $lecture_id = 13;
 
 
@@ -648,6 +676,7 @@ class TimetableParts extends \yii\db\ActiveRecord
 
                             $timetable = new Timetable();
                             $timetable->corps_id = $currentCorpsId;
+                            $timetable->title = $lesson['title'];
                             $timetable->audience_id = $audienceID;
                             $timetable->subjects_id = $subjId;
                             $timetable->teacher_id = $teacherID;

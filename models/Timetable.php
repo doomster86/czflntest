@@ -327,7 +327,7 @@ class Timetable extends \yii\db\ActiveRecord
                                 $output .= '<p>Группа: ' . $groupName . '</p>';
                                 $output .= '<p><a href="/timetable-parts/freetime/?group='. $cell['group_id']
                                     .'&subject='.$cell['subjects_id']
-                                    .'&teacher='.$teacherName.'" target="_blank">Предмет: ' . $subjName . '</a></p>';
+                                    .'&teacher='.$teacherName.'" target="_blank">Предмет: ' . $cell['title'] . '</a></p>';
                                 if (isset(Yii::$app->user->identity->role)) {
                                     if (Yii::$app->user->identity->role == 1) {
                                         $output .= '<p class="align-center"><br/><!--<a href="/timetable/update/' . $cell["id"] . '">Редагувати</a> | -->
