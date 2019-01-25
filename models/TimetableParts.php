@@ -176,6 +176,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                 //пробуем поставить предмет в ячейку, если не подходит, пробуем следующий и т.д.
                 //если не можем поставить без окна, то заканчиваем день
                 //перебираем субьекты РНП
+                $cnt=0;
                 foreach ($rnpSubjects as $lesson) {
                     global $lectFilterStatus;
                     $lectFilterStatus = 1; //по умолчанию, считаем что можем поставить лекцию
@@ -582,6 +583,65 @@ class TimetableParts extends \yii\db\ActiveRecord
                         }
                     }
 
+                    // установить расписания для ДКА
+                    if($lectFilterStatus == 1) {
+                        $lecture_id = 13;
+
+                        //состоялась ли лекция
+                        $statusLect = 1; //по умолчанию ставим, что состоялась
+
+                        if ($date == $Group['date_dka_1']) {
+                            if (!$cnt) {
+                                $timetable = new Timetable();
+                                $timetable->corps_id = $currentCorpsId;
+                                $timetable->title = 'ДКА 1';
+                                $timetable->audience_id = $audienceID;
+                                $timetable->subjects_id = $mont;
+                                $timetable->teacher_id = $teacherID;
+                                $timetable->group_id = $groupID;
+                                $timetable->lecture_id = $lecture_id;
+                                $timetable->date = $date;
+                                $timetable->status = $statusLect;
+                                $timetable->half = $half;
+                                $timetable->part_id = $id;
+                                $timetable->x = $x;
+                                $timetable->y = $y;
+
+                                if ($timetable->validate()) {
+                                    $timetable->save();
+                                }
+                                else {
+                                    print_r($timetable->getErrors());
+                                }
+                            }
+                        }
+                        if ($date == $Group['date_dka_2']) {
+                            if (!$cnt) {
+                                $timetable = new Timetable();
+                                $timetable->corps_id = $currentCorpsId;
+                                $timetable->title = 'ДКА 2';
+                                $timetable->audience_id = $audienceID;
+                                $timetable->subjects_id = $mont;
+                                $timetable->teacher_id = $teacherID;
+                                $timetable->group_id = $groupID;
+                                $timetable->lecture_id = $lecture_id;
+                                $timetable->date = $date;
+                                $timetable->status = $statusLect;
+                                $timetable->half = $half;
+                                $timetable->part_id = $id;
+                                $timetable->x = $x;
+                                $timetable->y = $y;
+
+                                if ($timetable->validate()) {
+                                    $timetable->save();
+                                }
+                                else {
+                                    print_r($timetable->getErrors());
+                                }
+                            }
+                        }
+                    }
+
                     //нельзя ставить больше занятий в неделю, чем позволяет РНП
                     //echo $mont;
                     if($lectFilterStatus == 1) {
@@ -646,8 +706,52 @@ class TimetableParts extends \yii\db\ActiveRecord
                                 $lectFilterStatus = 0;
                             }
                         }
+                        if ($type == 1) {
+                            for ($k = 2; $k <= 4; $k++) {
+                                $timetable = new Timetable();
+                                $timetable->corps_id = $currentCorpsId;
+                                $timetable->title = $lesson['title'];
+                                $timetable->audience_id = $audienceID;
+                                $timetable->subjects_id = $subjId;
+                                $timetable->teacher_id = $teacherID;
+                                $timetable->group_id = $groupID;
+                                $timetable->lecture_id = $lecture_id;
+                                $timetable->date = $date;
+                                $timetable->status = $statusLect;
+                                $timetable->half = $half;
+                                $timetable->part_id = $id;
+                                $timetable->x = $x;
+                                $timetable->y = $k;
+
+                                //чтобы снова начать перебор с начала всех пар
+                                $j = 0;
+                                if ($timetable->validate()) {
+                                    $timetable->save();
+                                }
+                                else {
+                                    print_r($timetable->getErrors());
+                                }
+                            }
+                        }
                     }
 
+                    // нельзя ставить группе навчання, если уже произошла ДКА
+                    if($lectFilterStatus == 1) {
+                        if ($date >= $Group['date_dka_1']) {
+                            if ($type < 2) {
+                                $lectFilterStatus = 0;
+                            }
+                        }
+                    }
+                    // нельзя ставить группе практику, пока не произошла ДКА
+                    if($lectFilterStatus == 1) {
+                        if ($date <= $Group['date_dka_1']) {
+                            if ($type == 2) {
+                                $lectFilterStatus = 0;
+                            }
+                        }
+                    }
+                    $cnt++;
                     $lecture_id = 13;
 
 
