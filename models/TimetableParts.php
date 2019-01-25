@@ -706,6 +706,25 @@ class TimetableParts extends \yii\db\ActiveRecord
                                 $lectFilterStatus = 0;
                             }
                         }
+                    }
+
+                    // нельзя ставить группе навчання, если уже произошла ДКА
+                    if($lectFilterStatus == 1) {
+                        if ($date >= $Group['date_dka_1']) {
+                            if ($type < 2) {
+                                $lectFilterStatus = 0;
+                            }
+                        }
+                    }
+                    // нельзя ставить группе практику, пока не произошла ДКА
+                    if($lectFilterStatus == 1) {
+                        if ($date <= $Group['date_dka_1']) {
+                            if ($type == 2) {
+                                $lectFilterStatus = 0;
+                            }
+                        }
+                    }
+                    if($lectFilterStatus == 1) {
                         if ($type == 1) {
                             for ($k = 2; $k <= 4; $k++) {
                                 $timetable = new Timetable();
@@ -727,27 +746,9 @@ class TimetableParts extends \yii\db\ActiveRecord
                                 $j = 0;
                                 if ($timetable->validate()) {
                                     $timetable->save();
-                                }
-                                else {
+                                } else {
                                     print_r($timetable->getErrors());
                                 }
-                            }
-                        }
-                    }
-
-                    // нельзя ставить группе навчання, если уже произошла ДКА
-                    if($lectFilterStatus == 1) {
-                        if ($date >= $Group['date_dka_1']) {
-                            if ($type < 2) {
-                                $lectFilterStatus = 0;
-                            }
-                        }
-                    }
-                    // нельзя ставить группе практику, пока не произошла ДКА
-                    if($lectFilterStatus == 1) {
-                        if ($date <= $Group['date_dka_1']) {
-                            if ($type == 2) {
-                                $lectFilterStatus = 0;
                             }
                         }
                     }
