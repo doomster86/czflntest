@@ -128,7 +128,7 @@ $nakazy = count($nakazArray);
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
-                                    <button type="submit" name="deletesubject" value="<?php echo $RnpSubjectsArray[$k]['ID']; ?>" class="btn btn-primary">Видалити</button>
+                                    <button type="submit" name="deletesubject" value="<?php echo $RnpSubjectsArray[$k]['ID']; ?>" class="btn btn-primary deletesubject">Видалити</button>
                                 </div>
                             </div>
                         </div>
@@ -156,7 +156,7 @@ $nakazy = count($nakazArray);
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
-                            <button type="submit" name="deletemodule" value="<?php echo $i; ?>" class="btn btn-primary">
+                            <button type="submit" name="deletemodule" value="<?php echo $i; ?>" class="btn btn-primary deletemodule">
                                 Видалити
                             </button>
                         </div>
@@ -185,7 +185,7 @@ $nakazy = count($nakazArray);
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
-                            <button type="submit" name="deletenakaz" value="<?php echo $i; ?>" class="btn btn-primary">
+                            <button type="submit" name="deletenakaz" value="<?php echo $i; ?>" class="btn btn-primary deletenakaz">
                                 Видалити
                             </button>
                         </div>

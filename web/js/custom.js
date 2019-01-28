@@ -67,4 +67,10 @@ $(document).ready(function () {
             $(this).find('td').eq(index+coolspan-1).remove();
         });
     });
+    $(".deletesubject, .deletemodule").click(function() {
+        $("input").removeAttr("required");
+    });
+    $(".deletenakaz").click(function() {
+        $("select").removeAttr("required");
+    });
 });

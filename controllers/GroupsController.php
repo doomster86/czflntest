@@ -240,4 +240,8 @@ class GroupsController extends Controller
             return array('error' => 'No Groups Found');
         }
     }
+
+    public function actionGetShedGroup() {
+
+    }
 }
