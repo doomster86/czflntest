@@ -367,3 +367,7 @@ a.desc:after {
 .grey-menu .icon-bar {
     background-color: #000;
 }
+
+.rnp-subject-th {
+    min-width: 200px;
+}

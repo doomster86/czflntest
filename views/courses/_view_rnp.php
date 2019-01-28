@@ -21,7 +21,7 @@ $nakazy = count($nakazArray);
                 <thead>
                 <tr>
                     <th rowspan="2">№ <p style="white-space: nowrap">з/п</p></th>
-                    <th rowspan="2">Навчальні предмети</th>
+                    <th rowspan="2" class="rnp-subject-th">Навчальні предмети</th>
                     <th rowspan="2">Кількість годин (заплановано)</th>
                     <th colspan="<?php echo $modules; ?>" id="weeks">Кількість тижнів</th>
                     <th rowspan="2">Всього за категорію (фактично)</th>
