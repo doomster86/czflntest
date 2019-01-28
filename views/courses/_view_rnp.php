@@ -234,7 +234,7 @@ $nakazy = count($nakazArray);
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
-                        <button type="submit" name="deletetable" value="deletetable" class="btn btn-primary">Видалити</button>
+                        <button type="submit" name="deletetable" value="deletetable" class="btn btn-primary deletetable">Видалити</button>
                     </div>
                 </div>
             </div>
