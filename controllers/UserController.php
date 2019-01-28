@@ -341,4 +341,13 @@ class UserController extends Controller
             return $this->render('/site/access_denied');
         }
     }
+    public function actionGetListLector() {
+        \Yii::$app->response->format = \yii\web\Response:: FORMAT_JSON;
+        $users = User::find()->select(["id" => "id", "name" => 'CONCAT(lastname, " ", firstname, " ", middlename)'])->orderBy("lastname")->asArray()->all();
+        if (count($users) > 0) {
+            return $users;
+        } else {
+            return array('error' => 'No Users Found');
+        }
+    }
 }

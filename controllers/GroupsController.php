@@ -230,4 +230,14 @@ class GroupsController extends Controller
 		    return $this->render('/site/access_denied');
 	    }
     }
+
+    public function actionGetListGroup() {
+        \Yii::$app->response->format = \yii\web\Response:: FORMAT_JSON;
+        $groups = Groups::find()->select(["id" => "ID", "name"])->orderBy("name")->asArray()->all();
+        if (count($groups) > 0) {
+            return $groups;
+        } else {
+            return array('error' => 'No Groups Found');
+        }
+    }
 }
