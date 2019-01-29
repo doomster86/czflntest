@@ -3,6 +3,9 @@
 namespace app\controllers;
 
 use Yii;
+use app\models\Audience;
+use app\models\Corps;
+use app\models\LectureTable;
 use app\models\User;
 use app\models\TeacherMeta;
 use app\models\StudentMeta;
@@ -347,7 +350,63 @@ class UserController extends Controller
         if (count($users) > 0) {
             return $users;
         } else {
-            return array('error' => 'No Users Found');
+            return array('error' => 200);
+        }
+    }
+
+    public function actionGetShedLector()
+    {
+        \Yii::$app->response->format = \yii\web\Response:: FORMAT_JSON;
+        $request = Yii::$app->request->get();
+        if (!empty($request['lector']) && !empty($request['datestart']) && !empty($request['datefin'])) {
+            $lector_id = intval($request['lector']);
+            if (!is_int($lector_id) || $lector_id < 1) {
+                return array('error' => 304);
+            }
+            $hasUser = User::find()->where(['id' => $lector_id])->exists();
+            if (!$hasUser) {
+                return array('error' => 201);
+            }
+            $datestart = strtotime($request['datestart']);
+            $datefin = strtotime($request['datefin']);
+            if (!$datestart) {
+                return array('error' => 301);
+            } else if (!$datefin) {
+                return array('error' => 302);
+            }
+            $timetable = Timetable::find()
+                ->asArray()
+                ->where(['=', 'teacher_id', $lector_id])
+                ->andWhere(['>=', 'date', $datestart])
+                ->andWhere(['<=', 'date', $datefin])
+                ->all();
+            $subjects = array();
+            $i = 0;
+            if (count($timetable) > 0) {
+                foreach ($timetable as $lesson) {
+                    $subjects[$i]['id'] = $lesson['id'];
+                    $corps = Corps::find()->asArray()->select(["name" => 'CONCAT(corps_name, ", ", location)'])->where(['ID' => $lesson['corps_id']])->one();
+                    $subjects[$i]['corps'] = $corps['name'];
+                    $audience = Audience::find()->asArray()->select(["name" => 'CONCAT(num)'])->where(['ID' => $lesson['audience_id']])->one();
+                    $subjects[$i]['audience'] = $audience['name'];
+                    $subjects[$i]['subject'] = $lesson['title'];
+                    $teacher = User::find()->where(['=', 'id', $lesson['teacher_id']])->select(['name' => 'CONCAT(lastname, " ", firstname, " ", middlename)'])->asArray()->one();
+                    $subjects[$i]['teacher'] = $teacher['name'];
+                    $group = Groups::find()->where(['=', 'ID', $lesson['group_id']])->select(['name' => 'CONCAT(name)'])->asArray()->one();
+                    $subjects[$i]['group'] = $group['name'];
+                    $subjects[$i]['lecture'] = $lesson['y'];
+                    $subjects[$i]['date'] = date('d.m.Y', $lesson['date']);
+                    $subjects[$i]['half'] = $lesson['half'];
+                    $lectures = LectureTable::find()->where(['=', 'corps_id', $lesson['corps_id']])->asArray()->all();
+                    $subjects[$i]['time'] = $lectures[$lesson['y'] - 1]['time_start'];
+                    $i++;
+                }
+                return $subjects;
+            } else {
+                return array('error' => 310);
+            }
+        } else {
+            return array('error' => 300);
         }
     }
 }
