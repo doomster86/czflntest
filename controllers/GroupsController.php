@@ -2,6 +2,11 @@
 
 namespace app\controllers;
 
+use app\models\Audience;
+use app\models\Corps;
+use app\models\LectureTable;
+use app\models\Timetable;
+use app\models\Nakaz;
 use Yii;
 use app\models\Groups;
 use app\models\GroupsSearch;
@@ -241,7 +246,47 @@ class GroupsController extends Controller
         }
     }
 
-    public function actionGetShedGroup() {
+    public function actionGetShedGroup()
+    {
+        \Yii::$app->response->format = \yii\web\Response:: FORMAT_JSON;
+        $request = Yii::$app->request->get();
+        if (!empty($request['group']) && !empty($request['datestart']) && !empty($request['datefin'])) {
+            $group_id = (int)$request['group'];
+            $datestart = strtotime($request['datestart']);
+            $datefin = strtotime($request['datefin']);
+            if (!$datestart || !$datefin) {
+                return array('error' => 'Invalid Date');
+            }
+            $timetable = Timetable::find()
+                ->asArray()
+                ->where(['=', 'group_id', $group_id])
+                ->andWhere(['>=', 'date', $datestart])
+                ->andWhere(['<=', 'date', $datefin])
+                ->all();
+            $subjects = array();
+            $i = 0;
+            foreach ($timetable as $lesson) {
+                $subjects[$i]['id'] = $lesson['id'];
+                $corps = Corps::find()->asArray()->select(["name" => 'CONCAT(corps_name, ", ", location)'])->where(['ID' => $lesson['corps_id']])->one();
+                $subjects[$i]['corps'] = $corps['name'];
+                $audience = Audience::find()->asArray()->select(["name" => 'CONCAT(num)'])->where(['ID' => $lesson['audience_id']])->one();
+                $subjects[$i]['audience'] = $audience['name'];
+                $subjects[$i]['subject'] = $lesson['title'];
+                $teacher = User::find()->where(['=', 'id', $lesson['teacher_id']])->select(['name' => 'CONCAT(lastname, " ", firstname, " ", middlename)'])->asArray()->one();
+                $subjects[$i]['teacher'] = $teacher['name'];
+                $group = Groups::find()->where(['=', 'ID', $lesson['group_id']])->select(['name' => 'CONCAT(name)'])->asArray()->one();
+                $subjects[$i]['group'] = $group['name'];
+                $subjects[$i]['lecture'] = $lesson['y'];
+                $subjects[$i]['date'] = date('d.m.Y', $lesson['date']);
+                $subjects[$i]['half'] = $lesson['half'];
+                $lectures = LectureTable::find()->where(['=', 'corps_id', $lesson['corps_id']])->asArray()->all();
+                $subjects[$i]['time'] = $lectures[$lesson['y']-1]['time_start'];
+                $i++;
+            }
+            return $subjects;
 
+        } else {
+            return array('error' => 'Invalid GET Parameters');
+        }
     }
 }
