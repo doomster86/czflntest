@@ -160,12 +160,10 @@ class TimetableController extends Controller
                 ];
                 */
 
-                echo Json::encode(['output'=>$out, 'selected'=>'']);
-
-                return;
+                return Json::encode(['output'=>$out, 'selected'=>'']);
             }
         }
-        echo Json::encode(['output'=>'', 'selected'=>'']);
+        return Json::encode(['output'=>'', 'selected'=>'']);
     }
 
     public function actionSubcatlecture() {
@@ -177,12 +175,10 @@ class TimetableController extends Controller
 
                 $out = Timetable::getLectureList($corpsId);
 
-                echo Json::encode(['output'=>$out, 'selected'=>'']);
-
-                return;
+                return Json::encode(['output'=>$out, 'selected'=>'']);
             }
         }
-        echo Json::encode(['output'=>'', 'selected'=>'']);
+        return Json::encode(['output'=>'', 'selected'=>'']);
     }
 
     public function actionSubcatsubjects() {
@@ -194,12 +190,10 @@ class TimetableController extends Controller
 
                 $out = Timetable::getGroupList($groupId);
 
-                echo Json::encode(['output'=>$out, 'selected'=>'']);
-
-                return;
+                return Json::encode(['output'=>$out, 'selected'=>'']);
             }
         }
-        echo Json::encode(['output'=>'', 'selected'=>'']);
+        return Json::encode(['output'=>'', 'selected'=>'']);
     }
 
     public function actionPrint($table_id)
