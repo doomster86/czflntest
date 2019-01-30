@@ -782,4 +782,30 @@ class Timetable extends \yii\db\ActiveRecord
         return $subjects;
     }
 
+    public function getGroupListRnp($groupId) {
+        $course_ids[] = Groups::find()->asArray()
+            ->select(["course"])
+            ->where(['ID' => $groupId])
+            ->one();
+        $course_id = ArrayHelper::getColumn($course_ids, 'course');
+        $rnp = Rnps::find()->where(['prof_id' => $course_id])->asArray()->one();
+        $rnp_id = $rnp['ID'];
+        $rnpSubjects = RnpSubjects::find()->where(['rnp_id' => $rnp_id])->asArray()->all();
+        $subjects = array();
+        foreach ($rnpSubjects as $value) {
+            $subjects[] = array('id' => $value['ID'], 'name' => $value['title'] );
+        }
+        return $subjects;
+    }
+
+    public function getTeacherListRnp($subjectId) {
+        $teachers = Nakaz::find()->select('teacher_id')->where(['subject_id' => $subjectId])->asArray()->groupBy('teacher_id')->all();
+        $subjects = array();
+        foreach ($teachers as $teacher) {
+            $teacher_name = User::find()->select(['name' => 'CONCAT(lastname, " ", firstname, " ", middlename)'])->where(['id' => $teacher['teacher_id']])->asArray()->one();
+            $teacher_name = $teacher_name['name'];
+            $subjects[] = array('id' => $teacher['teacher_id'], 'name' => $teacher_name );
+        }
+        return $subjects;
+    }
 }

@@ -90,6 +90,15 @@ $this->title = 'Створити заняття';
         ]
     ]);
 
+    echo $form->field($model, 'teacher_id')->label('Оберіть викладача')->widget(DepDrop::classname(), [
+        'options'=>['id'=>'teacher_id'],
+        'pluginOptions'=>[
+            'depends'=>['subjects_id'],
+            'placeholder'=>'Оберіть викладача',
+            'url'=>Url::to(['/timetable/nakazteachers'])
+        ]
+    ]);
+
     ?>
 
     <?php

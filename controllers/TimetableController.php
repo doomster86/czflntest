@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\LectureTable;
+use app\models\RnpSubjects;
 use app\models\Subjects;
 use app\models\TimetableViewer;
 use Yii;
@@ -64,16 +65,17 @@ class TimetableController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 
-	        $teacherID = Subjects::find()
+	        /* $teacherID = Subjects::find()
 	                             ->asArray()
 	                             ->select('teacher_id')
 	                             ->where(['ID' => $model->subjects_id])
 	                             ->one();
 	        $teacherID = $teacherID['teacher_id'];
+	        */
 
-	        $model->teacher_id = $teacherID;
+	        //$model->teacher_id = $teacherID;
 
-	        $lectureIDs = LectureTable::find()
+	        /*$lectureIDs = LectureTable::find()
 	                                  ->asArray()
 	                                  ->select(["ID"])
 	                                  ->where(['=', 'corps_id', $model->corps_id])
@@ -81,8 +83,10 @@ class TimetableController extends Controller
 	                                  ->all();
 	        $lectureIDs = ArrayHelper::getColumn($lectureIDs, 'ID');
 	        $lectureID = $lectureIDs[$model->y];
-
-	        $model->lecture_id = $lectureID;
+*/
+	        $rnpSubject = RnpSubjects::find()->where(['ID' => $model->subjects_id])->asArray()->one();
+            $model->title = $rnpSubject['title'];
+	        $model->lecture_id = 13;
 
         	$model->save();
 
@@ -188,7 +192,22 @@ class TimetableController extends Controller
             if ($parents != null) {
                 $groupId = $parents[0];
 
-                $out = Timetable::getGroupList($groupId);
+                $out = Timetable::getGroupListRnp($groupId);
+
+                return Json::encode(['output'=>$out, 'selected'=>'']);
+            }
+        }
+        return Json::encode(['output'=>'', 'selected'=>'']);
+    }
+
+    public function actionNakazteachers() {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $subjectId = $parents[0];
+
+                $out = Timetable::getTeacherListRnp($subjectId);
 
                 return Json::encode(['output'=>$out, 'selected'=>'']);
             }
