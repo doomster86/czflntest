@@ -30,7 +30,9 @@ $(document).ready(function () {
         $("#rnp_table tr th.nakaz:last").after(html);
         html = $(".copy-fields-teacher tr").html();
         $("#rnp_table tr").each(function () {
+            var teacher = $(this).find('td.teacher:last option:selected').val();
             $(this).find('td.teacher:last').after(html);
+            $(this).find('td.teacher:last select').val(teacher);
         });
         $("#rnp_table tbody tr").each(function () {
             $(this).find('td.teacher:last select').attr('name', 'teacher[' + ($(this).find('td:first').html()-1) + '][]');
