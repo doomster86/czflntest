@@ -137,7 +137,7 @@ $(function(){
 			}));
 
 			$w
-			.load(setWidths)
+			.on('load', setWidths)
 			.resize($.debounce(250, function () {
 				setWidths();
 				repositionStickyHead();

@@ -14,6 +14,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use app\models\Timetable;
 use app\models\Courses;
+use app\models\TimetableViewer;
 
 /**
  * TimetablePartsController implements the CRUD actions for TimetableParts model.
@@ -42,8 +43,12 @@ class TimetablePartsController extends Controller
      */
     public function actionView($id)
     {
+        $timetable = new Timetable();
+        $TTViewer = new TimetableViewer();
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'timetable' => $timetable,
+            'TTViewer' => $TTViewer,
         ]);
     }
 
