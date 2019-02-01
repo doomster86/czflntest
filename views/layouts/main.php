@@ -37,35 +37,30 @@ AppAsset::register($this);
         ],
     ]);
 
-    $menuItems = [
-        ['label' => 'Головна', 'url' => ['/site/index']],
-        ['label' => 'Про центр', 'url' => ['/site/about']],
-        ['label' => 'Розклад', 'url' => ['/timetable/index'], /*'visible' => !Yii::$app->user->isGuest*/],
-        //['label' => 'Графік відвідування', 'url' => ['#'], /*'visible' => Yii::$app->user->identity->role=='admin'*/],
-        ['label' => 'Контакти', 'url' => ['/site/contact']],
-    ];
-
-    if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Вхід', 'url' => ['/subjects/index'], 'items' => [
-            ['label' => 'Увійти', 'url' => ['/site/login']],
-            ['label' => 'Зареєеструватись', 'url' => ['/site/signup']],
-        ]];
-    } else {
-        $menuItems[] = '<li>'
-            . Html::beginForm(['/site/logout'], 'post')
-            . Html::submitButton(
-                'Вийти (' . Yii::$app->user->identity->username . ')',
-                ['class' => 'btn btn-link logout']
-            )
-            . Html::endForm()
-            . '</li>';
-    }
-
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
-        'activateParents'=>true,
-        'items' => $menuItems,
+        'items' => [
+            ['label' => 'Головна', 'url' => ['/site/index']],
+            ['label' => 'Про центр', 'url' => ['/site/about']],
+            ['label' => 'Розклад', 'url' => ['/timetable/index']],
+            ['label' => 'Контакти', 'url' => ['/site/contact']],
+            Yii::$app->user->isGuest ? (['label' => 'Вхід', 'url' => ['/subjects/index'], 'items' => [
+                ['label' => 'Увійти', 'url' => ['/site/login']],
+                ['label' => 'Зареєеструватись', 'url' => ['/site/signup']],
+            ]]) : ['label' => Yii::$app->user->identity->username, 'items' => [
+                [
+                    'label' => 'Вийти',
+                    'url' => ['/site/logout'],
+                    'linkOptions' => ['data-method' => 'post'],
+                ],
+                [
+                    'label' => 'Змінити пароль',
+                    'url' => ['/user/pass'],
+                ],
+            ]]
+        ],
     ]);
+
     NavBar::end();
     ?>
 

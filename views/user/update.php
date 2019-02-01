@@ -2,6 +2,8 @@
 
 use app\models\User;
 use yii\widgets\Pjax;
+use yii\widgets\ActiveForm;
+use yii\helpers\Html;
 
 
 $this->title = 'Редагувати користувача '.$model->username;
@@ -31,6 +33,19 @@ foreach (User::ROLES as $rolesName) {
             'status' => $arrStatus,
             'roles' => $arrRoles,
         ]) ?>
+        <div class="user-changePassword">
+
+            <?php $form = ActiveForm::begin(); ?>
+
+            <?= $form->field($password, 'password')->passwordInput()->label('Новий пароль') ?>
+            <?= $form->field($password, 'confirm_password')->passwordInput()->label('Повторіть новий пароль') ?>
+
+            <div class="form-group">
+                <?= Html::submitButton('Змінити', ['class' => 'btn btn-primary']) ?>
+            </div>
+            <?php ActiveForm::end(); ?>
+
+        </div>
     </div>
 
     <div class="col-lg-6">

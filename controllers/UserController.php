@@ -18,6 +18,7 @@ use app\models\Timetable;
 use app\models\Subjects;
 use app\models\Groups;
 use app\models\Courses;
+use app\models\ChangePasswordForm;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -136,6 +137,16 @@ class UserController extends Controller
             $teacher->user_id = $id;
             $student->user_id = $id;
 
+            try {
+                $password = new ChangePasswordForm($id);
+            } catch (InvalidParamException $e) {
+                throw new \yii\web\BadRequestHttpException($e->getMessage());
+            }
+
+            if ($password->load(\Yii::$app->request->post()) && $password->validate() && $password->changePassword()) {
+                \Yii::$app->session->setFlash('success', 'Password Changed!');
+            }
+
             if($teacher->load(Yii::$app->request->post()) && $teacher->save()) {
                 return $this->render('update', [
                     'model' => $model,
@@ -165,6 +176,7 @@ class UserController extends Controller
                     'teacher' => $teacher,
                     'student' => $student,
                     'operation' => '',
+                    'password' => $password,
                 ]);
             }
 
@@ -408,5 +420,29 @@ class UserController extends Controller
         } else {
             return array('error' => 300);
         }
+    }
+    /**
+     * Change User password.
+     *
+     * @return mixed
+     * @throws BadRequestHttpException
+     */
+    public function actionPass()
+    {
+        $id = \Yii::$app->user->id;
+
+        try {
+            $model = new ChangePasswordForm($id);
+        } catch (InvalidParamException $e) {
+            throw new \yii\web\BadRequestHttpException($e->getMessage());
+        }
+
+        if ($model->load(\Yii::$app->request->post()) && $model->validate() && $model->changePassword()) {
+            \Yii::$app->session->setFlash('success', 'Password Changed!');
+        }
+
+        return $this->render('pass', [
+            'model' => $model,
+        ]);
     }
 }

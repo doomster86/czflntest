@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     $request = Yii::$app->request;
     $request = $request->get();
-    if (!empty($request['TimetableViewer']['teacher_id'] || !empty($request['TimetableViewer']['group_id']))) {
+    if (isset($request['TimetableViewer']['teacher_id']) || isset($request['TimetableViewer']['group_id'])) {
     $currentDate = strtotime('now');
 
     //$currentDate >= datestart
@@ -99,7 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
 </div>
 <?php
-    if (empty($request['TimetableViewer']['teacher_id']) && empty($request['TimetableViewer']['group_id'])) { ?>
+    if (!isset($request['TimetableViewer']['teacher_id']) && !isset($request['TimetableViewer']['group_id'])) { ?>
 <div class="teachers-time">
     <p>
         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
