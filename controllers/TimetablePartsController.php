@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\AddGroupToTable;
 use app\models\Groups;
 use app\models\Lessons;
+use app\models\RnpSubjects;
 use app\models\Subjects;
 use app\models\User;
 use Yii;
@@ -212,12 +213,12 @@ class TimetablePartsController extends Controller
     }
 
     public function getSubjectName($id) {
-        $subject_values = Subjects::find()->asArray()
-            ->select(['ID', 'name'])
-            ->where(['=', 'ID', $id])
+        $subject_values = Timetable::find()->asArray()
+            ->select(['subjects_id', 'title'])
+            ->where(['=', 'subjects_id', $id])
             ->one();
 
-        $subject = $subject_values['name'];
+        $subject = $subject_values['title'];
 
         return $subject;
     }
@@ -293,7 +294,7 @@ class TimetablePartsController extends Controller
                 $teacher = User::find()->where(['ID' => $timetable['teacher_id']])->asArray()->one();
                 $group = Groups::find()->where(['ID' => $timetable['group_id']])->asArray()->one();
                 $course = Courses::find()->where(['ID' => $group['course']])->asArray()->one();
-                $subject = Subjects::find()->where(['ID' => $timetable['subjects_id']])->asArray()->one();
+                $subject = RnpSubjects::find()->where(['ID' => $timetable['subjects_id']])->asArray()->one();
                 $table[$i]['teacher'] = $teacher;
                 $table[$i]['group'] = $group;
                 $table[$i]['course'] = $course;

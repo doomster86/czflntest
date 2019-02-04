@@ -284,12 +284,12 @@ class Timetable extends \yii\db\ActiveRecord
                                     ->one();
                                 $audienceName = $audienceName['name'];
 
-                                $teacherName = User::find()
+                                $teacher = User::find()
                                     ->asArray()
-                                    ->select('firstname, middlename, lastname')
+                                    ->select('id, firstname, middlename, lastname')
                                     ->where(['=', 'id', $cell['teacher_id']])
                                     ->one();
-                                $teacherName = $teacherName['firstname'] . " " . $teacherName['lastname'];
+                                $teacherName = $teacher['firstname'] . " " . $teacher['lastname'];
 
                                 $groupName = Groups::find()
                                     ->asArray()
@@ -326,7 +326,7 @@ class Timetable extends \yii\db\ActiveRecord
                                 $output .= '<p>Группа: ' . $groupName . '</p>';
                                 $output .= '<p><a href="/timetable-parts/freetime/?group='. $cell['group_id']
                                     .'&subject='.$cell['subjects_id']
-                                    .'&teacher='.$teacherName.'" target="_blank">Предмет: ' . $cell['title'] . '</a></p>';
+                                    .'&teacher='.$teacher['id'].'" target="_blank">Предмет: ' . $cell['title'] . '</a></p>';
                                 if (isset(Yii::$app->user->identity->role)) {
                                     if (Yii::$app->user->identity->role == 1) {
                                         $output .= '<p class="align-center"><br/><!--<a href="/timetable/update/' . $cell["id"] . '">Редагувати</a> | -->
@@ -511,12 +511,12 @@ class Timetable extends \yii\db\ActiveRecord
                                     ->one();
                                 $audienceName = $audienceName['name'];
 
-                                $teacherName = User::find()
+                                $teacher = User::find()
                                     ->asArray()
                                     ->select('firstname, middlename, lastname')
                                     ->where(['=', 'id', $cell['teacher_id']])
                                     ->one();
-                                $teacherName = $teacherName['firstname']." ".$teacherName['lastname'];
+                                $teacherName = $teacher['firstname']." ".$teacher['lastname'];
 
                                 $groupName = Groups::find()
                                     ->asArray()

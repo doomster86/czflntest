@@ -42,10 +42,8 @@ $formatter = new \yii\i18n\Formatter;
             if (!empty($table)) {
                 $i = 0;
                 foreach ($table as $row){
-                    if ($i) {
-                        $timetable = $row['timetable'] + $table[$i-1]['timetable'];
-                    }
                     $i++;
+                    $timetable = $row['timetable'] + $table[$i-1]['timetable'];
                 }
             }
             if (!empty($timetable)) {
@@ -74,8 +72,8 @@ $formatter = new \yii\i18n\Formatter;
                     <th><?= $row['course']['name']; ?></th>
                     <th><?= $row['group']['name']; ?></th>
                     <th><?= ($row['group']['date_start'] && $row['group']['date_end'] ? $formatter->asDate($row['group']['date_start'], 'dd.MM.yyyy') . " - " . $formatter->asDate($row['group']['date_end'], 'dd.MM.yyyy') : ''); ?></th>
-                    <th><?= $row['subject']['name']; ?></th>
-                    <th nowrap><?= ($row['practice'] == 1 ? 'вир. нав.' : 'теор. нав.'); ?></th>
+                    <th><?= $row['subject']['title']; ?></th>
+                    <th nowrap><?= (!empty($row['practice']) ? 'вир. нав.' : 'теор. нав.'); ?></th>
                     <?php foreach ($row['timetable'] as $timetable) { ?>
                         <th><?= $timetable['lectComplete']; ?></th>
                         <?php

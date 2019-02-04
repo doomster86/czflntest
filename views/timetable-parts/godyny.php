@@ -112,7 +112,7 @@ $roles = User::ROLES;
                     <th><?= $row['course']['name']; ?></th>
                     <th><?= $row['group']['name']; ?></th>
                     <th><?= ($row['group']['date_start'] && $row['group']['date_end'] ? $formatter->asDate($row['group']['date_start'], 'dd.MM.yyyy') . " - " . $formatter->asDate($row['group']['date_end'], 'dd.MM.yyyy') : ''); ?></th>
-                    <th><?= $row['subject']['name']; ?></th>
+                    <th><?= $row['subject']['title']; ?></th>
                     <th nowrap><?= (!empty($row['practice']) ? 'вир. нав.' : 'теор. нав.'); ?></th>
                     <?php foreach ($row['timetable'] as $timetable) { ?>
                         <th><?= $timetable['lectComplete']; ?></th>

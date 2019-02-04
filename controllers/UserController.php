@@ -19,6 +19,7 @@ use app\models\Subjects;
 use app\models\Groups;
 use app\models\Courses;
 use app\models\ChangePasswordForm;
+use app\models\RnpSubjects;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -303,7 +304,7 @@ class UserController extends Controller
             foreach ($timetables as $timetable) {
                 $group = Groups::find()->where(['ID' => $timetable['group_id']])->asArray()->one();
                 $course = Courses::find()->where(['ID' => $group['course']])->asArray()->one();
-                $subject = Subjects::find()->where(['ID' => $timetable['subjects_id']])->asArray()->one();
+                $subject = RnpSubjects::find()->where(['ID' => $timetable['subjects_id']])->asArray()->one();
                 if (!empty($group)) {
                     $table[$i] = $timetable;
                     $table[$i]['subject'] = $subject;
