@@ -7,6 +7,7 @@ use yii\helpers\ArrayHelper;
 use app\models\Groups;
 use yii\helpers\Url;
 use app\models\User;
+use yii\bootstrap\Alert;
 
 $this->title = 'Фактичне педнавантаження';
 $this->params['breadcrumbs'][] = ['label' => 'Розклади', 'url' => ['index']];
@@ -67,6 +68,7 @@ $roles = User::ROLES;
     <?= Html::button('Роздрукувати', ['class' => 'btn btn-primary', 'onclick' => 'javascript:tableToExcel(\'tableGodyny\', \'outputdata\', \'outputdata\');']); ?>
 </div>
 <div class="table-responsive">
+    <?php if (!empty($table)) { ?>
     <table class="table table-bordered" id="tableGodyny">
         <thead>
         <tr>
@@ -127,6 +129,16 @@ $roles = User::ROLES;
         } ?>
         </tbody>
     </table>
+    <?php }
+    else {
+        Alert::begin([
+            'options' => [
+                'class' => 'alert-warning',
+            ],
+        ]);
+
+        echo 'За вибраний період даних немає.';
+
+        Alert::end();
+    } ?>
 </div>
-<pre>
-</pre>

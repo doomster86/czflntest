@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use app\models\User;
 use kartik\date\DatePicker;
 use yii\bootstrap\ActiveForm;
+use yii\bootstrap\Alert;
 
 $this->title = 'Фактичне педнавантаження';
 $this->params['breadcrumbs'][] = ['label' => 'Користувачі', 'url' => ['index']];
@@ -28,6 +29,7 @@ $formatter = new \yii\i18n\Formatter;
     <?= Html::button('Роздрукувати', [ 'class' => 'btn btn-primary', 'onclick' => 'javascript:tableToExcel(\'tableGodyny\', \'outputdata\', \'outputdata\');' ]); ?>
 </div>
 <div class="table-responsive">
+    <?php if (!empty($table)) { ?>
     <table class="table table-bordered" id="tableGodyny">
         <thead>
         <tr>
@@ -84,7 +86,20 @@ $formatter = new \yii\i18n\Formatter;
                 <?php
                 $num++;
             }
-        } ?>
+        }
+    ?>
         </tbody>
     </table>
+    <?php }
+     else {
+            Alert::begin([
+                'options' => [
+                    'class' => 'alert-warning',
+                ],
+            ]);
+
+            echo 'За вибраний період даних немає.';
+
+            Alert::end();
+    } ?>
 </div>
