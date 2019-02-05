@@ -93,17 +93,12 @@ class TimetablePartsController extends Controller
     }
 
     public function getWeekRozklad($subject_id, $group_id, $date) {
-        $date_start = Timetable::find()
-            ->asArray()
-            ->select('date')
-            ->where(['=', 'subjects_id', $subject_id])
-            ->andWhere(['=', 'group_id', $group_id])
-            ->orderBy('date')
-            ->one();
-        $date_diff = $date - $date_start['date'];
+        $group = Groups::find()->asArray()->where(['ID' => $group_id])->one();
+        $date_start = $group['date_start'];
+        $date_diff = $date - $group['date_start'];
         $num_week =  ceil(date('d', $date_diff)/7);
-        $firstDay = $date_start['date'] + (86400*7*($num_week-1));
-        $lastDay = $date_start['date'] + (86400*7*($num_week-1)) + (86400*7);
+        $firstDay = $date_start + $date_diff;
+        $lastDay = $date_start + $date_diff + (86400*7*($num_week-1)) + (86400*7);
         $lessonsInTable = Timetable::find()
             ->asArray()
             ->select('half')
@@ -118,8 +113,9 @@ class TimetablePartsController extends Controller
         foreach ($lessonsInTable as $lesson) {
             $sum = $sum + $lesson['half'];
         }
-
-        return $sum;
+        $formatter = new Formatter();
+        //return $day_start;
+        return $formatter->asDate($date_start, 'dd.MM.yyyy');
     }
     public function getWeekRnp($subject_id, $group_id, $date) {
         $group = Groups::find()->asArray()->where(['ID' => $group_id])->one();

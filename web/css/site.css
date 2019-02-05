@@ -371,3 +371,7 @@ a.desc:after {
 .rnp-subject-th {
     min-width: 200px;
 }
+
+.godyny-table tbody th {
+    font-weight: normal;
+}

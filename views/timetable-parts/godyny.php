@@ -17,9 +17,11 @@ $roles = User::ROLES;
 ?>
 <div class="form-group row">
     <div class="col-xs-4 col-sm-3 col-md-3 col-lg-2">
-        <?php $form = ActiveForm::begin(); ?>
+        <?php
+        $date = Yii::$app->request->post('date')?Yii::$app->request->post('date'):date('m-Y');
+        $form = ActiveForm::begin(); ?>
         <?= DatePicker::widget(['name' => 'date',
-            'value' => Yii::$app->request->post('date'),
+            'value' => $date,
             'pluginOptions' => [
                 'autoclose' => true,
                 'startView' => 'year',
@@ -69,7 +71,7 @@ $roles = User::ROLES;
 </div>
 <div class="table-responsive">
     <?php if (!empty($table)) { ?>
-    <table class="table table-bordered" id="tableGodyny">
+    <table class="table table-striped table-bordered col-xs-12 godyny-table" id="tableGodyny">
         <thead>
         <tr>
             <th>№</th>
