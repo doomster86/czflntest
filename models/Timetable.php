@@ -319,6 +319,10 @@ class Timetable extends \yii\db\ActiveRecord
                                     $half_class = "half";
                                 }
 
+                                $curdate = $date_array['datestart'];
+                                $curdate = (int)$curdate;
+                                $curdate = $curdate + 86400 * ($td - 1);
+
                                 $output .= '<div class="' . $class_bg . ' ' . $half_class . '">';
                                 $output .= '<p> Корпус: ' . $corpsName . '<br />';
                                 $output .= 'Аудиторія: ' . $audienceName . '</p>';
@@ -326,7 +330,7 @@ class Timetable extends \yii\db\ActiveRecord
                                 $output .= '<p>Группа: ' . $groupName . '</p>';
                                 $output .= '<p><a href="/timetable-parts/freetime/?group='. $cell['group_id']
                                     .'&subject='.$cell['subjects_id']
-                                    .'&teacher='.$teacher['id'].'" target="_blank">Предмет: ' . $cell['title'] . '</a></p>';
+                                    .'&teacher='.$teacher['id'].'&date='.$curdate.'" target="_blank">Предмет: ' . $cell['title'] . '</a></p>';
                                 if (isset(Yii::$app->user->identity->role)) {
                                     if (Yii::$app->user->identity->role == 1) {
                                         $output .= '<p class="align-center"><br/><!--<a href="/timetable/update/' . $cell["id"] . '">Редагувати</a> | -->

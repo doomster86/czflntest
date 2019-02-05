@@ -18,17 +18,19 @@ $this->params['breadcrumbs'][] = $this->title;
             <th>Група</th>
             <th>Предмет</th>
             <th>Викладач</th>
-            <th>Заплановано годин</th>
-            <th>Заплановано в розкладі</th>
-            <th>Залишилось</th>
+            <th>Всього годин по РНП</th>
+            <th>Всього в розкладі</th>
+            <th>Всього в РНП на обраний тиждень</th>
+            <th>У розкладі на обраний тиждень</th>
         </tr>
         <tr>
             <td><?php echo $group; ?></td>
             <td><?php echo $subject; ?></td>
             <td><?php echo $teacher; ?></td>
-            <td><?php echo $lessons; ?></td>
-            <td><?php echo $intable; ?></td>
-            <td><?php echo $more; ?></td>
+            <td><?php echo $allrnp; ?></td>
+            <td><?php echo $allrozklad; ?></td>
+            <td><?php echo $weekrnp; ?></td>
+            <td><?php echo $weekrozklad; ?></td>
         </tr>
     </table>
 </div>

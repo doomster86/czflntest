@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\AddGroupToTable;
 use app\models\Groups;
 use app\models\Lessons;
+use app\models\Modules;
 use app\models\RnpSubjects;
 use app\models\Subjects;
 use app\models\User;
@@ -59,27 +60,79 @@ class TimetablePartsController extends Controller
         $group = $request->get('group');
         $subject = $request->get('subject');
         $teacher = $request->get('teacher');
-        if(!empty($group) && !empty($subject) && !empty($teacher)) {
+        $date = $request->get('date');
+        if(!empty($group) && !empty($subject) && !empty($teacher) && !empty($date)) {
 
             $group_name = $this->getGroupName($group);
             $subject_name = $this->getSubjectName($subject);
             $teacher_name = $this->getTeacherName($teacher);
             $course_id = $this->getCourseId($group);
-            $lessons_all = $this->getAllLessons($course_id, $subject);
-            $lessons_in_table = $this->getLessonsInTable($subject, $group);
-            $lessons_more = $lessons_all - $lessons_in_table;
+            $modules = Modules::find()->asArray()->where(['subject_id' => $subject])->all();
+            $allrnp = 0;
+            foreach ($modules as $module) {
+                $allrnp += $module['column_plan'] * $module['column_rep'];
+            }
+            $allrozklad = $this->getLessonsInTable($subject, $group);
+
+            $weekrnp = $this->getWeekRnp($subject, $group, $date);
+            $weekrozklad = $this->getWeekRozklad($subject, $group, $date);
 
             return $this->render('freetime', [
                 'group' => $group_name,
                 'subject' => $subject_name,
                 'teacher' => $teacher_name,
-                'lessons' => $lessons_all,
-                'intable' => $lessons_in_table,
-                'more' => $lessons_more,
+                'allrnp' => $allrnp,
+                'allrozklad' => $allrozklad,
+                'weekrnp' => $weekrnp,
+                'weekrozklad' => $weekrozklad,
             ]);
         } else {
             return $this->redirect(['index']);
         }
+    }
+
+    public function getWeekRozklad($subject_id, $group_id, $date) {
+        $group = Groups::find()->asArray()->where(['ID' => $group_id])->one();
+        $date_start = $group['date_start'];
+        $date_diff = $date - $group['date_start'];
+        $num_week =  ceil(date('d', $date_diff)/7);
+        $firstDay = $date_start + (86400*7*($num_week-1));
+        $lastDay = $date_start + (86400*7*($num_week-1)) + (86400*7);
+        $lessonsInTable = Timetable::find()
+            ->asArray()
+            ->select('half')
+            ->where(['=', 'subjects_id', $subject_id])
+            ->andWhere(['=', 'group_id', $group_id])
+            ->andWhere(['>=', 'date', $firstDay])
+            ->andWhere(['<', 'date', $lastDay])
+            ->all();
+
+        $sum = 0;
+
+        foreach ($lessonsInTable as $lesson) {
+            $sum = $sum + $lesson['half'];
+        }
+
+        return $sum;
+    }
+    public function getWeekRnp($subject_id, $group_id, $date) {
+        $group = Groups::find()->asArray()->where(['ID' => $group_id])->one();
+        $date_diff = $date - $group['date_start'];
+        $num_week =  ceil(date('d', $date_diff)/7);
+        $modules = Modules::find()
+            ->where(['subject_id' => $subject_id])
+            ->asArray()
+            ->all();
+        $column_rep = 0;
+        $column_plan = 0;
+        foreach ($modules as $module) {
+            $column_rep += $module['column_rep'];
+            if ($num_week <= $column_rep) { // если неделя попадает в РНП, присваиваем часы
+                $column_plan += $module['column_plan'];
+                break;
+            }
+        }
+        return $column_plan;
     }
 
     /**
