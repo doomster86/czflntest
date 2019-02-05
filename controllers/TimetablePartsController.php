@@ -96,8 +96,8 @@ class TimetablePartsController extends Controller
         $date_start = $group['date_start'];
         $date_diff = $date - $group['date_start'];
         $num_week =  ceil(date('d', $date_diff)/7);
-        $firstDay = $date_start + (86400*7*($num_week-1));
-        $lastDay = $date_start + (86400*7*($num_week-1)) + (86400*7);
+        $firstDay = $date_start + $date_diff + (86400*7*($num_week-1));
+        $lastDay = $date_start + $date_diff + (86400*7*($num_week-1)) + (86400*7);
         $lessonsInTable = Timetable::find()
             ->asArray()
             ->select('half')
