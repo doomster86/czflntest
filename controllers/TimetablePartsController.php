@@ -12,6 +12,7 @@ use app\models\User;
 use Yii;
 use app\models\TimetableParts;
 use app\models\TimetablePartsSearch;
+use yii\i18n\Formatter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use app\models\Timetable;
@@ -92,12 +93,17 @@ class TimetablePartsController extends Controller
     }
 
     public function getWeekRozklad($subject_id, $group_id, $date) {
-        $group = Groups::find()->asArray()->where(['ID' => $group_id])->one();
-        $date_start = $group['date_start'];
-        $date_diff = $date - $group['date_start'];
+        $date_start = Timetable::find()
+            ->asArray()
+            ->select('date')
+            ->where(['=', 'subjects_id', $subject_id])
+            ->andWhere(['=', 'group_id', $group_id])
+            ->orderBy('date')
+            ->one();
+        $date_diff = $date - $date_start['date'];
         $num_week =  ceil(date('d', $date_diff)/7);
-        $firstDay = $date_start + $date_diff + (86400*7*($num_week-1));
-        $lastDay = $date_start + $date_diff + (86400*7*($num_week-1)) + (86400*7);
+        $firstDay = $date_start['date'] + (86400*7*($num_week-1));
+        $lastDay = $date_start['date'] + (86400*7*($num_week-1)) + (86400*7);
         $lessonsInTable = Timetable::find()
             ->asArray()
             ->select('half')
