@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="subject_time">
     <h3><?php echo $this->title; ?></h3>
-    <table class="table">
+    <table class="table table-striped table-bordered col-xs-12 freetime-table">
         <tr>
             <th>Група</th>
             <th>Предмет</th>
@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <th>У розкладі на обраний тиждень</th>
         </tr>
         <tr>
-            <td><?php echo $group; ?></td>
+            <td nowrap><?php echo $group; ?><br />Дата посадки: <?php echo $date_start; ?><br />(<?php echo $day_name; ?>)</td>
             <td><?php echo $subject; ?></td>
             <td><?php echo $teacher; ?></td>
             <td><?php echo $allrnp; ?></td>

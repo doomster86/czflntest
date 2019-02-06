@@ -77,7 +77,11 @@ class TimetablePartsController extends Controller
 
             $weekrnp = $this->getWeekRnp($subject, $group, $date);
             $weekrozklad = $this->getWeekRozklad($subject, $group, $date);
-
+            $date_start = Groups::find()->asArray()->where(['ID' => $group])->one();
+            $date_start = $date_start['date_start'];
+            $day_name = $this->getNameDay($date_start);
+            $formatter = new Formatter();
+            $date_start = $formatter->asDate($date_start, "dd.MM.yyyy");
             return $this->render('freetime', [
                 'group' => $group_name,
                 'subject' => $subject_name,
@@ -86,19 +90,48 @@ class TimetablePartsController extends Controller
                 'allrozklad' => $allrozklad,
                 'weekrnp' => $weekrnp,
                 'weekrozklad' => $weekrozklad,
+                'date_start' => $date_start,
+                'day_name' => $day_name,
             ]);
         } else {
             return $this->redirect(['index']);
         }
     }
 
+    public function getNameDay($date) {
+        $day = date('w', $date);
+        $day_name = '';
+        if ($day == 0) {
+            $day_name = 'Неділя';
+        } elseif ($day == 1) {
+            $day_name = 'Понеділок';
+        } elseif ($day == 2) {
+            $day_name = 'Вівторок';
+        } elseif ($day == 3) {
+            $day_name = 'Середа';
+        } elseif ($day == 4) {
+            $day_name = 'Четвер';
+        } elseif ($day == 5) {
+            $day_name = 'П\'ятниця';
+        } elseif ($day == 6) {
+            $day_name = 'Субота';
+        }
+        return $day_name;
+    }
+
     public function getWeekRozklad($subject_id, $group_id, $date) {
         $group = Groups::find()->asArray()->where(['ID' => $group_id])->one();
         $date_start = $group['date_start'];
+        $day_start = date('w', $date_start);
         $date_diff = $date - $group['date_start'];
         $num_week =  ceil(date('d', $date_diff)/7);
-        $firstDay = $date_start + $date_diff;
-        $lastDay = $date_start + $date_diff + (86400*7*($num_week-1)) + (86400*7);
+        $today = date('w', $date);
+        $firstDay  = mktime(0, 0, 0, date("m", $date)  , date("d", $date)-$today+$day_start, date("Y", $date));
+        if ($today < $day_start) {
+            $firstDay  = mktime(0, 0, 0, date("m", $date)  , date("d", $date)-$today-$day_start-1, date("Y", $date));
+        }
+
+        $lastDay = $firstDay + (86400*7);
         $lessonsInTable = Timetable::find()
             ->asArray()
             ->select('half')
@@ -113,9 +146,7 @@ class TimetablePartsController extends Controller
         foreach ($lessonsInTable as $lesson) {
             $sum = $sum + $lesson['half'];
         }
-        $formatter = new Formatter();
-        //return $day_start;
-        return $formatter->asDate($date_start, 'dd.MM.yyyy');
+        return $sum;
     }
     public function getWeekRnp($subject_id, $group_id, $date) {
         $group = Groups::find()->asArray()->where(['ID' => $group_id])->one();
