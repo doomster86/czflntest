@@ -97,7 +97,7 @@ class GroupsSearch extends Groups {
             'curator' => $this->curator,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name]);
+        $query->andFilterWhere(['like', 'groups.name', $this->name]);
 
 	    $query->joinWith(['courses' => function ($q) {
 		    $q->where('courses.name LIKE "%' . $this->coursesName . '%"');

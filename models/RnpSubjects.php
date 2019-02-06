@@ -59,7 +59,7 @@ class RnpSubjects extends \yii\db\ActiveRecord
     public function getUser() {
         return $this->hasOne(User::class, ['id' => 'teacher_id'])->viaTable('nakaz', ['subject_id' => 'ID'], function ($query) {
             /* @var $query \yii\db\ActiveQuery */
-            $query->orderBy(['column_num' => SORT_DESC])->limit(1);
+            $query->orderBy(['column_num' => SORT_DESC]);
         });
     }
 

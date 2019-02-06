@@ -55,6 +55,7 @@ $this->title = 'Головна';
                 'Вийти',
                 ['class' => 'btn btn-default']
                 ); ?>
+                <?= Html::a('Змінити пароль', ['user/pass'], ['class'=>'btn btn-default']) ?>
                 <?= Html::endForm(); ?>
             </div>
 
