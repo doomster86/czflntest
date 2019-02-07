@@ -15,20 +15,22 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="timetable-parts-view">
 
     <?php
+    $request = Yii::$app->request;
+    $request = $request->get();
     $form = ActiveForm::begin([
         'id' => 'timetable-selector',
         'action' => ['/timetable-parts/view/'],
         'method' => 'get',
     ]);
-
+    $TTViewer->teacher_id = $request['TimetableViewer']['teacher_id'];
     $items = $timetable->getTeachersNames();
     $params = [
-        'prompt' => 'Оберіть викладача'
+        'prompt' => 'Оберіть викладача',
     ];
     echo $form->field($TTViewer, 'teacher_id')->label(false)->dropDownList($items,$params);
 
     echo "<p>або</p>";
-
+    $TTViewer->group_id = $request['TimetableViewer']['group_id'];
     $items = $timetable->getGroupsNames();
     $params = [
         'prompt' => 'Оберіть групу'
@@ -44,8 +46,6 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
 
     <?php
-    $request = Yii::$app->request;
-    $request = $request->get();
     if (isset($request['TimetableViewer']['teacher_id']) || isset($request['TimetableViewer']['group_id'])) {
     $currentDate = strtotime('now');
 
