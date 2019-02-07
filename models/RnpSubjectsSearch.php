@@ -63,18 +63,7 @@ class RnpSubjectsSearch extends RnpSubjects
         }]);
 
         $query->joinWith(['user' => function ($q) {
-            $pieces = explode(" ", $this->teacherName);
-            $userFirstName = $pieces[0];
-            if (!empty($pieces[1])) {
-                $userLastName = $pieces[1];
-            }
-
-            if (empty($userLastName)) {
-                $q->where('firstname LIKE "%' . $userFirstName . '%" ' . 'OR lastname LIKE "%' . $userFirstName . '%"');
-            } else {
-                $q->where('firstname LIKE "%' . $userFirstName . '%" ' . 'OR lastname LIKE "%' . $userLastName . '%" OR firstname LIKE "%' . $userLastName . '%" ' . 'OR lastname LIKE "%' . $userFirstName . '%" ');
-
-            }
+            $q->where('concat_ws(\' \',firstname,middlename,lastname) like "%' . $this->teacherName . '%"');
         }]);
 
         return $dataProvider;
