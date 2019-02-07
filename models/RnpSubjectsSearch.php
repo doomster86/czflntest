@@ -53,9 +53,9 @@ class RnpSubjectsSearch extends RnpSubjects
 
         $this->load($params);
 
-        $query->andFilterWhere(['like', 'title', $this->title]);
+        $query->andFilterWhere(['like', 'rnp_subjects.title', $this->title]);
         $query->joinWith(['audience' => function ($q) {
-            $q->where('audience.name LIKE "%' . $this->audienceName . '%"');
+            $q->where('audience.name LIKE "%' . $this->audienceName . '%" OR audience.name IS NULL');
         }]);
 
         $query->joinWith(['profession' => function ($q) {

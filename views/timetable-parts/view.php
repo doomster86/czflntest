@@ -22,7 +22,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'action' => ['/timetable-parts/view/'],
         'method' => 'get',
     ]);
-    $TTViewer->teacher_id = $request['TimetableViewer']['teacher_id'];
+    if (!empty($request['TimetableViewer']['teacher_id'])) {
+        $TTViewer->teacher_id = $request['TimetableViewer']['teacher_id'];
+    }
     $items = $timetable->getTeachersNames();
     $params = [
         'prompt' => 'Оберіть викладача',
@@ -30,7 +32,9 @@ $this->params['breadcrumbs'][] = $this->title;
     echo $form->field($TTViewer, 'teacher_id')->label(false)->dropDownList($items,$params);
 
     echo "<p>або</p>";
-    $TTViewer->group_id = $request['TimetableViewer']['group_id'];
+    if (!empty($request['TimetableViewer']['group_id'])) {
+        $TTViewer->group_id = $request['TimetableViewer']['group_id'];
+    }
     $items = $timetable->getGroupsNames();
     $params = [
         'prompt' => 'Оберіть групу'
