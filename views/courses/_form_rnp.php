@@ -20,16 +20,16 @@ if (!empty($request['courses_count'])) {
     <input type="hidden" name="modules_count" class="modules" value="<?php echo $modules; ?>"/>
     <input type="hidden" name="courses_count" class="courses" value="<?php echo $courses; ?>"/>
     <input type="hidden" name="prof_id" value="<?php echo $prof_id; ?>"/>
-    <div style="overflow-x:auto;">
+    <div style="overflow-x:auto;" class="sticky-table sticky-ltr-cells">
         <table class="table table-bordered" id="rnp_table">
             <thead>
             <tr>
                 <th rowspan="2">№ <p style="white-space: nowrap">з/п</p></th>
-                <th rowspan="2">Навчальні предмети</th>
+                <th rowspan="2" class="sticky-cell">Навчальні предмети</th>
                 <th rowspan="2">Кількість годин (заплановано)</th>
                 <th colspan="<?php echo $modules; ?>" id="weeks">Кількість тижнів</th>
                 <th rowspan="2">Всього за категорію (фактично)</th>
-                <th rowspan="2" class="nakaz"><textarea rows="3" name="nakaz[]">Наказ про педнавантаження №***-Н від **.**.**</textarea>
+                <th rowspan="2" class="nakaz sticky-cell-opposite"><textarea rows="3" name="nakaz[]">Наказ про педнавантаження №***-Н від **.**.**</textarea>
                 </th>
                 <th rowspan="2"></th>
             </tr>
@@ -49,18 +49,18 @@ if (!empty($request['courses_count'])) {
                 ?>
                 <tr>
                     <td style="vertical-align: middle;font-weight: bold;text-align: center;"><?php echo $k + 1; ?></td>
-                    <td><input type="text" name="courses[]" class="form-control" required></td>
+                    <td class="sticky-cell"><input style="width: 200px;" type="text" name="courses[]" class="form-control" required></td>
                     <td><input type="number" name="zaplan[]" class="form-control" min="0" required></td>
                     <?php
                     for ($j = 0; $j < $modules; $j++) {
                         ?>
-                        <td class="module"><input type="number" name="modules[<?php echo $k ?>][<?php echo $j ?>]" class="form-control" min="0" style="min-width: 70px;" required>
+                        <td class="module"><input type="number" name="modules[<?php echo $k ?>][<?php echo $j ?>]" class="form-control" min="0" style="min-width: 57px;" required>
                         </td>
                         <?php
                     }
                     ?>
                     <td>?</td>
-                    <td class="teacher"><select class="form-control" name="teacher[0][0]" required>
+                    <td class="teacher sticky-cell-opposite"><select class="form-control" name="teacher[0][0]" required>
                             <option value="">Оберіть викладача</option>
                             <?php
                             foreach ($UsersArray as $user) {
@@ -98,7 +98,7 @@ if (!empty($request['courses_count'])) {
     <tr>
         <th class="week">
             <button class="btn btn-danger form-control remove-module" style="margin-bottom: 9px;" type="button"><i
-                        class="glyphicon glyphicon-remove"></i> Видалити
+                        class="glyphicon glyphicon-remove"></i>
             </button>
             <input type="number" name="weeks[]" class="form-control" min="1" required>
         </th>
@@ -107,17 +107,17 @@ if (!empty($request['courses_count'])) {
     <tbody class="copy-fields-course hide">
     <tr>
         <td class="index" style="vertical-align: middle;font-weight: bold;text-align: center;"></td>
-        <td><input type="text" name="courses[]" class="form-control" required></td>
+        <td class="sticky-cell"><input style="width: 200px;" type="text" name="courses[]" class="form-control" required></td>
         <td><input type="number" name="zaplan[]" class="form-control" min="0" required></td>
         <?php
         for ($i = 0; $i < $modules; $i++) {
             ?>
-            <td class="module"><input type="number" name="modules[][<?php echo $i ?>]" class="form-control" style="min-width: 70px;" min="0" required></td>
+            <td class="module"><input type="number" name="modules[][<?php echo $i ?>]" class="form-control" style="min-width: 57px;" min="0" required></td>
             <?php
         }
         ?>
         <td>?</td>
-        <td class="teacher"><select class="form-control" required>
+        <td class="teacher sticky-cell-opposite"><select class="form-control" required>
                 <option value="">Оберіть викладача</option>
                 <?php
                 foreach ($UsersArray as $user) {
@@ -136,14 +136,14 @@ if (!empty($request['courses_count'])) {
 <table>
     <tbody class="copy-fields-module hide">
     <tr>
-        <td class="module"><input type="number" name="modules[]" class="form-control" style="min-width: 70px;" min="0" required></td>
+        <td class="module"><input type="number" name="modules[]" class="form-control" style="min-width: 57px;" min="0" required></td>
     </tr>
     </tbody>
 </table>
 <table>
     <thead class="copy-fields-nakaz hide">
     <tr>
-        <th rowspan="2" class="nakaz">
+        <th rowspan="2" class="nakaz sticky-cell-opposite">
             <button class="btn btn-danger form-control remove-nakaz" style="margin-bottom: 9px;" type="button"><i
                         class="glyphicon glyphicon-remove"></i> Видалити
             </button>
@@ -153,7 +153,7 @@ if (!empty($request['courses_count'])) {
     </thead>
     <tbody class="copy-fields-teacher hide">
     <tr>
-        <td class="teacher"><select class="form-control" name="modules[]" required>
+        <td class="teacher sticky-cell-opposite"><select class="form-control" name="modules[]" required>
                 <option value="">Оберіть викладача</option>
                 <?php
                 foreach ($UsersArray as $user) {

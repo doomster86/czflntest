@@ -55,6 +55,13 @@ class TimetablePartsController extends Controller
         ]);
     }
 
+    public function actionPrintpage()
+    {
+        return $this->render('printpage', [
+
+        ]);
+    }
+
     public function actionFreetime()
     {
         $request = Yii::$app->request;

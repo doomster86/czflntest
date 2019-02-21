@@ -19,12 +19,14 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/site.css',
+        'css/jquery.stickytable.css',
     ];
     public $js = [
         'js/jquery.stickyheader.js',
         'js/jquery.ba-throttle-debounce.min.js',
         'js/xporttoexel.js',
         'js/custom.js',
+        'js/jquery.stickytable.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

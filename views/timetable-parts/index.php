@@ -31,6 +31,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Створити новий розклад', ['create'], ['class' => 'btn btn-success']) ?>
+
+        <?= Html::a('Роздрукувати розклад', ['printpage'], ['class' => 'btn btn-primary']) ?>
     </p>
 
     <?= GridView::widget([
