@@ -57,8 +57,16 @@ class TimetablePartsController extends Controller
 
     public function actionPrintpage()
     {
+        $request = Yii::$app->request->post();
+        if (!empty($request)) {
+            $date_start = strtotime(sprintf("%4dW%02d", date('Y'), $request['week']));
+            $date_end = $date_start + 24 * 60 * 60 * 5;
+        }
         return $this->render('printpage', [
-
+            'groups' => Groups::find()->asArray()->all(),
+            'request' => $request,
+            'date_start' => $date_start,
+            'date_end' => $date_end,
         ]);
     }
 

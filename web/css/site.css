@@ -259,7 +259,7 @@ a.desc:after {
 
 #lectures td, #lectures th, .sticky-thead th {
     margin: 0 !important;
-    padding: 5px !important;
+    padding: 0px !important;
 }
 
 #lectures th, .sticky-thead th {
@@ -267,7 +267,7 @@ a.desc:after {
 }
 
 #lectures .light, #lectures .dark {
-    padding: 5px 10px;
+    padding: 2px 5px;
     border: 1px solid #e0e0e0;
 }
 
@@ -337,7 +337,7 @@ a.desc:after {
 }
 
 .sticky-thead th:first-child {
-    width: 60px;
+    width: 51px;
 }
 
 .sticky-thead th {
@@ -374,4 +374,20 @@ a.desc:after {
 
 .godyny-table tbody th {
     font-weight: normal;
+}
+
+#lectures div {
+    border-radius: 0px;
+    margin-bottom: 0px;
+    width: auto;
+    font-size: 11px;
+    height: 185px;
+}
+
+#lectures .create {
+    height: 60px;
+}
+
+#lectures p {
+    margin: 0 0 3px;
 }

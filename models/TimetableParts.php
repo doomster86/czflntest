@@ -813,7 +813,7 @@ class TimetableParts extends \yii\db\ActiveRecord
                         $errLog .= "<br/> Группа: ".$groupID;
                         $errLog .= "<br/> x: ".$x;
                         $errLog .= "<br/> y: ".$y;
-                        $errLog .= "<br/>".$err;
+                        //$errLog .= "<br/>".$err;
                         //echo $errLog;
                     }
 
