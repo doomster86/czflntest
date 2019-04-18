@@ -8,11 +8,12 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use app\models\TimetableParts;
 
 ?>
     <script type="application/javascript">
         function print() {
-            var prtContent = document.getElementById("w4");
+            var prtContent = document.getElementById("w0");
             var WinPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
             WinPrint.document.write(prtContent.innerHTML);
             WinPrint.document.close();
@@ -61,11 +62,24 @@ use yii\widgets\ActiveForm;
         <div class="col-sm-3">
             <div class="form-group">
                 <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary']) ?>
+            </div>
+            <div class="form-group">
                 <?= Html::button('Роздрукувати', ['class' => 'btn btn-success', 'onclick' => 'print()']); ?>
             </div>
         </div>
     </div>
 <?php ActiveForm::end(); ?>
-<? echo ($date_start) . "<br/>";
-echo ($date_end);
+<?php
+
+$tableID = new TimetableParts();
+
+$tableID = $tableID->find()
+    ->asArray()
+    ->select(['id'])
+    ->where(['>=', 'datestart', $date_start]) // datestart <= $currentDate
+    ->andWhere(['>=', 'dateend', $date_end])// dateend >= $currentDate
+    ->one();
+print_r($tableID);
+$tableID = $tableID['id'];
+print_r($tableID);
 ?>
