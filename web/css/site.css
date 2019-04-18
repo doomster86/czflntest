@@ -391,3 +391,19 @@ a.desc:after {
 #lectures p {
     margin: 0 0 3px;
 }
+
+#printtable tr > th{
+    vertical-align: middle;
+    text-align: center;
+}
+
+#printtable thead{
+    border-top: 2px #000 solid;
+    border-right: 2px #000 solid;
+    border-left: 2px #000 solid;
+}
+
+#printtable thead > tr > th {
+    border-bottom: 2px #000 solid;
+    border-right: 1px #000 solid;
+}

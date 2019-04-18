@@ -124,6 +124,54 @@ class Timetable extends \yii\db\ActiveRecord
         return $this->hasOne(LectureTable::className(), ['id' => 'part_id']);
     }
 
+    public function renderPrintTable($datestart, $dateend, $groupID) {
+        $output = '';
+        if ($groupID) {
+            $input_array = Timetable::find()
+                ->asArray()
+                ->where( [ '>=', 'date', $datestart ] )
+                ->andWhere( [ '<=', 'date', $dateend ] )
+                ->andWhere( [ '=', 'group_id', $groupID ] )
+                ->all();
+        } else {
+            $input_array = Timetable::find()
+                ->asArray()
+                ->where( [ '>=', 'date', $datestart ] )
+                ->andWhere( [ '<=', 'date', $dateend ] )
+                ->all();
+        }
+        $datediff = floor(($dateend - $datestart) / (60 * 60 * 24));
+        $output .= '<table class="table" id="printtable">';
+        $output .= '<thead>';
+        $output .= '<tr>';
+        $output .= '<th scope="col">Дата<br/>Дні</th>';
+        $output .= '<th scope="col">Час</th>';
+        $output .= '<th scope="col">Назва дисципліни</th>';
+        $output .= '<th scope="col">№<br/>Аудит.</th>';
+        $output .= '<th scope="col">Прізвище та ініціали<br/>виклдачів</th>';
+        $output .= '</tr>';
+        $output .= '</thead>';
+        $output .= '<tbody>';
+
+        for ($i = 1; $i <= $datediff; $i++) {
+            $date = $datestart + ($i * 60 * 60 * 24) - 86400;
+            foreach ($input_array as $value) {
+                //if ($date == $value['date']) {
+                    $output .= '<tr>';
+                    $output .= '<td>'. $date .'</td>';
+                    $output .= '<td>'. $value['date'] .'</td>';
+                    $output .= '<td>Ячейка 3</td>';
+                    $output .= '<td>Ячейка 4</td>';
+                    $output .= '<td>Ячейка 5</td>';
+                    $output .= '</tr>';
+               // }
+            }
+        }
+        $output .= '</tbody>';
+        $output .= '</table>';
+        return $output;
+    }
+
     public function renderTable($id, $teacherID, $groupID) {
         $output = '';
 

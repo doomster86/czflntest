@@ -9,6 +9,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\TimetableParts;
+use app\models\Timetable;
 
 ?>
     <script type="application/javascript">
@@ -71,15 +72,6 @@ use app\models\TimetableParts;
 <?php ActiveForm::end(); ?>
 <?php
 
-$tableID = new TimetableParts();
+echo Timetable::renderPrintTable($date_start, $date_end, $g);
 
-$tableID = $tableID->find()
-    ->asArray()
-    ->select(['id'])
-    ->where(['>=', 'datestart', $date_start]) // datestart <= $currentDate
-    ->andWhere(['>=', 'dateend', $date_end])// dateend >= $currentDate
-    ->one();
-print_r($tableID);
-$tableID = $tableID['id'];
-print_r($tableID);
 ?>
