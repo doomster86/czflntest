@@ -12,17 +12,7 @@ use app\models\TimetableParts;
 use app\models\Timetable;
 
 ?>
-    <script type="application/javascript">
-        function print() {
-            var divToPrint=document.getElementById("printtable");
-            var newWin= window.open("");
-            var myStyle = document.getElementsByTagName('head')[0];
-            newWin.document.write(myStyle.outerHTML);
-            newWin.document.write(divToPrint.outerHTML);
-            newWin.print();
-            newWin.close();
-        }
-    </script>
+<div class="hidden-print">
 
 <?php $form = ActiveForm::begin(); ?>
     <div class="row">
@@ -65,11 +55,12 @@ use app\models\Timetable;
                 <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary']) ?>
             </div>
             <div class="form-group">
-                <?= Html::button('Роздрукувати', ['class' => 'btn btn-success', 'onclick' => 'print()']); ?>
+                <?= Html::button('Роздрукувати', ['class' => 'btn btn-success hidden-print', 'onclick' => 'print()']); ?>
             </div>
         </div>
     </div>
 <?php ActiveForm::end(); ?>
+</div>
 <?php
 
 echo Timetable::renderPrintTable($date_start, $date_end, $g);

@@ -131,7 +131,7 @@ if(!Yii::$app->user->isGuest) {
     </div>
 </div>
 
-<footer class="footer">
+<footer class="footer hidden-print">
     <div class="container">
         <div class="col-lg-4">
             <h4>Телефони</h4>
