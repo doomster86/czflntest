@@ -4,8 +4,9 @@ namespace app\models;
 
 use Yii;
 use yii\helpers\ArrayHelper;
-use \app\models\TimetableParts;
 use yii\helpers\Html;
+use app\models\RnpSubjects;
+use yii\i18n\Formatter;
 /**
  * This is the model class for table "timetable".
  *
@@ -155,16 +156,48 @@ class Timetable extends \yii\db\ActiveRecord
 
         for ($i = 1; $i <= $datediff; $i++) {
             $date = $datestart + ($i * 60 * 60 * 24) - 86400;
+            $day = 0;
             foreach ($input_array as $value) {
-                //if ($date == $value['date']) {
-                    $output .= '<tr>';
-                    $output .= '<td>'. $date .'</td>';
-                    $output .= '<td>'. $value['date'] .'</td>';
-                    $output .= '<td>Ячейка 3</td>';
-                    $output .= '<td>Ячейка 4</td>';
-                    $output .= '<td>Ячейка 5</td>';
+                $td = 0;
+                if ($date == $value['date']) {
+                    if ($day != $date) {
+                        $td = 1;
+                    }
+                    $day = $date;
+                    $teacher = User::find()
+                        ->asArray()
+                        ->select('id, firstname, middlename, lastname')
+                        ->where(['=', 'id', $value['teacher_id']])
+                        ->one();
+                    $teacherName = $teacher['firstname'] . " " . $teacher['middlename'] ." " . $teacher['lastname'];
+
+                    $audienceNum = Audience::find()
+                        ->asArray()
+                        ->select('num')
+                        ->where(['=', 'ID', $value['audience_id']])
+                        ->one();
+                    $audienceNum = $audienceNum['num'];
+
+                    $subjName = RnpSubjects::find()
+                        ->asArray()
+                        ->select('title')
+                        ->where(['=', 'id', $value['subjects_id']])
+                        ->one();
+                    $subjName = $subjName['title'];
+                    if ($td) {
+                        $output .= '<tr style="border-top: 3px #000 solid;">';
+                    } else {
+                        $output .= '<tr>';
+                    }
+                    $formatter = new Formatter();
+                    $format_date = $formatter->asDate($date, "dd.MM.yy");
+                    $output .= '<td>'. $format_date .'</td>';
+                    $output .= '<td>'. $value .'</td>';
+                    $output .= '<td>'. $subjName .'</td>';
+                    $output .= '<td>'. $audienceNum .'</td>';
+                    $output .= '<td>'. $teacherName .'</td>';
                     $output .= '</tr>';
-               // }
+                }
             }
         }
         $output .= '</tbody>';

@@ -14,13 +14,13 @@ use app\models\Timetable;
 ?>
     <script type="application/javascript">
         function print() {
-            var prtContent = document.getElementById("w0");
-            var WinPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
-            WinPrint.document.write(prtContent.innerHTML);
-            WinPrint.document.close();
-            WinPrint.focus();
-            WinPrint.print();
-            WinPrint.close();
+            var divToPrint=document.getElementById("printtable");
+            var newWin= window.open("");
+            var myStyle = document.getElementsByTagName('head')[0];
+            newWin.document.write(myStyle.outerHTML);
+            newWin.document.write(divToPrint.outerHTML);
+            newWin.print();
+            newWin.close();
         }
     </script>
 

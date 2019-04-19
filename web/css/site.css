@@ -398,12 +398,24 @@ a.desc:after {
 }
 
 #printtable thead{
-    border-top: 2px #000 solid;
-    border-right: 2px #000 solid;
-    border-left: 2px #000 solid;
+    border-top: 3px #000 solid;
+    border-right: 3px #000 solid;
+    border-left: 3px #000 solid;
 }
 
 #printtable thead > tr > th {
-    border-bottom: 2px #000 solid;
+    border-bottom: 3px #000 solid;
     border-right: 1px #000 solid;
+}
+
+#printtable tbody{
+    border-bottom: 3px #000 solid;
+    border-right: 3px #000 solid;
+    border-left: 3px #000 solid;
+}
+
+#printtable tbody td{
+    border-bottom: 1px #000 solid;
+    border-right: 1px #000 solid;
+    border-left: 1px #000 solid;
 }
