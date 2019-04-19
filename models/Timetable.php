@@ -192,7 +192,7 @@ class Timetable extends \yii\db\ActiveRecord
                     $formatter = new Formatter();
                     $format_date = $formatter->asDate($date, "dd.MM.yy");
                     $output .= '<td>'. $format_date .'</td>';
-                    $output .= '<td>'. $value .'</td>';
+                    $output .= '<td>в разработке</td>';
                     $output .= '<td>'. $subjName .'</td>';
                     $output .= '<td>'. $audienceNum .'</td>';
                     $output .= '<td>'. $teacherName .'</td>';
