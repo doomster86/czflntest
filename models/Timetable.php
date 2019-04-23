@@ -173,10 +173,18 @@ class Timetable extends \yii\db\ActiveRecord
 
                     $audienceNum = Audience::find()
                         ->asArray()
-                        ->select('num')
+                        ->select('corps_id, num')
                         ->where(['=', 'ID', $value['audience_id']])
                         ->one();
+                    $corpsID = $audienceNum['corps_id'];
                     $audienceNum = $audienceNum['num'];
+
+                    $corpsTimes = LectureTable::find()
+                        ->asArray()
+                        ->select('time_start, time_stop')
+                        ->where(['=', 'corps_id', $corpsID])
+                        ->orderBy('time_start')
+                        ->all();
 
                     $subjName = RnpSubjects::find()
                         ->asArray()
@@ -192,7 +200,15 @@ class Timetable extends \yii\db\ActiveRecord
                     $formatter = new Formatter();
                     $format_date = $formatter->asDate($date, "dd.MM.yy");
                     $output .= '<td>'. $format_date .'</td>';
-                    $output .= '<td>в разработке</td>';
+                    if(!empty($corpsTimes))
+                    {
+                        $time_start = $corpsTimes[$value['y']-1]['time_start'];
+                        $output .= '<td>'. $time_start .' - <br />';
+                        $time_stop = $corpsTimes[$value['y']-1]['time_stop'];
+                        $output .= $time_stop .'</td>';
+                    } else {
+                        $output .= '<td></td>';
+                    }
                     $output .= '<td>'. $subjName .'</td>';
                     $output .= '<td>'. $audienceNum .'</td>';
                     $output .= '<td>'. $teacherName .'</td>';
