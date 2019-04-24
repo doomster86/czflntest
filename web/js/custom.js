@@ -123,6 +123,7 @@ $(document).ready(function () {
 
     $("#footer-1").on("click", function () {
         var text = $("#footer-1").html();
+        text = text.replace(/&nbsp;/g, ' ').replace(/<br.*?>/g, '\n');
         $("#footer-1-append textarea").val(text)
         $("#footer-1-append").show();
         $('#footer-1').hide();
@@ -140,6 +141,7 @@ $(document).ready(function () {
 
     $("#footer-2").on("click", function () {
         var text = $("#footer-2").html();
+        text = text.replace(/&nbsp;/g, ' ').replace(/<br.*?>/g, '\n');
         $("#footer-2-append textarea").val(text)
         $("#footer-2-append").show();
         $('#footer-2').hide();
