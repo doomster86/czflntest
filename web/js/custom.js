@@ -73,4 +73,51 @@ $(document).ready(function () {
         $("input").removeAttr("required");
         $("select").removeAttr("required");
     });
+    $("#group").change(function(){
+        if ($(this).val().length){
+            $(".week-selector").hide()
+            $("#week").prop('disabled', 'disabled');
+        } else {
+            $(".week-selector").show();
+            $("#week").prop( "disabled", false );
+        }
+    });
+    if ($("#group").val().length){
+        $(".week-selector").hide()
+        $("#week").prop('disabled', 'disabled');
+    } else {
+        $(".week-selector").show();
+        $("#week").prop( "disabled", false );
+    }
+
+    $("#dolzh").on("click", function () {
+        var text = $("#dolzh").html();
+        $("#dolzh-append textarea").val(text)
+        $("#dolzh-append").show();
+            $('#dolzh').hide();
+    });
+    $("#dolzh-save").on("click", function () {
+        var text = $("#dolzh-append textarea").val();
+        if (text.length) {
+            $("#dolzh").html(text);
+            $("#dolzh-append").hide();
+            $('#dolzh').show();
+        }
+    });
+
+    $("#initial").on("click", function () {
+        var text = $("#initial").html();
+        $("#initial-append textarea").val(text)
+        $("#initial-append").show();
+        $('#initial').hide();
+        //textArea.hide()
+    });
+    $("#initial-save").on("click", function () {
+        var text = $("#initial-append textarea").val();
+        if (text.length) {
+            $("#initial").html(text);
+            $("#initial-append").hide();
+            $('#initial').show();
+        }
+    });
 });

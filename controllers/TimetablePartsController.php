@@ -61,8 +61,17 @@ class TimetablePartsController extends Controller
         $date_start = 0;
         $date_end = 0;
         if (!empty($request)) {
-            $date_start = strtotime(sprintf("%4dW%02d", date('Y'), $request['week']));
-            $date_end = $date_start + 24 * 60 * 60 * 5;
+            if (empty($request['week']) && !empty($request['group'])) {
+                $Group = Groups::find()
+                    ->asArray()
+                    ->where( [ '=', 'ID', $request['group'] ] )
+                    ->one();
+                $date_start = $Group['date_start'];
+                $date_end = $Group['date_end'];
+            } else {
+                $date_start = strtotime(sprintf("%4dW%02d", date('Y'), $request['week']));
+                $date_end = $date_start + 24 * 60 * 60 * 5;
+            }
         }
         return $this->render('printpage', [
             'groups' => Groups::find()->asArray()->all(),

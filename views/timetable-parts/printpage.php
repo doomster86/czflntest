@@ -17,7 +17,7 @@ use app\models\Timetable;
 <?php $form = ActiveForm::begin(); ?>
     <div class="row">
         <div class="col-sm-3">
-            <div class="form-group">
+            <div class="form-group week-selector">
                 <label for="week">Виберіть тиждень</label>
                 <select class="form-control" id="week" name="week" required>
                     <option value="">Номер тижня року</option>
@@ -62,6 +62,30 @@ use app\models\Timetable;
 <?php ActiveForm::end(); ?>
 </div>
 <?php
+if ($g) {
+    $Group = \app\models\Groups::find()
+        ->asArray()
+        ->where( [ '=', 'ID', $g ] )
+        ->one();
+?>
+    <div class="row" style="font-size: 15px;">
+        <div class="col-xs-8 col-sm-8 col-md-8"></div>
+        <div class="col-xs-4 col-md-4">
+            <p>ЗАТВЕРДЖУЮ</p>
+                <p id="dolzh-append" style="display: none;"><textarea></textarea><br/><button class="btn" type="button" id="dolzh-save">Зберегти</button></p>
+                <p id="dolzh">Директор Харківського міського центру ПТО ДСЗ</p>
+                <p id="initial-append" style="display: none;"><textarea></textarea><br/><button class="btn" type="button" id="initial-save">Зберегти</button></p>
+                <p id="initial">______________ Р.А Кір'янов</p>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 20px; font-weight: bold; font-size: 17px;" >
+        <p align="center">РОЗКЛАД ЗАНЯТЬ<br/>
+        слухачів група <?php echo $Group['name'] ?><br/>
+        на тиждень з
+        </p>
+    </div>
+<?php
+}
 
 echo Timetable::renderPrintTable($date_start, $date_end, $g);
 
