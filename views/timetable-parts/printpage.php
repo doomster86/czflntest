@@ -90,3 +90,14 @@ if ($g) {
 echo Timetable::renderPrintTable($date_start, $date_end, $g);
 
 ?>
+
+<div class="row">
+    <div class="col-xs-6 col-sm-6 col-md-6" align="center">
+        <p id="footer-1-append" style="display: none;"><textarea></textarea><br/><button class="btn" type="button" id="footer-1-save">Зберегти</button></p>
+        <p id="footer-1">Текст блока «Подвал 1»</p>
+    </div>
+    <div class="col-xs-6 col-sm-6 col-md-6" align="center">
+        <p id="footer-2-append" style="display: none;"><textarea></textarea><br/><button class="btn" type="button" id="footer-2-save">Зберегти</button></p>
+        <p id="footer-2">Текст блока «Подвал 2»</p>
+    </div>
+</div>

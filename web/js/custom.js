@@ -120,4 +120,38 @@ $(document).ready(function () {
             $('#initial').show();
         }
     });
+
+    $("#footer-1").on("click", function () {
+        var text = $("#footer-1").html();
+        $("#footer-1-append textarea").val(text)
+        $("#footer-1-append").show();
+        $('#footer-1').hide();
+        //textArea.hide()
+    });
+    $("#footer-1-save").on("click", function () {
+        var text = $("#footer-1-append textarea").val();
+        if (text.length) {
+            text = text.replace(/\r\n|\r|\n/g,"<br />")
+            $("#footer-1").html(text);
+            $("#footer-1-append").hide();
+            $('#footer-1').show();
+        }
+    });
+
+    $("#footer-2").on("click", function () {
+        var text = $("#footer-2").html();
+        $("#footer-2-append textarea").val(text)
+        $("#footer-2-append").show();
+        $('#footer-2').hide();
+        //textArea.hide()
+    });
+    $("#footer-2-save").on("click", function () {
+        var text = $("#footer-2-append textarea").val();
+        if (text.length) {
+            text = text.replace(/\r\n|\r|\n/g,"<br />")
+            $("#footer-2").html(text);
+            $("#footer-2-append").hide();
+            $('#footer-2').show();
+        }
+    });
 });
