@@ -156,4 +156,25 @@ $(document).ready(function () {
             $('#footer-2').show();
         }
     });
+
+    $(".teachername").on("click", function () {
+        var text = $(this).html();
+        text = text.replace(/&nbsp;/g, ' ').replace(/<br.*?>/g, '\n');
+        var index = $(this).index(".teachername");
+        $(".teachername-append textarea").eq(index).val(text)
+        $(".teachername-append").eq(index).show();
+        $(this).hide();
+        //textArea.hide()
+    });
+
+    $(".teachername-save").on("click", function () {
+        var index = $(this).index(".teachername-save");
+        var text = $(".teachername-append textarea").eq(index).val();
+        if (text.length) {
+            text = text.replace(/\r\n|\r|\n/g,"<br />")
+            $(".teachername").eq(index).html(text);
+            $(".teachername-append").eq(index).hide();
+            $('.teachername').eq(index).show();
+        }
+    });
 });

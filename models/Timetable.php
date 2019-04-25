@@ -211,7 +211,7 @@ class Timetable extends \yii\db\ActiveRecord
                     }
                     $output .= '<td>'. $subjName .'</td>';
                     $output .= '<td>'. $audienceNum .'</td>';
-                    $output .= '<td>'. $teacherName .'</td>';
+                    $output .= '<td><p class="teachername">'. $teacherName .'</p><p class="teachername-append" style="display: none;"><textarea></textarea><br/><button class="btn teachername-save" type="button">Зберегти</button></p></td>';
                     $output .= '</tr>';
                 }
             }
