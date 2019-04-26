@@ -157,6 +157,7 @@ class Timetable extends \yii\db\ActiveRecord
         for ($i = 1; $i <= $datediff; $i++) {
             $date = $datestart + ($i * 60 * 60 * 24) - 86400;
             $day = 0;
+            $j = 0;
             foreach ($input_array as $value) {
                 $td = 0;
                 if ($date == $value['date']) {
@@ -203,8 +204,22 @@ class Timetable extends \yii\db\ActiveRecord
                     if(!empty($corpsTimes))
                     {
                         $time_start = $corpsTimes[$value['y']-1]['time_start'];
-                        $output .= '<td>'. $time_start .' - <br />';
                         $time_stop = $corpsTimes[$value['y']-1]['time_stop'];
+                        if ($value['half'] == 1){
+                            $arr_time_start = array_map('intval', explode(':', $time_start));
+                            $time_1 = mktime($arr_time_start[0], $arr_time_start[1], 1, date('m'), date('d'), date('Y'));
+                            $arr_time_stop = array_map('intval', explode(':', $time_stop));
+                            $time_2 = mktime($arr_time_stop[0], $arr_time_stop[1], 1, date('m'), date('d'), date('Y'));
+                            $time_diff = ($time_2 - $time_1)/2;
+                            if ($j==0) {
+                                $time_stop = date('H:i',$time_2 - $time_diff);
+                            } else {
+                                $time_start = date('H:i',$time_2 - $time_diff);
+                            }
+                            $j++;
+                        }
+
+                        $output .= '<td>'. $time_start .' - <br />';
                         $output .= $time_stop .'</td>';
                     } else {
                         $output .= '<td></td>';
