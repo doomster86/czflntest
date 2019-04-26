@@ -142,6 +142,8 @@ class Timetable extends \yii\db\ActiveRecord
                 ->all();
         }
         $datediff = floor(($dateend - $datestart) / (60 * 60 * 24));
+        if (!empty($input_array)){
+
         $output .= '<table class="table" id="printtable">';
         $output .= '<thead>';
         $output .= '<tr>';
@@ -153,7 +155,6 @@ class Timetable extends \yii\db\ActiveRecord
         $output .= '</tr>';
         $output .= '</thead>';
         $output .= '<tbody>';
-
         for ($i = 1; $i <= $datediff; $i++) {
             $date = $datestart + ($i * 60 * 60 * 24) - 86400;
             $day = 0;
@@ -233,6 +234,7 @@ class Timetable extends \yii\db\ActiveRecord
         }
         $output .= '</tbody>';
         $output .= '</table>';
+    }
         return $output;
     }
 

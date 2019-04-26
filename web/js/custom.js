@@ -90,34 +90,38 @@ $(document).ready(function () {
         $("#week").prop( "disabled", false );
     }
 
-    $("#dolzh").on("click", function () {
-        var text = $("#dolzh").html();
-        $("#dolzh-append textarea").val(text)
-        $("#dolzh-append").show();
-            $('#dolzh').hide();
+    $(".dolzh").on("click", function () {
+        var text = $(this).html();
+        var index = $(this).index(".dolzh");
+        $(".dolzh-append textarea").eq(index).val(text)
+        $(".dolzh-append").eq(index).show();
+        $(this).hide();
     });
-    $("#dolzh-save").on("click", function () {
-        var text = $("#dolzh-append textarea").val();
+    $(".dolzh-save").on("click", function () {
+        var index = $(this).index(".dolzh-save");
+        var text = $(".dolzh-append textarea").eq(index).val();
         if (text.length) {
-            $("#dolzh").html(text);
-            $("#dolzh-append").hide();
-            $('#dolzh').show();
+            $(".dolzh").eq(index).html(text);
+            $(".dolzh-append").eq(index).hide();
+            $('.dolzh').eq(index).show();
         }
     });
 
-    $("#initial").on("click", function () {
-        var text = $("#initial").html();
-        $("#initial-append textarea").val(text)
-        $("#initial-append").show();
-        $('#initial').hide();
+    $(".initial").on("click", function () {
+        var text = $(this).html();
+        var index = $(this).index(".initial");
+        $(".initial-append textarea").eq(index).val(text)
+        $(".initial-append").eq(index).show();
+        $(this).hide();
         //textArea.hide()
     });
-    $("#initial-save").on("click", function () {
-        var text = $("#initial-append textarea").val();
+    $(".initial-save").on("click", function () {
+        var index = $(this).index(".initial-save");
+        var text = $(".initial-append textarea").eq(index).val();
         if (text.length) {
-            $("#initial").html(text);
-            $("#initial-append").hide();
-            $('#initial').show();
+            $(".initial").eq(index).html(text);
+            $(".initial-append").eq(index).hide();
+            $('.initial').eq(index).show();
         }
     });
 
