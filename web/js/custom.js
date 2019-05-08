@@ -177,6 +177,7 @@ $(document).ready(function () {
         if (text.length) {
             text = text.replace(/\r\n|\r|\n/g,"<br />")
             $(".teachername").eq(index).html(text);
+            $(".teachernameExel").eq(index).html(text);
             $(".teachername-append").eq(index).hide();
             $('.teachername').eq(index).show();
         }

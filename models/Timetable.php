@@ -238,6 +238,118 @@ class Timetable extends \yii\db\ActiveRecord
         return $output;
     }
 
+    public function renderPrintExel($datestart, $dateend, $groupID) {
+        $output = '';
+        if ($groupID) {
+            $input_array = Timetable::find()
+                ->asArray()
+                ->where( [ '>=', 'date', $datestart ] )
+                ->andWhere( [ '<=', 'date', $dateend ] )
+                ->andWhere( [ '=', 'group_id', $groupID ] )
+                ->all();
+        } else {
+            $input_array = Timetable::find()
+                ->asArray()
+                ->where( [ '>=', 'date', $datestart ] )
+                ->andWhere( [ '<=', 'date', $dateend ] )
+                ->all();
+        }
+        $datediff = floor(($dateend - $datestart) / (60 * 60 * 24));
+        if (!empty($input_array)){
+            $output .= '<table id="tableExcel" class="hidden">';
+            $output .= '<thead>';
+            $output .= '<tr>';
+            $output .= '<th scope="col">Дата<br/>Дні</th>';
+            $output .= '<th scope="col">Час</th>';
+            $output .= '<th scope="col">Назва дисципліни</th>';
+            $output .= '<th scope="col">№<br/>Аудит.</th>';
+            $output .= '<th scope="col">Прізвище та ініціали<br/>виклдачів</th>';
+            $output .= '</tr>';
+            $output .= '</thead>';
+            $output .= '<tbody>';
+            for ($i = 1; $i <= $datediff; $i++) {
+                $date = $datestart + ($i * 60 * 60 * 24) - 86400;
+                $day = 0;
+                $j = 0;
+                foreach ($input_array as $value) {
+                    $td = 0;
+                    if ($date == $value['date']) {
+                        if ($day != $date) {
+                            $td = 1;
+                        }
+                        $day = $date;
+                        $teacher = User::find()
+                            ->asArray()
+                            ->select('id, firstname, middlename, lastname')
+                            ->where(['=', 'id', $value['teacher_id']])
+                            ->one();
+                        $teacherName = $teacher['firstname'] . " " . $teacher['middlename'] ." " . $teacher['lastname'];
+
+                        $audienceNum = Audience::find()
+                            ->asArray()
+                            ->select('corps_id, num')
+                            ->where(['=', 'ID', $value['audience_id']])
+                            ->one();
+                        $corpsID = $audienceNum['corps_id'];
+                        $audienceNum = $audienceNum['num'];
+
+                        $corpsTimes = LectureTable::find()
+                            ->asArray()
+                            ->select('time_start, time_stop')
+                            ->where(['=', 'corps_id', $corpsID])
+                            ->orderBy('time_start')
+                            ->all();
+
+                        $subjName = RnpSubjects::find()
+                            ->asArray()
+                            ->select('title')
+                            ->where(['=', 'id', $value['subjects_id']])
+                            ->one();
+                        $subjName = $subjName['title'];
+                        if ($td) {
+                            $output .= '<tr style="border-top: 1px #000 solid;">';
+                        } else {
+                            $output .= '<tr>';
+                        }
+                        $formatter = new Formatter();
+                        $format_date = $formatter->asDate($date, "dd.MM.yy");
+                        $output .= '<td>'. $format_date .'</td>';
+                        if(!empty($corpsTimes))
+                        {
+                            $time_start = $corpsTimes[$value['y']-1]['time_start'];
+                            $time_stop = $corpsTimes[$value['y']-1]['time_stop'];
+                            if ($value['half'] == 1){
+                                $arr_time_start = array_map('intval', explode(':', $time_start));
+                                $time_1 = mktime($arr_time_start[0], $arr_time_start[1], 1, date('m'), date('d'), date('Y'));
+                                $arr_time_stop = array_map('intval', explode(':', $time_stop));
+                                $time_2 = mktime($arr_time_stop[0], $arr_time_stop[1], 1, date('m'), date('d'), date('Y'));
+                                $time_diff = ($time_2 - $time_1)/2;
+                                if ($j==0) {
+                                    $time_stop = date('H:i',$time_2 - $time_diff);
+                                } else {
+                                    $time_start = date('H:i',$time_2 - $time_diff);
+                                }
+                                $j++;
+                            }
+
+                            $output .= '<td>'. $time_start .' - ';
+                            $output .= $time_stop .'</td>';
+                        } else {
+                            $output .= '<td></td>';
+                        }
+                        $output .= '<td>'. $subjName .'</td>';
+                        $output .= '<td>'. $audienceNum .'</td>';
+                        $output .= '<td><p class="teachernameExel">'. $teacherName .'</p></td>';
+                        $output .= '</tr>';
+                    }
+                }
+            }
+            $output .= '</tbody>';
+            $output .= '</table>';
+        }
+        return $output;
+    }
+
     public function renderTable($id, $teacherID, $groupID) {
         $output = '';
 

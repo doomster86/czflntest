@@ -52,10 +52,15 @@ $formatter = new \yii\i18n\Formatter();
         <div class="row">
             <div class="col-sm-3">
                 <div class="form-group">
-                    <?= Html::submitButton('Отправить', ['class' => 'btn btn-primary']) ?>
+                    <?= Html::submitButton('Обновити таблицю', ['class' => 'btn btn-primary']) ?>
                 </div>
                 <div class="form-group">
                     <?= Html::button('Роздрукувати', ['class' => 'btn btn-success hidden-print', 'onclick' => 'print()']); ?>
+                    <?php
+                    if ($g) {
+                        echo Html::button('Завантажити Exel', ['class' => 'btn btn-primary', 'onclick' => 'javascript:tableToExcel(\'tableExcel\', \'outputdata\', \'outputdata\');']);
+                    }
+                    ?>
                 </div>
             </div>
         </div>
@@ -90,6 +95,7 @@ if ($g) {
         <?php
         echo $timetable;
     }
+    echo Timetable::renderPrintExel($date_start, $date_end, $g);
 } else {
     foreach ($groups as $group) {
         $timetable = Timetable::renderPrintTable($date_start, $date_end, $group['ID']);
