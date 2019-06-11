@@ -419,3 +419,11 @@ a.desc:after {
     border-right: 1px #000 solid;
     border-left: 1px #000 solid;
 }
+
+#rnp_table .form-control {
+    font-size: 11px;
+}
+
+#rnp_table, #rnp_table .form-control, #rnp_table .btn {
+    font-size: 11px;
+}

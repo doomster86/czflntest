@@ -333,11 +333,12 @@ class CoursesController extends Controller {
                                 'subject_id' => $subject_id,
                                 'column_num' => $h,
                                 'column_plan' => $request['modules'][$i][$h],
-                                'column_rep' => $request['weeks'][$h]
+                                'column_rep' => $request['weeks'][$h],
+                                'column_text' => $request['text'][$h]
                             ), '') && $modelModules->validate()) {
                             if ($exist) {
                                 Yii::$app->db->createCommand()
-                                    ->update('modules', ['column_plan' => $request['modules'][$i][$h], 'column_rep' => $request['weeks'][$h]], 'ID = ' . $exist['ID'])
+                                    ->update('modules', ['column_plan' => $request['modules'][$i][$h], 'column_rep' => $request['weeks'][$h], 'column_text' => $request['text'][$h]], 'ID = ' . $exist['ID'])
                                     ->execute();
                             } else {
                                 $modelModules->save();

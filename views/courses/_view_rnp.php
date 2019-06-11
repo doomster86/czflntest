@@ -22,7 +22,7 @@ $nakazy = count($nakazArray);
                 <tr>
                     <th rowspan="2">№ <p style="white-space: nowrap">з/п</p></th>
                     <th rowspan="2" class="sticky-cell">Навчальні предмети</th>
-                    <th rowspan="2">Кількість годин (заплановано)</th>
+                    <th rowspan="2"><p>Кількість годин (заплановано)</p>Довільний текст</th>
                     <th colspan="<?php echo $modules; ?>" id="weeks">Кількість тижнів</th>
                     <th rowspan="2">Всього за категорію (фактично)</th>
                     <?php
@@ -51,7 +51,8 @@ $nakazy = count($nakazArray);
                                             class="glyphicon glyphicon-remove"></i>
                                 </button>
                             <?php } ?>
-                            <input type="number" name="weeks[]" value="<?php echo $weeksArray[$i]['column_rep'];?>" class="form-control" min="1" required>
+                            <input type="number" name="weeks[]" value="<?php echo $weeksArray[$i]['column_rep'];?>" class="form-control form-group" min="1" required>
+                            <input type="text" name="text[]" value="<?php echo $weeksArray[$i]['column_text'];?>" class="form-control">
                         </th>
                         <?php
                     }
@@ -247,7 +248,7 @@ $nakazy = count($nakazArray);
                 <button class="btn btn-danger form-control remove-module" style="margin-bottom: 9px;" type="button"><i
                             class="glyphicon glyphicon-remove"></i>
                 </button>
-                <input type="number" name="weeks[]" class="form-control" min="1" required>
+                <input type="number" name="weeks[]" class="form-control form-group" min="1" required><input type="text" name="text[]" value="" class="form-control">
             </th>
         </tr>
         </thead>

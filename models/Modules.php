@@ -13,6 +13,7 @@ use Yii;
  * @property int $column_num
  * @property int $column_plan
  * @property int $column_rep
+ * @property string $column_text
  */
 class Modules extends \yii\db\ActiveRecord
 {
@@ -32,6 +33,7 @@ class Modules extends \yii\db\ActiveRecord
         return [
             [['rnp_id', 'subject_id', 'column_num', 'column_rep'], 'required'],
             [['rnp_id', 'subject_id', 'column_num', 'column_rep'], 'integer'],
+            [['column_text'], 'string'],
         ];
     }
 
@@ -47,6 +49,7 @@ class Modules extends \yii\db\ActiveRecord
             'column_num' => 'Column Num',
             'column_plan' => 'Column Plan',
             'column_rep' => 'Column Rep',
+            'column_text' => 'Column Text',
         ];
     }
 }
