@@ -54,7 +54,7 @@ if (!empty($request['courses_count'])) {
                     <?php
                     for ($j = 0; $j < $modules; $j++) {
                         ?>
-                        <td class="module"><input type="number" name="modules[<?php echo $k ?>][<?php echo $j ?>]" class="form-control" min="0" style="min-width: 57px;" required>
+                        <td class="module"><input type="number" name="modules[<?php echo $k ?>][<?php echo $j ?>]" class="form-control" min="1" style="min-width: 57px;">
                         </td>
                         <?php
                     }
@@ -112,7 +112,7 @@ if (!empty($request['courses_count'])) {
         <?php
         for ($i = 0; $i < $modules; $i++) {
             ?>
-            <td class="module"><input type="number" name="modules[][<?php echo $i ?>]" class="form-control" style="min-width: 57px;" min="0" required></td>
+            <td class="module"><input type="number" name="modules[][<?php echo $i ?>]" class="form-control" style="min-width: 57px;" min="1"></td>
             <?php
         }
         ?>
@@ -136,7 +136,7 @@ if (!empty($request['courses_count'])) {
 <table>
     <tbody class="copy-fields-module hide">
     <tr>
-        <td class="module"><input type="number" name="modules[]" class="form-control" style="min-width: 57px;" min="0" required></td>
+        <td class="module"><input type="number" name="modules[]" class="form-control" style="min-width: 57px;" min="1"></td>
     </tr>
     </tbody>
 </table>

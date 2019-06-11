@@ -30,8 +30,8 @@ class Modules extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['rnp_id', 'subject_id', 'column_num', 'column_plan', 'column_rep'], 'required'],
-            [['rnp_id', 'subject_id', 'column_num', 'column_plan', 'column_rep'], 'integer'],
+            [['rnp_id', 'subject_id', 'column_num', 'column_rep'], 'required'],
+            [['rnp_id', 'subject_id', 'column_num', 'column_rep'], 'integer'],
         ];
     }
 

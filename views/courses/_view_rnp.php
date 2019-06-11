@@ -79,7 +79,7 @@ $nakazy = count($nakazArray);
                                 }
                             }
                             ?>
-                            <td class="module"><input type="number" name="modules[<?php echo $k ?>][<?php echo $j ?>]" value="<?php echo $value; ?>" class="form-control" min="0" style="min-width: 57px;" required>
+                            <td class="module"><input type="number" name="modules[<?php echo $k ?>][<?php echo $j ?>]" value="<?php echo $value; ?>" class="form-control" min="1" style="min-width: 57px;">
                             </td>
                             <?php
                         }
@@ -259,7 +259,7 @@ $nakazy = count($nakazArray);
             <?php
             for ($i = 0; $i < $modules; $i++) {
                 ?>
-                <td class="module"><input type="number" name="modules[][<?php echo $i ?>]" class="form-control" style="min-width: 57px;" min="0" required></td>
+                <td class="module"><input type="number" name="modules[][<?php echo $i ?>]" class="form-control" style="min-width: 57px;" min="1"></td>
                 <?php
             }
             ?>
@@ -289,7 +289,7 @@ $nakazy = count($nakazArray);
     <table>
         <tbody class="copy-fields-module hide">
         <tr>
-            <td class="module"><input type="number" name="modules[]" class="form-control" style="min-width: 57px;" min="0" required></td>
+            <td class="module"><input type="number" name="modules[]" class="form-control" style="min-width: 57px;" min="1"></td>
         </tr>
         </tbody>
     </table>

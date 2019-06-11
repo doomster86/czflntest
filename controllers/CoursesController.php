@@ -106,7 +106,8 @@ class CoursesController extends Controller {
 
 
     public function actionView($id) {
-        if(Yii::$app->user->identity->role==1) {
+        if (!Yii::$app->user->isGuest){
+            if(Yii::$app->user->identity->role==1) {
 
             //lessons
             $searchModel = new LessonsSearch();
@@ -400,7 +401,7 @@ class CoursesController extends Controller {
                     'teachersArray' => $teachersArray
                 ]);
             }
-        } else {
+        }} else {
             return $this->render('/site/access_denied');
         }
         exit;
