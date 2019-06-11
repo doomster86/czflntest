@@ -26,7 +26,7 @@ if (!empty($request['courses_count'])) {
             <tr>
                 <th rowspan="2">№ <p style="white-space: nowrap">з/п</p></th>
                 <th rowspan="2" class="sticky-cell">Навчальні предмети</th>
-                <th rowspan="2">Кількість годин (заплановано)</th>
+                <th rowspan="2"><p>Кількість годин (заплановано)</p>Нотатка</th>
                 <th colspan="<?php echo $modules; ?>" id="weeks">Кількість тижнів</th>
                 <th rowspan="2">Всього за категорію (фактично)</th>
                 <th rowspan="2" class="nakaz sticky-cell-opposite"><textarea rows="3" name="nakaz[]">Наказ про педнавантаження №***-Н від **.**.**</textarea>
