@@ -259,11 +259,13 @@ class Timetable extends \yii\db\ActiveRecord
             $output .= '<table id="tableExcel" class="hidden">';
             $output .= '<thead>';
             $output .= '<tr>';
-            $output .= '<th scope="col">Дата<br/>Дні</th>';
-            $output .= '<th scope="col">Час</th>';
-            $output .= '<th scope="col">Назва дисципліни</th>';
-            $output .= '<th scope="col">№<br/>Аудит.</th>';
-            $output .= '<th scope="col">Прізвище та ініціали<br/>виклдачів</th>';
+            $output .= '<th scope="col">група</th>';
+            $output .= '<th scope="col">професія';
+            $output .= '<th scope="col">дата</th>';
+            $output .= '<th scope="col">час</th>';
+            $output .= '<th scope="col">предмет</th>';
+            $output .= '<th scope="col">ауд</th>';
+            $output .= '<th scope="col">викладач</th>';
             $output .= '</tr>';
             $output .= '</thead>';
             $output .= '<tbody>';
@@ -306,13 +308,21 @@ class Timetable extends \yii\db\ActiveRecord
                             ->where(['=', 'id', $value['subjects_id']])
                             ->one();
                         $subjName = $subjName['title'];
-                        if ($td) {
-                            $output .= '<tr style="border-top: 1px #000 solid;">';
-                        } else {
+                        $groupName = Groups::find()
+                            ->asArray()
+                            ->select('name, course')
+                            ->where(['=', 'ID', $value['group_id']])
+                            ->one();
+                        $courseName = Courses::find()
+                            ->asArray()
+                            ->select('name')
+                            ->where(['=', 'ID', $groupName['course']])
+                            ->one();
                             $output .= '<tr>';
-                        }
                         $formatter = new Formatter();
                         $format_date = $formatter->asDate($date, "dd.MM.yy");
+                        $output .= '<td>'. $groupName['name'] .'</td>';
+                        $output .= '<td>'. $courseName['name'] .'</td>';
                         $output .= '<td>'. $format_date .'</td>';
                         if(!empty($corpsTimes))
                         {

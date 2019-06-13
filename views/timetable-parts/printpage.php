@@ -73,6 +73,10 @@ if ($g) {
         ->asArray()
         ->where( [ '=', 'ID', $g ] )
         ->one();
+    $Course = \app\models\Courses::find()
+        ->asArray()
+        ->where(['=', 'ID', $Group['course']])
+        ->one();
     $timetable = Timetable::renderPrintTable($date_start, $date_end, $g);
     if ($timetable) {
         ?>
@@ -81,16 +85,19 @@ if ($g) {
             <div class="col-xs-4 col-md-4">
                 <p>ЗАТВЕРДЖУЮ</p>
                 <p class="dolzh-append" style="display: none;"><textarea></textarea><br/><button class="btn dolzh-save" type="button">Зберегти</button></p>
-                <p class="dolzh">Директор Харківського міського центру ПТО ДСЗ</p>
+                <p class="dolzh"><?php echo (!empty($printdata['dolzh'])?$printdata['dolzh']:'Директор Харківського міського центру ПТО ДСЗ');?></p>
                 <p class="initial-append" style="display: none;"><textarea></textarea><br/><button class="btn initial-save" type="button">Зберегти</button></p>
-                <p class="initial">______________ Р.А Кір'янов</p>
+                <p class="initial"><?php echo (!empty($printdata['initial'])?$printdata['initial']:'______________ Р.А Кір\'янов');?></p>
             </div>
         </div>
         <div class="row" style="margin-top: 20px; font-weight: bold; font-size: 17px;" >
             <p align="center">РОЗКЛАД ЗАНЯТЬ<br/>
                 слухачів група <?php echo $Group['name'] ?><br/>
-                на тиждень з
             </p>
+        </div>
+        <div class="row" style="font-size: 17px; margin-left: 40px;">
+            <p>Професія: "<b><?php echo $Course['name']; ?></b>",<br/>
+                Термін навчання: <b>з <?php echo $formatter->asDate($Group['date_start'], 'dd.MM.yyyy'); ?> по <?php echo $formatter->asDate($Group['date_end'], 'dd.MM.yyyy'); ?></b>
         </div>
         <?php
         echo $timetable;
@@ -116,11 +123,11 @@ if ($g) {
                     <p class="dolzh-append" style="display: none;"><textarea></textarea><br/>
                         <button class="btn dolzh-save" type="button">Зберегти</button>
                     </p>
-                    <p class="dolzh">Директор Харківського міського центру ПТО ДСЗ</p>
+                    <p class="dolzh"><?php echo (!empty($printdata['dolzh'])?$printdata['dolzh']:'Директор Харківського міського центру ПТО ДСЗ');?></p>
                     <p class="initial-append" style="display: none;"><textarea></textarea><br/>
                         <button class="btn initial-save" type="button">Зберегти</button>
                     </p>
-                    <p class="initial">______________ Р.А Кір'янов</p>
+                    <p class="initial"><?php echo (!empty($printdata['initial'])?$printdata['initial']:'______________ Р.А Кір\'янов');?></p>
                 </div>
             </div>
             <div class="row" style="margin-top: 20px; font-weight: bold; font-size: 17px;">
@@ -146,11 +153,11 @@ if (!empty($timetable) || $j) {
     <div class="row">
         <div class="col-xs-6 col-sm-6 col-md-6" align="center">
             <p id="footer-1-append" style="display: none;"><textarea></textarea><br/><button class="btn" type="button" id="footer-1-save">Зберегти</button></p>
-            <p id="footer-1">Текст блока «Подвал 1»</p>
+            <p id="footer-1"><?php echo (!empty($printdata['blockleft'])?$printdata['blockleft']:'Текст блока «Подвал 1»');?></p>
         </div>
         <div class="col-xs-6 col-sm-6 col-md-6" align="center">
             <p id="footer-2-append" style="display: none;"><textarea></textarea><br/><button class="btn" type="button" id="footer-2-save">Зберегти</button></p>
-            <p id="footer-2">Текст блока «Подвал 2»</p>
+            <p id="footer-2"><?php echo (!empty($printdata['blockright'])?$printdata['blockright']:'Текст блока «Подвал 2»');?></p>
         </div>
     </div>
 

@@ -18,6 +18,7 @@ use yii\web\NotFoundHttpException;
 use app\models\Timetable;
 use app\models\Courses;
 use app\models\TimetableViewer;
+use app\models\Printdata;
 
 /**
  * TimetablePartsController implements the CRUD actions for TimetableParts model.
@@ -78,7 +79,36 @@ class TimetablePartsController extends Controller
             'request' => $request,
             'date_start' => $date_start,
             'date_end' => $date_end,
+            'printdata' => Printdata::find()->asArray()->one(),
         ]);
+    }
+
+
+    public function actionAjax()
+    {
+        $request = Yii::$app->request->post();
+        $Printdata = new Printdata();
+        $exist = $Printdata->find()->one();
+        if ($exist) {
+            $Printdata = $Printdata->find()->one();
+        }
+        if (!empty($request['dolzh'])) {
+            $Printdata->dolzh = $request['dolzh'];
+        }
+        if (!empty($request['initial'])) {
+            $Printdata->initial = $request['initial'];
+        }
+        if (!empty($request['footer1'])) {
+            $Printdata->blockleft = $request['footer1'];
+        }
+        if (!empty($request['footer2'])) {
+            $Printdata->blockright = $request['footer2'];
+        }
+        if (!$exist) {
+            $Printdata->save();
+        } else {
+            $Printdata->update();
+        }
     }
 
     public function actionFreetime()

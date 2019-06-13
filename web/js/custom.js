@@ -104,6 +104,14 @@ $(document).ready(function () {
             $(".dolzh").eq(index).html(text);
             $(".dolzh-append").eq(index).hide();
             $('.dolzh').eq(index).show();
+            $.ajax({
+                type: 'POST',
+                url: '/timetable-parts/ajax',
+                data: 'dolzh=' + text,
+                success: function () {
+                }
+            });
+
         }
     });
 
@@ -122,6 +130,13 @@ $(document).ready(function () {
             $(".initial").eq(index).html(text);
             $(".initial-append").eq(index).hide();
             $('.initial').eq(index).show();
+            $.ajax({
+                type: 'POST',
+                url: '/timetable-parts/ajax',
+                data: 'initial=' + text,
+                success: function () {
+                }
+            });
         }
     });
 
@@ -140,6 +155,13 @@ $(document).ready(function () {
             $("#footer-1").html(text);
             $("#footer-1-append").hide();
             $('#footer-1').show();
+            $.ajax({
+                type: 'POST',
+                url: '/timetable-parts/ajax',
+                data: 'footer1=' + text,
+                success: function () {
+                }
+            });
         }
     });
 
@@ -158,6 +180,13 @@ $(document).ready(function () {
             $("#footer-2").html(text);
             $("#footer-2-append").hide();
             $('#footer-2').show();
+            $.ajax({
+                type: 'POST',
+                url: '/timetable-parts/ajax',
+                data: 'footer2=' + text,
+                success: function () {
+                }
+            });
         }
     });
 
