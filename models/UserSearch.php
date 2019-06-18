@@ -12,6 +12,7 @@ use app\models\User;
  */
 class UserSearch extends User
 {
+    public $search;
     /**
      * @inheritdoc
      */
@@ -20,6 +21,7 @@ class UserSearch extends User
         return [
             [['id', 'status', 'created_at', 'updated_at', 'role'], 'integer'],
             [['username', 'auth_key', 'password_hash', 'password_reset_token', 'email'], 'safe'],
+            [['search'], 'safe'],
         ];
     }
 
@@ -71,6 +73,13 @@ class UserSearch extends User
             ->andFilterWhere(['like', 'password_hash', $this->password_hash])
             ->andFilterWhere(['like', 'password_reset_token', $this->password_reset_token])
             ->andFilterWhere(['like', 'email', $this->email]);
+
+        if (!empty($_POST['UserSearch']['search'])) {
+
+            $query->andFilterWhere(['like', 'CONCAT_WS(" ",firstname, lastname, middlename)', "{$_POST['UserSearch']['search']}"]);
+        } else if (!empty($_GET['search'])){
+            $query->andFilterWhere(['like', 'CONCAT_WS(" ",firstname, lastname, middlename)', "{$_GET['search']}"]);
+        }
 
         return $dataProvider;
     }

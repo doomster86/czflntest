@@ -35,6 +35,7 @@ class UserController extends Controller
     public function actionIndex()
     {
         $searchModel = new UserSearch();
+        $model = new User();
         //$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $request = Yii::$app->request;
@@ -54,10 +55,19 @@ class UserController extends Controller
                 ],
             ]);
         }
-
+        if (isset($_GET['role']) || isset($_POST['UserSearch']['search'])) {
+            $model = new User();
+            $dataProvider = $searchModel->search(['UserSearch'=>Yii::$app->request->queryParams]);
+            return $this->render('index', [
+                'dataProvider' => $dataProvider,
+                'model' => $model,
+                'searchModel' => $searchModel
+            ]);
+        }
         return $this->render('index', [
-            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'model' => $model,
+            'searchModel' => $searchModel
         ]);
     }
 

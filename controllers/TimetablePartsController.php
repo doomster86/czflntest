@@ -483,11 +483,15 @@ class TimetablePartsController extends Controller
                 $table[$i]['lectComplete'] = $lectCompleteAll;
                 $i++;
             }
+            usort ($table, array($this, 'name_sort'));
             return $this->render('godyny', [
                 'table' => $table,
             ]);
         } else {
             return $this->render('/site/access_denied');
         }
+    }
+    private function name_sort($x, $y) {
+        return strcasecmp($x['teacher']['lastname'], $y['teacher']['lastname']);
     }
 }

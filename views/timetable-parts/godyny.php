@@ -39,6 +39,12 @@ $roles = User::ROLES;
                 return $person->getFullName();
             }
         );
+        $currentLocale = setlocale(LC_ALL, NULL);
+        setlocale(LC_ALL,'uk_UA.utf8');
+        asort($userMap,SORT_LOCALE_STRING);
+        $GroupMap = ArrayHelper::map(Groups::find()->asArray()->all(), 'ID', 'name');
+        asort($GroupMap,SORT_LOCALE_STRING);
+        setlocale(LC_ALL, $currentLocale);
         $teacher_id = Yii::$app->request->post('User');
         $teacher_id = $teacher_id['ID'];
         ?>
@@ -56,7 +62,7 @@ $roles = User::ROLES;
         $group_id = Yii::$app->request->post('Groups');
         $group_id = $group_id['ID'];
         ?>
-        <?= $form->field(new Groups(), 'ID')->dropDownList(ArrayHelper::map(Groups::find()->asArray()->all(), 'ID', 'name'),
+        <?= $form->field(new Groups(), 'ID')->dropDownList($GroupMap,
             [
                 'prompt' => 'Всі групи',
                 'options' => [
@@ -95,6 +101,9 @@ $roles = User::ROLES;
                     <th>
                         <?php
                         echo $formatter->asDate($col['date'], 'dd.MM.yyyy');
+                        echo "<br /><span style='font-size: 9px;'>Тиждень №: ";
+                        echo intval(date('W', $col['date']));
+                        echo "</span>";
                         ?>
                     </th>
                     <?php
@@ -119,11 +128,11 @@ $roles = User::ROLES;
                     <th><?= $row['subject']['title']; ?></th>
                     <th nowrap><?= (!empty($row['practice']) ? 'вир. нав.' : 'теор. нав.'); ?></th>
                     <?php foreach ($row['timetable'] as $timetable) { ?>
-                        <th><?= $timetable['lectComplete']; ?></th>
+                        <th><?= $timetable['lectComplete']?$timetable['lectComplete']:''; ?></th>
                         <?php
                     }
                     ?>
-                    <th><?= $row['lectComplete']; ?></th>
+                    <th><?= $row['lectComplete']?$row['lectComplete']:''; ?></th>
                 </tr>
                 <?php
                 $num++;

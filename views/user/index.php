@@ -1,10 +1,14 @@
 <?php
 
+use app\models\User;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\widgets\ListView;
 use app\assets\Relevator;
+use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\UserSearch */
@@ -139,8 +143,50 @@ Relevator::register($this);
 
     <h2 class="scroller">Гортайте вниз для перегляду ↓↓↓</h2>
     <h4 class='clicktxt'>Натисніть на зображення для редагування</h4>
-    <?php
+    <div class="row">
+        <div class="form-group">
+            <div class="col-xs-5 col-sm-4 col-md-4 col-lg-3">
+                <?php
+                $search = '';
+                if (!empty($_POST['UserSearch']['search'])) {
+                    $search = $_POST['UserSearch']['search'];
+                } else if (!empty($_GET['search'])) {
+                    $search = $_GET['search'];
+                }
+                $form = ActiveForm::begin();
+                echo $form->field($model, 'role')->dropDownList(ArrayHelper::map(User::ROLES, 'roles', 'name'),
+                    [
+                        'prompt' => 'Всі користувачі',
+                        'onchange' => '$.pjax.reload({container: "#w0", url: "' . Url::to(['user/index']) . '?search='.$search.'", data: {role: $(this).val()}});',
+                        'options' => isset($_GET['role']) ? [$_GET['role'] => ["selected" => true]] : '',
+                    ]
+                )->label('Роль');;
+                ActiveForm::end();
+                ?>
+            </div>
+            <div class="col-xs-5 col-sm-4 col-md-4 col-lg-3">
+                <?php
+                if (!empty(Yii::$app->request->post()['UserSearch']['search'])) {
+                    $searchResult = Yii::$app->request->post()['UserSearch']['search'];
+                }else if (!empty($_GET['search'])) {
+                    $searchResult = $_GET['search'];
+                } else {
+                    $searchResult = '';
+                }
+                $form = ActiveForm::begin(); ?>
 
+                <?= $form->field($searchModel, 'search')->textInput(['value' => $searchResult])->label('Пошук'); ?>
+
+                <div class="form-group">
+                    <?= Html::submitButton('Пошук', ['class' => 'btn btn-success']) ?>
+                </div>
+
+                <?php ActiveForm::end(); ?>
+            </div>
+        </div>
+    </div>
+        <?php
+    Pjax::begin();
     echo ListView::widget([
         'dataProvider' => $dataProvider,
         'itemView' => '_list',
@@ -155,7 +201,7 @@ Relevator::register($this);
         }
     ]);
     ?>
-
+    <?php Pjax::end(); ?>
     <p>
         <?php
         $request = Yii::$app->request;
