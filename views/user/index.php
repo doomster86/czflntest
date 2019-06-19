@@ -176,12 +176,13 @@ Relevator::register($this);
                 $form = ActiveForm::begin(); ?>
 
                 <?= $form->field($searchModel, 'search')->textInput(['value' => $searchResult])->label('Пошук'); ?>
-
-                <div class="form-group">
+            </div>
+            <div class="col-xs-5 col-sm-4 col-md-4 col-lg-3">
+                <div class="form-group" style="margin-top: 25px;">
                     <?= Html::submitButton('Пошук', ['class' => 'btn btn-success']) ?>
                 </div>
-
                 <?php ActiveForm::end(); ?>
+            </div>
             </div>
         </div>
     </div>
