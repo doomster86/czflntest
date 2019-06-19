@@ -82,13 +82,6 @@ $(document).ready(function () {
             $("#week").prop( "disabled", false );
         }
     });
-    if ($("#group").val().length){
-        $(".week-selector").hide()
-        $("#week").prop('disabled', 'disabled');
-    } else {
-        $(".week-selector").show();
-        $("#week").prop( "disabled", false );
-    }
 
     $(".dolzh").on("click", function () {
         var text = $(this).html();
